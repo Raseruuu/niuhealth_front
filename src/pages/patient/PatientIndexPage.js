@@ -2,9 +2,7 @@ import Footer from "../../components/Footer"
 
 function PatientIndexPage() {
   // TODO: get from CONTEXT
-  const isEmailVerified = Boolean(
-    sessionStorage.getItem("email_verified") || false
-  )
+  const isEmailVerified = Boolean(sessionStorage.getItem("email_verified"))
   return (
     <div className="page-wrapper">
       <div className="page-content">
