@@ -1,7 +1,9 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
-import AWSCallback from "./components/AWSCallback"
+import AWSCallback, {
+  loader as AWSCallbackLoader,
+} from "./components/AWSCallback"
 import LoginAuth from "./components/LoginAuth"
 import PatientDashboard from "./components/patient/PatientDashboard"
 import "./index.css"
@@ -15,48 +17,52 @@ import Renew from "./pages/patient/subcription/Renew"
 import Subscription from "./pages/patient/subcription/Subcription"
 import VirtualVisit from "./pages/patient/VirtualVisit"
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Outlet />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <LoginAuth /> },
-      {
-        path: "patient",
-        element: <PatientDashboard />,
-        errorElement: <ErrorPage />,
-        children: [
-          { index: true, element: <PatientIndexPage /> },
-          { path: "virtualvisit", element: <VirtualVisit /> },
-          { path: "profile", element: <Profile /> },
-          { path: "appointments", element: <Appointment /> },
-          {
-            path: "subscription",
-            children: [
-              { index: true, element: <Subscription /> },
-              { path: "renew", element: <Renew /> },
-            ],
-          },
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <Outlet />,
+      errorElement: <ErrorPage />,
+      children: [
+        { index: true, element: <LoginAuth /> },
+        {
+          path: "patient",
+          element: <PatientDashboard />,
+          errorElement: <ErrorPage />,
+          children: [
+            { index: true, element: <PatientIndexPage /> },
+            { path: "virtualvisit", element: <VirtualVisit /> },
+            { path: "profile", element: <Profile /> },
+            { path: "appointments", element: <Appointment /> },
+            {
+              path: "subscription",
+              children: [
+                { index: true, element: <Subscription /> },
+                { path: "renew", element: <Renew /> },
+              ],
+            },
 
-          {
-            path: "insurance",
-            children: [
-              { index: true, element: <Insurance /> },
-              { path: "upload", element: <Upload /> },
-            ],
-          },
-        ],
-      },
-      {
-        path: "callback",
-        element: <AWSCallback />,
-      },
-    ],
-  },
-
-  { path: "*", element: <div>404. Page Not Found</div> },
-])
+            {
+              path: "insurance",
+              children: [
+                { index: true, element: <Insurance /> },
+                { path: "upload", element: <Upload /> },
+              ],
+            },
+          ],
+        },
+        {
+          path: "cburl",
+          element: <AWSCallback />,
+          loader: AWSCallbackLoader,
+        },
+      ],
+    },
+    { path: "404", element: <div>404. Page Not Found</div> },
+    { path: "*", element: <div>404. Page Not Found</div> },
+  ],
+  { basename: `${process.env.PUBLIC_URL}` }
+)
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(<RouterProvider router={router} />)

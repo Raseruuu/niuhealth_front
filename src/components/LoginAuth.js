@@ -8,10 +8,9 @@ function LoginAuth() {
   if (accessTokenValid) {
     // store user details then navigate to designated dashboard (? selection of role)
     return <Navigate to={"/patient"} replace={true} />
+  } else {
+    window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
   }
-
-  // all validation failed, redirect to aws cognito hosted UI
-  window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
 }
 
 export default LoginAuth

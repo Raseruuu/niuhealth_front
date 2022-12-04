@@ -1,4 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom"
+import { APP_URL, AWS_BUCKET } from "../../constants"
 import SideNavLogo from "./SideNavLogo"
 
 function PatientSideNav() {
@@ -17,9 +18,12 @@ function PatientSideNav() {
       <div className="media figmaSideUser">
         <Link className="" href="#">
           <img
-            src="/assets/images/users/user-1.jpg"
+            src={`${APP_URL}/assets/images/users/user-1.jpg`}
             alt="user"
             className="rounded-circle thumb-md"
+            onError={(e) =>
+              (e.target.src = `${AWS_BUCKET}/assets/images/users/user-1.jpg`)
+            }
           />
         </Link>
         <div className="media-body align-self-center ml-3">

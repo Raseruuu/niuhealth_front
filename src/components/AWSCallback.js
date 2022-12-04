@@ -1,18 +1,43 @@
 import { useEffect, useState } from "react"
-import { Navigate, useSearchParams } from "react-router-dom"
+import {
+  json,
+  Navigate,
+  redirect,
+  useLoaderData,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom"
 import axios from "../api/axios"
 import { API_URL, AWS_COGNITO_HOSTUI_DOMAIN } from "../constants"
 
-function AWSCallback() {
-  const [queryParameters, _] = useSearchParams()
-  const [isValid, setIsValid] = useState(false)
+export async function loader({ request }) {
+  const url = new URL(request.url)
+  const code = url.searchParams.get("code")
 
-  // get code from callback
-  const code = queryParameters?.get("code")
+  // if (!code || code === null) {
+  //   redirect("/404")
+  // }
 
-  if (!code) {
-    window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+  const response = await fetch(`${API_URL}exchange`, {
+    method: "POST",
+    body: JSON.stringify({ Code: code }),
+  })
+
+  console.log(response)
+
+  if (response.status !== 200) {
+    throw new Response("Not Found", { status: 404 })
   }
+
+  return { code, response: response.json() }
+}
+
+function AWSCallback() {
+  const { code } = useLoaderData()
+  const [queryParameters] = useSearchParams()
+  const [isValid, setIsValid] = useState(true)
+  const [errMsg, setErrMsg] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     let isMounted = true
@@ -20,24 +45,46 @@ function AWSCallback() {
 
     // call api for code validation
     const auth = async () => {
-      try {
-        const response = await axios.post(
-          `${API_URL}/exchange`,
+      await axios
+        .post(
+          "/exchange",
           { Code: code },
           {
             signal: controller.signal,
           }
         )
+        .then((res) => {
+          const {
+            data: { StatusCode, Message = "", Tokens = {} },
+          } = res
 
-        console.log(response.data)
-        isMounted && setIsValid(true)
-      } catch (err) {
-        console.error(err)
-        // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
-      }
+          if (StatusCode === 200 && isMounted) {
+            sessionStorage.setItem(
+              "access_token",
+              Tokens?.access_token || false
+            )
+            sessionStorage.setItem(
+              "refresh_token",
+              Tokens?.refresh_token || false
+            )
+            sessionStorage.setItem("token_type", Tokens?.token_type || false)
+
+            navigate("/", { replace: true })
+          } else {
+            console.error(Message || "Something went wrong...")
+            setErrMsg(Message || "Something went wrong...")
+            // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(JSON.stringify(err, null, 4))
+        })
+
+      // TODO: err needs to be check if errmsg is from aws cognito or api err response before redirecting to AWS COGNITO HOSTUI to prevent sign-in loop
     }
 
-    auth()
+    if (code !== null) auth()
 
     return () => {
       isMounted = false
@@ -45,13 +92,18 @@ function AWSCallback() {
     }
   }, [])
 
-  // return <div>CALLBACK</div>
+  if (!code || code === null) {
+    return <Navigate to="/404" replace={true} />
+  }
 
-  return isValid ? (
-    <Navigate to="/patient" replace={true} />
-  ) : (
-    window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
-  )
+  return <div>{code}</div>
+  // return errMsg ? <div>{errMsg}</div> : <div>Please wait...</div>
+  // TODO: Redirect to user designated dashboard
+  // return isValid ? (
+  //   <Navigate to="/patient" replace={true} />
+  // ) : (
+  //   window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+  // )
 }
 
 export default AWSCallback
