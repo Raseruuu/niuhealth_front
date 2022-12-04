@@ -5,28 +5,13 @@ export default function ErrorPage() {
   console.error(error)
 
   if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
-      return <div>This page doesn't exist!</div>
-    }
-
-    if (error.status === 401) {
-      return <div>You aren't authorized to see this</div>
-    }
-
-    if (error.status === 503) {
-      return <div>Looks like our API is down</div>
-    }
-
-    if (error.status === 418) {
-      return <div>🫖</div>
-    }
+    return (
+      <div>
+        {error.status >= 500 ? <p>Something went wrong...</p> : null}
+        <p>
+          {error.status} {error.data || error.message}
+        </p>
+      </div>
+    )
   }
-
-  return (
-    <div>
-      Something went wrong
-      <br />
-      <p>{error.statusText || error.message}</p>
-    </div>
-  )
 }

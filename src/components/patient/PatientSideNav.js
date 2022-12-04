@@ -27,8 +27,8 @@ function PatientSideNav() {
           />
         </Link>
         <div className="media-body align-self-center ml-3">
-          <p className="font-14 font-weight-bold mb-0">Amr Shawki</p>
-          <p className="mb-0 font-12 text-muted">amrshawki@gmail.com</p>
+          <p className="font-14 font-weight-bold mb-0">Juan Dela Cruz</p>
+          <p className="mb-0 font-12 text-muted">juandelacruz@gmail.com</p>
         </div>
       </div>
 
