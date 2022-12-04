@@ -1,30 +1,36 @@
 import Footer from "../../components/Footer"
 
 function PatientIndexPage() {
+  // TODO: get from CONTEXT
+  const isEmailVerified = Boolean(
+    sessionStorage.getItem("email_verified") || false
+  )
   return (
     <div className="page-wrapper">
       <div className="page-content">
         <div className="container-fluid">
           <div className="row figmaFirstBox">
             <div className="col-sm-12">
-              <div
-                className="alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show"
-                role="alert"
-              >
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="alert"
-                  aria-label="Close"
+              {isEmailVerified ? (
+                <div
+                  className="alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show"
+                  role="alert"
                 >
-                  <span aria-hidden="true">
-                    <i className="mdi mdi-close"></i>
-                  </span>
-                </button>
-                Please verify your email address to be able to use Niu Health
-                services if you dont see the email, you may need to check your
-                spam folder. <a href="">Resend verification email</a>
-              </div>
+                  <button
+                    type="button"
+                    className="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">
+                      <i className="mdi mdi-close"></i>
+                    </span>
+                  </button>
+                  Please verify your email address to be able to use Niu Health
+                  services if you dont see the email, you may need to check your
+                  spam folder. <a href="">Resend verification email</a>
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="row figmaFirstBox">

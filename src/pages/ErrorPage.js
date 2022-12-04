@@ -8,9 +8,7 @@ export default function ErrorPage() {
     return (
       <div>
         {error.status >= 500 ? <p>Something went wrong...</p> : null}
-        <p>
-          {error.status} {error.data || error.message}
-        </p>
+        <p>{error.data || error.message}</p>
       </div>
     )
   }

@@ -33,15 +33,25 @@ export async function loader({ request }) {
     sessionStorage.setItem("refresh_token", refresh_token)
     sessionStorage.setItem("token_type", token_type)
 
+    localStorage.setItem("access_token", access_token)
+    localStorage.setItem("id_token", id_token)
+    localStorage.setItem("refresh_token", refresh_token)
+    localStorage.setItem("token_type", token_type)
+
     return redirect("/")
-  } catch (error) {
-    sessionStorage.removeItem("access_token")
-    sessionStorage.removeItem("id_token")
-    sessionStorage.removeItem("refresh_token")
-    sessionStorage.removeItem("token_type")
-    console.error(error)
-    alert("Authentication fails.")
-    throw error
+  } catch (err) {
+    // sessionStorage.removeItem("access_token")
+    // sessionStorage.removeItem("id_token")
+    // sessionStorage.removeItem("refresh_token")
+    // sessionStorage.removeItem("token_type")
+    console.error(err)
+
+    throw new Response(
+      `Authentication Failed. ${err.message} ${err?.request?.responseURL} `,
+      {
+        status: err?.response?.status || 500,
+      }
+    )
   }
 }
 

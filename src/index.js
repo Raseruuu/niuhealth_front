@@ -2,9 +2,9 @@ import React from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import AWSCallback, {
-  loader as AWSCallbackLoader,
+  loader as awsCallbackLoader,
 } from "./components/AWSCallback"
-import LoginAuth from "./components/LoginAuth"
+import LoginAuth, { loader as loginAuthLoader } from "./components/LoginAuth"
 import PatientDashboard from "./components/patient/PatientDashboard"
 import "./index.css"
 import ErrorPage from "./pages/ErrorPage"
@@ -24,7 +24,7 @@ const router = createBrowserRouter(
       element: <Outlet />,
       errorElement: <ErrorPage />,
       children: [
-        { index: true, element: <LoginAuth /> },
+        { index: true, element: <LoginAuth />, loader: loginAuthLoader },
         {
           path: "patient",
           element: <PatientDashboard />,
@@ -54,7 +54,7 @@ const router = createBrowserRouter(
         {
           path: "cburl",
           element: <AWSCallback />,
-          loader: AWSCallbackLoader,
+          loader: awsCallbackLoader,
         },
       ],
     },

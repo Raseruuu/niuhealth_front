@@ -5,6 +5,9 @@ import SideNavLogo from "./SideNavLogo"
 function PatientSideNav() {
   const location = useLocation()
 
+  const name = sessionStorage.getItem("name") || "Welcome"
+  const email = sessionStorage.getItem("email")
+
   return (
     <div className="left-sidenav">
       <div className="topbar-left">
@@ -27,8 +30,8 @@ function PatientSideNav() {
           />
         </Link>
         <div className="media-body align-self-center ml-3">
-          <p className="font-14 font-weight-bold mb-0">Juan Dela Cruz</p>
-          <p className="mb-0 font-12 text-muted">juandelacruz@gmail.com</p>
+          <p className="font-14 font-weight-bold mb-0">{name}</p>
+          <p className="mb-0 font-12 text-muted">{email}</p>
         </div>
       </div>
 
