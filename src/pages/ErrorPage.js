@@ -7,7 +7,6 @@ export default function ErrorPage() {
   if (isRouteErrorResponse(error)) {
     return (
       <div>
-        {error.status >= 500 ? <p>Something went wrong...</p> : null}
         <p>{error.data || error.message}</p>
       </div>
     )

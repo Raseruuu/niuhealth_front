@@ -4,7 +4,9 @@ import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import AWSCallback, {
   loader as awsCallbackLoader,
 } from "./components/AWSCallback"
+import ErrorPage45 from "./components/ErrorPage45"
 import LoginAuth, { loader as loginAuthLoader } from "./components/LoginAuth"
+import GreenLock from "./components/lottie/LottieGreenLock"
 import PatientDashboard from "./components/patient/PatientDashboard"
 import "./index.css"
 import ErrorPage from "./pages/ErrorPage"
@@ -58,8 +60,10 @@ const router = createBrowserRouter(
         },
       ],
     },
-    { path: "404", element: <div>404. Page Not Found</div> },
-    { path: "*", element: <div>404. Page Not Found</div> },
+    { path: "testUi", element: <GreenLock /> },
+    { path: "500", element: <ErrorPage45 statusCode={500} /> },
+    { path: "404", element: <ErrorPage45 statusCode={404} /> },
+    { path: "*", element: <ErrorPage45 statusCode={404} /> },
   ],
   { basename: `${process.env.PUBLIC_URL}` }
 )
