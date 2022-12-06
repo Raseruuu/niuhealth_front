@@ -35,14 +35,21 @@ function AWSCallback() {
           }
         )
         .then((res) => {
-          const { StatusCode, StatucCode, Message, TransactionType, Tokens } =
-            res.data
+          const {
+            StatusCode,
+            StatucCode,
+            Message,
+            TransactionType,
+            Tokens,
+            UserType,
+          } = res.data
 
           return {
             ...Tokens,
             transactionType: TransactionType,
             statusCode: StatusCode || StatucCode,
             msg: Message,
+            userType: UserType,
           }
         })
         .then(
@@ -54,22 +61,15 @@ function AWSCallback() {
             transactionType,
             statusCode,
             msg,
+            userType,
           }) => {
-            console.log(
-              access_token,
-              id_token,
-              refresh_token,
-              token_type,
-              transactionType,
-              statusCode
-            )
-
             if (statusCode !== 200) {
               sessionStorage.removeItem("access_token")
               sessionStorage.removeItem("id_token")
               sessionStorage.removeItem("refresh_token")
               sessionStorage.removeItem("token_type")
-              console.error(msg)
+              sessionStorage.removeItem("userType")
+
               throw new Error(msg)
             }
 
@@ -78,6 +78,7 @@ function AWSCallback() {
             sessionStorage.setItem("refresh_token", refresh_token)
             sessionStorage.setItem("token_type", token_type)
             sessionStorage.setItem("transactionType", transactionType)
+            sessionStorage.setItem("userType", userType)
             console.log("Success")
             navigate("/", { replace: true })
           }

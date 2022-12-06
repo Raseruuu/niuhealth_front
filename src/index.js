@@ -7,7 +7,7 @@ import AWSCallback, {
 import ErrorPage45 from "./components/ErrorPage45"
 import LoginAuth, { loader as loginAuthLoader } from "./components/LoginAuth"
 import GreenLock from "./components/lottie/LottieGreenLock"
-import PatientDashboard from "./components/patient/PatientDashboard"
+import PatientDashboard from "./pages/patient/layout/PatientDashboard"
 import "./index.css"
 import ErrorPage from "./pages/ErrorPage"
 import Appointment from "./pages/patient/Appointment"
@@ -69,4 +69,8 @@ const router = createBrowserRouter(
 )
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
-root.render(<RouterProvider router={router} />)
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+)
