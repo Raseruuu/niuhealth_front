@@ -1,11 +1,19 @@
 import imgLogo from "../assets/images/nu-health-logo.png"
 import img500 from "../assets/images/500.jpg"
 import img404 from "../assets/images/404.jpg"
+import loginBg from "../assets/images/login_bg.jpg"
 import { Link } from "react-router-dom"
 
 function ErrorPage45({ statusCode }) {
   return (
-    <div className="account-body accountbg" style={{ width: "100vw" }}>
+    <div
+      className="account-body"
+      style={{
+        width: "100vw",
+        backgroundImage: `url(${loginBg})`,
+        backgroundColor: "#eee",
+      }}
+    >
       <div className="container">
         <div className="row vh-100 ">
           <div className="col-12 align-self-center">
@@ -35,11 +43,8 @@ function ErrorPage45({ statusCode }) {
                           ? "Looks like you've got lost..."
                           : "Somthing went wrong"}
                       </h4>
-                      <Link
-                        to={statusCode === 404 ? "/" : -1}
-                        className="btn btn-sm btn-gradient-success"
-                      >
-                        Back to Dashboard
+                      <Link to={-1} className="btn btn-sm btn-gradient-success">
+                        Go Back
                       </Link>
                     </div>
                   </div>

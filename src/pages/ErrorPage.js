@@ -11,4 +11,10 @@ export default function ErrorPage() {
       </div>
     )
   }
+
+  return (
+    <div>
+      <p>{error.data || error.message || JSON.stringify(error, null, 4)}</p>
+    </div>
+  )
 }
