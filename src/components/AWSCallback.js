@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import axios from "../api/axios"
-import { AWS_COGNITO_HOSTUI_DOMAIN } from "../constants"
+import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from "../constants"
 import LottieFailed from "./lottie/LottieFailed"
 import GreenLock from "./lottie/LottieGreenLock"
 
@@ -80,6 +80,15 @@ function AWSCallback() {
             sessionStorage.setItem("transactionType", transactionType)
             sessionStorage.setItem("userType", userType)
             console.log("Success")
+
+            if (userType === USERTYPE.provider) {
+              navigate("/provider", { replace: true })
+              return
+            } else if (userType === USERTYPE.patient) {
+              navigate("/patient", { replace: true })
+              return
+            }
+
             navigate("/", { replace: true })
           }
         )
@@ -112,7 +121,7 @@ function AWSCallback() {
                 window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
               }}
               type="button"
-              class="btn btn-success btn-round py-2 waves-effect waves-light figmaBigButton"
+              className="btn btn-success btn-round py-2 waves-effect waves-light figmaBigButton"
             >
               Back to Login
             </button>

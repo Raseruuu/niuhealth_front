@@ -18,6 +18,10 @@ import Profile from "./pages/patient/Profile"
 import Renew from "./pages/patient/subcription/Renew"
 import Subscription from "./pages/patient/subcription/Subcription"
 import VirtualVisit from "./pages/patient/VirtualVisit"
+import ProviderDashboard from "./pages/provider/layout/ProviderDashboard"
+import ProviderIndex from "./pages/provider/ProviderIndex"
+import Patients from "./pages/provider/patient/PatientList"
+import PatientProfile from "./pages/provider/patient/Profile"
 
 const router = createBrowserRouter(
   [
@@ -54,15 +58,33 @@ const router = createBrowserRouter(
           ],
         },
         {
+          path: "provider",
+          element: <ProviderDashboard />,
+          errorElement: <ErrorPage />,
+          children: [
+            { index: true, element: <ProviderIndex /> },
+            {
+              path: "patient",
+              element: <Outlet />,
+              children: [
+                { index: true, element: <Patients /> },
+                { path: "profile", element: <PatientProfile /> },
+                { path: "profile/:action", element: <PatientProfile /> },
+              ],
+            },
+          ],
+        },
+        {
           path: "cburl",
           element: <AWSCallback />,
           loader: awsCallbackLoader,
         },
+        { path: "testUi", element: <GreenLock /> },
+        { path: "500", element: <ErrorPage45 statusCode={500} /> },
+        { path: "404", element: <ErrorPage45 statusCode={404} /> },
       ],
     },
-    { path: "testUi", element: <GreenLock /> },
-    { path: "500", element: <ErrorPage45 statusCode={500} /> },
-    { path: "404", element: <ErrorPage45 statusCode={404} /> },
+
     { path: "*", element: <ErrorPage45 statusCode={404} /> },
   ],
   { basename: `${process.env.PUBLIC_URL}` }

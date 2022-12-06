@@ -45,17 +45,17 @@ function PatientSideNav() {
       </div>
       {location?.pathname === "/patient/virtualvisit" ? (
         <div
-          class="spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show"
+          className="spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show"
           role="alert"
         >
           <button
             type="button"
-            class="close"
+            className="close"
             data-dismiss="alert"
             aria-label="Close"
           >
             <span aria-hidden="true">
-              <i class="mdi mdi-close"></i>
+              <i className="mdi mdi-close"></i>
             </span>
           </button>
           Sorry, we are unavailable for virtual visits from 12:00 Am to 8:00 Am.

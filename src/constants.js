@@ -6,4 +6,8 @@ export const TRANSACTIONTYPE = {
   login: "Login",
   register: "Register",
 }
+export const USERTYPE = {
+  provider: "Provider",
+  patient: "Patient",
+}
 export const AWS_BUCKET = process.env.REACT_APP_AWS_BUCKET
