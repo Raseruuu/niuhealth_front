@@ -1,0 +1,251 @@
+/*
+Template Name: NU Health CSS
+Author: Harkonnen Dev Team
+Version: 1.0.0
+File: App Css
+*/
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
+/*
+Template Name: 
+Author: Claire
+Email: 
+File: 
+*/
+
+/* BACKGROUND COLORS */
+
+.color_primary_darker{ background-color: #346f2a; }
+.color_primary_dark{ background-color: #53b143; }
+.color_primary_base{ background-color: #68dd54; }
+.color_primary_light{ background-color: #84e476; }
+.color_primary_lighter{ background-color: #a2eb98; }
+.color_primary_lightest{ background-color: #deffd9; }
+
+.color_secondary_darker{ background-color: #153f6a; }
+.color_secondary_dark{ background-color: #205590; }
+.color_secondary_base{ background-color: #2a6ab6; }
+.color_secondary_light{ background-color: #3786e3; }
+.color_secondary_lighter{ background-color: #8fccfe; }
+.color_secondary_lightest{ background-color: #ffffff; }
+
+.color_neutral_darker{ background-color: #1e1f20; }
+.color_neutral_dark{ background-color: #353536; }
+.color_neutral_base{ background-color: #4b4c4d; }
+.color_neutral_light{ background-color: #626263; }
+.color_neutral_lighter{ background-color: #cbcbcb; }
+.color_neutral_lightest{ background-color: #e6e6e6; }
+
+.color_accent1{ background-color: #5c22f0; }
+.color_accent2{ background-color: #4891a0; }
+.color_accent3{ background-color: #7bbf79; }
+.color_accent4{ background-color: #d48d2c; }
+.color_accent5{ background-color: #f2de3a; }
+
+.color_status_error{ background-color: #e8554a; }
+.color_status_warning{ background-color: #f2de3a; }
+.color_status_success{ background-color: #53b143; }
+.color_status_disabled{ background-color: #e6e6e6; }
+
+	a{
+		color: #53b143;
+	}
+	a:hover{
+		color: #346f2a;
+		text-decoration: underline;
+	}
+
+.virtDesc{
+	padding-top:10px;
+}
+
+.spacetop{
+	margin-top:20px;
+	
+}
+
+.ccDelete{
+		margin-left: 50px;
+}
+.redText{
+	color: #f00 !important;
+}
+.redText:hover{
+	text-decoration: underline;
+}
+
+.virtualvisitbadge{
+	margin-left: 20px;
+}
+
+.topbar .topbar-left .logo .logo-sm {
+    height: 36px !important;
+}
+
+.figma .left-sidenav, .figma .page-wrapper{
+	margin-top: 0;
+}
+
+.figmaSideUser{
+	margin: 40px 0 20px 0;
+}
+
+.virtualTourSide{
+	margin: 10px 0 40px 0;
+}
+
+.figma .left-sidenav{
+	min-width: 320px;
+	max-width: 320px;
+}
+
+.figmaBigButton{
+	font-size: 16px;
+	padding: 10px 30px;
+}
+
+.logoutDiv{
+	position: absolute;
+	bottom: 22px;
+	padding-left: 20px;
+}
+.telehealth{
+	margin-left: -10px;
+}
+.telehealth li{
+	padding: 10px;
+}
+
+
+.figmaFirstBox{
+	margin-top: 20px;
+}
+
+.account-body.accountbg{
+	background-image: url("../images/login_bg.jpg");
+	background-color: #eee;
+	background-size:  cover;  
+	background-repeat: no-repeat;
+    background-position: center center;  
+}
+.account-body.visitsuccess{
+	background-image: url("../images/11b-05.jpg");
+	background-color: #eee;
+}
+
+.swal2-popup .swal2-styled.swal2-confirm{
+	background-color: #1eca7b;
+}
+.visitRequestDetailsUser{
+	margin-bottom: 20px;
+}
+.insuranceVisitRequest{
+	margin: 0 auto;
+}
+.nuGeneralMenu .active, .nuGeneralMenu li:hover{
+	background-color: #d3f0d1;
+	border-radius: 6px;
+}
+ .nuGeneralMenu li:hover a:hover, .nuGeneralMenu li:hover a i{
+	color: #333;
+	text-decoration: none;
+ }
+.generalProfileForm{
+	margin-top: 20px;
+}
+
+.uploadPicContainer{
+	width: 200px;
+}
+
+.creditCardContianer{
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+
+
+
+.wizard_btn{
+	margin-top: 20px;
+}
+.wizard_btn button{
+	margin-right: 30px;
+}
+.wizard_btn p{
+	font-size: 12px;
+	font-style: italic;
+	max-width: 600px;
+}
+.steps_img{
+	max-width: 100%;
+	height: auto;
+	margin-bottom: 20px;
+	border-radius: 20px;
+}
+.steps_title_sub_text{
+	font-size: 18px;
+	margin: 30px 0;
+}
+.steps_info_text{
+	font-size: 20px;
+	font-weight: 600;
+}
+.steps_info_text .green_h{
+	font-size: 28px;
+	color: #68dd54;
+}
+
+
+.visitCompleteCont{
+	max-width: 500px;
+	position: relative;
+    margin: 0 auto;
+
+}
+
+.image_fit{
+	width: 100%;
+	height: auto;
+}
+
+.big_rating .br-theme-fontawesome-stars .br-widget a{
+	font-size: 24px !important;
+}
+
+.visit_success_btn .btn{
+	min-width: 150px ;
+}
+
+.timesched{
+	display: inline-block;
+	width: 100px;
+}
+
+.left-sidenav-menu li.mm-active>a{
+
+	background: linear-gradient(14deg, #53b143 0%, #68dd54);
+}
+.btn-success, .btn-gradient-success{
+	background-color:  #68dd54;
+	border-color: #53b143;
+}
+
+.postRegBtn{
+	width: 300px;
+}
+
+.welcomeStepCont{
+	min-width: 500px;
+}
+
+.pricingTable1 .pricingTable-signup{
+	background: linear-gradient(14deg, #53b143 0%, #68dd54);
+}
+
+.doctor .met-profile .met-profile-main .met-profile_user-detail .met-user-name,
+.doctor .met-profile .personal-detail li,
+.doctor .met-profile .met-profile-main .met-profile_user-detail .met-user-name-post{
+	color: #333 !important;
+}
