@@ -55,8 +55,10 @@ function PatientProfile() {
                         </span>
                       </div>
                       <div className='met-profile_user-detail'>
-                        <h5 className='met-user-name'>Ronald Gardner</h5>
-                        <p className='mb-0 met-user-name-post'>Confined</p>
+                        <h5 className='met-user-name'>{selectedUser.name}</h5>
+                        <p className='mb-0 met-user-name-post'>
+                          {selectedUser.status}
+                        </p>
                       </div>
                     </div>
                   </div>

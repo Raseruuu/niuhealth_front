@@ -38,6 +38,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Donald Gardner",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                         >
@@ -63,6 +64,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Donald Gardner",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                           className='mr-2'
@@ -75,6 +77,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Donald Gardner",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                         >
@@ -90,6 +93,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Matt Rosales",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                         >
@@ -115,6 +119,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Matt Rosales",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                           className='mr-2'
@@ -127,6 +132,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Matt Rosales",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                         >
@@ -142,6 +148,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Michael Hill",
                               email: "xyx@gmail.com",
+                              status: "Deceased",
                             },
                           }}
                         >
@@ -167,6 +174,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Michael Hill",
                               email: "xyx@gmail.com",
+                              status: "Deceased",
                             },
                           }}
                           className='mr-2'
@@ -179,6 +187,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Michael Hill",
                               email: "xyx@gmail.com",
+                              status: "Deceased",
                             },
                           }}
                         >
@@ -194,6 +203,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Nancy Flanary",
                               email: "xyx@gmail.com",
+                              status: "Confined",
                             },
                           }}
                         >
@@ -218,6 +228,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Nancy Flanary",
+                              status: "Confined",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -230,6 +241,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Nancy Flanary",
+                              status: "Confined",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -245,6 +257,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Dorothy Key",
+                              status: "Confined",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -270,6 +283,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Dorothy Key",
+                              status: "Confined",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -282,6 +296,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Dorothy Key",
+                              status: "Confined",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -297,6 +312,7 @@ function PatientList() {
                           state={{
                             selectedUser: {
                               name: "Joseph Cross",
+                              status: "Follow-up Checkup",
                               email: "xyx@gmail.com",
                             },
                           }}
@@ -323,6 +339,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Joseph Cross",
                               email: "xyx@gmail.com",
+                              status: "Follow-up Checkup",
                             },
                           }}
                           className='mr-2'
@@ -335,6 +352,7 @@ function PatientList() {
                             selectedUser: {
                               name: "Joseph Cross",
                               email: "xyx@gmail.com",
+                              status: "Follow-up Checkup",
                             },
                           }}
                         >

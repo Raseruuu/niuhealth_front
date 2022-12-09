@@ -22,6 +22,12 @@ import ProviderDashboard from "./pages/provider/layout/ProviderDashboard"
 import ProviderIndex from "./pages/provider/ProviderIndex"
 import Patients from "./pages/provider/patient/PatientList"
 import PatientProfile from "./pages/provider/patient/Profile"
+import Ratings from "./pages/provider/Ratings"
+import Visits from "./pages/provider/Visits"
+import VisitRequest from "./pages/provider/VisitRequest"
+import Clinics from "./pages/provider/Clinics"
+import Services from "./pages/provider/services/Services"
+import ManageServices from "./pages/provider/services/ManageServices"
 
 const router = createBrowserRouter(
   [
@@ -70,6 +76,30 @@ const router = createBrowserRouter(
                 { index: true, element: <Patients /> },
                 { path: "profile", element: <PatientProfile /> },
                 { path: "profile/:action", element: <PatientProfile /> },
+              ],
+            },
+            {
+              path: "ratings",
+              element: <Ratings />,
+            },
+            {
+              path: "visits",
+              element: <Visits />,
+            },
+            {
+              path: "visit-requests",
+              element: <VisitRequest />,
+            },
+            {
+              path: "clinics",
+              element: <Clinics />,
+            },
+            {
+              path: "services",
+              element: <Outlet />,
+              children: [
+                { index: true, element: <Services /> },
+                { path: "manage", element: <ManageServices /> },
               ],
             },
           ],
