@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useLoaderData, useNavigate } from "react-router-dom"
 import axios from "../api/axios"
 import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from "../constants"
+import useAuth from "../hooks/useAuth"
 import LottieFailed from "./lottie/LottieFailed"
 import GreenLock from "./lottie/LottieGreenLock"
 
@@ -17,6 +18,7 @@ export function loader({ request }) {
 }
 
 function AWSCallback() {
+  const { setAuth } = useAuth()
   const navigate = useNavigate()
   const { code } = useLoaderData()
   const [errMsg, setErrMsg] = useState()
@@ -69,6 +71,7 @@ function AWSCallback() {
               sessionStorage.removeItem("refresh_token")
               sessionStorage.removeItem("token_type")
               sessionStorage.removeItem("userType")
+              setAuth({})
 
               throw new Error(msg)
             }
@@ -80,6 +83,15 @@ function AWSCallback() {
             sessionStorage.setItem("transactionType", transactionType)
             sessionStorage.setItem("userType", userType)
             console.log("Success")
+
+            setAuth({
+              access_token,
+              id_token,
+              refresh_token,
+              token_type,
+              transactionType,
+              userType,
+            })
 
             if (userType === USERTYPE.provider) {
               navigate("/provider", { replace: true })
@@ -108,20 +120,20 @@ function AWSCallback() {
 
   return (
     <div
-      className="d-flex flex-column justify-content-center align-items-center"
+      className='d-flex flex-column justify-content-center align-items-center'
       style={{ width: "100vw", height: "100vh" }}
     >
       {errMsg ? <LottieFailed /> : <GreenLock />}
       {errMsg ? (
-        <div className="text-center">
+        <div className='text-center'>
           <h4>{errMsg}</h4>
           <p>
             <button
               onClick={() => {
                 window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
               }}
-              type="button"
-              className="btn btn-success btn-round py-2 waves-effect waves-light figmaBigButton"
+              type='button'
+              className='btn btn-success btn-round py-2 waves-effect waves-light figmaBigButton'
             >
               Back to Login
             </button>

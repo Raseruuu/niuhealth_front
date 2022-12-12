@@ -28,6 +28,7 @@ import VisitRequest from "./pages/provider/VisitRequest"
 import Clinics from "./pages/provider/Clinics"
 import Services from "./pages/provider/services/Services"
 import ManageServices from "./pages/provider/services/ManageServices"
+import { AuthProvider } from "./context/AuthProvider"
 
 const router = createBrowserRouter(
   [
@@ -123,6 +124,8 @@ const router = createBrowserRouter(
 const root = ReactDOM.createRoot(document.getElementById("root"))
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 )
