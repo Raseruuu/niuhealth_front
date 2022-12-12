@@ -6,34 +6,39 @@ import WelcomeCard from "../../components/provider/WelcomeCard"
 
 function ProviderIndex() {
   return (
-    <div className="container-fluid">
-      <div className="row">
-        <div className="col-sm-12">
-          <div className="page-title-box"></div>
+    <div className='container-fluid'>
+      <div className='row'>
+        <div className='col-sm-12'>
+          <div className='page-title-box'></div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-12">
+      <div className='row'>
+        <div className='col-12'>
           <WelcomeCard />
         </div>
       </div>
 
       {/* <!-- Calendar --> */}
-      <div className="row">
-        <div className="col-lg-4">
+      <div className='row'>
+        <div className='col-lg-4'>
           <TodaySchedule />
         </div>
-        <div className="col-lg-8">
-          <Calendar />
+        <div className='col-lg-8'>
+          <div className='card'>
+            <div className='card-body'>
+              <Calendar />
+              <div style={{ clear: "both" }}></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-lg-4">
+      <div className='row'>
+        <div className='col-lg-4'>
           <Activity />
         </div>
-        <div className="col-lg-8">
+        <div className='col-lg-8'>
           <PatientDetails />
         </div>
       </div>
