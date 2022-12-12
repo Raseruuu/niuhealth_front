@@ -78,7 +78,7 @@ export default function Calendar() {
       eventAdd={function ({ event }) {
         console.log("eventAdd", event)
       }}
-      eventChange={function (event) {
+      eventChange={function ({ event }) {
         console.log("eventChange", event)
       }}
       eventRemove={function (event) {
