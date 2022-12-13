@@ -82,7 +82,6 @@ function AWSCallback() {
             sessionStorage.setItem("token_type", token_type)
             sessionStorage.setItem("transactionType", transactionType)
             sessionStorage.setItem("userType", userType)
-            console.log("Success")
 
             setAuth({
               access_token,
