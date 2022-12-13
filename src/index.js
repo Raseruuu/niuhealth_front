@@ -25,16 +25,17 @@ import PatientProfile from "./pages/provider/patient/Profile"
 import Ratings from "./pages/provider/Ratings"
 import Visits from "./pages/provider/Visits"
 import VisitRequest from "./pages/provider/VisitRequest"
-import Clinics from "./pages/provider/Clinics"
+import Clinics from "./pages/provider/clinics/Clinics"
 import Services from "./pages/provider/services/Services"
 import ManageServices from "./pages/provider/services/ManageServices"
 import { AuthProvider } from "./context/AuthProvider"
+import ClinicSchedule from "./pages/provider/clinics/ClinicSchedule"
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
-      element: <Outlet />,
+      element: <Outlet />, // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },
@@ -93,7 +94,11 @@ const router = createBrowserRouter(
             },
             {
               path: "clinics",
-              element: <Clinics />,
+              element: <Outlet />,
+              children: [
+                { index: true, element: <Clinics /> },
+                { path: "create", element: <ClinicSchedule /> },
+              ],
             },
             {
               path: "services",

@@ -10,12 +10,9 @@ export const useRefreshToken = () => {
       console.log(JSON.stringify(prev))
       console.log(response.data.token)
       const user = response.data?.userInfo
-      const points = response.data?.userInfo?.points
-      const commission = response.data?.userInfo?.commission
-      const role = [response.data?.userInfo?.type]
-      const token = response.data?.token
+      const access_token = response.data?.access_token
 
-      return { ...prev, token, role, user, points, commission }
+      return { ...prev, access_token, user }
     })
 
     return response.data.token
