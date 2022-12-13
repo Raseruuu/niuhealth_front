@@ -1,8 +1,60 @@
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AWS_BUCKET } from "../../../constants"
+import useAuth from "../../../hooks/useAuth"
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
 
 // Provider list of patients
 function PatientList() {
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const [errMsg, setErrMsg] = useState(null)
+  const [list, setList] = useState([])
+
+  /*
+  For Status:
+  Confined -  badge-soft-purple
+  Deceased - badge-soft-danger
+  Follow-up Checkup - badge-soft-success
+  */
+
+  useEffect(() => {
+    let isMounted = true
+    const controller = new AbortController()
+
+    async function getList() {
+      await axiosPrivate
+        .post(
+          "getPatients",
+          { Email: auth.email || "jmmalunao@gmail.com" },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { StatusCode: statusCode, Data: data = [], Message } = res.data
+
+          if (statusCode === 200) {
+            setList(data)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
+        })
+    }
+
+    isMounted && getList()
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  }, [])
+
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -30,336 +82,51 @@ function PatientList() {
                   </thead>
 
                   <tbody>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Donald Gardner",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Donald Gardner
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-purple'>
-                          Confined
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile/edit'
-                          state={{
-                            selectedUser: {
-                              name: "Donald Gardner",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile/delete'
-                          state={{
-                            selectedUser: {
-                              name: "Donald Gardner",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Matt Rosales",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-9.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Matt Rosales
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-purple'>
-                          Confined
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile/edit'
-                          state={{
-                            selectedUser: {
-                              name: "Matt Rosales",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile/delete'
-                          state={{
-                            selectedUser: {
-                              name: "Matt Rosales",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Michael Hill",
-                              email: "xyx@gmail.com",
-                              status: "Deceased",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-8.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Michael Hill
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-danger'>
-                          Deceased
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile/edit'
-                          state={{
-                            selectedUser: {
-                              name: "Michael Hill",
-                              email: "xyx@gmail.com",
-                              status: "Deceased",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile/delete'
-                          state={{
-                            selectedUser: {
-                              name: "Michael Hill",
-                              email: "xyx@gmail.com",
-                              status: "Deceased",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Nancy Flanary",
-                              email: "xyx@gmail.com",
-                              status: "Confined",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-7.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Nancy Flanary
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-purple'>
-                          Confined
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile/edit'
-                          state={{
-                            selectedUser: {
-                              name: "Nancy Flanary",
-                              status: "Confined",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile/delete'
-                          state={{
-                            selectedUser: {
-                              name: "Nancy Flanary",
-                              status: "Confined",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Dorothy Key",
-                              status: "Confined",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-6.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Dorothy Key
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-primary'>
-                          Confined
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Dorothy Key",
-                              status: "Confined",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Dorothy Key",
-                              status: "Confined",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <Link
-                          to='profile'
-                          state={{
-                            selectedUser: {
-                              name: "Joseph Cross",
-                              status: "Follow-up Checkup",
-                              email: "xyx@gmail.com",
-                            },
-                          }}
-                        >
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-5.jpg`}
-                            alt=''
-                            className='thumb-sm rounded-circle mr-2'
-                          />
-                          Joseph Cross
-                        </Link>
-                      </td>
-                      <td>xyx@gmail.com</td>
-                      <td>+123456789</td>
-                      <td>
-                        <span className='badge badge-md badge-soft-success'>
-                          Follow-up Checkup
-                        </span>
-                      </td>
-                      <td>
-                        <Link
-                          to='profile/edit'
-                          state={{
-                            selectedUser: {
-                              name: "Joseph Cross",
-                              email: "xyx@gmail.com",
-                              status: "Follow-up Checkup",
-                            },
-                          }}
-                          className='mr-2'
-                        >
-                          <i className='fas fa-edit text-info font-16'></i>
-                        </Link>
-                        <Link
-                          to='profile/delete'
-                          state={{
-                            selectedUser: {
-                              name: "Joseph Cross",
-                              email: "xyx@gmail.com",
-                              status: "Follow-up Checkup",
-                            },
-                          }}
-                        >
-                          <i className='fas fa-trash-alt text-danger font-16'></i>
-                        </Link>
-                      </td>
-                    </tr>
+                    {list.map((item) => (
+                      <tr>
+                        <td>
+                          <Link
+                            to='profile'
+                            state={{
+                              selectedUser: item,
+                            }}
+                          >
+                            <img
+                              src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                              alt=''
+                              className='thumb-sm rounded-circle mr-2'
+                            />
+                            {item.name}
+                          </Link>
+                        </td>
+                        <td>{item.email}</td>
+                        <td>{item.phone}</td>
+                        <td>
+                          <span className='badge badge-md badge-soft-purple'>
+                            {item.status}
+                          </span>
+                        </td>
+                        <td>
+                          <Link
+                            to='profile/edit'
+                            state={{
+                              selectedUser: item,
+                            }}
+                            className='mr-2'
+                          >
+                            <i className='fas fa-edit text-info font-16'></i>
+                          </Link>
+                          <Link
+                            to='profile/delete'
+                            state={{
+                              selectedUser: item,
+                            }}
+                          >
+                            <i className='fas fa-trash-alt text-danger font-16'></i>
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

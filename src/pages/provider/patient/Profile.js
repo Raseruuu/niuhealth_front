@@ -66,15 +66,15 @@ function PatientProfile() {
                     <ul className='list-unstyled personal-detail'>
                       <li className=''>
                         <i className='dripicons-phone mr-2 text-info font-18'></i>{" "}
-                        <b> phone </b> : +91 23456 78910
+                        <b> phone </b> : {selectedUser.phone}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-mail text-info font-18 mt-2 mr-2'></i>{" "}
-                        <b> Email </b> : patient@gmail.com
+                        <b> Email </b> : {selectedUser.email}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{" "}
-                        <b>Location</b> : Hawaii
+                        <b>Location</b> : {selectedUser.address}
                       </li>
                     </ul>
                     <div className='button-list btn-social-icon'>
@@ -349,7 +349,7 @@ function PatientProfile() {
                           data-clipboard-target='#clipboardTextarea'
                         >
                           <i className='fas fa-video'></i> Start Virtual Call
-                        </button>
+                        </button>{" "}
                         <button
                           type='button'
                           className='btn btn-gradient-primary btn-clipboard'
