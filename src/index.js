@@ -1,4 +1,4 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import ReactDOM from "react-dom/client"
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom"
 import AWSCallback, {
@@ -31,13 +31,20 @@ import ManageServices from "./pages/provider/services/ManageServices"
 import { AuthProvider } from "./context/AuthProvider"
 import ClinicSchedule from "./pages/provider/clinics/ClinicSchedule"
 import VirtualVisitIndex from "./pages/virtualvisit/VirtualVisitIndex"
-import Room from "./pages/virtualvisit/Room"
+
+const Room = lazy(() => import("./pages/virtualvisit/Room"))
+
+const App = () => (
+  <Suspense>
+    <Outlet />
+  </Suspense>
+)
 
 const router = createBrowserRouter(
   [
     {
       path: "/",
-      element: <Outlet />, // TODO: should be auth
+      element: <App />, // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },

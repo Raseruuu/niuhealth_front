@@ -1,13 +1,12 @@
 import React, { useEffect } from "react"
 
-import ZoomMtgEmbedded from "@zoomus/websdk/embedded"
+import { ZoomMtg } from "@zoomus/websdk"
 import useAuth from "../../hooks/useAuth"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import { useNavigate } from "react-router-dom"
 import { USERTYPE } from "../../constants"
 
 function Room() {
-  const client = ZoomMtgEmbedded.createClient()
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
@@ -29,6 +28,7 @@ function Room() {
   var userEmail = email
   var passWord = "123456"
   var registrantToken = ""
+  var leaveUrl = "http://localhost:3000" // TODO: Redirect to ratings
 
   function getSignature() {
     axiosPrivate
@@ -53,65 +53,48 @@ function Room() {
   }
 
   function startMeeting(signature) {
-    let meetingSDKElement = document.getElementById("meetingSDKElement")
+    document.getElementById("zmmtg-root").style.display = "block"
 
-    client.init({
-      debug: true,
-      zoomAppRoot: meetingSDKElement,
-      language: "en-US",
-      customize: {
-        // meetingInfo: [
-        //   "topic",
-        //   "host",
-        //   "mn",
-        //   "pwd",
-        //   "telPwd",
-        //   "invite",
-        //   "participant",
-        //   "dc",
-        //   "enctype",
-        // ],
-        video: {
-          isResizable: true,
-          viewSizes: {
-            default: {
-              width: 1000,
-              height: 600,
-            },
-            ribbon: {
-              width: 300,
-              height: 700,
-            },
+    ZoomMtg.init({
+      leaveUrl: leaveUrl,
+      success: (success) => {
+        console.log(success)
+
+        ZoomMtg.join({
+          signature: signature,
+          meetingNumber: meetingNumber,
+          userName: userName,
+          sdkKey: sdkKey,
+          userEmail: userEmail,
+          passWord: passWord,
+          tk: registrantToken,
+          success: (success) => {
+            console.log(success)
           },
-        },
-        toolbar: {
-          buttons: [
-            {
-              text: "Custom Button",
-              className: "CustomButton",
-              onClick: () => {
-                console.log("custom button")
-                navigate(-1)
-              },
-            },
-          ],
-        },
+          error: (error) => {
+            console.log(error)
+          },
+        })
       },
-    })
-
-    client.join({
-      sdkKey: sdkKey,
-      signature: signature,
-      meetingNumber: meetingNumber,
-      password: passWord,
-      userName: userName,
-      userEmail: userEmail,
-      tk: registrantToken,
+      error: (error) => {
+        console.log(error)
+      },
     })
   }
 
   useEffect(() => {
+    ZoomMtg.setZoomJSLib("https://source.zoom.us/2.9.5/lib", "/av")
+
+    ZoomMtg.preLoadWasm()
+    ZoomMtg.prepareWebSDK()
+    ZoomMtg.i18n.load("en-US")
+    ZoomMtg.i18n.reload("en-US")
+
     getSignature()
+
+    return () => {
+      document.getElementById("zmmtg-root").style.display = "none"
+    }
   }, [])
 
   return (

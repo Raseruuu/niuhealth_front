@@ -79,20 +79,22 @@ function LoginAuth() {
   } = useLoaderData()
   console.log(email, email_verified, name, sub, username, accessTokenValid)
 
-  setAuth((prev) => ({
-    ...prev,
-    email,
-    email_verified,
-    name,
-    sub,
-    username,
-    access_token,
-    token_type,
-    id_token,
-    refresh_token,
-    transactionType,
-    userType,
-  }))
+  useEffect(() => {
+    setAuth((prev) => ({
+      ...prev,
+      email,
+      email_verified,
+      name,
+      sub,
+      username,
+      access_token,
+      token_type,
+      id_token,
+      refresh_token,
+      transactionType,
+      userType,
+    }))
+  }, [])
 
   if (accessTokenValid && userType === USERTYPE.patient) {
     return <Navigate to={"/patient"} replace={true} />
