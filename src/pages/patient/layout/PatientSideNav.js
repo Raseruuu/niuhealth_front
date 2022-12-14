@@ -1,61 +1,63 @@
-import { Link, NavLink, useLocation } from "react-router-dom"
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
 import { APP_URL, AWS_BUCKET } from "../../../constants"
 import SideNavLogo from "../../../components/SideNavLogo"
 
 function PatientSideNav() {
   const location = useLocation()
+  const navigate = useNavigate()
 
   const name = sessionStorage.getItem("name") || "Welcome"
   const email = sessionStorage.getItem("email")
 
   return (
-    <div className="left-sidenav">
-      <div className="topbar-left">
-        <Link to="/patient" className="logo">
+    <div className='left-sidenav position-relative'>
+      <div className='topbar-left'>
+        <Link to='/patient' className='logo'>
           <span>
             <SideNavLogo />
           </span>
         </Link>
       </div>
 
-      <div className="media figmaSideUser">
-        <Link className="" href="#">
+      <div className='media figmaSideUser'>
+        <Link className='' href='#'>
           <img
             src={`${APP_URL}/assets/images/users/user-1.jpg`}
-            alt="user"
-            className="rounded-circle thumb-md"
+            alt='user'
+            className='rounded-circle thumb-md'
             onError={(e) =>
               (e.target.src = `${AWS_BUCKET}/assets/images/users/user-1.jpg`)
             }
           />
         </Link>
-        <div className="media-body align-self-center ml-3">
-          <p className="font-14 font-weight-bold mb-0">{name}</p>
-          <p className="mb-0 font-12 text-muted">{email}</p>
+        <div className='media-body align-self-center ml-3'>
+          <p className='font-14 font-weight-bold mb-0'>{name}</p>
+          <p className='mb-0 font-12 text-muted'>{email}</p>
         </div>
       </div>
 
-      <div className="virtualTourSide">
+      <div className='virtualTourSide'>
         <button
-          type="button"
-          className="btn btn-success btn-round waves-effect waves-light figmaBigButton"
+          type='button'
+          className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
+          onClick={() => navigate("/virtualvisit")}
         >
           Start Your First Virtual Visit
         </button>
       </div>
       {location?.pathname === "/patient/virtualvisit" ? (
         <div
-          className="spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show"
-          role="alert"
+          className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
+          role='alert'
         >
           <button
-            type="button"
-            className="close"
-            data-dismiss="alert"
-            aria-label="Close"
+            type='button'
+            className='close'
+            data-dismiss='alert'
+            aria-label='Close'
           >
-            <span aria-hidden="true">
-              <i className="mdi mdi-close"></i>
+            <span aria-hidden='true'>
+              <i className='mdi mdi-close'></i>
             </span>
           </button>
           Sorry, we are unavailable for virtual visits from 12:00 Am to 8:00 Am.
@@ -63,46 +65,46 @@ function PatientSideNav() {
         </div>
       ) : null}
 
-      <ul className="metismenu left-sidenav-menu">
+      <ul className='metismenu left-sidenav-menu'>
         <li>
-          <NavLink to="virtualvisit">
-            <i className="mdi mdi-video"></i>
+          <NavLink to='virtualvisit'>
+            <i className='mdi mdi-video'></i>
             <span>Virtual Visit</span>
-            <span className="menu-arrow"></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
 
         <li>
-          <NavLink to="profile">
-            <i className="dripicons-user"></i>
+          <NavLink to='profile'>
+            <i className='dripicons-user'></i>
             <span>Profile</span>
-            <span className="menu-arrow"></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
         <li>
-          <NavLink to="appointments">
-            <i className="mdi mdi-calendar-text"></i>
+          <NavLink to='appointments'>
+            <i className='mdi mdi-calendar-text'></i>
             <span>Appointments</span>
-            <span className="menu-arrow"></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
         <li>
-          <NavLink to="subscription">
-            <i className="mdi mdi-credit-card"></i>
+          <NavLink to='subscription'>
+            <i className='mdi mdi-credit-card'></i>
             <span>Subscription and Payment</span>
-            <span className="menu-arrow"></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
         <li>
-          <NavLink to="insurance">
-            <i className="mdi mdi-home-plus"></i>
+          <NavLink to='insurance'>
+            <i className='mdi mdi-home-plus'></i>
             <span>Insurance</span>
-            <span className="menu-arrow"></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
       </ul>
-      <div className="logoutDiv">
-        <Link href="">Logout</Link>
+      <div className='logoutDiv'>
+        <Link href=''>Logout</Link>
       </div>
     </div>
   )

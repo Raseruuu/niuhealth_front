@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router-dom"
+
 function Visits() {
+  const navigate = useNavigate(0)
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -10,7 +13,8 @@ function Visits() {
                   type='button'
                   className='btn btn-success waves-effect waves-light'
                   id='create-visit'
-                  onclick='openModal()'
+                  // onclick='openModal()'
+                  onClick={() => navigate("/virtualvisit/room")}
                 >
                   New Visit
                 </button>
@@ -46,7 +50,7 @@ function Visits() {
                       />
                       <label
                         className='custom-control-label'
-                        for='customSwitchSuccess'
+                        htmlFor='customSwitchSuccess'
                       >
                         Accept Instant Visits
                       </label>
@@ -59,13 +63,13 @@ function Visits() {
                     <div className='checkbox checkbox-success '>
                       <h6 className='mb-3 mt-0'>Filter</h6>
                       <input id='checkbox0' type='checkbox' checked />
-                      <label for='checkbox0'>
+                      <label htmlFor='checkbox0'>
                         <i className='dripicons-camcorder'></i> Virtual Visits
                       </label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox1' type='checkbox' checked />
-                      <label for='checkbox1'>
+                      <label htmlFor='checkbox1'>
                         <i className=' dripicons-user'></i> In-Person Visits
                       </label>
                     </div>
@@ -88,15 +92,15 @@ function Visits() {
                     <h6 className='mb-3 mt-0'>Booking Status</h6>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox0' type='checkbox' checked />
-                      <label for='checkbox0'>Confirmed</label>
+                      <label htmlFor='checkbox0'>Confirmed</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox1' type='checkbox' checked />
-                      <label for='checkbox1'>Pending</label>
+                      <label htmlFor='checkbox1'>Pending</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox2' type='checkbox' />
-                      <label for='checkbox2'>Rejected</label>
+                      <label htmlFor='checkbox2'>Rejected</label>
                     </div>
                   </div>
                 </div>
@@ -108,15 +112,15 @@ function Visits() {
                     <h6 className='mb-3 mt-0'>My Clinics</h6>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox0' type='checkbox' />
-                      <label for='checkbox0'>BLK Hospital</label>
+                      <label htmlFor='checkbox0'>BLK Hospital</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox1' type='checkbox' />
-                      <label for='checkbox1'>Linda's Clinic</label>
+                      <label htmlFor='checkbox1'>Linda's Clinic</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox2' type='checkbox' />
-                      <label for='checkbox2'>Sony Center Clinic</label>
+                      <label htmlFor='checkbox2'>Sony Center Clinic</label>
                     </div>
                   </div>
                 </div>

@@ -1,8 +1,8 @@
 import Activity from "../../components/provider/Activity"
 import Calendar from "../../components/provider/calendar/Calendar"
 import TodaySchedule from "../../components/provider/calendar/TodaySchedule"
-import PatientDetails from "../../components/provider/PatientDetails"
 import WelcomeCard from "../../components/provider/WelcomeCard"
+import PatientListData from "../../components/provider/PatientListData"
 
 function ProviderIndex() {
   return (
@@ -39,7 +39,29 @@ function ProviderIndex() {
           <Activity />
         </div>
         <div className='col-lg-8'>
-          <PatientDetails />
+          <div className='card'>
+            <div className='card-body'>
+              <h4 className='header-title mt-0 mb-3'>Patient Details</h4>
+              <div className='table-responsive'>
+                <table className='table'>
+                  <thead className='thead-light'>
+                    <tr>
+                      <th>Patient</th>
+                      <th>Email</th>
+                      <th>Phone No</th>
+
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <PatientListData limit={6} />
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

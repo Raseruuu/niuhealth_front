@@ -9,8 +9,6 @@ function ProviderDashboard() {
   const matches = useMediaQuery("only screen and (max-width: 575.98px)")
   const [openSideNav, setOpenSideNav] = useState(!matches)
 
-  console.log(matches)
-
   useEffect(() => {
     if (matches) {
       setOpenSideNav(false)
