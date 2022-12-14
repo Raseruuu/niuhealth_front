@@ -4,20 +4,28 @@ import ZoomMtgEmbedded from "@zoomus/websdk/embedded"
 import useAuth from "../../hooks/useAuth"
 import useAxiosPrivate from "../../hooks/useAxiosPrivate"
 import { useNavigate } from "react-router-dom"
+import { USERTYPE } from "../../constants"
 
 function Room() {
   const client = ZoomMtgEmbedded.createClient()
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
+  const email = auth?.email || sessionStorage.getItem("email")
+  const isProvider =
+    (auth?.userType || sessionStorage.getItem("userType")) === USERTYPE.provider
+      ? true
+      : false
+
+  console.log("isProvider: ", isProvider)
 
   var signatureEndpoint =
     "http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com"
   var sdkKey = "PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW"
   var meetingNumber = "4737080721"
-  var role = auth?.isProvider ? 1 : 1
-  var userName = auth?.isProvider ? "Provider" : "Guest"
-  var userEmail = auth?.email || ""
+  var role = isProvider ? 1 : 0
+  var userName = isProvider ? "Provider" : "Patient"
+  var userEmail = email
   var passWord = "123456"
   var registrantToken = ""
 

@@ -30,6 +30,8 @@ import Services from "./pages/provider/services/Services"
 import ManageServices from "./pages/provider/services/ManageServices"
 import { AuthProvider } from "./context/AuthProvider"
 import ClinicSchedule from "./pages/provider/clinics/ClinicSchedule"
+import VirtualVisitIndex from "./pages/virtualvisit/VirtualVisitIndex"
+import Room from "./pages/virtualvisit/Room"
 
 const router = createBrowserRouter(
   [
@@ -39,6 +41,14 @@ const router = createBrowserRouter(
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },
+        {
+          path: "virtualvisit",
+          element: <Outlet />,
+          children: [
+            { index: true, element: <VirtualVisitIndex /> },
+            { path: "room", element: <Room /> },
+          ],
+        },
         {
           path: "patient",
           element: <PatientDashboard />,

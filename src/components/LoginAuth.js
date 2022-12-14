@@ -20,17 +20,16 @@ export async function loader({ request }) {
     )
     .then((res) => {
       console.log("res: ", res)
-      // TODO: store user details in CONTEXT
 
       try {
         const { email, email_verified, name, sub, username } =
           res?.data?.Result || {}
 
-        // sessionStorage.setItem("email", email)
-        // sessionStorage.setItem("email_verified", email_verified)
-        // sessionStorage.setItem("name", name)
-        // sessionStorage.setItem("sub", sub)
-        // sessionStorage.setItem("username", username)
+        sessionStorage.setItem("email", email)
+        sessionStorage.setItem("email_verified", email_verified)
+        sessionStorage.setItem("name", name)
+        sessionStorage.setItem("sub", sub)
+        sessionStorage.setItem("username", username)
         if (!email) {
           throw new Error("No email address.")
         }
