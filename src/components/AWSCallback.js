@@ -92,14 +92,6 @@ function AWSCallback() {
               userType,
             })
 
-            if (userType === USERTYPE.provider) {
-              navigate("/provider", { replace: true })
-              return
-            } else if (userType === USERTYPE.patient) {
-              navigate("/patient", { replace: true })
-              return
-            }
-
             navigate("/", { replace: true })
           }
         )

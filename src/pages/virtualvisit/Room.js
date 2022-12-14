@@ -12,6 +12,7 @@ function Room() {
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
   const email = auth?.email || sessionStorage.getItem("email")
+  const name = auth?.name || sessionStorage.getItem("name")
   const isProvider =
     (auth?.userType || sessionStorage.getItem("userType")) === USERTYPE.provider
       ? true
@@ -24,7 +25,7 @@ function Room() {
   var sdkKey = "PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW"
   var meetingNumber = "4737080721"
   var role = isProvider ? 1 : 0
-  var userName = isProvider ? "Provider" : "Patient"
+  var userName = name
   var userEmail = email
   var passWord = "123456"
   var registrantToken = ""
