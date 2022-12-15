@@ -1,11 +1,13 @@
+import useAuth from '../../hooks/useAuth'
+
 function WelcomeCard() {
-  const user = sessionStorage.getItem("name") || null
+  const { auth } = useAuth()
   return (
-    <div className="card">
-      <div className="card-body">
-        <div className="jumbotron mb-0 bg-light">
-          <h1 className="display-4">Good Morning{user ? `, ${user}` : null}</h1>
-          <p className="lead">Have a nice day at work!</p>
+    <div className='card'>
+      <div className='card-body'>
+        <div className='jumbotron mb-0 bg-light'>
+          <h1 className='display-4'>Good Morning{auth?.name ?? null}</h1>
+          <p className='lead'>Have a nice day at work!</p>
           {/* <hr className="my-4" /> */}
         </div>
       </div>
