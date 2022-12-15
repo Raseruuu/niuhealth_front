@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
-import { AWS_BUCKET } from "../../constants"
-import useAuth from "../../hooks/useAuth"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AWS_BUCKET } from '../../constants'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
 function PatientListData({ limit }) {
   const { auth } = useAuth()
@@ -24,17 +24,17 @@ function PatientListData({ limit }) {
     async function getList() {
       await axiosPrivate
         .post(
-          "getPatients",
-          { Email: auth.email || "jmmalunao@gmail.com" },
+          'getPatients',
+          { Email: auth.email || 'jmmalunao@gmail.com' },
           {
             signal: controller.signal,
           }
         )
         .then((res) => {
           console.log(res)
-          const { StatusCode: statusCode, Data: data = [], Message } = res.data
+          const { Status, Data: data = [], Message } = res.data
 
-          if (statusCode === 200) {
+          if (Status) {
             setList(data.slice(0, limit))
           } else {
             throw new Error(Message)

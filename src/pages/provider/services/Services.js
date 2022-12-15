@@ -1,6 +1,54 @@
-import { Link } from "react-router-dom"
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
+import { AWS_BUCKET } from '../../../constants'
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
-function Services() {
+function Services({ limit }) {
+  const navigate = useNavigate()
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const [errMsg, setErrMsg] = useState(null)
+  const [list, setList] = useState([])
+
+  useEffect(() => {
+    let isMounted = true
+    const controller = new AbortController()
+
+    async function getList() {
+      await axiosPrivate
+        .post(
+          'getServices',
+          { Email: auth.email || 'jmmalunao@gmail.com' },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data = [], Message } = res.data
+
+          if (Status) {
+            setList(data.slice(0, limit))
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
+        })
+    }
+
+    isMounted && getList()
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  }, [])
+
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -8,7 +56,7 @@ function Services() {
           <div className='page-title-box'>
             <div className='float-right'>
               <ol className='breadcrumb'>
-                <Link to='manage'>
+                <Link to='manage/new'>
                   <button
                     type='button'
                     className='btn btn-success waves-effect waves-light'
@@ -34,11 +82,11 @@ function Services() {
                   <div className='p-3'>
                     <h6 className='mb-3 mt-0'>My Clinics</h6>
                     <div className='checkbox checkbox-success '>
-                      <input id='checkbox0' type='checkbox' checked />
+                      <input id='checkbox0' type='checkbox' defaultChecked />
                       <label for='checkbox0'>BLK Hospital</label>
                     </div>
                     <div className='checkbox checkbox-success '>
-                      <input id='checkbox1' type='checkbox' checked />
+                      <input id='checkbox1' type='checkbox' defaultChecked />
                       <label for='checkbox1'>Linda's Clinic</label>
                     </div>
                     <div className='checkbox checkbox-success '>
@@ -56,7 +104,7 @@ function Services() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox3' type='checkbox' />
                       <label for='checkbox3'>
-                        {" "}
+                        {' '}
                         5<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -67,7 +115,7 @@ function Services() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox4' type='checkbox' />
                       <label for='checkbox4'>
-                        {" "}
+                        {' '}
                         4<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -78,7 +126,7 @@ function Services() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox5' type='checkbox' />
                       <label for='checkbox5'>
-                        {" "}
+                        {' '}
                         3<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -89,7 +137,7 @@ function Services() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox6' type='checkbox' />
                       <label for='checkbox6'>
-                        {" "}
+                        {' '}
                         2<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star light-gray'></i>
@@ -100,7 +148,7 @@ function Services() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox7' type='checkbox' />
                       <label for='checkbox7'>
-                        {" "}
+                        {' '}
                         1<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star light-gray'></i>
                         <i className='mdi mdi-star light-gray'></i>
@@ -137,235 +185,48 @@ function Services() {
           </div>
 
           <div className='row'>
-            <div className='col-lg-4'>
-              <div className='card e-co-product'>
-                <a href=''>
-                  <img
-                    src='../assets/images/products/img-1.png'
-                    alt=''
-                    className='img-fluid'
-                  />
-                </a>
-                <div className='card-body product-info'>
-                  <a href='' className='product-title'>
-                    Scaling and polishing session
-                  </a>
-                  <p>Lorem ipsum dolor sit amet consecutetur.</p>
-                  <div className='d-flex justify-content-between my-2'>
-                    <p className='product-price'>$329.00 </p>
-                    <ul className='list-inline mb-0 product-review align-self-center'>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star-half text-warning'></i>
-                      </li>
-                    </ul>
+            {list.map((item, index) => (
+              <div key={item?.recno || index} className='col-lg-4'>
+                <div className='card e-co-product'>
+                  <Link to=''>
+                    <img
+                      src={`${AWS_BUCKET}/assets/images/products/img-1.png`}
+                      alt=''
+                      className='img-fluid'
+                    />
+                  </Link>
+                  <div className='card-body product-info'>
+                    <Link to='' className='product-title'>
+                      {item.name}
+                    </Link>
+                    <p>{item.description}</p>
+                    <div className='d-flex justify-content-between my-2'>
+                      <p className='product-price'>${item.rate}</p>
+                      <p className='mb-0 product-review align-self-center'>
+                        <Rating
+                          fillColor='#ffb822'
+                          emptyColor='white'
+                          SVGstrokeColor='#f1a545'
+                          SVGstorkeWidth={1}
+                          size={17}
+                          allowFraction={true}
+                          initialValue={4.5}
+                          readonly={true}
+                        />
+                      </p>
+                    </div>
+                    <Link to='manage/update' state={{ selectedService: item }}>
+                      <button
+                        type='button'
+                        className='btn btn-gradient-success waves-effect waves-light'
+                      >
+                        Manage
+                      </button>
+                    </Link>
                   </div>
-                  <a href='../pages/manage-service.html'>
-                    <button
-                      type='button'
-                      className='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Manage
-                    </button>
-                  </a>
                 </div>
               </div>
-            </div>
-
-            <div className='col-lg-4'>
-              <div className='card e-co-product'>
-                <a href=''>
-                  <img
-                    src='../assets/images/products/img-1.png'
-                    alt=''
-                    className='img-fluid'
-                  />
-                </a>
-                <div className='card-body product-info'>
-                  <a href='' className='product-title'>
-                    Scaling and polishing session
-                  </a>
-                  <p>Lorem ipsum dolor sit amet consecutetur.</p>
-                  <div className='d-flex justify-content-between my-2'>
-                    <p className='product-price'>$329.00 </p>
-                    <ul className='list-inline mb-0 product-review align-self-center'>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star-half text-warning'></i>
-                      </li>
-                    </ul>
-                  </div>
-                  <a href='../pages/manage-service.html'>
-                    <button
-                      type='button'
-                      className='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Manage
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className='col-lg-4'>
-              <div className='card e-co-product'>
-                <a href=''>
-                  <img
-                    src='../assets/images/products/img-1.png'
-                    alt=''
-                    className='img-fluid'
-                  />
-                </a>
-                <div className='card-body product-info'>
-                  <a href='' className='product-title'>
-                    Scaling and polishing session
-                  </a>
-                  <p>Lorem ipsum dolor sit amet consecutetur.</p>
-                  <div className='d-flex justify-content-between my-2'>
-                    <p className='product-price'>$329.00 </p>
-                    <ul className='list-inline mb-0 product-review align-self-center'>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star-half text-warning'></i>
-                      </li>
-                    </ul>
-                  </div>
-                  <a href='../pages/manage-service.html'>
-                    <button
-                      type='button'
-                      className='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Manage
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className='col-lg-4'>
-              <div className='card e-co-product'>
-                <a href=''>
-                  <img
-                    src='../assets/images/products/img-1.png'
-                    alt=''
-                    className='img-fluid'
-                  />
-                </a>
-                <div className='card-body product-info'>
-                  <a href='' className='product-title'>
-                    Scaling and polishing session
-                  </a>
-                  <p>Lorem ipsum dolor sit amet consecutetur.</p>
-                  <div className='d-flex justify-content-between my-2'>
-                    <p className='product-price'>$329.00 </p>
-                    <ul className='list-inline mb-0 product-review align-self-center'>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star-half text-warning'></i>
-                      </li>
-                    </ul>
-                  </div>
-                  <a href='../pages/manage-service.html'>
-                    <button
-                      type='button'
-                      className='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Manage
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className='col-lg-4'>
-              <div className='card e-co-product'>
-                <a href=''>
-                  <img
-                    src='../assets/images/products/img-1.png'
-                    alt=''
-                    className='img-fluid'
-                  />
-                </a>
-                <div className='card-body product-info'>
-                  <a href='' className='product-title'>
-                    Scaling and polishing session
-                  </a>
-                  <p>Lorem ipsum dolor sit amet consecutetur.</p>
-                  <div className='d-flex justify-content-between my-2'>
-                    <p className='product-price'>$329.00 </p>
-                    <ul className='list-inline mb-0 product-review align-self-center'>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star text-warning'></i>
-                      </li>
-                      <li className='list-inline-item'>
-                        <i className='mdi mdi-star-half text-warning'></i>
-                      </li>
-                    </ul>
-                  </div>
-                  <a href='../pages/manage-service.html'>
-                    <button
-                      type='button'
-                      className='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Manage
-                    </button>
-                  </a>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

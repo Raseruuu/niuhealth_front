@@ -124,7 +124,7 @@ const router = createBrowserRouter(
               element: <Outlet />,
               children: [
                 { index: true, element: <Services /> },
-                { path: 'manage', element: <ManageServices /> },
+                { path: 'manage/:action', element: <ManageServices /> },
               ],
             },
           ],
@@ -147,9 +147,7 @@ const router = createBrowserRouter(
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
-  </React.StrictMode>
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
 )

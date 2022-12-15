@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from "react"
-import { useForm } from "react-hook-form"
-import { Link, useNavigate } from "react-router-dom"
-import useAuth from "../../../hooks/useAuth"
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import { useEffect, useRef, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 export default function ClinicSchedule() {
   const { auth } = useAuth()
@@ -23,18 +23,18 @@ export default function ClinicSchedule() {
     setIsSuccess(false)
 
     await axiosPrivate
-      .post("createClinic", {
+      .post('createClinic', {
         ...data,
-        Provider: auth?.email || "jmmalunao@gmail.com",
+        Provider: auth?.email || 'jmmalunao@gmail.com',
       })
       .then((res) => {
         return res.data
       })
       .then((data) => {
-        const { StatusCode, Message } = data || {}
+        const { Status, Message } = data || {}
         setFeedbackMsg(Message)
 
-        if (StatusCode === 200) {
+        if (Status) {
           setIsSuccess(true)
         } else {
           setIsSuccess(false)
@@ -92,16 +92,16 @@ export default function ClinicSchedule() {
                       <div className='col-md-12'>
                         <input
                           className={`form-control ${
-                            errors.Name ? "is-invalid" : ""
+                            errors.Name ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='Name'
-                          {...register("Name", { required: true })}
+                          {...register('Name', { required: true })}
                         />
                         {errors.Name ? (
                           <div
                             className='invalid-feedback'
-                            style={{ display: "block" }}
+                            style={{ display: 'block' }}
                           >
                             Please enter clinic name.
                           </div>
@@ -125,16 +125,16 @@ export default function ClinicSchedule() {
                       <div className='col-md-12'>
                         <input
                           className={`form-control ${
-                            errors.Address ? "is-invalid" : ""
+                            errors.Address ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='Address'
-                          {...register("Address", { required: true })}
+                          {...register('Address', { required: true })}
                         />
                         {errors.Address ? (
                           <div
                             className='invalid-feedback'
-                            style={{ display: "block" }}
+                            style={{ display: 'block' }}
                           >
                             Please enter clinic address.
                           </div>
@@ -158,16 +158,16 @@ export default function ClinicSchedule() {
                       <div className='col-md-12'>
                         <input
                           className={`form-control ${
-                            errors.Services ? "is-invalid" : ""
+                            errors.Services ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='Services'
-                          {...register("Services", { required: true })}
+                          {...register('Services', { required: true })}
                         />
                         {errors.Services ? (
                           <div
                             className='invalid-feedback'
-                            style={{ display: "block" }}
+                            style={{ display: 'block' }}
                           >
                             Please enter clinic services.
                           </div>
@@ -191,16 +191,16 @@ export default function ClinicSchedule() {
                       <div className='col-md-12'>
                         <input
                           className={`form-control ${
-                            errors.Services ? "is-invalid" : ""
+                            errors.Services ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='Working_hours'
-                          {...register("Working_hours", { required: true })}
+                          {...register('Working_hours', { required: true })}
                         />
                         {errors.Working_hours ? (
                           <div
                             className='invalid-feedback'
-                            style={{ display: "block" }}
+                            style={{ display: 'block' }}
                           >
                             Please enter clinic working hour(s).
                           </div>
@@ -215,7 +215,7 @@ export default function ClinicSchedule() {
                     <div className='col-lg-6'>
                       <div
                         className={`alert  alert-dismissible fade show ${
-                          isSuccess ? "alert-success" : "alert-danger"
+                          isSuccess ? 'alert-success' : 'alert-danger'
                         }`}
                         role='alert'
                       >
@@ -242,7 +242,7 @@ export default function ClinicSchedule() {
                       disabled={isSubmitting}
                     >
                       Save
-                    </button>{" "}
+                    </button>{' '}
                     <button
                       type='button'
                       className='btn btn-gradient-info waves-effect waves-light'

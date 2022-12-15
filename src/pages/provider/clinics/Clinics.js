@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { AWS_BUCKET } from "../../../constants"
-import useAuth from "../../../hooks/useAuth"
-import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { AWS_BUCKET } from '../../../constants'
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 function Clinics() {
   const navigate = useNavigate()
@@ -18,17 +18,17 @@ function Clinics() {
     async function getList() {
       await axiosPrivate
         .post(
-          "getClinics",
-          { Email: auth.email || "jmmalunao@gmail.com" },
+          'getClinics',
+          { Email: auth.email || 'jmmalunao@gmail.com' },
           {
             signal: controller.signal,
           }
         )
         .then((res) => {
           console.log(res)
-          const { StatusCode: statusCode, Data: data = [], Message } = res.data
+          const { Status, Data: data = [], Message } = res.data
 
-          if (statusCode === 200) {
+          if (Status) {
             setList(data)
           } else {
             throw new Error(Message)
@@ -58,7 +58,7 @@ function Clinics() {
                 <button
                   type='button'
                   className='btn btn-success waves-effect waves-light'
-                  onClick={() => navigate("create")}
+                  onClick={() => navigate('create')}
                 >
                   New Clinic Schedule
                 </button>

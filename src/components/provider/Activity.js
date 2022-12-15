@@ -1,7 +1,7 @@
-import moment from "moment"
-import { useEffect, useState } from "react"
-import useAuth from "../../hooks/useAuth"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
 function Activity() {
   const { auth } = useAuth()
@@ -16,17 +16,17 @@ function Activity() {
     async function getList() {
       await axiosPrivate
         .post(
-          "getActivities",
-          { Email: auth.email || "jmmalunao@gmail.com" },
+          'getActivities',
+          { Email: auth.email || 'jmmalunao@gmail.com' },
           {
             signal: controller.signal,
           }
         )
         .then((res) => {
           console.log(res)
-          const { StatusCode: statusCode, Data: data = [], Message } = res.data
+          const { Status, Data: data = [], Message } = res.data
 
-          if (statusCode === 200) {
+          if (Status) {
             setList(data?.slice(0, 5))
           } else {
             throw new Error(Message)

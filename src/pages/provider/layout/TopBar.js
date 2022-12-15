@@ -1,12 +1,10 @@
-import { Link } from "react-router-dom"
-import SideNavLogo from "../../../components/SideNavLogo"
-import { AWS_BUCKET } from "../../../constants"
-
-// TODO: get user details from auth Context
-const xUser = { auth: { name: sessionStorage.getItem("name") || "Welcome" } }
+import { Link } from 'react-router-dom'
+import SideNavLogo from '../../../components/SideNavLogo'
+import { AWS_BUCKET } from '../../../constants'
+import useAuth from '../../../hooks/useAuth'
 
 function TopBar({ menuClick }) {
-  const { auth } = xUser
+  const { auth } = useAuth()
   return (
     <div className='topbar'>
       <div className='topbar-left'>
@@ -101,7 +99,7 @@ function TopBar({ menuClick }) {
             </Link>
             <div className='dropdown-menu dropdown-menu-right dropdown-lg pt-0'>
               <h6 className='dropdown-item-text font-15 m-0 py-3 bg-primary text-white d-flex justify-content-between align-items-center'>
-                Notifications{" "}
+                Notifications{' '}
                 <span className='badge badge-light badge-pill'>2</span>
               </h6>
               <div className='slimscroll notification-list'>
@@ -200,7 +198,7 @@ function TopBar({ menuClick }) {
                 </Link>
               </div>
               <Link
-                href='../pages/pages-notifications.html'
+                to='../pages/pages-notifications.html'
                 className='dropdown-item text-center text-primary'
               >
                 View all <i className='fi-arrow-right'></i>
@@ -212,7 +210,7 @@ function TopBar({ menuClick }) {
             <Link
               className='nav-link dropdown-toggle waves-effect waves-light nav-user'
               data-toggle='dropdown'
-              href='#'
+              to='#'
               role='button'
               aria-haspopup='false'
               aria-expanded='false'
@@ -223,24 +221,24 @@ function TopBar({ menuClick }) {
                 className='rounded-circle'
               />
               <span className='ml-1 nav-user-name hidden-sm'>
-                {auth.name} <i className='mdi mdi-chevron-down'></i>{" "}
+                {auth.name} <i className='mdi mdi-chevron-down'></i>{' '}
               </span>
             </Link>
             <div className='dropdown-menu dropdown-menu-right'>
-              <Link className='dropdown-item' href='#'>
+              <Link className='dropdown-item' to='#'>
                 <i className='ti-user text-muted mr-2'></i> Profile
               </Link>
-              <Link className='dropdown-item' href='#'>
+              <Link className='dropdown-item' to='#'>
                 <i className='ti-wallet text-muted mr-2'></i> My Wallet
               </Link>
-              <Link className='dropdown-item' href='#'>
+              <Link className='dropdown-item' to='#'>
                 <i className='ti-settings text-muted mr-2'></i> Settings
               </Link>
-              <Link className='dropdown-item' href='#'>
+              <Link className='dropdown-item' to='#'>
                 <i className='ti-lock text-muted mr-2'></i> Lock screen
               </Link>
               <div className='dropdown-divider mb-0'></div>
-              <Link className='dropdown-item' href='#'>
+              <Link className='dropdown-item' to='#'>
                 <i className='ti-power-off text-muted mr-2'></i> Logout
               </Link>
             </div>
@@ -252,7 +250,7 @@ function TopBar({ menuClick }) {
             <button
               onClick={menuClick}
               className='nav-link button-menu-mobile waves-effect waves-light'
-              type={"button"}
+              type={'button'}
             >
               <i className='ti-menu nav-icon'></i>
             </button>

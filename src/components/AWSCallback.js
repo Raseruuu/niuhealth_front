@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react"
-import { useLoaderData, useNavigate } from "react-router-dom"
-import axios from "../api/axios"
-import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from "../constants"
-import useAuth from "../hooks/useAuth"
-import LottieFailed from "./lottie/LottieFailed"
-import GreenLock from "./lottie/LottieGreenLock"
+import { useEffect, useState } from 'react'
+import { useLoaderData, useNavigate } from 'react-router-dom'
+import axios from '../api/axios'
+import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from '../constants'
+import useAuth from '../hooks/useAuth'
+import LottieFailed from './lottie/LottieFailed'
+import GreenLock from './lottie/LottieGreenLock'
 
 export function loader({ request }) {
   const url = new URL(request.url)
-  const code = url.searchParams.get("code")
+  const code = url.searchParams.get('code')
 
   if (!code || code === null) {
     window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
@@ -30,7 +30,7 @@ function AWSCallback() {
     async function auth() {
       await axios
         .post(
-          "exchange",
+          'exchange',
           { Code: code },
           {
             signal: controller.signal,
@@ -38,8 +38,8 @@ function AWSCallback() {
         )
         .then((res) => {
           const {
+            Status,
             StatusCode,
-            StatucCode,
             Message,
             TransactionType,
             Tokens,
@@ -49,7 +49,7 @@ function AWSCallback() {
           return {
             ...Tokens,
             transactionType: TransactionType,
-            statusCode: StatusCode || StatucCode,
+            statusCode: Status || StatusCode,
             msg: Message,
             userType: UserType,
           }
@@ -65,23 +65,23 @@ function AWSCallback() {
             msg,
             userType,
           }) => {
-            if (statusCode !== 200) {
-              sessionStorage.removeItem("access_token")
-              sessionStorage.removeItem("id_token")
-              sessionStorage.removeItem("refresh_token")
-              sessionStorage.removeItem("token_type")
-              sessionStorage.removeItem("userType")
+            if (!statusCode) {
+              sessionStorage.removeItem('access_token')
+              sessionStorage.removeItem('id_token')
+              sessionStorage.removeItem('refresh_token')
+              sessionStorage.removeItem('token_type')
+              sessionStorage.removeItem('userType')
               setAuth({})
 
               throw new Error(msg)
             }
 
-            sessionStorage.setItem("access_token", access_token)
-            sessionStorage.setItem("id_token", id_token)
-            sessionStorage.setItem("refresh_token", refresh_token)
-            sessionStorage.setItem("token_type", token_type)
-            sessionStorage.setItem("transactionType", transactionType)
-            sessionStorage.setItem("userType", userType)
+            sessionStorage.setItem('access_token', access_token)
+            sessionStorage.setItem('id_token', id_token)
+            sessionStorage.setItem('refresh_token', refresh_token)
+            sessionStorage.setItem('token_type', token_type)
+            sessionStorage.setItem('transactionType', transactionType)
+            sessionStorage.setItem('userType', userType)
 
             setAuth({
               access_token,
@@ -92,7 +92,7 @@ function AWSCallback() {
               userType,
             })
 
-            navigate("/", { replace: true })
+            navigate('/', { replace: true })
           }
         )
         .catch((err) => {
@@ -112,7 +112,7 @@ function AWSCallback() {
   return (
     <div
       className='d-flex flex-column justify-content-center align-items-center'
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: '100vw', height: '100vh' }}
     >
       {errMsg ? <LottieFailed /> : <GreenLock />}
       {errMsg ? (
