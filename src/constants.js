@@ -3,11 +3,11 @@ export const API_URL = process.env.REACT_APP_API_URL
 export const AWS_COGNITO_HOSTUI_DOMAIN =
   process.env.REACT_APP_AWS_COGNITO_HOSTUI_DOMAIN
 export const TRANSACTIONTYPE = {
-  login: "Login",
-  register: "Register",
+  login: 'Login',
+  register: 'Register',
 }
 export const USERTYPE = {
-  provider: "Provider",
-  patient: "Patient",
+  provider: 'Provider',
+  patient: 'Patient',
 }
 export const AWS_BUCKET = process.env.REACT_APP_AWS_BUCKET

@@ -1,34 +1,36 @@
-import React, { useEffect } from "react"
+import React, { useEffect } from 'react'
 
-import { ZoomMtg } from "@zoomus/websdk"
-import useAuth from "../../hooks/useAuth"
-import useAxiosPrivate from "../../hooks/useAxiosPrivate"
-import { useNavigate } from "react-router-dom"
-import { USERTYPE } from "../../constants"
+import { ZoomMtg } from '@zoomus/websdk'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import { useNavigate } from 'react-router-dom'
+import { APP_URL, USERTYPE } from '../../constants'
 
 function Room() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const email = auth?.email || sessionStorage.getItem("email")
-  const name = auth?.name || sessionStorage.getItem("name")
+  const email = auth?.email || sessionStorage.getItem('email')
+  const name = auth?.name || sessionStorage.getItem('name')
   const isProvider =
-    (auth?.userType || sessionStorage.getItem("userType")) === USERTYPE.provider
+    (auth?.userType || sessionStorage.getItem('userType')) === USERTYPE.provider
       ? true
       : false
 
-  console.log("isProvider: ", isProvider)
+  console.log('isProvider: ', isProvider)
 
   var signatureEndpoint =
-    "http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com"
-  var sdkKey = "PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW"
-  var meetingNumber = "4737080721"
+    'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
+  var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
+  var meetingNumber = '4737080721'
   var role = isProvider ? 1 : 0
   var userName = name
   var userEmail = email
-  var passWord = "123456"
-  var registrantToken = ""
-  var leaveUrl = "http://localhost:3000" // TODO: Redirect to ratings
+  var passWord = '123456'
+  var registrantToken = ''
+  var leaveUrl = `${APP_URL}/virtualvisit/complete?meeting=${encodeURI(
+    meetingNumber
+  )}` // TODO: Redirect to ratings
 
   function getSignature() {
     axiosPrivate
@@ -40,7 +42,7 @@ function Room() {
         },
         {
           headers: {
-            "Set-Cookie": "cross-site-cookie=whatever; SameSite=None; Secure",
+            'Set-Cookie': 'cross-site-cookie=whatever; SameSite=None; Secure',
           },
         }
       )
@@ -53,7 +55,7 @@ function Room() {
   }
 
   function startMeeting(signature) {
-    document.getElementById("zmmtg-root").style.display = "block"
+    document.getElementById('zmmtg-root').style.display = 'block'
 
     ZoomMtg.init({
       leaveUrl: leaveUrl,
@@ -83,17 +85,17 @@ function Room() {
   }
 
   useEffect(() => {
-    ZoomMtg.setZoomJSLib("https://source.zoom.us/2.9.5/lib", "/av")
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
 
     ZoomMtg.preLoadWasm()
     ZoomMtg.prepareWebSDK()
-    ZoomMtg.i18n.load("en-US")
-    ZoomMtg.i18n.reload("en-US")
+    ZoomMtg.i18n.load('en-US')
+    ZoomMtg.i18n.reload('en-US')
 
     getSignature()
 
     return () => {
-      document.getElementById("zmmtg-root").style.display = "none"
+      document.getElementById('zmmtg-root').style.display = 'none'
     }
   }, [])
 
