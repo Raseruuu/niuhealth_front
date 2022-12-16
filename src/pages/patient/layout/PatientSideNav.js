@@ -1,13 +1,13 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom"
-import { APP_URL, AWS_BUCKET } from "../../../constants"
-import SideNavLogo from "../../../components/SideNavLogo"
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { APP_URL, AWS_BUCKET } from '../../../constants'
+import SideNavLogo from '../../../components/SideNavLogo'
 
 function PatientSideNav() {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const name = sessionStorage.getItem("name") || "Welcome"
-  const email = sessionStorage.getItem("email")
+  const name = sessionStorage.getItem('name') || 'Welcome'
+  const email = sessionStorage.getItem('email')
 
   return (
     <div className='left-sidenav position-relative'>
@@ -40,12 +40,12 @@ function PatientSideNav() {
         <button
           type='button'
           className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
-          onClick={() => navigate("/virtualvisit")}
+          onClick={() => navigate('/virtualvisit')}
         >
           Start Your First Virtual Visit
         </button>
       </div>
-      {location?.pathname === "/patient/virtualvisit" ? (
+      {location?.pathname === '/patient/virtualvisit' ? (
         <div
           className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
           role='alert'
@@ -71,6 +71,13 @@ function PatientSideNav() {
             <i className='mdi mdi-video'></i>
             <span>Virtual Visit</span>
             <span className='menu-arrow'></span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='marketplace'>
+            <i className='dripicons-medical'></i>
+            <span>Marketplace</span>
+            <span class='menu-arrow'></span>
           </NavLink>
         </li>
 

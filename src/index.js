@@ -31,7 +31,10 @@ import ManageServices from './pages/provider/services/ManageServices'
 import { AuthProvider } from './context/AuthProvider'
 import ClinicSchedule from './pages/provider/clinics/ClinicSchedule'
 import VirtualVisitIndex from './pages/virtualvisit/VirtualVisitIndex'
-
+import Marketplace from './pages/patient/marketplace/Marketplace'
+import ProvidersList from './pages/patient/marketplace/ProvidersList'
+import Checkout from './pages/patient/marketplace/Checkout'
+import Success from './pages/patient/marketplace/Success'
 const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
 
@@ -65,6 +68,16 @@ const router = createBrowserRouter(
           children: [
             { index: true, element: <PatientIndexPage /> },
             { path: 'virtualvisit', element: <VirtualVisit /> },
+            {
+              path: 'marketplace',
+              element: <Outlet />,
+              children: [
+                { index: true, element: <Marketplace /> },
+                { path: 'providers', element: <ProvidersList /> },
+                { path: 'checkout', element: <Checkout /> },
+                { path: 'success', element: <Success /> },
+              ],
+            },
             { path: 'profile', element: <Profile /> },
             { path: 'appointments', element: <Appointment /> },
             {
