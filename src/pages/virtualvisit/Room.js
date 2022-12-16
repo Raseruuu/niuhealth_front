@@ -17,8 +17,6 @@ function Room() {
       ? true
       : false
 
-  console.log('isProvider: ', isProvider)
-
   var signatureEndpoint =
     'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
   var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
@@ -28,9 +26,9 @@ function Room() {
   var userEmail = email
   var passWord = '123456'
   var registrantToken = ''
-  var leaveUrl = `${APP_URL}/virtualvisit/complete?meeting=${encodeURI(
-    meetingNumber
-  )}` // TODO: Redirect to ratings
+  var leaveUrl = isProvider
+    ? `${APP_URL}/provider/visits`
+    : `${APP_URL}/virtualvisit/complete?meeting=${encodeURI(meetingNumber)}`
 
   function getSignature() {
     axiosPrivate

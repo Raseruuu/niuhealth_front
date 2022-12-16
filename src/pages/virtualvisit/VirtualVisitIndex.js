@@ -1,8 +1,43 @@
-import { useNavigate } from "react-router-dom"
-import Footer from "../../components/Footer"
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Footer from '../../components/Footer'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import useInterval from '../../hooks/useInterval'
 
 export default function VirtualVisitIndex() {
   const navigate = useNavigate()
+  const axiosPrivate = useAxiosPrivate()
+  const [isReady, setIsReady] = useState(false)
+  const [delay, setDelay] = useState('10000')
+
+  const getStatus = async () => {
+    const controller = new AbortController()
+
+    await axiosPrivate
+      .post(
+        'getMeetingDetails',
+        { MeetingID: '4737080721' },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        const { Status, Message, Data } = res.data
+        if (Data?.Status === 'started') {
+          setDelay(null)
+          setIsReady(true)
+        } else {
+          setIsReady(false)
+        }
+      })
+      .catch((err) => console.error(err))
+  }
+
+  useInterval(getStatus, delay)
+
+  useEffect(() => {
+    getStatus()
+  }, [])
 
   return (
     <div className='figma'>
@@ -33,7 +68,7 @@ export default function VirtualVisitIndex() {
               <div className='col-lg-6'>
                 <div className='card'>
                   <div className='card-body'>
-                    <h2 style={{ paddingTop: "30px" }}>
+                    <h2 style={{ paddingTop: '30px' }}>
                       Thanks for your patience.
                       <br />
                       Your provider will soon be with you.
@@ -56,14 +91,18 @@ export default function VirtualVisitIndex() {
 
                     <div
                       className='wizard_btn'
-                      style={{ margin: "50px 0", paddingBottom: "50px" }}
+                      style={{ margin: '50px 0', paddingBottom: '50px' }}
                     >
                       <button
                         type='button'
                         className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
-                        onClick={() => navigate("room")}
+                        onClick={() => navigate('room')}
+                        style={{
+                          cursor: isReady ? 'pointer' : 'not-allowed',
+                        }}
+                        disabled={!isReady}
                       >
-                        Join Virtual Visit Now
+                        {isReady ? ' Join Virtual Visit Now' : 'Please wait...'}
                       </button>
 
                       <button
