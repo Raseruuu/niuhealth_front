@@ -77,7 +77,7 @@ function PatientSideNav() {
           <NavLink to='marketplace'>
             <i className='dripicons-medical'></i>
             <span>Marketplace</span>
-            <span class='menu-arrow'></span>
+            <span className='menu-arrow'></span>
           </NavLink>
         </li>
 
