@@ -1,14 +1,56 @@
 import React, { useEffect, useState } from 'react'
 import { AWS_BUCKET } from '../../constants'
 import { Rating } from 'react-simple-star-rating'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import useAuth from '../../hooks/useAuth'
 
 export default function Complete() {
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const navigate = useNavigate()
   const [rating, setRating] = useState(3)
+  const [review, setReview] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { meetingId } = useParams()
 
   const handleRating = (rate) => {
     setRating(rate)
   }
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true)
+    try {
+      await axiosPrivate
+        .post('createRating', {
+          Provider: 'jmmalunao@gmail.com',
+          Patient: auth.email,
+          MeetingID: meetingId,
+          Rating: rating,
+          Review: 'Sample meeting review',
+        })
+        .then((res) => {
+          console.log(res.data)
+          const { Status, Message } = res.data
+          if (Status) {
+            navigate('/patient')
+          } else {
+            alert(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          throw err
+        })
+        .finally(() => {
+          setIsSubmitting(false)
+        })
+    } catch (error) {
+      setIsSubmitting(false)
+      console.error(error)
+    }
+  }
+
   return (
     <div
       className='account-body visitsuccess vw-100'
@@ -66,6 +108,14 @@ export default function Complete() {
                         ]}
                       />
                     </div>
+                    <h4>Tell to us your experience</h4>
+                    <div className='big_rating'>
+                      <textarea
+                        onChange={(e) => setReview(e.target.value)}
+                        className='form-control'
+                        maxLength={150}
+                      ></textarea>
+                    </div>
                   </div>
 
                   <div className='form-group mb-0 row '>
@@ -73,6 +123,8 @@ export default function Complete() {
                       <button
                         className='btn btn-gradient-success btn-round waves-effect waves-light'
                         type='button'
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
                       >
                         SUBMIT
                       </button>

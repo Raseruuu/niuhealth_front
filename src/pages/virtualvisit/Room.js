@@ -28,7 +28,7 @@ function Room() {
   var registrantToken = ''
   var leaveUrl = isProvider
     ? `${APP_URL}/provider/visits`
-    : `${APP_URL}/virtualvisit/complete?meeting=${encodeURI(meetingNumber)}`
+    : `${APP_URL}/virtualvisit/complete/${encodeURI(meetingNumber)}`
 
   function getSignature() {
     axiosPrivate

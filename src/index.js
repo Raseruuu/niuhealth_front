@@ -1,7 +1,12 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  Outlet,
+  redirect,
+  RouterProvider,
+} from 'react-router-dom'
 import AWSCallback, {
   loader as awsCallbackLoader,
 } from './components/AWSCallback'
@@ -59,7 +64,10 @@ const router = createBrowserRouter(
           children: [
             { index: true, element: <VirtualVisitIndex /> },
             { path: 'room', element: <Room /> },
-            { path: 'complete', element: <Complete /> },
+            {
+              path: 'complete/:meetingId',
+              element: <Complete />,
+            },
           ],
         },
         {
