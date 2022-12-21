@@ -2,7 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL, AWS_BUCKET } from '../../../constants'
 import SideNavLogo from '../../../components/SideNavLogo'
 
-function PatientSideNav() {
+function PatientSideNav({ openSideNav }) {
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -10,7 +10,10 @@ function PatientSideNav() {
   const email = sessionStorage.getItem('email')
 
   return (
-    <div className='left-sidenav position-relative'>
+    <div 
+      className='left-sidenav position-relative'
+      style={{ display: openSideNav ? "block" : "none" }}
+    >  
       <div className='topbar-left'>
         <Link to='/patient' className='logo'>
           <span>
@@ -113,6 +116,7 @@ function PatientSideNav() {
       <div className='logoutDiv'>
         <Link href=''>Logout</Link>
       </div>
+      
     </div>
   )
 }
