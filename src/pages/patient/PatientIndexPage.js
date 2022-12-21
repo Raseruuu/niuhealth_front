@@ -11,7 +11,8 @@ function PatientIndexPage() {
       <div className='page-content'>
         <div className='container-fluid'>
           <div className='row figmaFirstBox'>
-            <div className='col-sm-12'>
+            {/* added paddingTop for space covered by topbar */}
+            <div className='col-sm-12' style={{ paddingTop: '80px'}} >
               {isEmailVerified ? (
                 <div
                   className='alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
@@ -39,7 +40,7 @@ function PatientIndexPage() {
               <div className='card'>
                 <div className='card-body'>
                   <h2>Start Your First Virtual Visit</h2>
-                  <h4 style={{ marginTop: "40px" }}>How telehealth works?</h4>
+                  <h4 style={{ marginTop: "40px" }}>How does telehealth work?</h4>
                   <ol className='telehealth'>
                     <li>Click on Start Your First Virtual Visit</li>
                     <li>
