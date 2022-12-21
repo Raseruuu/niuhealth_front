@@ -16,7 +16,7 @@ function TopBar({ menuClick }) {
         >
           <i className='ti-menu nav-icon'></i>
         </button>
-        <SideNavLogo />
+        <SideNavLogo style={{ width: '170px' }} />
       </Link>
       <ul className='list-unstyled dev-top-bar-right mb-0'>
         <li className='dropdown notification-list'>

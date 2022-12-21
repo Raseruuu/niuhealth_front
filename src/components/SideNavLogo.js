@@ -1,7 +1,9 @@
-import imgLogo from "../assets/images/nu-health-logo.png"
+import imgLogo from '../assets/images/nu-health-logo.png'
 
-function SideNavLogo() {
-  return <img src={imgLogo} alt="logo-small" className="logo-sm" />
+function SideNavLogo({ style }) {
+  return (
+    <img src={imgLogo} alt='logo-small' className='logo-sm' style={style} />
+  )
 }
 
 export default SideNavLogo
