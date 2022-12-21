@@ -1,11 +1,11 @@
-import { useMediaQuery } from "@react-hook/media-query"
-import { useEffect, useState } from "react"
-import { Outlet } from "react-router-dom"
-import PatientSideNav from "./PatientSideNav"
-import TopBar from "./TopBar"
+import { useMediaQuery } from '@react-hook/media-query'
+import { useEffect, useState } from 'react'
+import { Outlet } from 'react-router-dom'
+import PatientSideNav from './PatientSideNav'
+import TopBar from './TopBar'
 
 function PatientDashboard() {
-  const matches = useMediaQuery("only screen and (max-width: 575.98px)")
+  const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
 
   useEffect(() => {
@@ -17,12 +17,11 @@ function PatientDashboard() {
   return (
     <div>
       <TopBar menuClick={() => setOpenSideNav((prev) => !prev)} />
-      
+      <div style={{ display: 'inline-block', height: '64px' }}></div>
       <div
-        className="figma mm-active active"
-        style={{ display: "flex", width: "100vw" }}
+        className='figma mm-active active'
+        style={{ display: 'flex', width: '100vw' }}
       >
-        {/* <PatientSideNav /> */}
         <PatientSideNav openSideNav={openSideNav} />
         <Outlet />
       </div>

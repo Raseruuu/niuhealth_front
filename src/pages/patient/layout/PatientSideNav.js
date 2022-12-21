@@ -10,19 +10,19 @@ function PatientSideNav({ openSideNav }) {
   const email = sessionStorage.getItem('email')
 
   return (
-    <div 
+    <div
       className='left-sidenav position-relative'
-      style={{ display: openSideNav ? "block" : "none" }}
-    >  
-      <div className='topbar-left'>
+      style={{ display: openSideNav ? 'block' : 'none' }}
+    >
+      {/* <div className='topbar-left'>
         <Link to='/patient' className='logo'>
           <span>
             <SideNavLogo />
           </span>
         </Link>
-      </div>
+      </div> */}
 
-      <div className='media figmaSideUser'>
+      {/* <div className='media figmaSideUser'>
         <Link className='' href='#'>
           <img
             src={`${APP_URL}/assets/images/users/user-1.jpg`}
@@ -37,7 +37,7 @@ function PatientSideNav({ openSideNav }) {
           <p className='font-14 font-weight-bold mb-0'>{name}</p>
           <p className='mb-0 font-12 text-muted'>{email}</p>
         </div>
-      </div>
+      </div> */}
 
       <div className='virtualTourSide'>
         <button
@@ -116,7 +116,6 @@ function PatientSideNav({ openSideNav }) {
       <div className='logoutDiv'>
         <Link href=''>Logout</Link>
       </div>
-      
     </div>
   )
 }

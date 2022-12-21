@@ -1,3 +1,28 @@
 #zmmtg-root {
   display: none;
 }
+
+.dev-top-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: white;
+  position: static;
+  min-height: 70px;
+  height: 70px;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+.dev-top-bar-right {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
