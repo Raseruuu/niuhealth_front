@@ -113,7 +113,7 @@ export default function Complete() {
                       <textarea
                         onChange={(e) => setReview(e.target.value)}
                         className='form-control'
-                        maxLength={150}
+                        maxLength={500}
                       ></textarea>
                     </div>
                   </div>
