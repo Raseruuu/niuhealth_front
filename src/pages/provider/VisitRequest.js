@@ -1,4 +1,64 @@
+import { useEffect, useState } from "react"
+
+function PatientRequest({patientReqData}){
+  const req_id=patientReqData.id
+  return patientReqData.map((item, index)=>(
+      <tr>
+      <td>{item.id}</td>
+      <td>
+        <div className='media'>
+          <a href='../pages/visit-request-profile.html'>
+            <img
+              src='../assets/images/users/user-1.png'
+              alt=''
+              className='thumb-sm rounded-circle mr-2'
+            />
+          </a>
+          <div className='media-body align-self-center text-truncate'>
+            <h6 className='mt-0 mb-1 text-dark'> 
+              <a href='../pages/visit-request-profile.html'>
+                {item.name}
+              </a>{" "}
+              <span className={'badge badge-md '+(item.insurType ? 'badge-soft-success':'badge-soft-danger')}>
+                {(item.insurType ? 'Insured' : 'Not Insured')}
+              </span>
+            </h6>
+            <p className='text-muted mb-0'>
+              Virtual visit on {item.schedule}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td>{item.requestDate}</td>
+      <td>
+        {" "}
+        <button
+          type='button'
+          className='btn btn-outline-success waves-effect waves-light'
+          onclick="approveVisit('Donald');"
+        >
+          Approve
+        </button>{" "}
+        <button
+          type='button'
+          className='btn btn-outline-danger waves-effect waves-light'
+          onclick="cancelVisit('Donald');"
+        >
+          Cancel
+        </button>
+      </td>
+    </tr>
+  ))
+}
+
 function VisitRequest() {
+  const [reqList, setReqList] = 
+    useState([
+      {id:546546, name: "Donald Gardner", insurType: 0,schedule:"15 August",requestDate:"03 Aug 2023 1:33"},
+      {id:504152, name: "Nicholas Smith", insurType: 1,schedule:"21 September",requestDate:"03 Dec 2023 5:00"},
+      {id:240879, name: "Paula Anderson", insurType: 1,schedule:"5 December",requestDate:"02 Sep 2023 12:33"}
+    ])
+  
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -24,53 +84,12 @@ function VisitRequest() {
                       <th className='border-top-0'>Action</th>
                     </tr>
                   </thead>
+                
                   <tbody>
-                    <tr>
-                      <td>382314</td>
-                      <td>
-                        <div className='media'>
-                          <a href='../pages/visit-request-profile.html'>
-                            <img
-                              src='../assets/images/users/user-1.png'
-                              alt=''
-                              className='thumb-sm rounded-circle mr-2'
-                            />
-                          </a>
-                          <div className='media-body align-self-center text-truncate'>
-                            <h6 className='mt-0 mb-1 text-dark'>
-                              <a href='../pages/visit-request-profile.html'>
-                                Donald Gardner
-                              </a>{" "}
-                              <span className='badge badge-md badge-soft-danger'>
-                                Not Insured
-                              </span>
-                            </h6>
-                            <p className='text-muted mb-0'>
-                              Virtual visit on 15 August
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>03 Aug 2022 12:33</td>
-                      <td>
-                        {" "}
-                        <button
-                          type='button'
-                          className='btn btn-outline-success waves-effect waves-light'
-                          onclick="approveVisit('Donald');"
-                        >
-                          Approve
-                        </button>{" "}
-                        <button
-                          type='button'
-                          className='btn btn-outline-danger waves-effect waves-light'
-                          onclick="cancelVisit('Donald');"
-                        >
-                          Cancel
-                        </button>
-                      </td>
-                    </tr>
-                    <tr>
+                  
+                    <PatientRequest patientReqData = {reqList}/>
+                    
+                   {/* <tr>
                       <td>504152</td>
                       <td>
                         <div className='media'>
@@ -114,7 +133,7 @@ function VisitRequest() {
                         </button>
                       </td>
                     </tr>
-                    <tr>
+                     <tr>
                       <td>240879</td>
                       <td>
                         <div className='media'>
@@ -157,7 +176,7 @@ function VisitRequest() {
                           Cancel
                         </button>
                       </td>
-                    </tr>
+                    </tr> */}
                   </tbody>
                 </table>
               </div>
