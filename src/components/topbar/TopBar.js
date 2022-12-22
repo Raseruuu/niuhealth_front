@@ -1,12 +1,66 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import SideNavLogo from '../../../components/SideNavLogo'
-import { AWS_BUCKET } from '../../../constants'
-import useAuth from '../../../hooks/useAuth'
+import SideNavLogo from '../../components/SideNavLogo'
+import { AWS_BUCKET } from '../../constants'
+import useAuth from '../../hooks/useAuth'
+const NotifIconSwitch = (icontype ) => {
+  switch (icontype) {
+    case "order":
+      return 
+    (<div className='avatar-md bg-primary'>
+      <i className='la la-cart-arrow-down text-white'></i>
+    </div>);
+    case "meeting":
+      return 
+    (<div className='avatar-md bg-success'>
+    <i className='la la-group text-white'></i>
+  </div>);
+    default:
+      return (
+    <div className='avatar-md bg-primary'>
+      <i className='la la-cart-arrow-down text-white'></i>
+    </div>
+      )
+  }
 
+}
+function NotifLink({ntype,subject,body,timeReceived}){
+  // console.log(notifItem)
+  // console.log("body"+notifItem['body  '])
+  const timeNow=20
+  const timeSince=(timeNow-timeReceived) +" minutes ago"
+  return(
+    <Link to='' className='dropdown-item py-3'>
+      <small className='float-right text-muted pl-2'>{timeSince}</small>
+      <div className='media'>
+          {/* <NotifIconSwitch icontype={ntype}/> */}
+          
+          <NotifIconSwitch icontype={ntype}/>
+        <div className='media-body align-self-center ml-2 text-truncate'>
+          <h6 className='my-0 font-weight-normal text-dark'>
+            {subject}
+          </h6>
+          <small className='text-muted mb-0'>
+            {body}
+          </small>
+        </div>
+      </div>
+    </Link>
+  )
+}
 export function TopBar({ menuClick }) {
-  //notif badge number 
-  const [ntfBadgeNum,setNtfBadgeNum]=useState(4)
+  
+  const [notifs,setNotifs]=useState([
+      {type:"order",subject:"Your order is placed.",body:"Dummy text",timeReceived:4},
+      {type:"meeting",subject:"Meeting With Designers",body:"Lorem Ipsum",timeReceived:10},
+      {type:"task",subject:"Tax Complete",body:"Dolor Sit Amet",timeReceived:10},
+      {type:"order2",subject:"It is a long established fact that a reader...",body:"Dolor Sit Amet",timeReceived:10},
+      {type:"success",subject:"Payment Successful",body:"The Success is in the payment.",timeReceived:10}
+    ])
+  //notif badge number
+  const ntfBadgeNum=notifs.length
+  console.log(ntfBadgeNum)
+  console.log(notifs[0].type)
   const { auth } = useAuth()
   return (
     <div className='dev-top-bar'>
@@ -34,18 +88,31 @@ export function TopBar({ menuClick }) {
             aria-expanded='false'
           >
             <i className='ti-bell noti-icon'></i>
+            {ntfBadgeNum>0&&
             <span className='badge badge-danger badge-pill noti-icon-badge'>
               {ntfBadgeNum}
             </span>
+            }
+            
           </Link>
           <div className='dropdown-menu dropdown-menu-right dropdown-lg pt-0'>
             <h6 className='dropdown-item-text font-15 m-0 py-3 bg-primary text-white d-flex justify-content-between align-items-center'>
               Notifications{' '}
-              <span className='badge badge-light badge-pill'>2</span>
+              <span className='badge badge-light badge-pill'>{ntfBadgeNum}</span>
             </h6>
             <div className='slimscroll notification-list'>
-              <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>2 min ago</small>
+              {
+              notifs.map((notif)=>
+                <NotifLink 
+                  type={notif.type}
+                  subject={notif.subject}
+                  body= {notif.body}
+                  timeReceived={notif.timeReceived}/>
+              )
+              }
+              {/* <NotifLink /> */}
+              {/* <Link to='' className='dropdown-item py-3'>
+                <small className='float-right text-muted pl-2'>2 mins. ago</small>
                 <div className='media'>
                   <div className='avatar-md bg-primary'>
                     <i className='la la-cart-arrow-down text-white'></i>
@@ -60,6 +127,7 @@ export function TopBar({ menuClick }) {
                   </div>
                 </div>
               </Link>
+              
               <Link to='' className='dropdown-item py-3'>
                 <small className='float-right text-muted pl-2'>
                   10 min ago
@@ -130,7 +198,7 @@ export function TopBar({ menuClick }) {
                     </small>
                   </div>
                 </div>
-              </Link>
+              </Link> */}
             </div>
             <Link
               to='../pages/pages-notifications.html'
@@ -160,7 +228,7 @@ export function TopBar({ menuClick }) {
             </span>
           </Link>
           <div className='dropdown-menu dropdown-menu-right'>
-            <Link className='dropdown-item' to='#'>
+            <Link className='dropdown-item' to='profile'>
               <i className='ti-user text-muted mr-2'></i> Profile
             </Link>
 
