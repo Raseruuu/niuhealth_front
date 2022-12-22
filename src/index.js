@@ -1,12 +1,7 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  createBrowserRouter,
-  Outlet,
-  redirect,
-  RouterProvider,
-} from 'react-router-dom'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
 import AWSCallback, {
   loader as awsCallbackLoader,
 } from './components/AWSCallback'
@@ -40,7 +35,8 @@ import ManageServices from './pages/provider/services/ManageServices'
 import Services from './pages/provider/services/Services'
 import VisitRequest from './pages/provider/VisitRequest'
 import Visits from './pages/provider/Visits'
-import VirtualVisitIndex from './pages/virtualvisit/VirtualVisitIndex'
+import TellUsWhy from './pages/virtualvisit/TellUsWhy'
+import WaitingRoom from './pages/virtualvisit/WaitingRoom'
 const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
 
@@ -62,7 +58,8 @@ const router = createBrowserRouter(
           path: 'virtualvisit',
           element: <Outlet />,
           children: [
-            { index: true, element: <VirtualVisitIndex /> },
+            { index: true, element: <TellUsWhy /> },
+            { path: 'waitingroom', element: <WaitingRoom /> },
             { path: 'room', element: <Room /> },
             {
               path: 'complete/:meetingId',
