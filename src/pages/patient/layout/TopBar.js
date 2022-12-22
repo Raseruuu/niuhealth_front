@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import SideNavLogo from '../../../components/SideNavLogo'
 import { AWS_BUCKET } from '../../../constants'
@@ -8,7 +7,7 @@ function TopBar({ menuClick }) {
   const { auth } = useAuth()
   return (
     <div className='dev-top-bar'>
-      <Link to='/patient' className='logo'>
+      <div>
         <button
           onClick={menuClick}
           className='nav-link button-menu-mobile waves-effect waves-light btn-lg'
@@ -16,8 +15,11 @@ function TopBar({ menuClick }) {
         >
           <i className='ti-menu nav-icon'></i>
         </button>
-        <SideNavLogo style={{ width: '170px' }} />
-      </Link>
+        <Link to='/patient' className='logo'>
+          <SideNavLogo style={{ width: '170px' }} />
+        </Link>
+      </div>
+
       <ul className='list-unstyled dev-top-bar-right mb-0'>
         <li className='dropdown notification-list'>
           <Link
@@ -158,15 +160,11 @@ function TopBar({ menuClick }) {
             <Link className='dropdown-item' to='#'>
               <i className='ti-user text-muted mr-2'></i> Profile
             </Link>
-            <Link className='dropdown-item' to='#'>
-              <i className='ti-wallet text-muted mr-2'></i> My Wallet
-            </Link>
+
             <Link className='dropdown-item' to='#'>
               <i className='ti-settings text-muted mr-2'></i> Settings
             </Link>
-            <Link className='dropdown-item' to='#'>
-              <i className='ti-lock text-muted mr-2'></i> Lock screen
-            </Link>
+
             <div className='dropdown-divider mb-0'></div>
             <Link className='dropdown-item' to='#'>
               <i className='ti-power-off text-muted mr-2'></i> Logout
