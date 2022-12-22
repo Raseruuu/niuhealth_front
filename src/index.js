@@ -21,6 +21,7 @@ import ProvidersList from './pages/patient/marketplace/ProvidersList'
 import Success from './pages/patient/marketplace/Success'
 import PatientIndexPage from './pages/patient/PatientIndexPage'
 import Profile from './pages/patient/Profile'
+import PaymentForm from './pages/patient/subcription/PaymentForm'
 import Renew from './pages/patient/subcription/Renew'
 import Subscription from './pages/patient/subcription/Subcription'
 import VirtualVisit from './pages/patient/VirtualVisit'
@@ -91,6 +92,7 @@ const router = createBrowserRouter(
               children: [
                 { index: true, element: <Subscription /> },
                 { path: 'renew', element: <Renew /> },
+                { path: 'renew/pay', element: <PaymentForm /> },
               ],
             },
 
