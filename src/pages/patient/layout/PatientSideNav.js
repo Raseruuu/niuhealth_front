@@ -45,7 +45,7 @@ function PatientSideNav({ openSideNav }) {
           className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
           onClick={() => navigate('/virtualvisit')}
         >
-          Start Your First Virtual Visit
+          Start Your Virtual Visit
         </button>
       </div>
       {location?.pathname === '/patient/virtualvisit' ? (

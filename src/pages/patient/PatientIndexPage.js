@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom"
-import Footer from "../../components/Footer"
+import { useNavigate } from 'react-router-dom'
+import Footer from '../../components/Footer'
 
 function PatientIndexPage() {
   const navigate = useNavigate()
   // TODO: get from CONTEXT
-  const isEmailVerified = Boolean(sessionStorage.getItem("email_verified"))
+  const isEmailVerified = Boolean(sessionStorage.getItem('email_verified'))
 
   return (
     <div className='page-wrapper'>
@@ -12,7 +12,7 @@ function PatientIndexPage() {
         <div className='container-fluid'>
           <div className='row figmaFirstBox'>
             {/* added paddingTop for space covered by topbar */}
-            <div className='col-sm-12' style={{ paddingTop: '80px'}} >
+            <div className='col-sm-12' style={{ paddingTop: '80px' }}>
               {isEmailVerified ? (
                 <div
                   className='alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
@@ -40,9 +40,11 @@ function PatientIndexPage() {
               <div className='card'>
                 <div className='card-body'>
                   <h2>Start Your First Virtual Visit</h2>
-                  <h4 style={{ marginTop: "40px" }}>How does telehealth work?</h4>
+                  <h4 style={{ marginTop: '40px' }}>
+                    How does telehealth work?
+                  </h4>
                   <ol className='telehealth'>
-                    <li>Click on Start Your First Virtual Visit</li>
+                    <li>Click on Start Your Virtual Visit</li>
                     <li>
                       Add your reason for visiting and test your mic and camera
                     </li>
@@ -51,9 +53,9 @@ function PatientIndexPage() {
                       healthcare provider will be with you shortly
                     </li>
                   </ol>
-                  <p style={{ marginTop: "40px" }}>
+                  <p style={{ marginTop: '40px' }}>
                     <button
-                      onClick={() => navigate("/virtualvisit")}
+                      onClick={() => navigate('/virtualvisit')}
                       type='button'
                       className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
                     >
