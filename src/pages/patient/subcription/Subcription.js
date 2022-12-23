@@ -1,3 +1,4 @@
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
@@ -30,22 +31,21 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
     */
 
 function Subscription() {
-  const navigage = useNavigate()
   const deleteCC = (value) => window?.deleteCC(value) || false
   const navigate = useNavigate()
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
-  const [list, setList] = useState([])
+  const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
 
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
 
-    async function getList() {
+    async function getRecord() {
       await axiosPrivate
-        .get(
-          'checkSubscriptions',
+        .post(
+          'getPatientSubscription',
           { Email: auth.email },
           {
             signal: controller.signal,
@@ -55,8 +55,15 @@ function Subscription() {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
+          if (!Status && Message === 'Patient not subscribed') {
+            navigate('plans')
+          }
+
           if (Status && isMounted) {
-            setList(data)
+            setSubs({
+              subsStart: data.subscription_start,
+              subsEnd: data.subscription_end,
+            })
           } else {
             throw new Error(Message)
           }
@@ -67,7 +74,7 @@ function Subscription() {
         })
     }
 
-    isMounted && getList()
+    isMounted && getRecord()
 
     return () => {
       isMounted = false
@@ -97,11 +104,11 @@ function Subscription() {
                       <tbody>
                         <tr>
                           <td className='payment-title'>Start date</td>
-                          <td>6/27/2022</td>
+                          <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
                         </tr>
                         <tr>
                           <td className='payment-title'>End Date</td>
-                          <td>6/26/2023</td>
+                          <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -109,7 +116,7 @@ function Subscription() {
                       <button
                         type='button'
                         className='btn btn-round btn-outline-info waves-effect waves-light'
-                        onClick={() => navigage('renew')}
+                        onClick={() => navigate('renew')}
                       >
                         Renew Your Subscription
                       </button>{' '}

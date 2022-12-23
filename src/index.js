@@ -91,6 +91,7 @@ const router = createBrowserRouter(
               path: 'subscription',
               children: [
                 { index: true, element: <Subscription /> },
+                { path: 'plans', element: <Renew /> },
                 { path: 'renew', element: <Renew /> },
                 { path: 'renew/pay', element: <PaymentForm /> },
               ],

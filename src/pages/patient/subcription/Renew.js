@@ -37,7 +37,6 @@ function Renew() {
           }
         )
         .then((res) => {
-          console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status && isMounted) {
@@ -47,7 +46,6 @@ function Renew() {
           }
         })
         .catch((err) => {
-          console.error(err)
           setErrMsg(err.message)
         })
     }
@@ -93,7 +91,7 @@ function Renew() {
 
           <div className='row'>
             {list.map((item) => (
-              <div className='col-lg-3'>
+              <div className='col-lg-3' key={item?.subscription_plan}>
                 <div className='card'>
                   <div className='card-body'>
                     <div className='pricingTable1 text-center'>
