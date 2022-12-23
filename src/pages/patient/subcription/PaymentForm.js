@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
-import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
-export default function Checkout() {
+export default function PaymentForm() {
+  const { state: selectedSubscription } = useLocation()
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
+  const cardRef = useRef()
   const {
     register,
     handleSubmit,
@@ -18,8 +19,9 @@ export default function Checkout() {
     formState: { errors, isValid, isSubmitting },
   } = useForm()
 
+  console.log(selectedSubscription)
+
   const [show, setShow] = useState(false)
-  const [totalAmount, setTotalAmount] = useState('195.00')
 
   const handleClose = () => setShow(false)
 
@@ -30,23 +32,26 @@ export default function Checkout() {
 
       const billing = {
         ...data,
-        Number: data.number,
+        CardNumber: data.number,
         ExpMonth,
-        ExpYear,
+        Expyear: ExpYear,
         CVC: data?.cvc,
-        Amount: totalAmount,
-        Description: 'Payment for Cart ID: 4005',
-        Email: data?.email,
+        Amount: selectedSubscription.amount,
+        Description: selectedSubscription.actionDescription,
+        Email: auth.email,
+        SubscriptionPlan: selectedSubscription.id || 1,
+        PaymentType: 3,
       }
 
       console.log(billing)
 
       await axiosPrivate
-        .post('stripePayment', billing)
+        .post('subscriptionPayment', billing)
         .then((res) => {
           const { Status, Message } = res.data
           if (Status) {
-            navigate('../success', { replace: true })
+            alert(Message)
+            navigate('/patient/subscription', { replace: true })
           } else {
             alert(Message)
           }
@@ -67,163 +72,35 @@ export default function Checkout() {
   }
 
   useEffect(() => {
-    new window.Card({
-      form: document.querySelector('.bill-form'),
-      container: '.card-wrapper',
-    })
+    if (cardRef.current) {
+      new window.Card({
+        form: document.querySelector('.bill-form'),
+        container: '.card-wrapper',
+      })
+    }
   }, [])
 
   return (
-    <div class='page-wrapper'>
-      <div class='page-content'>
-        <div class='container-fluid'>
-          <div class='row'>
-            <div class='col-sm-12'>
-              <div class='page-title-box'>
-                <div class='float-right'>
-                  <ol class='breadcrumb'>
-                    <li class='breadcrumb-item'>
-                      <Link href='/patient/marketplace'>Marketplace</Link>
-                    </li>
-                    <li class='breadcrumb-item active'>Checkout</li>
-                  </ol>
-                </div>
-                <h4 class='page-title'>Checkout</h4>
-              </div>
-            </div>
-          </div>
+    <div className='page-wrapper'>
+      <div className='page-content pt-4'>
+        <div className='container-fluid'>
           <form onSubmit={(e) => e.preventDefault()}>
-            <div class='row'>
-              <div class='col-lg-4'>
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Order Summary</h4>
-                    <div class='table-responsive shopping-cart'>
-                      <table class='table mb-0'>
-                        <thead>
-                          <tr>
-                            <th>Service</th>
-                            <th>Appt Date</th>
-                            <th>Total</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
-                                alt=''
-                                height='52'
-                              />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 1
-                              </p>
-                            </td>
-                            <td>12/21/2022</td>
-                            <td>$75</td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
-                                alt=''
-                                height='52'
-                              />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 2
-                              </p>
-                            </td>
-                            <td>12/22/2022</td>
-                            <td>$50</td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
-                                alt=''
-                                height='52'
-                              />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 3
-                              </p>
-                            </td>
-                            <td>12/22/2022</td>
-                            <td>$60</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div class='total-payment'>
-                      <table class='table mb-0'>
-                        <tbody>
-                          <tr>
-                            <td class='payment-title'>Subtotal</td>
-                            <td>$215.00</td>
-                          </tr>
-                          <tr>
-                            <td class='payment-title'>Promo Code</td>
-                            <td>-$10.00</td>
-                          </tr>
-                          <tr>
-                            <td class='payment-title'>Total</td>
-                            <td class='text-dark'>
-                              <strong>${totalAmount}</strong>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </div>
+            <div className='row'>
+              <div className='col-lg-12'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <h4 className='header-title mt-0 mb-3'>Billing Address</h4>
 
-                <div class='card'>
-                  <div
-                    class='col-md-12 align-self-center'
-                    style={{ padding: '30px 20px' }}
-                  >
-                    <div class='text-center'>
-                      <h4 class=''>Have a promo code ?</h4>
-                      <p class='font-13'>
-                        If you have a promocode, You can take discount !
-                      </p>
-                      <div class='input-group w-75 mx-auto'>
-                        <input
-                          type='text'
-                          class='form-control'
-                          placeholder='Use Promo code'
-                          aria-describedby='button-addon2'
-                          {...register('coupon')}
-                        />
-                        <div class='input-group-append'>
-                          <button
-                            class='btn btn-gradient-success'
-                            type='button'
-                            id='button-addon2'
-                          >
-                            Apply
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class='col-lg-8'>
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Billing Address</h4>
-
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             First Name{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.firstname ? 'is-invalid' : null
                             }`}
                             {...register('firstname', {
@@ -233,15 +110,15 @@ export default function Checkout() {
                           />
                         </div>
                       </div>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Last Name{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.lastname ? 'is-invalid' : null
                             }`}
                             {...register('lastname', {
@@ -252,15 +129,16 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-12'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        <div className='form-group'>
                           <label>
-                            Address <small class='text-danger font-13'>*</small>
+                            Address{' '}
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.address ? 'is-invalid' : null
                             }`}
                             {...register('address', {
@@ -271,15 +149,16 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
-                            City <small class='text-danger font-13'>*</small>
+                            City{' '}
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.city ? 'is-invalid' : null
                             }`}
                             {...register('city', {
@@ -290,13 +169,14 @@ export default function Checkout() {
                         </div>
                       </div>
 
-                      <div class='col-md-6'>
-                        <div class='form-group'>
-                          <label class='col-form-label pt-0 pb-1'>
-                            Country <small class='text-danger font-13'>*</small>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
+                          <label className='col-form-label pt-0 pb-1'>
+                            Country{' '}
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <select
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.country ? 'is-invalid' : null
                             }`}
                             {...register('country', {
@@ -312,16 +192,16 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Email Address{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='email'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.email ? 'is-invalid' : null
                             }`}
                             {...register('email', {
@@ -331,15 +211,15 @@ export default function Checkout() {
                           />
                         </div>
                       </div>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Mobile No{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.mobileno ? 'is-invalid' : null
                             }`}
                             {...register('mobileno', {
@@ -353,64 +233,64 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Payment Details</h4>
-                    <div class='billing-nav'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <h4 className='header-title mt-0 mb-3'>Payment Details</h4>
+                    <div className='billing-nav'>
                       <ul
-                        class='nav nav-pills justify-content-center text-center mb-3'
+                        className='nav nav-pills justify-content-center text-center mb-3'
                         id='pills-tab'
                         role='tablist'
                       >
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link active'
+                            className='nav-link active'
                             id='pills-credit-card-tab'
                             data-toggle='pill'
                             href='#pills-credit-card'
                           >
-                            <i class='mdi mdi-credit-card d-block mx-auto text-danger font-18'></i>
+                            <i className='mdi mdi-credit-card d-block mx-auto text-danger font-18'></i>
                             Credit-Card
                           </a>
                         </li>
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link'
+                            className='nav-link'
                             id='pills-paypal-tab'
                             data-toggle='pill'
                             href='#pills-paypal'
                           >
-                            <i class='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
+                            <i className='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
                             Paypal
                           </a>
                         </li>
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link'
+                            className='nav-link'
                             id='pills-bitcoin-tab'
                             data-toggle='pill'
                             href='#pills-bitcoin'
                           >
-                            <i class='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
+                            <i className='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
                             Bitcoin
                           </a>
                         </li>
                       </ul>
-                      <div class='tab-content' id='pills-tabContent'>
+                      <div className='tab-content' id='pills-tabContent'>
                         <div
-                          class='tab-pane fade show active'
+                          className='tab-pane fade show active'
                           id='pills-credit-card'
                         >
-                          <div class='demo-container'>
-                            <div class='card-wrapper mb-4'></div>
-                            <div class='form-container'>
-                              <div class='bill-form'>
-                                <div class='row'>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                          <div className='demo-container'>
+                            <div className='card-wrapper mb-4'></div>
+                            <div className='form-container'>
+                              <div className='bill-form' ref={cardRef}>
+                                <div className='row'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='Card number'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.cardnumber
                                             ? 'is-invalid'
                                             : null
@@ -423,11 +303,11 @@ export default function Checkout() {
                                       />
                                     </div>
                                   </div>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='Full name'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.fullname ? 'is-invalid' : null
                                         }`}
                                         type='text'
@@ -439,12 +319,12 @@ export default function Checkout() {
                                     </div>
                                   </div>
                                 </div>
-                                <div class='row'>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                <div className='row'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='MM/YY'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.expiry ? 'is-invalid' : null
                                         }`}
                                         type='tel'
@@ -455,11 +335,11 @@ export default function Checkout() {
                                       />
                                     </div>
                                   </div>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='CVC'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.cvc ? 'is-invalid' : ''
                                         }`}
                                         type='number'
@@ -473,7 +353,7 @@ export default function Checkout() {
                                 </div>
                                 <button
                                   type='button'
-                                  class='btn btn-success px-3'
+                                  className='btn btn-success px-3'
                                   onClick={hanldePayNow}
                                 >
                                   Pay Now
@@ -482,16 +362,16 @@ export default function Checkout() {
                             </div>
                           </div>
                         </div>
-                        <div class='tab-pane fade' id='pills-paypal'>
-                          <div class='row'>
-                            <div class='col-md-12 col-lg-6 offset-lg-3'>
-                              <div class='card border'>
-                                <div class='card-body'>
-                                  <h4 class='title-text'>
-                                    <i class='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
+                        <div className='tab-pane fade' id='pills-paypal'>
+                          <div className='row'>
+                            <div className='col-md-12 col-lg-6 offset-lg-3'>
+                              <div className='card border'>
+                                <div className='card-body'>
+                                  <h4 className='title-text'>
+                                    <i className='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
                                     Add Paypal Form
                                   </h4>
-                                  <p class='mb-0 text-muted'>
+                                  <p className='mb-0 text-muted'>
                                     There are many variations of passages of
                                     Lorem Ipsum available, but the majority have
                                     suffered alteration in some form, by
@@ -502,16 +382,16 @@ export default function Checkout() {
                             </div>
                           </div>
                         </div>
-                        <div class='tab-pane fade' id='pills-bitcoin'>
-                          <div class='row'>
-                            <div class='col-md-12 col-lg-6 offset-lg-3'>
-                              <div class='card border'>
-                                <div class='card-body'>
-                                  <h4 class='title-text'>
-                                    <i class='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
+                        <div className='tab-pane fade' id='pills-bitcoin'>
+                          <div className='row'>
+                            <div className='col-md-12 col-lg-6 offset-lg-3'>
+                              <div className='card border'>
+                                <div className='card-body'>
+                                  <h4 className='title-text'>
+                                    <i className='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
                                     Add Bitcoin Form
                                   </h4>
-                                  <p class='mb-0 text-muted'>
+                                  <p className='mb-0 text-muted'>
                                     There are many variations of passages of
                                     Lorem Ipsum available, but the majority have
                                     suffered alteration in some form, by
@@ -548,11 +428,11 @@ const ConfirmModal = ({ show, handleClose, handleSubmit, isSubmitting }) => (
     <Modal.Header>
       <Modal.Title>Do you want to proceed?</Modal.Title>
     </Modal.Header>
-    <Modal.Body>Please confirm to pay for availed service(s)</Modal.Body>
+    <Modal.Body>Please confirm to pay for availed subscription.</Modal.Body>
     <Modal.Footer>
       <button
         type='submit'
-        class='btn btn-success px-3'
+        className='btn btn-success px-3'
         onClick={handleSubmit}
         disabled={isSubmitting}
       >
