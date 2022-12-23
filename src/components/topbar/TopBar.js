@@ -28,8 +28,6 @@ const NotifIconSwitch = ({ icontype }) => {
       icon: 'la-check-circle',
     },
   }
-  console.log(icontype)
-  console.log(iconsGen[icontype])
   return (
     <div className={`avatar-md ${iconsGen[icontype].bg}`}>
       <i className={`la ${iconsGen[icontype].icon} text-white`}></i>

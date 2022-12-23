@@ -15,16 +15,24 @@ function PatientDashboard() {
   }, [matches])
 
   return (
-    <div>
+    <div className='d-flex vw-100'>
       <TopBar menuClick={() => setOpenSideNav((prev) => !prev)} />
-      <div style={{ display: 'inline-block', height: '64px' }}></div>
-      <div
+      {/* <div style={{ display: 'inline-block', height: '64px' }}></div> */}
+      {/* <div
         className='figma mm-active active'
         style={{ display: 'flex', width: '100vw' }}
+      > */}
+      <PatientSideNav openSideNav={openSideNav} />
+
+      <div
+        style={{
+          overflowY: 'scroll',
+        }}
+        className='vh-100 w-100 pt-4'
       >
-        <PatientSideNav openSideNav={openSideNav} />
         <Outlet />
       </div>
+      {/* </div> */}
     </div>
   )
 }

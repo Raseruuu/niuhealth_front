@@ -11,8 +11,8 @@ function PatientSideNav({ openSideNav }) {
 
   return (
     <div
-      className='left-sidenav position-relative'
-      style={{ display: openSideNav ? 'block' : 'none' }}
+      className='left-sidenav'
+      style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' }}
     >
       {/* <div className='topbar-left'>
         <Link to='/patient' className='logo'>
