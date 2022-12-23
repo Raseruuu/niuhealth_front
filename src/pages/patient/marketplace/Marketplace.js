@@ -17,13 +17,9 @@ export default function Marketplace() {
 
     async function getList() {
       await axiosPrivate
-        .post(
-          'getServices',
-          { Email: 'jmmalunao@gmail.com' }, // TODO: Request htmlFor open list
-          {
-            signal: controller.signal,
-          }
-        )
+        .get('getAllServices', {
+          signal: controller.signal,
+        })
         .then((res) => {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
@@ -61,7 +57,7 @@ export default function Marketplace() {
   }, [])
 
   return (
-    <div className='figma'>
+    <div className='figma mt-5'>
       <div className='page-wrapper'>
         <div className='page-content'>
           <div className='container-fluid'>
@@ -320,7 +316,7 @@ export default function Marketplace() {
 
                 <div className='row'>
                   {list.map((item, index) => (
-                    <div key={item?.recno || index} className='col-lg-4'>
+                    <div key={item?.id || index} className='col-lg-4'>
                       <div className='card e-co-product'>
                         <Link to='providers'>
                           <img
@@ -331,11 +327,11 @@ export default function Marketplace() {
                         </Link>
                         <div className='card-body product-info'>
                           <Link to='providers' className='product-title'>
-                            {item.name}
+                            {item.service_description}
                           </Link>
-                          <p>{item.description}</p>
+                          <p>{item.provider_name}</p>
                           <div className='d-flex justify-content-between my-2'>
-                            <p className='product-price'>${item.rate}</p>
+                            <p className='product-price'>${item.cost_price}</p>
                             <p className='mb-0 product-review align-self-center'>
                               <Rating
                                 fillColor='#ffb822'
@@ -358,17 +354,11 @@ export default function Marketplace() {
             </div>
           </div>
 
-          <button
-            onClick={() => {
-              console.log(priceRangeRef.current.value)
-            }}
-          >
-            Get Price Range
-          </button>
-
           <Footer />
         </div>
       </div>
     </div>
   )
 }
+
+const Filter = () => {}
