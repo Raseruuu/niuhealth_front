@@ -16,12 +16,16 @@ const NotifIconSwitch = ({ icontype }) => {
       icon: 'la-group',
     },
     success: {
-      bg: 'bg-success',
-      icon: 'la-group',
+      bg: 'bg-pink',
+      icon: 'la-list-alt',
+    },
+    deliver: {
+      bg: 'bg-warning',
+      icon: 'la-truck',
     },
     task: {
-      bg: 'bg-success',
-      icon: 'la-group',
+      bg: 'bg-info',
+      icon: 'la-list-alt',
     },
   }
   console.log(icontype)

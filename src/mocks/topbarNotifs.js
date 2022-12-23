@@ -13,12 +13,12 @@ const notifs = [
   },
   {
     type: 'task',
-    subject: 'Tax Complete',
+    subject: 'Task Complete',
     body: 'Dolor Sit Amet',
     timeReceived: 10,
   },
   {
-    type: 'order',
+    type: 'deliver',
     subject: 'It is a long established fact that a reader...',
     body: 'Dolor Sit Amet',
     timeReceived: 10,
