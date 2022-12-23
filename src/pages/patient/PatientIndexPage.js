@@ -12,7 +12,7 @@ function PatientIndexPage() {
         <div className='container-fluid'>
           <div className='row figmaFirstBox'>
             {/* added paddingTop for space covered by topbar */}
-            <div className='col-sm-12' style={{ paddingTop: '80px' }}>
+            <div className='col-sm-12'>
               {isEmailVerified ? (
                 <div
                   className='alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'

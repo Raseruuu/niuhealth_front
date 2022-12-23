@@ -2,7 +2,7 @@ import { useMediaQuery } from '@react-hook/media-query'
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import PatientSideNav from './PatientSideNav'
-import TopBar from './TopBar'
+import TopBar from '../../../components/topbar/TopBar'
 
 function PatientDashboard() {
   const matches = useMediaQuery('only screen and (max-width: 575.98px)')
