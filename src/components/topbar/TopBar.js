@@ -25,7 +25,7 @@ const NotifIconSwitch = ({ icontype }) => {
     },
     task: {
       bg: 'bg-info',
-      icon: 'la-list-alt',
+      icon: 'la-check-circle',
     },
   }
   console.log(icontype)

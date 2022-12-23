@@ -21,7 +21,6 @@ import ProvidersList from './pages/patient/marketplace/ProvidersList'
 import Success from './pages/patient/marketplace/Success'
 import PatientIndexPage from './pages/patient/PatientIndexPage'
 import Profile from './pages/patient/Profile'
-import ProfileEdit from './pages/patient/ProfileEdit'
 import PaymentForm from './pages/patient/subcription/PaymentForm'
 import Renew from './pages/patient/subcription/Renew'
 import Subscription from './pages/patient/subcription/Subcription'
@@ -87,7 +86,6 @@ const router = createBrowserRouter(
               ],
             },
             { path: 'profile', element: <Profile /> },
-            { path: 'profilesettings', element: <ProfileEdit /> },
             { path: 'appointments', element: <Appointment /> },
             {
               path: 'subscription',
