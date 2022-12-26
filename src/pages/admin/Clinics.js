@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 // import Footer from '../../../components/Footer'
 
-export default function ClinicsList() {
+export default function AdminClinics() {
   return (
 <div class="page-wrapper">
             {/* <!-- Page Content--> */}

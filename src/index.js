@@ -42,10 +42,12 @@ const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminIndex = lazy(() => import('./pages/admin/AdminIndex'))
-const ClinicsList = lazy(() => import('./pages/admin/Clinics'))
-const CompaniesList = lazy(() => import('./pages/admin/Companies'))
-// const AdminProvidersList = lazy(() => import('./pages/admin/Providers'))
-// const PatientsList = lazy(() => import('./pages/admin/Patients'))
+const AdminClinics = lazy(() => import('./pages/admin/Clinics'))
+const AdminCompanies = lazy(() => import('./pages/admin/Companies'))
+const AdminProviders = lazy(() => import('./pages/admin/Providers'))
+const AdminPatients = lazy(() => import('./pages/admin/Patients'))
+
+const AdminSettings = lazy(() => import('./pages/admin/Settings'))
 // const SettingsList = lazy(() => import('./pages/admin/Settings'))
 const App = () => (
   <Suspense>
@@ -83,11 +85,11 @@ const router = createBrowserRouter(
             // { path: 'waitingroom', element: <WaitingRoom /> },
             // { path: 'room', element: <Room /> },
             { index: true, element: <AdminIndex /> },
-            { path: 'admin/companies', element: <CompaniesList /> },
-            { path: 'admin/clinics', element: <ClinicsList /> },
-            // { path: 'admin/providers', element: <ProvidersList /> },
-            // { path: 'admin/patients', element: <PatientsList /> },
-            // { path: 'admin/adminsettings', element: <SettingsList /> }
+            { path: 'companies', element: <AdminCompanies /> },
+            { path: 'clinics', element: <AdminClinics /> },
+            { path: 'providers', element: <AdminProviders /> },
+            { path: 'patients', element: <AdminPatients /> },
+            { path: 'settings', element: <AdminSettings /> }
           ],
         },
         {

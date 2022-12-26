@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CompaniesList() {
+export default function AdminCompanies() {
   return (
 <div class="page-wrapper">
             {/* <!-- Page Content--> */}
@@ -12,9 +12,9 @@ export default function CompaniesList() {
                         <div class="col-sm-12">
                             <div class="page-title-box">
                                 <div class="float-right">
-                                    <a href="manage_clinic.html"><button type="button" class="btn btn-success waves-effect waves-light">New Clinic</button></a>
+                                    <a href="manage_companies.html"><button type="button" class="btn btn-success waves-effect waves-light">New Company</button></a>
                                 </div>
-                                <h4 class="page-title">Clinics</h4>
+                                <h4 class="page-title">Companies</h4>
                             </div>
                             {/* <!--end page-title-box--> */}
                         </div>
@@ -29,39 +29,18 @@ export default function CompaniesList() {
                             <div class="card">
                                 <div class="card-body">
                                  
-								  <div class="row" style={{marginBottom: "30px"}}>
-                                        <div class="col-lg-3">
-											<label for="example-text-input" class="col-form-label text-right">Company</label>
-											<select class="form-control">
-                                                                        <option>Maxicare Corporation</option>
-                                                                        <option>The Ogamo Institute</option>
-                                                                        <option>St. Luke Group</option>
-                                                                    </select>
-										</div>
-										<div class="col-lg-3">
-											<label for="example-text-input" class="col-form-label text-right">Location</label>
-											<select class="form-control">
-                                                                        <option>Location Name 1</option>
-                                                                        <option>Location Name 2</option>
-                                                                        <option>Location Name 3</option>
-                                                                    </select>
-										</div>	
-										
-									</div>
+								 
 								 
 								 <div class="">
-                                        <table 
-                                          id="datatable2" 
-                                          class="table dt-responsive nowrap" 
-                                          style={{borderCollapse: 'collapse', borderSpacing: 0, width: "100%"}}>
+                                        <table id="datatable2" class="table dt-responsive nowrap" style={{borderCollapse: "collapse", borderSpacing: 0, width: "100%"}} >
                                             <thead>
                                             <tr>
-												<th>Clinic Name</th>
-                                                <th>Company</th>
+                                                <th>Company Name</th>
                                                 <th>Contact Info</th>
                                                 <th>Email</th>
                                                 <th>Address</th>
-												<th>Providers</th>
+                                                <th>Clinics</th>
+                                                <th>Providers</th>
                                                 <th>Date Created</th>
                                             </tr>
                                             </thead>
@@ -69,129 +48,111 @@ export default function CompaniesList() {
 
                                             <tbody>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
+                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+                                                <th>+63 8789 4561</th>
+                                                <th>admin@maxicare.com.ph</th>
                                                 <th>Sample address in here</th>
-                                                <th>10</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>10</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_clinic.html">Maxicare Centris</a></th>
-                                                <th>Maxicare Corporation</th>
-												<th>+63 8765 4321</th>
-                                                <th>centris@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>10</th>
+                                                <th>20</th>
+                                                <th>25</th>
                                                 <th>11/29/2022</th>
                                             </tr>
                                             </tbody>
@@ -202,7 +163,7 @@ export default function CompaniesList() {
 								 
 									
 								</div>
-                {/* <!--end card-body--> */}
+                                {/* <!--end card-body--> */}
                             </div>
                             {/* <!--end card--> */}
                         </div>

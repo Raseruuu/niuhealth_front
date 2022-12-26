@@ -27,14 +27,13 @@ function SideNav({ openSideNav=true }) {
             </li>
             <li>
               <NavLink to='clinics'>
-                <i className='fas fa-user-friends'></i>
+                <i className='fas fa-medkit'></i>
                 <span>Clinics</span>
                 <span className='menu-arrow'>
                   <i className='mdi mdi-chevron-right'></i>
                 </span>
               </NavLink>
-            </li>
-            <li>
+            </li><li>
               <NavLink to='providers'>
                 <i className='far fa-star'></i>
                 <span>Providers</span>
@@ -44,7 +43,7 @@ function SideNav({ openSideNav=true }) {
               </NavLink>
             </li>
             <li>
-              <NavLink to='settings'>
+              <NavLink to='patients'>
                 <i className='fas fa-clock'></i>
                 <span>Patients</span>
                 <span className='menu-arrow'>
@@ -52,6 +51,8 @@ function SideNav({ openSideNav=true }) {
                 </span>
               </NavLink>
             </li>
+            
+            
             <li>
               <NavLink to='settings'>
                 <i className='far fa-newspaper'></i>
@@ -61,24 +62,7 @@ function SideNav({ openSideNav=true }) {
                 </span>
               </NavLink>
             </li>
-            <li>
-              <NavLink to='clinics'>
-                <i className='fas fa-medkit'></i>
-                <span>Clinics</span>
-                <span className='menu-arrow'>
-                  <i className='mdi mdi-chevron-right'></i>
-                </span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to='services'>
-                <i className='fas fa-dolly'></i>
-                <span>Services</span>
-                <span className='menu-arrow'>
-                  <i className='mdi mdi-chevron-right'></i>
-                </span>
-              </NavLink>
-            </li>
+            
           </ul>
         </li>
         <li>
