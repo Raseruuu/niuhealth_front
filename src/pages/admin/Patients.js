@@ -1,8 +1,49 @@
-import React from 'react'
+import React, { useState }  from 'react'
 import { Link } from 'react-router-dom'
 // import Footer from '../../../components/Footer'
 
+
+function PatientItem({name,email,contactnum,address}){
+    
+    return(
+        <tr>
+        <th><a href="manage_patients.html">
+            <img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/>
+            {name}</a></th>
+        <th>{email}</th>
+        <th>{contactnum}</th>
+        <th>{address}</th>
+        </tr>
+ 
+ )}
 export default function AdminPatients() {
+    const [patientsList,setPatientsList] = useState([
+        {
+            name :"Danica Stoudomaire",
+            contactnum:"+63911 1111 1111",
+            email: "prime@numberone.com.ph",
+            address:"One street block 1 lot 1 Brgy. 1 Area 1"
+        },
+        {
+            name :"Matt Rosales",
+            contactnum:"+63911 1111 1111",
+            email: "prime@numberone.com.ph",
+            address:"Sample Address"
+        },
+        {
+            name :" Michael Hill",
+            contactnum:"+63911 1111 1111",
+            email: "prime@numberone.com.ph",
+            address:"Sampress Addle"
+        },
+        {
+            name :"Nancy Flanary",
+            contactnum:"+63911 1111 1111",
+            email: "xyx@gmail.com",
+            address:"Address Sample"
+        }
+        ]
+    )
   return (
 <div class="page-wrapper">
             {/* <!-- Page Content--> */}
@@ -43,33 +84,11 @@ export default function AdminPatients() {
                                                 <th>Address</th>
                                             </tr>
                                             </thead>
-
-
                                             <tbody>
-                                            <tr>
-                                                <th><a href="manage_patients.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Danica Stoudomaire </a></th>
-                                                <th>xyx@gmail.com</th>
-												<th>+123456789</th>
-                                                <th>Sample address in here</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_patients.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Matt Rosales </a></th>
-                                                <th>xyx@gmail.com</th>
-												<th>+123456789</th>
-                                                <th>Sample address in here</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_patients.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Michael Hill </a></th>
-                                                <th>xyx@gmail.com</th>
-												<th>+123456789</th>
-                                                <th>Sample address in here</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_patients.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Nancy Flanary </a></th>
-                                                <th>xyx@gmail.com</th>
-												<th>+123456789</th>
-                                                <th>Sample address in here</th>
-                                            </tr>
+                                            {patientsList.map((patient)=>
+                                                    <PatientItem {...patient} />
+                                                    )}
+                                           
                                             </tbody>
                                         </table>
                                     </div>        

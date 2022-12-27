@@ -1,8 +1,40 @@
-import React from 'react'
+import React,{useState} from 'react'
 import { Link } from 'react-router-dom'
 // import Footer from '../../../components/Footer'
-
+function ProviderItem({name,clinics,specialty,rating}){
+    
+    return(
+        <tr>
+            <th><a href="manage_provider.html">
+                <img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/>
+            {name} </a></th>
+            <th>{clinics}</th>
+            <th>{specialty}</th>
+            <th>{rating}</th>
+        </tr>
+    )}
 export default function AdminProviders() {
+    const [providerList,setProviderList] = useState([
+        {
+            name :"Dr. Joseph Albert Nefarior",
+            clinics:"Maxicare Centris, Sese Dental Clinic",
+            specialty:"Pediatrician, Gastrologist",
+            rating: "3.9",
+        },
+        {
+            name :"Dra. Janice De Leon",
+            clinics:" XYZ Clinic",
+            specialty:"Surgeon, ENT",
+            rating: "4.7",
+        },
+        {
+            name :"Dr. Martin Sese",
+            clinics:"Sese Dental Clinic",
+            specialty:"Dentist",
+            rating: "5.0",
+        },
+        ]
+    )
   return (
 <div class="page-wrapper">
             {/* <!-- Page Content--> */}
@@ -48,24 +80,10 @@ export default function AdminProviders() {
 
 
                                             <tbody>
-                                            <tr>
-                                                <th><a href="manage_provider.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Dr. Joseph Albert Nefarior </a></th>
-                                                <th>Maxicare Centris<br/>Sese Dental Clinic</th>
-												<th>Pediatrician, Gastrologist</th>
-                                                <th>3.9</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_provider.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Dra. Janice De Leon </a></th>
-                                                <th>XYZ Clinic</th>
-												<th>Surgeon, ENT</th>
-                                                <th>4.7</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_provider.html"><img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/> Dr. Martin Sese </a></th>
-                                                <th>Sese Dental Clinic</th>
-												<th>Dentist</th>
-                                                <th>5.0</th>
-                                            </tr>
+                                            {providerList.map((provider)=>
+                                                    <ProviderItem {...provider} />
+                                                    )}
+
                                             </tbody>
                                         </table>
                                     </div>        

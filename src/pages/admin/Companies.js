@@ -15,15 +15,7 @@ function CompanyItem({name,contactnum,email,address,clinics,providers,dateCreate
             <th>{dateCreated}</th>
         </tr>
     )}
-    
 export default function AdminCompanies() {
-    // <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-    // <th>+63 8789 4561</th>
-    // <th>admin@maxicare.com.ph</th>
-    // <th>Sample address in here</th>
-    // <th>20</th>
-    // <th>25</th>
-    // <th>11/29/2022</th>
     const [companylist,setCompanyList] = useState([
         {
             name :"Uno Corporation",
@@ -74,16 +66,10 @@ export default function AdminCompanies() {
                         {/* <!--end col--> */}
                     </div>
                     {/* <!-- end page title end breadcrumb --> */}
- 
-
- 
 					<div class="row ">                               
                         <div class="col-lg-12">
                             <div class="card">
                                 <div class="card-body">
-                                 
-								 
-								 
 								 <div class="">
                                         <table id="datatable2" class="table dt-responsive nowrap" style={{borderCollapse: "collapse", borderSpacing: 0, width: "100%"}} >
                                             <thead>
@@ -97,30 +83,13 @@ export default function AdminCompanies() {
                                                 <th>Date Created</th>
                                             </tr>
                                             </thead>
-
-
                                             <tbody>
                                             {companylist.map((company)=>
                                                     <CompanyItem {...company} />
                                                     )}
-
-                                            {/* <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr> */}
-                                            
                                             </tbody>
                                         </table>
                                     </div>        
-								 
-								 
-								 
-									
 								</div>
                                 {/* <!--end card-body--> */}
                             </div>
@@ -129,10 +98,6 @@ export default function AdminCompanies() {
                         {/* <!--end col-->                         */}
                     </div>
                     {/* <!--end row--> */}
-					
-					
-					
-
                 </div>
                 {/* <!-- container --> */}
 
