@@ -22,13 +22,8 @@ export default function Marketplace() {
         })
         .then((res) => {
           console.log(res)
-          const { Status, Data: data = [], Message } = res.data
 
-          if (Status) {
-            setList(data)
-          } else {
-            throw new Error(Message)
-          }
+          setList(res.data)
         })
         .catch((err) => {
           console.error(err)
@@ -36,7 +31,7 @@ export default function Marketplace() {
         })
     }
 
-    isMounted && getList()
+    getList()
 
     return () => {
       isMounted = false
@@ -316,9 +311,9 @@ export default function Marketplace() {
 
                 <div className='row'>
                   {list.map((item, index) => (
-                    <div key={item?.id || index} className='col-lg-4'>
+                    <div key={item?.service_id || index} className='col-lg-4'>
                       <div className='card e-co-product'>
-                        <Link to='providers'>
+                        <Link to='booking' state={{ ...item }}>
                           <img
                             src={`${AWS_BUCKET}/assets/images/products/img-1.png`}
                             alt=''
@@ -326,7 +321,11 @@ export default function Marketplace() {
                           />
                         </Link>
                         <div className='card-body product-info'>
-                          <Link to='providers' className='product-title'>
+                          <Link
+                            to='booking'
+                            className='product-title'
+                            state={{ ...item }}
+                          >
                             {item.service_description}
                           </Link>
                           <p>{item.provider_name}</p>

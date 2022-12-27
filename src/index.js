@@ -15,6 +15,7 @@ import Appointment from './pages/patient/Appointment'
 import Insurance from './pages/patient/insurance/Insurance'
 import Upload from './pages/patient/insurance/Upload'
 import PatientDashboard from './pages/patient/layout/PatientDashboard'
+import Booking from './pages/patient/marketplace/Booking'
 import Checkout from './pages/patient/marketplace/Checkout'
 import Marketplace from './pages/patient/marketplace/Marketplace'
 import ProvidersList from './pages/patient/marketplace/ProvidersList'
@@ -81,6 +82,7 @@ const router = createBrowserRouter(
               children: [
                 { index: true, element: <Marketplace /> },
                 { path: 'providers', element: <ProvidersList /> },
+                { path: 'booking', element: <Booking /> },
                 { path: 'checkout', element: <Checkout /> },
                 { path: 'success', element: <Success /> },
               ],
