@@ -65,9 +65,7 @@ function SideNav({ openSideNav=true }) {
             
           </ul>
         </li>
-        <li>
-            <a href="../figma/profile.html"><i class="ti-lock"></i><span>Settings</span><span class="menu-arrow"></span></a>
-        </li> 
+        
       </ul>
     </div>
   )
