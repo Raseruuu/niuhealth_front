@@ -77,24 +77,16 @@ function PatientSideNav({ openSideNav }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to='marketplace'>
-            <i className='dripicons-medical'></i>
-            <span>Marketplace</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-
-        <li>
-          <NavLink to='profile'>
-            <i className='dripicons-user'></i>
-            <span>Profile</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
           <NavLink to='appointments'>
             <i className='mdi mdi-calendar-text'></i>
             <span>Appointments</span>
+            <span className='menu-arrow'></span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='marketplace'>
+            <i className='dripicons-medical'></i>
+            <span>Marketplace</span>
             <span className='menu-arrow'></span>
           </NavLink>
         </li>
@@ -109,6 +101,13 @@ function PatientSideNav({ openSideNav }) {
           <NavLink to='insurance'>
             <i className='mdi mdi-home-plus'></i>
             <span>Insurance</span>
+            <span className='menu-arrow'></span>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to='profile'>
+            <i className='dripicons-user'></i>
+            <span>Profile</span>
             <span className='menu-arrow'></span>
           </NavLink>
         </li>
