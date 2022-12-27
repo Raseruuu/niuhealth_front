@@ -25,6 +25,10 @@ function PatientList() {
         <div className='col-sm-12'>
           <div className='page-title-box'>
             <h4 className='page-title'>Patients</h4>
+            <form role="search" class="">
+                <input type="text" id="AllCompo" placeholder="Search..." class="form-control"/>
+                <a href=""><i class="fas fa-search"></i></a>
+            </form>
           </div>
         </div>
       </div>
@@ -44,7 +48,7 @@ function PatientList() {
                       <th>Action</th>
                     </tr>
                   </thead>
-
+                  
                   <tbody>
                     <PatientListData />
                   </tbody>
