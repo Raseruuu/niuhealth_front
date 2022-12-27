@@ -1,6 +1,59 @@
-import React from 'react'
+import React, { useState } from 'react'
 
+function CompanyItem({name,contactnum,email,address,clinics,providers,dateCreated}){
+    
+    return(
+        <tr>
+            <th><a href="manage_clinic.html">
+                {name}
+                </a></th>
+            <th>{contactnum}</th>
+            <th>{email}</th>
+            <th>{address}</th>
+            <th>{clinics}</th>
+            <th>{providers}</th>
+            <th>{dateCreated}</th>
+        </tr>
+    )}
+    
 export default function AdminCompanies() {
+    // <th><a href="manage_companies.html">Maxicare Corporation</a></th>
+    // <th>+63 8789 4561</th>
+    // <th>admin@maxicare.com.ph</th>
+    // <th>Sample address in here</th>
+    // <th>20</th>
+    // <th>25</th>
+    // <th>11/29/2022</th>
+    const [companylist,setCompanyList] = useState([
+        {
+            name :"Uno Corporation",
+            contactnum:"+63911 1111 111",
+            email: "prime@numberone.com.ph",
+            address:"One street block 1 lot 1 Brgy. 1 Area 1",
+            clinics:11,
+            providers:1,
+            dateCreated:"11/11/2011"
+        },
+        {
+            name :"Dos Corporation",
+            contactnum:"+63922 222 2222",
+            email: "Biduo@segunda.com",
+            address:"#2 Dalawa street Brgy. 2 ",
+            clinics:2,
+            providers:2,
+            dateCreated:"2/2/2022"
+        },
+        {
+            name :"Maxicare Corporation",
+            contactnum:"+63999 999 9999",
+            email: "Maxicare@maxicare.com.ph",
+            address:"Sample Address Here",
+            clinics:4,
+            providers:10,
+            dateCreated:"3/2/2022"
+        },
+        ]
+    )
   return (
 <div class="page-wrapper">
             {/* <!-- Page Content--> */}
@@ -47,7 +100,11 @@ export default function AdminCompanies() {
 
 
                                             <tbody>
-                                            <tr>
+                                            {companylist.map((company)=>
+                                                    <CompanyItem {...company} />
+                                                    )}
+
+                                            {/* <tr>
                                                 <th><a href="manage_companies.html">Maxicare Corporation</a></th>
                                                 <th>+63 8789 4561</th>
                                                 <th>admin@maxicare.com.ph</th>
@@ -55,106 +112,8 @@ export default function AdminCompanies() {
                                                 <th>20</th>
                                                 <th>25</th>
                                                 <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
-                                            <tr>
-                                                <th><a href="manage_companies.html">Maxicare Corporation</a></th>
-                                                <th>+63 8789 4561</th>
-                                                <th>admin@maxicare.com.ph</th>
-                                                <th>Sample address in here</th>
-                                                <th>20</th>
-                                                <th>25</th>
-                                                <th>11/29/2022</th>
-                                            </tr>
+                                            </tr> */}
+                                            
                                             </tbody>
                                         </table>
                                     </div>        
