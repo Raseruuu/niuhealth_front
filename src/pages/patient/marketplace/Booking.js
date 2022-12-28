@@ -15,6 +15,7 @@ export default function Booking() {
   const [errMsg, setErrMsg] = useState(null)
   const [providerSched, setProviderSched] = useState([])
   const navigate = useNavigate()
+  const [slots, setSlots] = useState([])
 
   const handleDateSelect = (selectInfo) => {
     console.log(selectInfo)
@@ -36,14 +37,23 @@ export default function Booking() {
   }
 
   const handleEventClick = (clickInfo) => {
+    const dateX = moment(clickInfo.event.startStr).format('MM/DD/YY')
+    const timeX = moment(clickInfo.event.startStr).format('HH')
+
+    console.log(dateX, timeX)
+
     const state = {
       selectedProvider,
-      timeSlot: clickInfo.event.startStr,
+      timeSlot: {
+        dateX,
+        timeX,
+      },
     }
-
     if (
       window.confirm(
-        `Are you sure you want to book on this slot/time '${clickInfo.event.title}'`
+        `Are you sure you want to book on this slot/time ${moment(
+          clickInfo.event.startStr
+        ).format('MM/DD/YYYY hA')}?`
       )
     ) {
       navigate('../checkout', {
@@ -53,13 +63,13 @@ export default function Booking() {
   }
 
   const handleEvents = (events) => {
-    // console.log(events)
+    console.log(events)
   }
 
   const INITIAL_EVENTS = (appointments = []) => {
     const schedArray = []
 
-    const startDate = moment().subtract(2, 'days')
+    const startDate = moment().startOf('week')
     const endDate = moment().add(10, 'days')
 
     const startEndDateDiff = endDate.diff(startDate, 'days')
@@ -69,22 +79,33 @@ export default function Booking() {
         .add(index === 0 ? 0 : 1, 'days')
         .format('YYYY-MM-DD')
 
-      for (let j = 4; j < 23; j++) {
-        let timeStr = j
-        if (j <= 9) {
-          timeStr = '0' + j
-        }
+      for (let j = 4; j < 24; j++) {
+        let doAppend = appointments.some(
+          (item) =>
+            item.trans_date_time === currentD && item.trans_start === String(j)
+        )
 
-        schedArray.push({
-          id: 'id_' + index + j,
-          title: `${currentD}T${timeStr}:00:00`,
-          start: `${currentD}T${timeStr}:00:00`,
-          backgroundColor: '#1eca7b',
-          borderColor: 'transparent',
-        })
+        if (doAppend) {
+          continue
+        } else {
+          let timeStr = j
+          if (j < 10) {
+            timeStr = '0' + j
+          }
+          const startStr = `${currentD}T${timeStr}:00:00`
+
+          schedArray.push({
+            id: 'id_' + index + j,
+            title: 'Available',
+            start: startStr,
+            backgroundColor: '#1eca7b',
+            borderColor: 'transparent',
+          })
+        }
       }
     }
-    return schedArray
+    // console.log(schedArray)
+    setSlots(schedArray)
   }
 
   useEffect(() => {
@@ -224,14 +245,13 @@ export default function Booking() {
                       right: '',
                     }}
                     initialView='timeGridWeek'
-                    initialEvents={INITIAL_EVENTS()}
+                    events={slots}
                     // slotMinTime={'06:00:00'}
                     // slotMaxTime={'22:00:00'}
                     allDaySlot={false}
                     editable={false}
                     selectable={true}
-                    selectMirror={true}
-                    dayMaxEvents={true}
+                    slotDuration={'00:20:00'}
                     select={handleDateSelect}
                     eventClick={handleEventClick}
                     eventsSet={handleEvents}

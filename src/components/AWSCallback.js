@@ -83,14 +83,15 @@ function AWSCallback() {
             sessionStorage.setItem('transactionType', transactionType)
             sessionStorage.setItem('userType', userType)
 
-            setAuth({
-              access_token,
-              id_token,
-              refresh_token,
-              token_type,
-              transactionType,
-              userType,
-            })
+            isMounted &&
+              setAuth({
+                access_token,
+                id_token,
+                refresh_token,
+                token_type,
+                transactionType,
+                userType,
+              })
 
             navigate('/', { replace: true })
           }
@@ -101,7 +102,7 @@ function AWSCallback() {
         })
     }
 
-    isMounted && auth()
+    auth()
 
     return () => {
       isMounted = false

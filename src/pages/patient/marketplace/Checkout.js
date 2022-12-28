@@ -34,20 +34,22 @@ export default function Checkout() {
       const ExpYear = data?.expiry.split(' / ')[1]
 
       const billing = {
-        ...data,
-        Number: data.number,
+        CardNumber: data.number,
         ExpMonth,
-        ExpYear,
+        Expyear: ExpYear,
         CVC: data?.cvc,
-        Amount: totalAmount,
-        Description: 'Payment for Cart ID: 4005',
         Email: auth?.email,
+        ServiceID: selectedService.selectedProvider.service_id,
+        PaymentType: 3,
+        ProviderID: selectedService.selectedProvider.provider_id,
+        Date: selectedService.timeSlot.dateX,
+        Time: selectedService.timeSlot.timeX,
       }
 
       console.log(billing)
 
       await axiosPrivate
-        .post('stripePayment', billing)
+        .post('servicePayment', billing)
         .then((res) => {
           const { Status, Message } = res.data
           if (Status) {
@@ -396,7 +398,7 @@ export default function Checkout() {
                           class='tab-pane fade show active'
                           id='pills-credit-card'
                         >
-                          <div class='demo-container'>
+                          <div class='demo-container w-100'>
                             <div class='card-wrapper mb-4'></div>
                             <div class='form-container'>
                               <div ref={cardRef} class='bill-form'>
