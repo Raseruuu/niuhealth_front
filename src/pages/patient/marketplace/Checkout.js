@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import moment from 'moment'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
 import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 export default function Checkout() {
+  const cardRef = useRef()
+  const { state: selectedService } = useLocation()
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
@@ -19,7 +22,9 @@ export default function Checkout() {
   } = useForm()
 
   const [show, setShow] = useState(false)
-  const [totalAmount, setTotalAmount] = useState('195.00')
+  const [totalAmount, setTotalAmount] = useState(
+    selectedService?.selectedProvider?.cost_price
+  )
 
   const handleClose = () => setShow(false)
 
@@ -36,7 +41,7 @@ export default function Checkout() {
         CVC: data?.cvc,
         Amount: totalAmount,
         Description: 'Payment for Cart ID: 4005',
-        Email: data?.email,
+        Email: auth?.email,
       }
 
       console.log(billing)
@@ -67,10 +72,12 @@ export default function Checkout() {
   }
 
   useEffect(() => {
-    new window.Card({
-      form: document.querySelector('.bill-form'),
-      container: '.card-wrapper',
-    })
+    if (cardRef.current) {
+      new window.Card({
+        form: document.querySelector('.bill-form'),
+        container: '.card-wrapper',
+      })
+    }
   }, [])
 
   return (
@@ -83,7 +90,7 @@ export default function Checkout() {
                 <div class='float-right'>
                   <ol class='breadcrumb'>
                     <li class='breadcrumb-item'>
-                      <Link href='/patient/marketplace'>Marketplace</Link>
+                      <Link to='/patient/marketplace'>Marketplace</Link>
                     </li>
                     <li class='breadcrumb-item active'>Checkout</li>
                   </ol>
@@ -116,39 +123,25 @@ export default function Checkout() {
                                 height='52'
                               />
                               <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 1
+                                {
+                                  selectedService?.selectedProvider
+                                    ?.provider_name
+                                }{' '}
+                                -{' '}
+                                {
+                                  selectedService?.selectedProvider
+                                    ?.service_description
+                                }
                               </p>
                             </td>
-                            <td>12/21/2022</td>
-                            <td>$75</td>
-                          </tr>
-                          <tr>
                             <td>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
-                                alt=''
-                                height='52'
-                              />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 2
-                              </p>
+                              {moment(selectedService.timeSlot).format(
+                                'MM/DD/YYYY h:mm a'
+                              )}
                             </td>
-                            <td>12/22/2022</td>
-                            <td>$50</td>
-                          </tr>
-                          <tr>
                             <td>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
-                                alt=''
-                                height='52'
-                              />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
-                                Service name 3
-                              </p>
+                              ${selectedService?.selectedProvider?.cost_price}
                             </td>
-                            <td>12/22/2022</td>
-                            <td>$60</td>
                           </tr>
                         </tbody>
                       </table>
@@ -158,11 +151,13 @@ export default function Checkout() {
                         <tbody>
                           <tr>
                             <td class='payment-title'>Subtotal</td>
-                            <td>$215.00</td>
+                            <td>
+                              ${selectedService?.selectedProvider?.cost_price}
+                            </td>
                           </tr>
                           <tr>
                             <td class='payment-title'>Promo Code</td>
-                            <td>-$10.00</td>
+                            <td>-$0.00</td>
                           </tr>
                           <tr>
                             <td class='payment-title'>Total</td>
@@ -404,7 +399,7 @@ export default function Checkout() {
                           <div class='demo-container'>
                             <div class='card-wrapper mb-4'></div>
                             <div class='form-container'>
-                              <div class='bill-form'>
+                              <div ref={cardRef} class='bill-form'>
                                 <div class='row'>
                                   <div class='col-md-6'>
                                     <div class='form-group'>

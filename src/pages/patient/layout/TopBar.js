@@ -5,8 +5,8 @@ import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 
 export function TopBar({ menuClick }) {
-  //notif badge number 
-  const [ntfBadgeNum,setNtfBadgeNum]=useState(4)
+  //notif badge number
+  const [ntfBadgeNum, setNtfBadgeNum] = useState(4)
   const { auth } = useAuth()
   return (
     <div className='dev-top-bar'>
@@ -28,7 +28,8 @@ export function TopBar({ menuClick }) {
           <Link
             className='nav-link dropdown-toggle arrow-none waves-light waves-effect'
             data-toggle='dropdown'
-            href='#'
+            href=''
+            onClick={(e) => e.preventDefault()}
             role='button'
             aria-haspopup='false'
             aria-expanded='false'
