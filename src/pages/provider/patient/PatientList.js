@@ -4,6 +4,7 @@ import PatientListData from "../../../components/provider/PatientListData"
 import { AWS_BUCKET } from "../../../constants"
 import useAuth from "../../../hooks/useAuth"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import useDebounce from "../../../hooks/useDebounce"
 
 // Provider list of patients
 function PatientList() {
@@ -12,7 +13,7 @@ function PatientList() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [search, setSearch] = useState("")
-  // const handleSearch
+  const debouncedSearch = useDebounce(search,500)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -23,8 +24,9 @@ function PatientList() {
     () => {
       localStorage.setItem("search", search);
       console.log(search)
+      // add search request here
     },
-    [search]
+    [debouncedSearch]
   )
   return (
     <div className='container-fluid'>
@@ -38,17 +40,18 @@ function PatientList() {
             </form> */}
             <div className="float-right">
               <div className='input-group' style={{paddingTop:"10px",paddingBottom:"10px"}}>
-                <input
-                  type='text'
-                  className='form-control'
-                  style = {{maxWidth:'300px'}}
-                  placeholder='Search Patients...'
-                  aria-label='Search Patients...'
-                  onChange={e => {
-                    setSearch(e.target.value)
-                  }}
-                  value={search}
-                />
+                <form role="search" class="">
+                  <input
+                    type='text'
+                    className='form-control'
+                    style = {{maxWidth:'300px'}}
+                    placeholder='Search Patients...'
+                    aria-label='Search Patients...'
+                    onChange={e => {
+                      setSearch(e.target.value)
+                    }}
+                    value={search}/>
+                </form>
                 <span className='input-group-append'>
                   <button className='btn btn-success' type='button'>
                     <i class="fas fa-search"></i>
