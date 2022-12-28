@@ -11,24 +11,51 @@ function PatientList() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-
+  const [search, setSearch] = useState("")
+  // const handleSearch
   /*
   For Status:
   Confined -  badge-soft-purple
   Deceased - badge-soft-danger
   Follow-up Checkup - badge-soft-success
   */
-
+  useEffect(
+    () => {
+      localStorage.setItem("search", search);
+      console.log(search)
+    },
+    [search]
+  )
   return (
     <div className='container-fluid'>
       <div className='row'>
         <div className='col-sm-12'>
           <div className='page-title-box'>
             <h4 className='page-title'>Patients</h4>
-            <form role="search" class="">
+            {/* <form role="search" class="">
                 <input type="text" id="AllCompo" placeholder="Search..." class="form-control"/>
                 <a href=""><i class="fas fa-search"></i></a>
-            </form>
+            </form> */}
+            <div className="float-right">
+              <div className='input-group' style={{paddingTop:"10px",paddingBottom:"10px"}}>
+                <input
+                  type='text'
+                  className='form-control'
+                  style = {{maxWidth:'300px'}}
+                  placeholder='Search Patients...'
+                  aria-label='Search Patients...'
+                  onChange={e => {
+                    setSearch(e.target.value)
+                  }}
+                  value={search}
+                />
+                <span className='input-group-append'>
+                  <button className='btn btn-success' type='button'>
+                    <i class="fas fa-search"></i>
+                  </button>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
