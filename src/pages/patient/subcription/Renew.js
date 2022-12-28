@@ -40,7 +40,7 @@ function Renew() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status && isMounted) {
-            setList(data)
+            isMounted && setList(data)
           } else {
             throw new Error(Message)
           }
@@ -50,7 +50,7 @@ function Renew() {
         })
     }
 
-    isMounted && getList()
+    getList()
 
     return () => {
       isMounted = false
@@ -102,8 +102,8 @@ function Renew() {
                         height='100'
                       />
                       <h6 className='title1 py-3 mt-2 mb-0'>
-                        Plus plan{' '}
-                        <small className='text-muted'>Per Month</small>
+                        Plus plan {item.description}
+                        <small className='text-muted'></small>
                       </h6>
                       <ul className='list-unstyled pricing-content-2 pb-3'>
                         <li>Lorem ipsum</li>

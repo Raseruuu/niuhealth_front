@@ -40,8 +40,6 @@ export default function Booking() {
     const dateX = moment(clickInfo.event.startStr).format('MM/DD/YY')
     const timeX = moment(clickInfo.event.startStr).format('HH')
 
-    console.log(dateX, timeX)
-
     const state = {
       selectedProvider,
       timeSlot: {
@@ -63,7 +61,7 @@ export default function Booking() {
   }
 
   const handleEvents = (events) => {
-    console.log(events)
+    // console.log(events)
   }
 
   const INITIAL_EVENTS = (appointments = []) => {
