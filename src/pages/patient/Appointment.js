@@ -1,6 +1,9 @@
 import Footer from "../../components/Footer"
-import React, { useState } from 'react'
+import React, { useEffect,useState } from 'react'
 
+import { AWS_BUCKET } from '../../constants'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 const CancelButton = () => {
 return(
   <div className="list-inline mb-0 align-self-center">
@@ -25,10 +28,11 @@ const ViewVisitButton = () => {
   )}
 const StatusIcon = ({ icontype }) => {
   const StatusColor = {
-    upcoming: 'text-purple',
-    cancelled_by_p: 'text-danger',
-    cancelled_by_d: 'text-danger',
-    completed:"text-success",
+    0: 'text-purple',
+    2: 'text-danger',
+    3: 'text-danger',
+    1:"text-success",
+    4:"text-success",
   }
   return (
     <div className="task-priority-icon">
@@ -39,16 +43,18 @@ const StatusIcon = ({ icontype }) => {
 
 const StatusText = ({ status }) => {
   const statusColor = {
-    upcoming: 'badge-soft-purple',
-    cancelled_by_p: 'badge-soft-danger',
-    cancelled_by_d: 'badge-soft-danger',
-    completed: "badge-soft-success",
+    0: 'badge-soft-purple',
+    2: 'badge-soft-danger',
+    3: 'badge-soft-danger',
+    1: "badge-soft-success",
+    4: "badge-soft-success",
   }
   const statusText = {
-    upcoming: 'Upcoming',
-    cancelled_by_p: 'Cancelled By You',
-    cancelled_by_d: 'Cancelled By Doctor',
-    completed: "Completed",
+    0: 'Upcoming',
+    2: 'Cancelled By You',
+    3: 'Cancelled By Doctor',
+    1: "Completed",
+    4: "Approved",
   }
   return (
     <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
@@ -79,10 +85,10 @@ const AppointmentAction = ({ status }) => {
 
 }
 
-function AppointmentItem({providername,specialty,status,hub,address,time,date}){
+function AppointmentItem({provider_description,provider_name,service_description,service_id,trans_date_time,visit_id,status}){
  
   return(
-    <div className="card">
+    <div className="card" id={service_id}>
     <div className="card-body">
       <div className="task-box">
 
@@ -92,10 +98,11 @@ function AppointmentItem({providername,specialty,status,hub,address,time,date}){
         </div>
 
         <p className="text-muted float-right">
-          <span className="text-muted">{time}</span>
+          <span className="text-muted">{trans_date_time}</span>
           <span className="mx-1">·</span>
           <span>
-            <i className="far fa-fw fa-clock"></i> {date}
+            <i className="far fa-fw fa-clock"></i> {trans_date_time}
+            {/* //date */}
           </span>
         </p>
         <div className="media">
@@ -108,19 +115,19 @@ function AppointmentItem({providername,specialty,status,hub,address,time,date}){
           </a>
           <div className="media-body align-self-center ml-3">
             <p className="font-14 font-weight-bold mb-0">
-              {providername}
+              {provider_name}
               <StatusText status={status}/>
             </p>
-            <p className="mb-0 font-12 text-muted">{specialty}</p>
+            <p className="mb-0 font-12 text-muted">{service_description}</p>
           </div>
         </div>
         <p className="text-muted mb-1 virtDesc">
-          <strong>Hub: </strong> {hub}
+          <strong>{provider_description}</strong> 
         </p>
       
         <div className="virtDesc d-flex justify-content-between">
           <div className="br-wrapper br-theme-fontawesome-stars">
-            <strong>Hub Address:</strong> {address}
+            <strong>Hub Address:</strong> {}
           </div>
           <AppointmentAction status={status}/>
           
@@ -131,45 +138,84 @@ function AppointmentItem({providername,specialty,status,hub,address,time,date}){
     )}
 function Appointment() {
   const [appointmentsList,setAppointmentsList] = useState([
-    {
-        providername :"Guy McGee",
-        specialty:"Surgeon",
-        status:"upcoming",
+      {   
+
+          providername :"Guy McGee",
+          specialty:"Surgeon",
+          status:"upcoming",
+          hub: "Hawaii Kai Health Hub",
+          address:"45-1151 kamehameha, Hwy, Suite H View location on map",
+          time:"9:30 AM",
+          date:"June 06, 2022"
+      },
+      {
+        providername :"Brian McBrains",
+        specialty:"Neurosurgeon",
+        status:"cancelled_by_p",
         hub: "Hawaii Kai Health Hub",
-        address:"45-1151 kamehameha, Hwy, Suite H View location on map",
+        address:"One street block 1 lot 1 Brgy. 1 Area 1",
         time:"9:30 AM",
         date:"June 06, 2022"
-    },
-    {
-      providername :"Brian McBrains",
-      specialty:"Neurosurgeon",
-      status:"cancelled_by_p",
-      hub: "Hawaii Kai Health Hub",
-      address:"One street block 1 lot 1 Brgy. 1 Area 1",
-      time:"9:30 AM",
-      date:"June 06, 2022"
 
-    },
-    {
-      providername :"Dr Otto Octavius", 
-      specialty:"Neurology",
-      status:"completed",
-      hub: "Hawaii Kai Health Hub",
-      address:"One street block 1 lot 1 Brgy. 1 Area 1",
-      time:"9:30 AM",
-      date:"June 06, 2022"
-    },
-    {
-      providername :"Dr Otto Octavius",
-      specialty:"Neurology",
-      status:"cancelled_by_d",
-      hub: "Hawaii Kai Health Hub",
-      address:"One street block 1 lot 1 Brgy. 1 Area 1",
-      time:"9:30 AM",
-      date:"June 06, 2022"
-    },
-    ]
-)
+      },
+      {
+        providername :"Dr Otto Octavius", 
+        specialty:"Neurology",
+        status:"completed",
+        hub: "Hawaii Kai Health Hub",
+        address:"One street block 1 lot 1 Brgy. 1 Area 1",
+        time:"9:30 AM",
+        date:"June 06, 2022"
+      },
+      {
+        providername :"Dr Otto Octavius",
+        specialty:"Neurology",
+        status:"cancelled_by_d",
+        hub: "Hawaii Kai Health Hub",
+        address:"One street block 1 lot 1 Brgy. 1 Area 1",
+        time:"9:30 AM",
+        date:"June 06, 2022"
+      },
+    ])
+   
+    const [errMsg, setErrMsg] = useState(null)
+    const { auth } = useAuth()
+    const axiosPrivate = useAxiosPrivate()
+    useEffect(() => {
+      let isMounted = true
+      const controller = new AbortController()
+  
+      async function getList() {
+        await axiosPrivate
+          .post(
+            'getPatientAppointments',
+            { Email: auth.email },
+            // {
+            //   signal: controller.signal,
+            // }
+          )
+          .then((res) => {
+            const { Status, Data: data = [], Message } = res.data
+  
+            if (Status && isMounted) {
+              console.log(data)
+              setAppointmentsList(data)
+            } else {
+              throw new Error(Message)
+            }
+          })
+          .catch((err) => {
+            setErrMsg(err.message)
+          })
+      }
+  
+      isMounted && getList()
+  
+      return () => {
+        isMounted = false
+        controller.abort()
+      }
+    }, [])
   return (
     <div className="page-wrapper">
       <div className="page-content">
