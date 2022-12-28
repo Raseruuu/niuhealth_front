@@ -64,9 +64,18 @@ const AppointmentAction = ({ status }) => {
     )}
   else if (status==='completed'){
     return (
-      <ViewVisitButton/>
+      <>
+        <div class="br-wrapper br-theme-fontawesome-stars"><strong>Rate your experience: </strong> <select id="example-fontawesome" style={{display:"none"}}>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+        </div>
+        <ViewVisitButton/>
+      </>
     )}
-  
 
 }
 
