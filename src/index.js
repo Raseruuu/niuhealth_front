@@ -90,7 +90,7 @@ const router = createBrowserRouter(
             { path: 'clinics', element: <AdminClinics /> },
             { path: 'providers', element: <AdminProviders /> },
             { path: 'patients', element: <AdminPatients /> },
-            { path: 'settings', element: <AdminSettings /> }
+            { path: 'settings', element: <AdminSettings /> },
           ],
         },
         {
@@ -120,6 +120,7 @@ const router = createBrowserRouter(
                 { path: 'plans', element: <Renew /> },
                 { path: 'renew', element: <Renew /> },
                 { path: 'renew/pay', element: <PaymentForm /> },
+                { path: 'plans/pay', element: <PaymentForm /> },
               ],
             },
 
