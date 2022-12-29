@@ -21,9 +21,7 @@ export default function Marketplace() {
           signal: controller.signal,
         })
         .then((res) => {
-          console.log(res)
-
-          setList(res.data)
+          isMounted && setList(res.data)
         })
         .catch((err) => {
           console.error(err)
