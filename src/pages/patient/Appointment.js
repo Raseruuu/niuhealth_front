@@ -71,7 +71,7 @@ const AppointmentAction = ({ status }) => {
   else if (status==='completed'){
     return (
       <>
-        <div class="br-wrapper br-theme-fontawesome-stars"><strong>Rate your experience: </strong> <select id="example-fontawesome" style={{display:"none"}}>
+        <div className="br-wrapper br-theme-fontawesome-stars"><strong>Rate your experience: </strong> <select id="example-fontawesome" style={{display:"none"}}>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -90,7 +90,7 @@ function AppointmentItem({provider_description,provider_name,service_description
   return(
     <div className="card" id={service_id}>
     <div className="card-body">
-      <div className="task-box">
+      <div className="task-box" key ={visit_id}>
 
         <div className="task-priority-icon">
           {/* <i className="fas fa-circle text-purple"></i> */}
@@ -127,7 +127,7 @@ function AppointmentItem({provider_description,provider_name,service_description
       
         <div className="virtDesc d-flex justify-content-between">
           <div className="br-wrapper br-theme-fontawesome-stars">
-            <strong>Hub Address:</strong> {}
+            <strong>{provider_description}</strong> 
           </div>
           <AppointmentAction status={status}/>
           
@@ -137,46 +137,16 @@ function AppointmentItem({provider_description,provider_name,service_description
   </div>
     )}
 function Appointment() {
-  const [appointmentsList,setAppointmentsList] = useState([
-      {   
-
-          providername :"Guy McGee",
-          specialty:"Surgeon",
-          status:"upcoming",
-          hub: "Hawaii Kai Health Hub",
-          address:"45-1151 kamehameha, Hwy, Suite H View location on map",
-          time:"9:30 AM",
-          date:"June 06, 2022"
-      },
-      {
-        providername :"Brian McBrains",
-        specialty:"Neurosurgeon",
-        status:"cancelled_by_p",
-        hub: "Hawaii Kai Health Hub",
-        address:"One street block 1 lot 1 Brgy. 1 Area 1",
-        time:"9:30 AM",
-        date:"June 06, 2022"
-
-      },
-      {
-        providername :"Dr Otto Octavius", 
-        specialty:"Neurology",
-        status:"completed",
-        hub: "Hawaii Kai Health Hub",
-        address:"One street block 1 lot 1 Brgy. 1 Area 1",
-        time:"9:30 AM",
-        date:"June 06, 2022"
-      },
-      {
-        providername :"Dr Otto Octavius",
-        specialty:"Neurology",
-        status:"cancelled_by_d",
-        hub: "Hawaii Kai Health Hub",
-        address:"One street block 1 lot 1 Brgy. 1 Area 1",
-        time:"9:30 AM",
-        date:"June 06, 2022"
-      },
-    ])
+  const sampleappointment ={   
+    provider_name :"",
+    provider_description:"",
+    service_description:"",
+    service_id:"",
+    trans_date_time:"",
+    visit_id:"",
+    status:0
+  }
+  const [appointmentsList,setAppointmentsList] = useState([])
    
     const [errMsg, setErrMsg] = useState(null)
     const { auth } = useAuth()
@@ -233,43 +203,6 @@ function Appointment() {
               {appointmentsList.map((appointment)=>
               <AppointmentItem {...appointment} />
               )}
-              {/* <div className="card">
-                <div className="card-body">
-                  <div className="task-box">
-                    <div className="task-priority-icon">
-                      <i className="fas fa-circle text-danger"></i>
-                    </div>
-                    <p className="text-muted float-right">
-                      <span className="text-muted">9:30 AM</span>
-                      <span className="mx-1">·</span>
-                      <span>
-                        <i className="far fa-fw fa-clock"></i> June 06, 2022
-                      </span>
-                    </p>
-                    <div className="media">
-                      <a className="" href="#">
-                        <img
-                          src="../assets/images/users/user-1.jpg"
-                          alt="user"
-                          className="rounded-circle thumb-md"
-                        />
-                      </a>
-                      <div className="media-body align-self-center ml-3">
-                        <p className="font-14 font-weight-bold mb-0">
-                          Provider Name
-                          <span className="virtualvisitbadge badge badge-md badge-soft-danger">
-                            Cancelled by Doctor
-                          </span>
-                        </p>
-                        <p className="mb-0 font-12 text-muted">Specialty</p>
-                      </div>
-                    </div>
-                    <p className="text-muted mb-1 virtDesc">
-                      <strong>Hub: </strong> Hawaii Kai Health Hub
-                    </p>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

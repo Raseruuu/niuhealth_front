@@ -44,6 +44,14 @@ export default function TellUsWhy() {
                         Start Your First Virtual Visit
                       </button>
                     </Link>
+                    <Link to='..'>
+                      <button
+                        type='button'
+                        className='btn btn-danger btn-round waves-effect waves-light figmaBigButton float-right'
+                      >
+                        Cancel
+                      </button>
+                    </Link>
                     <p>
                       Enjoy our video content while you wait. It’s entertaining,
                       educational and helps us reduce costs for you

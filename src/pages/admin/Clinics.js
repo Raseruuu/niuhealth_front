@@ -53,42 +53,42 @@ export default function AdminClinics() {
         ]
     )
   return (
-<div class="page-wrapper">
+<div className="page-wrapper">
             {/* <!-- Page Content--> */}
-            <div class="page-content">
+            <div className="page-content">
 
-                <div class="container-fluid">
+                <div className="container-fluid">
                     {/* <!-- Page-Title --> */}
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="float-right">
-                                    <a href="manage_clinic.html"><button type="button" class="btn btn-success waves-effect waves-light">New Clinic</button></a>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="page-title-box">
+                                <div className="float-right">
+                                    <a href="manage_clinic.html"><button type="button" className="btn btn-success waves-effect waves-light">New Clinic</button></a>
                                 </div>
-                                <h4 class="page-title">Clinics</h4>
+                                <h4 className="page-title">Clinics</h4>
                             </div>
                             {/* <!--end page-title-box--> */}
                         </div>
                         {/* <!--end col--> */}
                     </div>
                     {/* <!-- end page title end breadcrumb --> */}
-					<div class="row ">                               
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
+					<div className="row ">                               
+                        <div className="col-lg-12">
+                            <div className="card">
+                                <div className="card-body">
                                  
-								  <div class="row" style={{marginBottom: "30px"}}>
-                                        <div class="col-lg-3">
-											<label for="example-text-input" class="col-form-label text-right">Company</label>
-											<select class="form-control">
+								  <div className="row" style={{marginBottom: "30px"}}>
+                                        <div className="col-lg-3">
+											<label for="example-text-input" className="col-form-label text-right">Company</label>
+											<select className="form-control">
                                                 <option>Maxicare Corporation</option>
                                                 <option>The Ogamo Institute</option>
                                                 <option>St. Luke Group</option>
                                             </select>
 										</div>
-										<div class="col-lg-3">
-											<label for="example-text-input" class="col-form-label text-right">Location</label>
-											<select class="form-control">
+										<div className="col-lg-3">
+											<label for="example-text-input" className="col-form-label text-right">Location</label>
+											<select className="form-control">
                                                 <option>Location Name 1</option>
                                                 <option>Location Name 2</option>
                                                 <option>Location Name 3</option>
@@ -97,10 +97,10 @@ export default function AdminClinics() {
 										
 									</div>
 								 
-								 <div class="">
+								 <div className="">
                                         <table 
                                           id="datatable2" 
-                                          class="table dt-responsive nowrap" 
+                                          className="table dt-responsive nowrap" 
                                           style={{borderCollapse: 'collapse', borderSpacing: 0, width: "100%"}}>
                                             <thead>
                                             <tr>
@@ -148,7 +148,7 @@ export default function AdminClinics() {
                 </div>
                 {/* <!-- container --> */}
 
-                <footer class="footer text-center text-sm-left">
+                <footer className="footer text-center text-sm-left">
                     &copy; 2022 NU Health 
                 </footer>
                 {/* <!--end footer--> */}
