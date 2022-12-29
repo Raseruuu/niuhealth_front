@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AWS_BUCKET } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 
 function PatientListData({ limit }) {
   const { auth } = useAuth()
@@ -32,13 +33,9 @@ function PatientListData({ limit }) {
         )
         .then((res) => {
           console.log(res)
-          const { Status, Data: data = [], Message } = res.data
+          const data = res.data || []
 
-          if (Status) {
-            setList(data.slice(0, limit))
-          } else {
-            throw new Error(Message)
-          }
+          isMounted && setList(data.slice(0, limit))
         })
         .catch((err) => {
           console.error(err)
@@ -46,7 +43,7 @@ function PatientListData({ limit }) {
         })
     }
 
-    isMounted && getList()
+    getList()
 
     return () => {
       isMounted = false
@@ -68,11 +65,19 @@ function PatientListData({ limit }) {
             alt=''
             className='thumb-sm rounded-circle mr-2'
           />
-          {item.name}
+          {item.first_name} {item.middle_name} {item.last_name}
         </Link>
       </td>
-      <td>{item.email}</td>
-      <td>{item.phone}</td>
+      <td>
+        <a href={`emailto:${item.email}`}>
+          <MdOutlineEmail /> {item.email}
+        </a>
+      </td>
+      <td>
+        <a href={`tel:${item.contact_info}`}>
+          <MdPhone /> {item.contact_info}
+        </a>
+      </td>
       <td>
         <span className='badge badge-md badge-soft-purple'>{item.status}</span>
       </td>
