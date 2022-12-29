@@ -96,7 +96,7 @@ export default function WaitingRoom() {
                       <button
                         type='button'
                         className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
-                        onClick={() => navigate('room')}
+                        onClick={() => navigate('../room')}
                         style={{
                           cursor: isReady ? 'pointer' : 'not-allowed',
                         }}
