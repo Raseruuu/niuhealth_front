@@ -121,6 +121,7 @@ function Subscription() {
                         Renew Your Subscription
                       </button>{' '}
                       <button
+                        disabled={true}
                         type='button'
                         className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
                         onClick={() =>
