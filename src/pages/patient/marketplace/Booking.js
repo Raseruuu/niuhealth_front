@@ -68,7 +68,7 @@ export default function Booking() {
     const schedArray = []
 
     const startDate = moment().startOf('week')
-    const endDate = moment().add(10, 'days')
+    const endDate = moment().add(6, 'months')
 
     const startEndDateDiff = endDate.diff(startDate, 'days')
 
