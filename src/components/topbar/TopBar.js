@@ -83,7 +83,8 @@ export function TopBar({ menuClick }) {
           <Link
             className='nav-link dropdown-toggle arrow-none waves-light waves-effect'
             data-toggle='dropdown'
-            href='#'
+            to='#'
+            onClick={(e) => e.preventDefault()}
             role='button'
             aria-haspopup='false'
             aria-expanded='false'

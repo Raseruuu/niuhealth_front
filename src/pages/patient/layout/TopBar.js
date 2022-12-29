@@ -25,10 +25,10 @@ export function TopBar({ menuClick }) {
 
       <ul className='list-unstyled dev-top-bar-right mb-0'>
         <li className='dropdown notification-list'>
-          <Link
+          <a
             className='nav-link dropdown-toggle arrow-none waves-light waves-effect'
             data-toggle='dropdown'
-            href=''
+            href='?'
             onClick={(e) => e.preventDefault()}
             role='button'
             aria-haspopup='false'
@@ -38,7 +38,7 @@ export function TopBar({ menuClick }) {
             <span className='badge badge-danger badge-pill noti-icon-badge'>
               {ntfBadgeNum}
             </span>
-          </Link>
+          </a>
           <div className='dropdown-menu dropdown-menu-right dropdown-lg pt-0'>
             <h6 className='dropdown-item-text font-15 m-0 py-3 bg-primary text-white d-flex justify-content-between align-items-center'>
               Notifications{' '}
