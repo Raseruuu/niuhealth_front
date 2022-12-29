@@ -39,7 +39,7 @@ export default function PaymentForm() {
         Amount: selectedSubscription.amount,
         Description: selectedSubscription.actionDescription,
         Email: auth.email,
-        SubscriptionPlan: selectedSubscription.id,
+        SubscriptionPlan: selectedSubscription.subscription_plan,
         PaymentType: 3,
       }
 
