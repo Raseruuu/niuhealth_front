@@ -1,13 +1,21 @@
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL, AWS_BUCKET } from '../../../constants'
 import SideNavLogo from '../../../components/SideNavLogo'
+import useLogout from '../../../hooks/useLogout'
 
 function PatientSideNav({ openSideNav }) {
   const location = useLocation()
   const navigate = useNavigate()
+  const logout = useLogout()
 
   const name = sessionStorage.getItem('name') || 'Welcome'
   const email = sessionStorage.getItem('email')
+
+  function handleLogout(e) {
+    e.preventDefault()
+    logout()
+    navigate('/')
+  }
 
   return (
     <div
@@ -113,7 +121,7 @@ function PatientSideNav({ openSideNav }) {
         </li>
       </ul>
       <div className='logoutDiv'>
-        <Link href=''>Logout</Link>
+        <Link onClick={handleLogout.bind(this)}>Logout</Link>
       </div>
     </div>
   )

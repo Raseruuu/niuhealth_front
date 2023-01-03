@@ -102,7 +102,7 @@ function LoginAuth() {
     return <Navigate to={'/provider'} replace={true} />
   } else {
     // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
-    return <div>Authentication Failed.</div>
+    return <div>Authenticating...</div>
   }
 }
 
