@@ -4,13 +4,15 @@ import { AWS_BUCKET } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
+import useDebounce from "../../hooks/useDebounce"
+import {StatusTextInsurance} from "../../components/status/Status"
 
-function PatientListData({ limit }) {
+function PatientListData({ limit , search}) {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-
+  const debouncedSearch = useDebounce(search,500)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -23,10 +25,13 @@ function PatientListData({ limit }) {
     const controller = new AbortController()
 
     async function getList() {
-      await axiosPrivate
+      if (search){
+        await axiosPrivate
         .post(
-          'getPatients',
-          { Email: auth.email || 'jmmalunao@gmail.com' },
+          'searchPatient',
+          { Email: auth.email || "provider1@gmail.com",
+            Search: search
+          },
           {
             signal: controller.signal,
           }
@@ -34,22 +39,48 @@ function PatientListData({ limit }) {
         .then((res) => {
           console.log(res)
           const data = res.data || []
-
-          isMounted && setList(data.slice(0, limit))
+          const searchData=data.Data
+          if (searchData){
+            isMounted && setList(searchData.slice(0, limit))
+          }
+          else{
+            setList([])
+          }
         })
         .catch((err) => {
           console.error(err)
           setErrMsg(err.message)
         })
+      }
+      else{
+        await axiosPrivate
+          .post(
+            'getPatients',
+            { Email: auth.email}
+            ,
+            {
+              signal: controller.signal,
+            }
+          )
+          .then((res) => {
+            console.log(res)
+            const data = res.data || []
+            isMounted && setList(data.Data.slice(0, limit))
+          })
+          .catch((err) => {
+            console.error(err)
+            setErrMsg(err.message)
+          })
+      }
     }
 
-    getList()
+    isMounted && getList()
 
     return () => {
       isMounted = false
       controller.abort()
     }
-  }, [])
+  }, [debouncedSearch])
 
   return list.map((item, index) => (
     <tr key={item?.recno || index}>
@@ -59,17 +90,20 @@ function PatientListData({ limit }) {
           state={{
             selectedUser: item,
           }}
-        >
+        > 
           <img
             src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
             alt=''
             className='thumb-sm rounded-circle mr-2'
           />
-          {item.first_name} {item.middle_name} {item.last_name}
+          
+          {item.first_name} {item.middle_name} {item.last_name} 
+          <StatusTextInsurance status={item.with_insurance||0}/>
+          
         </Link>
       </td>
       <td>
-        <a href={`emailto:${item.email}`}>
+        <a href={`mailto:${item.email}`}>
           <MdOutlineEmail /> {item.email}
         </a>
       </td>
@@ -79,9 +113,10 @@ function PatientListData({ limit }) {
         </a>
       </td>
       <td>
-        <span className='badge badge-md badge-soft-purple'>{item.status}</span>
+        <span className='badge badge-md badge-soft-purple'>{(item.status)?"Active":"Inactive"}</span>
       </td>
-      <td>
+      {/* //Action!!
+       <td>
         <Link
           to='profile/edit'
           state={{
@@ -99,7 +134,7 @@ function PatientListData({ limit }) {
         >
           <i className='fas fa-trash-alt text-danger font-16'></i>
         </Link>
-      </td>
+      </td> */}
     </tr>
   ))
 }

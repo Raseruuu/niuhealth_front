@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
+import TableCard, { TableTextLink , TableTitle } from "../../../components/table/Tables"
 
 function Clinics() {
   const navigate = useNavigate()
@@ -50,75 +51,49 @@ function Clinics() {
 
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'>
-            <div className='float-right'>
-              <ol className='breadcrumb'>
-                <button
-                  type='button'
-                  className='btn btn-success waves-effect waves-light'
-                  onClick={() => navigate('create')}
-                >
-                  New Clinic Schedule
-                </button>
-              </ol>
-            </div>
-            <h4 className='page-title'>Clinics</h4>
-          </div>
+
+      <TableTitle title="Clinics">
+        <div className='float-right'>
+          <ol className='breadcrumb'>
+            <button
+              type='button'
+              className='btn btn-success waves-effect waves-light'
+              onClick={() => navigate('create')}
+            >
+              New Clinic Schedule
+            </button>
+          </ol>
         </div>
-      </div>
+      </TableTitle>
+      <TableCard headers={["Clinic","Address","Services","Working Hours","Action"]}>
+        {list.map((item, index) => {
+          return (
+            <tr key={item?.recno || index}>
+              <td>
+                <img
+                  src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                  alt='user-10'
+                  className='thumb-sm rounded-circle mr-2'
+                />
+                {item.clinic_name}
+              </td>
+              <td>{item.address}</td>
+              <td>{item.services}</td>
+              <td>{item.working_hours}</td>
 
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className='card'>
-            <div className='card-body'>
-              <div className='table-responsive'>
-                <table className='table'>
-                  <thead className='thead-light'>
-                    <tr>
-                      <th>Clinic</th>
-                      <th>Address</th>
-                      <th>Services</th>
-                      <th>Working Hours</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {list.map((item, index) => {
-                      return (
-                        <tr key={item?.recno || index}>
-                          <td>
-                            <img
-                              src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
-                              alt='user-10'
-                              className='thumb-sm rounded-circle mr-2'
-                            />
-                            {item.name}
-                          </td>
-                          <td>{item.address}</td>
-                          <td>{item.services}</td>
-                          <td>{item.working_hours}</td>
-
-                          <td>
-                            <Link to='#' className='mr-2'>
-                              <i className='fas fa-edit text-info font-16'></i>
-                            </Link>
-                            <Link to='#'>
-                              <i className='fas fa-trash-alt text-danger font-16'></i>
-                            </Link>
-                          </td>
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <td>
+                <Link to='#' className='mr-2'>
+                  <i className='fas fa-edit text-info font-16'></i>
+                </Link>
+                <Link to='#'>
+                  <i className='fas fa-trash-alt text-danger font-16'></i>
+                </Link>
+              </td>
+            </tr>
+          )
+        })}
+      </TableCard>
+      
     </div>
   )
 }

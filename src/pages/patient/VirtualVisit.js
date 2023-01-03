@@ -1,5 +1,7 @@
 import Footer from "../../components/Footer"
 import React, { useEffect,useState } from 'react'
+import StatusIcon from "../../components/status/Status"
+import StatusText from "../../components/status/Status"
 
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
@@ -25,41 +27,6 @@ const ViewVisitButton = () => {
       </button>
     </div>
   )}
-const StatusIcon = ({ icontype }) => {
-  const StatusColor = {
-    0: 'text-purple',
-    2: 'text-danger',
-    3: 'text-danger',
-    1:"text-success",
-    4:"text-success",
-  }
-  return (
-    <div className="task-priority-icon">
-      <i className={`fas fa-circle ${StatusColor[icontype]}`}></i>
-    </div>
-  )
-}
-const StatusText = ({ status }) => {
-  const statusColor = {
-    0: 'badge-soft-purple',
-    2: 'badge-soft-danger',
-    3: 'badge-soft-danger',
-    1: "badge-soft-success",
-    4: "badge-soft-success",
-  }
-  const statusText = {
-    0: 'Upcoming',
-    2: 'Cancelled By You',
-    3: 'Cancelled By Doctor',
-    1: "Completed",
-    4: "Approved",
-  }
-  return (
-    <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
-      {statusText[status]}
-    </span>
-  )
-}
 const VisitAction = ({ status }) => {
 
   if (status==='upcoming'){
