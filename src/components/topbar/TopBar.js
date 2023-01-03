@@ -55,7 +55,7 @@ function NotifLink({ type, subject, body, timeReceived }) {
   )
 }
 
-export function TopBar({ menuClick }) {
+export function TopBar({ menuClick, homeAddress }) {
   const [notifs, setNotifs] = useState(SAMPLENOTIF)
   //notif badge number
   const ntfBadgeNum = notifs.length
@@ -73,7 +73,7 @@ export function TopBar({ menuClick }) {
         >
           <i className='ti-menu nav-icon'></i>
         </button>
-        <Link to='/patient' className='logo'>
+        <Link to={homeAddress} className='logo'>
           <SideNavLogo style={{ width: '170px' }} />
         </Link>
       </div>

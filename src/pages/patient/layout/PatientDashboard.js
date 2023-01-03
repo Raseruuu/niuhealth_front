@@ -16,7 +16,10 @@ function PatientDashboard() {
 
   return (
     <div className='d-flex vw-100'>
-      <TopBar menuClick={() => setOpenSideNav((prev) => !prev)} />
+      <TopBar
+        menuClick={() => setOpenSideNav((prev) => !prev)}
+        homeAddress={'/patient'}
+      />
       {/* <div style={{ display: 'inline-block', height: '64px' }}></div> */}
       {/* <div
         className='figma mm-active active'
