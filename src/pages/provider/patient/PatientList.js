@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import PatientListData from "../../../components/provider/PatientListData"
+import TableCard, { TableTitle } from "../../../components/table/Tables"
+// import   from "../../../components/table/Tables"
 import { AWS_BUCKET } from "../../../constants"
 import useAuth from "../../../hooks/useAuth"
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
@@ -25,69 +27,39 @@ function PatientList() {
       localStorage.setItem("search", search);
       console.log(search)
       // add search request here
+      
     },
     [debouncedSearch]
   )
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'>
-            <h4 className='page-title'>Patients</h4>
-            {/* <form role="search" class="">
-                <input type="text" id="AllCompo" placeholder="Search..." class="form-control"/>
-                <a href=""><i class="fas fa-search"></i></a>
-            </form> */}
-            <div className="float-right">
-              <div className='input-group' style={{paddingTop:"10px",paddingBottom:"10px"}}>
-                <form role="search" class="">
-                  <input
-                    type='text'
-                    className='form-control'
-                    style = {{maxWidth:'300px'}}
-                    placeholder='Search Patients...'
-                    aria-label='Search Patients...'
-                    onChange={e => {
-                      setSearch(e.target.value)
-                    }}
-                    value={search}/>
-                </form>
-                <span className='input-group-append'>
-                  <button className='btn btn-success' type='button'>
-                    <i class="fas fa-search"></i>
-                  </button>
-                </span>
-              </div>
-            </div>
+      <TableTitle title="Patients">
+        <div className="float-right">
+          <div className='input-group' style={{paddingTop:"10px",paddingBottom:"10px"}}>
+            <form role="search" class="">
+              <input
+                type='text'
+                className='form-control'
+                style = {{maxWidth:'300px'}}
+                placeholder='Search Patients...'
+                aria-label='Search Patients...'
+                onChange={e => {
+                  setSearch(e.target.value)
+                }}
+                value={search}/>
+                
+            </form>
+            <span className='input-group-append'>
+              <button className='btn btn-success' type='button'>
+                <i class="fas fa-search"></i>
+              </button>
+            </span>
           </div>
         </div>
-      </div>
-
-      <div className='row'>
-        <div className='col-lg-12'>
-          <div className='card'>
-            <div className='card-body'>
-              <div className='table-responsive'>
-                <table className='table'>
-                  <thead className='thead-light'>
-                    <tr>
-                      <th>Patient</th>
-                      <th>Email</th>
-                      <th>Phone No</th>
-                      <th>Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody>
-                    <PatientListData />
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      </TableTitle>
+      <TableCard headers={["Patient","Email","Phone No.","Status"]}>
+        <PatientListData limit={10} search={search}/>  
+      </TableCard>    
     </div>
   )
 }
