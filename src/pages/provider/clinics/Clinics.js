@@ -53,7 +53,7 @@ function Clinics() {
       <div className='row'>
         <div className='col-sm-12'>
           <div className='page-title-box'>
-            <div className='float-right'>
+            {/* <div className='float-right'>
               <ol className='breadcrumb'>
                 <button
                   type='button'
@@ -63,7 +63,7 @@ function Clinics() {
                   New Clinic Schedule
                 </button>
               </ol>
-            </div>
+            </div> */}
             <h4 className='page-title'>Clinics</h4>
           </div>
         </div>

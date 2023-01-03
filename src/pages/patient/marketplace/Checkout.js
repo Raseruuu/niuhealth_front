@@ -354,7 +354,7 @@ export default function Checkout() {
                   <div class='card-body'>
                     <h4 class='header-title mt-0 mb-3'>Payment Details</h4>
                     <div class='billing-nav'>
-                      <ul
+                      {/* <ul
                         class='nav nav-pills justify-content-center text-center mb-3'
                         id='pills-tab'
                         role='tablist'
@@ -392,13 +392,13 @@ export default function Checkout() {
                             Bitcoin
                           </a>
                         </li>
-                      </ul>
+                      </ul> */}
                       <div class='tab-content' id='pills-tabContent'>
                         <div
                           class='tab-pane fade show active'
                           id='pills-credit-card'
                         >
-                          <div class='demo-container w-100'>
+                          <div class='demo-container w-100 h-100'>
                             <div class='card-wrapper mb-4'></div>
                             <div class='form-container'>
                               <div ref={cardRef} class='bill-form'>

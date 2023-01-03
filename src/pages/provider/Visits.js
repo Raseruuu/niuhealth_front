@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from 'react-router-dom'
 
 function Visits() {
   const navigate = useNavigate(0)
@@ -14,7 +14,7 @@ function Visits() {
                   className='btn btn-success waves-effect waves-light'
                   id='create-visit'
                   // onclick='openModal()'
-                  onClick={() => navigate("/virtualvisit/room")}
+                  onClick={() => navigate('/virtualvisit/room')}
                 >
                   New Visit
                 </button>
@@ -76,7 +76,7 @@ function Visits() {
                   </div>
                 </div>
               </div>
-
+              {/* 
               <div className='row'>
                 <div className='col-lg-12'>
                   <div className='p-3'>
@@ -84,7 +84,7 @@ function Visits() {
                     <input type='text' id='range_04' />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className='row'>
                 <div className='col-lg-12'>
@@ -132,7 +132,7 @@ function Visits() {
           <div className='card'>
             <div className='card-body'>
               <div id='calendar'></div>
-              <div style={{ clear: "both" }}></div>
+              <div style={{ clear: 'both' }}></div>
             </div>
           </div>
         </div>
