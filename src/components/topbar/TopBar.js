@@ -79,7 +79,7 @@ export function TopBar({ menuClick }) {
       </div>
 
       <ul className='list-unstyled dev-top-bar-right mb-0'>
-        <li className='dropdown notification-list'>
+        {/* <li className='dropdown notification-list'>
           <Link
             className='nav-link dropdown-toggle arrow-none waves-light waves-effect'
             data-toggle='dropdown'
@@ -105,107 +105,11 @@ export function TopBar({ menuClick }) {
             </h6>
             <div className='slimscroll notification-list'>
               {notifs.map((notif) => {
-                // console.log(notif)
                 return <NotifLink {...notif} />
               })}
-              {/* <NotifLink /> */}
-              {/* <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>2 mins. ago</small>
-                <div className='media'>
-                  <div className='avatar-md bg-primary'>
-                    <i className='la la-cart-arrow-down text-white'></i>
-                  </div>
-                  <div className='media-body align-self-center ml-2 text-truncate'>
-                    <h6 className='my-0 font-weight-normal text-dark'>
-                      Your order is placed
-                    </h6>
-                    <small className='text-muted mb-0'>
-                      Dummy text of the printing and industry.
-                    </small>
-                  </div>
-                </div>
-              </Link>
-              
-              <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>
-                  10 min ago
-                </small>
-                <div className='media'>
-                  <div className='avatar-md bg-success'>
-                    <i className='la la-group text-white'></i>
-                  </div>
-                  <div className='media-body align-self-center ml-2 text-truncate'>
-                    <h6 className='my-0 font-weight-normal text-dark'>
-                      Meeting with designers
-                    </h6>
-                    <small className='text-muted mb-0'>
-                      It is a long established fact that a reader.
-                    </small>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>
-                  40 min ago
-                </small>
-                <div className='media'>
-                  <div className='avatar-md bg-pink'>
-                    <i className='la la-list-alt text-white'></i>
-                  </div>
-                  <div className='media-body align-self-center ml-2 text-truncate'>
-                    <h6 className='my-0 font-weight-normal text-dark'>
-                      UX 3 Task complete.
-                    </h6>
-                    <small className='text-muted mb-0'>
-                      Dummy text of the printing.
-                    </small>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>1 hr ago</small>
-                <div className='media'>
-                  <div className='avatar-md bg-warning'>
-                    <i className='la la-truck text-white'></i>
-                  </div>
-                  <div className='media-body align-self-center ml-2 text-truncate'>
-                    <h6 className='my-0 font-weight-normal text-dark'>
-                      Your order is placed
-                    </h6>
-                    <small className='text-muted mb-0'>
-                      It is a long established fact that a reader.
-                    </small>
-                  </div>
-                </div>
-              </Link>
-
-              <Link to='' className='dropdown-item py-3'>
-                <small className='float-right text-muted pl-2'>2 hrs ago</small>
-                <div className='media'>
-                  <div className='avatar-md bg-info'>
-                    <i className='la la-check-circle text-white'></i>
-                  </div>
-                  <div className='media-body align-self-center ml-2 text-truncate'>
-                    <h6 className='my-0 font-weight-normal text-dark'>
-                      Payment Successfull
-                    </h6>
-                    <small className='text-muted mb-0'>
-                      Dummy text of the printing.
-                    </small>
-                  </div>
-                </div>
-              </Link> */}
             </div>
-            <Link
-              to='../pages/pages-notifications.html'
-              className='dropdown-item text-center text-primary'
-            >
-              View all <i className='fi-arrow-right'></i>
-            </Link>
           </div>
-        </li>
+        </li> */}
 
         <li className='dropdown'>
           <Link
@@ -222,10 +126,11 @@ export function TopBar({ menuClick }) {
               className='rounded-circle'
             />
             <span className='ml-1 nav-user-name hidden-sm'>
-              {auth.name} <i className='mdi mdi-chevron-down'></i>{' '}
+              {auth.name}
+              {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
             </span>
           </Link>
-          <div className='dropdown-menu dropdown-menu-right'>
+          {/* <div className='dropdown-menu dropdown-menu-right'>
             <Link className='dropdown-item' to='profile'>
               <i className='ti-user text-muted mr-2'></i> Profile
             </Link>
@@ -238,7 +143,7 @@ export function TopBar({ menuClick }) {
             <Link className='dropdown-item' to='#'>
               <i className='ti-power-off text-muted mr-2'></i> Logout
             </Link>
-          </div>
+          </div> */}
         </li>
       </ul>
     </div>
