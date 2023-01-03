@@ -59,7 +59,7 @@ function PatientIndexPage() {
                       type='button'
                       className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
                     >
-                      Start Your First Virtual Visit
+                      Start Your Virtual Visit
                     </button>
                   </p>
                 </div>
