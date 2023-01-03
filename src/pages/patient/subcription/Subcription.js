@@ -137,7 +137,7 @@ function Subscription() {
             </div>
           </div>
 
-          <div className='row'>
+          {/* <div className='row'>
             <div className='col-lg-6'>
               <div className='card'>
                 <div className='card-body'>
@@ -205,7 +205,7 @@ function Subscription() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <Footer />
