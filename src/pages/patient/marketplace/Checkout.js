@@ -173,7 +173,7 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                <div class='card'>
+                {/* <div class='card'>
                   <div
                     class='col-md-12 align-self-center'
                     style={{ padding: '30px 20px' }}
@@ -203,7 +203,7 @@ export default function Checkout() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               <div class='col-lg-8'>
