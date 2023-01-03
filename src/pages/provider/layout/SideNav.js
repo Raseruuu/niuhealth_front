@@ -1,10 +1,20 @@
-import { NavLink } from "react-router-dom"
-import { useMediaQuery } from "@react-hook/media-query"
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import useLogout from '../../../hooks/useLogout'
+
 function SideNav({ openSideNav }) {
+  const logout = useLogout()
+  const navigate = useNavigate()
+
+  function handleLogout(e) {
+    e.preventDefault()
+    logout()
+    navigate('/')
+  }
+
   return (
     <div
       className='left-sidenav'
-      style={{ display: openSideNav ? "block" : "none" }}
+      style={{ display: openSideNav ? 'block' : 'none' }}
     >
       <ul className='metismenu left-sidenav-menu'>
         <li>
@@ -72,6 +82,9 @@ function SideNav({ openSideNav }) {
           </NavLink>
         </li>
       </ul>
+      <div className='logoutDiv'>
+        <Link onClick={handleLogout.bind(this)}>Logout</Link>
+      </div>
     </div>
   )
 }

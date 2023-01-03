@@ -237,7 +237,7 @@ export default function PaymentForm() {
                   <div className='card-body'>
                     <h4 className='header-title mt-0 mb-3'>Payment Details</h4>
                     <div className='billing-nav'>
-                      <ul
+                      {/* <ul
                         className='nav nav-pills justify-content-center text-center mb-3'
                         id='pills-tab'
                         role='tablist'
@@ -275,13 +275,13 @@ export default function PaymentForm() {
                             Bitcoin
                           </a>
                         </li>
-                      </ul>
+                      </ul> */}
                       <div className='tab-content' id='pills-tabContent'>
                         <div
                           className='tab-pane fade show active'
                           id='pills-credit-card'
                         >
-                          <div className='demo-container'>
+                          <div className='demo-container w-100 h-100'>
                             <div className='card-wrapper mb-4'></div>
                             <div className='form-container'>
                               <div className='bill-form' ref={cardRef}>
@@ -362,7 +362,7 @@ export default function PaymentForm() {
                             </div>
                           </div>
                         </div>
-                        <div className='tab-pane fade' id='pills-paypal'>
+                        {/* <div className='tab-pane fade' id='pills-paypal'>
                           <div className='row'>
                             <div className='col-md-12 col-lg-6 offset-lg-3'>
                               <div className='card border'>
@@ -401,7 +401,7 @@ export default function PaymentForm() {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

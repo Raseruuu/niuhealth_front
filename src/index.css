@@ -40,3 +40,7 @@
 .dev-pricingTable-signup:hover:disabled {
   background-color: grey;
 }
+
+.jp-card-container .jp-card {
+  min-width: unset;
+}

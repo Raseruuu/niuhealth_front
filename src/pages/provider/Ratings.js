@@ -44,11 +44,11 @@ function Ratings() {
                   <small className='float-right text-muted ml-3 font-14'>
                     593
                   </small>
-                  <div className='progress mt-2' style={{ height: "5px" }}>
+                  <div className='progress mt-2' style={{ height: '5px' }}>
                     <div
                       className='progress-bar bg-secondary'
                       role='progressbar'
-                      style={{ width: "80%", borderRadius: "5px" }}
+                      style={{ width: '80%', borderRadius: '5px' }}
                       aria-valuenow='80'
                       aria-valuemin='0'
                       aria-valuemax='100'
@@ -60,11 +60,11 @@ function Ratings() {
                   <small className='float-right text-muted ml-3 font-14'>
                     99
                   </small>
-                  <div className='progress mt-2' style={{ height: "5px" }}>
+                  <div className='progress mt-2' style={{ height: '5px' }}>
                     <div
                       className='progress-bar bg-secondary'
                       role='progressbar'
-                      style={{ width: "18%", borderRadius: "5px" }}
+                      style={{ width: '18%', borderRadius: '5px' }}
                       aria-valuenow='18'
                       aria-valuemin='0'
                       aria-valuemax='100'
@@ -76,11 +76,11 @@ function Ratings() {
                   <small className='float-right text-muted ml-3 font-14'>
                     6
                   </small>
-                  <div className='progress mt-2' style={{ height: "5px" }}>
+                  <div className='progress mt-2' style={{ height: '5px' }}>
                     <div
                       className='progress-bar bg-secondary'
                       role='progressbar'
-                      style={{ width: "10%", borderRadius: "5px" }}
+                      style={{ width: '10%', borderRadius: '5px' }}
                       aria-valuenow='10'
                       aria-valuemin='0'
                       aria-valuemax='100'
@@ -92,11 +92,11 @@ function Ratings() {
                   <small className='float-right text-muted ml-3 font-14'>
                     2
                   </small>
-                  <div className='progress mt-2' style={{ height: "5px" }}>
+                  <div className='progress mt-2' style={{ height: '5px' }}>
                     <div
                       className='progress-bar bg-secondary'
                       role='progressbar'
-                      style={{ width: "1%", borderRadius: "5px" }}
+                      style={{ width: '1%', borderRadius: '5px' }}
                       aria-valuenow='1'
                       aria-valuemin='0'
                       aria-valuemax='100'
@@ -108,11 +108,11 @@ function Ratings() {
                   <small className='float-right text-muted ml-3 font-14'>
                     0
                   </small>
-                  <div className='progress mt-2' style={{ height: "5px" }}>
+                  <div className='progress mt-2' style={{ height: '5px' }}>
                     <div
                       className='progress-bar bg-secondary'
                       role='progressbar'
-                      style={{ width: "0%", borderRadius: "5px" }}
+                      style={{ width: '0%', borderRadius: '5px' }}
                       aria-valuenow='0'
                       aria-valuemin='0'
                       aria-valuemax='100'
@@ -125,9 +125,9 @@ function Ratings() {
                 <h4 className='header-title d-inline-block mr-2 mb-1 mb-lg-0'>
                   Satisfied Customer
                 </h4>
-                <span className='text-right ml-auto d-inline-block'>
+                {/* <span className='text-right ml-auto d-inline-block'>
                   <i className='far fa-smile font-24 text-warning'></i>
-                </span>
+                </span> */}
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@ function Ratings() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox3' type='checkbox' />
                       <label for='checkbox3'>
-                        {" "}
+                        {' '}
                         5<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -152,7 +152,7 @@ function Ratings() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox4' type='checkbox' />
                       <label for='checkbox4'>
-                        {" "}
+                        {' '}
                         4<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -163,7 +163,7 @@ function Ratings() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox5' type='checkbox' />
                       <label for='checkbox5'>
-                        {" "}
+                        {' '}
                         3<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -174,7 +174,7 @@ function Ratings() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox6' type='checkbox' />
                       <label for='checkbox6'>
-                        {" "}
+                        {' '}
                         2<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star light-gray'></i>
@@ -185,7 +185,7 @@ function Ratings() {
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox7' type='checkbox' />
                       <label for='checkbox7'>
-                        {" "}
+                        {' '}
                         1<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star light-gray'></i>
                         <i className='mdi mdi-star light-gray'></i>
@@ -216,14 +216,14 @@ function Ratings() {
                 </div>
               </div>
 
-              <div className='row'>
+              {/* <div className='row'>
                 <div className='col-lg-12'>
                   <div className='p-3'>
                     <h6 className='mb-3 mt-0'>Age Range</h6>
                     <input type='text' id='range_04' />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className='row'>
                 <div className='col-lg-12'>
