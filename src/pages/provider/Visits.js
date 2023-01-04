@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import Calendar from '../../components/provider/calendar/Calendar'
 
 function Visits() {
   const navigate = useNavigate()
@@ -8,7 +9,7 @@ function Visits() {
       <div className='row'>
         <div className='col-sm-12'>
           <div className='page-title-box'>
-            <div className='float-right'>
+            {/* <div className='float-right'>
               <ol className='breadcrumb'>
                 <button
                   type='button'
@@ -24,7 +25,7 @@ function Visits() {
                   New Visit
                 </button>
               </ol>
-            </div>
+            </div> */}
             <h4 className='page-title'>Visits</h4>
           </div>
         </div>
@@ -136,7 +137,7 @@ function Visits() {
         <div className='col-lg-9'>
           <div className='card'>
             <div className='card-body'>
-              <div id='calendar'></div>
+              <Calendar allowCall={true} />
               <div style={{ clear: 'both' }}></div>
             </div>
           </div>
