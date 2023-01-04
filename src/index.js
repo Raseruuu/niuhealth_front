@@ -45,7 +45,10 @@ const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminIndex = lazy(() => import('./pages/admin/AdminIndex'))
-const AdminClinics = lazy(() => import('./pages/admin/Clinics'))
+const AdminClinics = lazy(() => import('./pages/admin/clinics/Clinics'))
+
+const AdminClinicSchedule = lazy(() => import('./pages/admin/clinics/ClinicSchedule'))
+// AdminClinicSchedule
 const AdminCompanies = lazy(() => import('./pages/admin/Companies'))
 const AdminProviders = lazy(() => import('./pages/admin/Providers'))
 const AdminPatients = lazy(() => import('./pages/admin/Patients'))
@@ -90,6 +93,14 @@ const router = createBrowserRouter(
             { index: true, element: <AdminIndex /> },
             { path: 'companies', element: <AdminCompanies /> },
             { path: 'clinics', element: <AdminClinics /> },
+            {
+              path: 'clinics',
+              element: <Outlet />,
+              children: [
+                { index: true, element: <AdminClinics /> },
+                { path: 'create', element: <AdminClinicSchedule /> },
+              ],
+            },
             { path: 'providers', element: <AdminProviders /> },
             { path: 'patients', element: <AdminPatients /> },
             { path: 'settings', element: <AdminSettings /> },

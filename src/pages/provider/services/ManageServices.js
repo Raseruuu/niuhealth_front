@@ -12,7 +12,7 @@ function ManageServices() {
   const { action } = useParams()
   const { state } = useLocation()
   const [clinicList, setClinicList] = useState([])
-
+  
   const {
     register,
     handleSubmit,
@@ -31,8 +31,12 @@ function ManageServices() {
     async function getList() {
       await axiosPrivate
         .post(
-          'getClinics',
-          { Email: auth.email || 'jmmalunao@gmail.com' },
+          'createService',
+          { Email: auth.email || 'jmmalunao@gmail.com',
+            ServiceDescription:"",
+            CostPrice:""
+
+          },
           {
             signal: controller.signal,
           }

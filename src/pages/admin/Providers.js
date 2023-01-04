@@ -1,6 +1,8 @@
 import React,{useState} from 'react'
 import { Link } from 'react-router-dom'
-// import Footer from '../../../components/Footer'
+import Footer from '../../components/Footer'
+import TableCard, { TableTitle } from "../../components/table/Tables"
+
 function ProviderItem({name,clinics,specialty,rating}){
     
     return(
@@ -37,89 +39,25 @@ export default function AdminProviders() {
     )
   return (
 <div class="page-wrapper">
-            {/* <!-- Page Content--> */}
-            <div class="page-wrapper">
-            {/* <!-- Page Content--> */}
-            <div class="page-content">
+    <div class="page-wrapper">
+        <div class="page-content">
 
                 <div class="container-fluid">
+                    <TableTitle title="Providers">
+                        <div class="float-right">
+                            <a href="manage_provider.html"><button type="button" class="btn btn-success waves-effect waves-light">New Provider</button></a>
+                        </div>
                     {/* <!-- Page-Title --> */}
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="float-right">
-                                    <a href="manage_provider.html"><button type="button" class="btn btn-success waves-effect waves-light">New Provider</button></a>
-                                </div>
-                                <h4 class="page-title">Providers</h4>
-                            </div>
-                            {/* <!--end page-title-box--> */}
-                        </div>
-                        {/* <!--end col--> */}
-                    </div>
-                    {/* <!-- end page title end breadcrumb --> */}
- 
-
- 
-					<div class="row ">                               
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                 
-								 
-								 
-								 <div class="">
-                                        <table id="datatable2" class="table dt-responsive nowrap" style={{borderCollapse: "collapse", borderSpacing: 0, width: "100%"}}>
-                                            <thead>
-                                            <tr>
-												<th>Provider Name</th>
-                                                <th>Clinics</th>
-                                                <th>Specialty</th>
-                                                <th>Ratings</th>
-                                            </tr>
-                                            </thead>
-
-
-                                            <tbody>
-                                            {providerList.map((provider)=>
-                                                    <ProviderItem {...provider} />
-                                                    )}
-
-                                            </tbody>
-                                        </table>
-                                    </div>        
-								 
-								 
-								 
-									
-								</div>
-                                {/* <!--end card-body--> */}
-                            </div>
-                            {/* <!--end card--> */}
-                        </div>
-                        {/* <!--end col-->                         */}
-                    </div>
-                    {/* <!--end row--> */}
-					
-					
-					
-
+                    </TableTitle>
+                    <TableCard headers={["Provider Name","Clinics","Specialty","Ratings"]}>
+                       {providerList.map((provider)=>
+                        <ProviderItem {...provider} />
+                        )}
+                    </TableCard >    
                 </div>
-                {/* <!-- container --> */}
-
-                <footer class="footer text-center text-sm-left">
-                    &copy; 2022 NU Health 
-                </footer>
-                {/* <!--end footer--> */}
-            </div>
-            {/* <!-- end page content --> */}
+                <Footer/>
         </div>
-        {/* <!-- end page-wrapper --> */}
-        </div>
-
-
-
-
-
-
+    </div>
+</div>
     )
-  }
+}
