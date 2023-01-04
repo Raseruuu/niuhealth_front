@@ -23,11 +23,10 @@ function Activity() {
           }
         )
         .then((res) => {
-          console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
-            setList(data?.slice(0, 5))
+            isMounted && setList(data?.slice(0, 5))
           } else {
             throw new Error(Message)
           }
@@ -38,7 +37,7 @@ function Activity() {
         })
     }
 
-    isMounted && getList()
+    getList()
 
     return () => {
       isMounted = false
