@@ -22,21 +22,26 @@ function PatientList() {
   Deceased - badge-soft-danger
   Follow-up Checkup - badge-soft-success
   */
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    alert(inputs);
+  }
   useEffect(
     () => {
-      localStorage.setItem("search", search);
-      console.log(search)
-      // add search request here
-      
-    },
-    [debouncedSearch]
-  )
+        localStorage.setItem("search", search);
+        console.log(search)
+        // add search request here
+        
+      },
+      [debouncedSearch]
+    )
+  
   return (
     <div className='container-fluid'>
       <TableTitle title="Patients">
         <div className="float-right">
           <div className='input-group' style={{paddingTop:"10px",paddingBottom:"10px"}}>
-            <form role="search" class="">
+            <form role="search" class="" onSubmit={handleSubmit}>
               <input
                 type='text'
                 className='form-control'

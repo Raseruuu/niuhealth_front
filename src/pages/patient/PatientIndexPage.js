@@ -39,7 +39,7 @@ function PatientIndexPage() {
             <div className='col-lg-12'>
               <div className='card'>
                 <div className='card-body'>
-                  <h2>Start Your First Virtual Visit</h2>
+                  <h2>Start Your Virtual Visit</h2>
                   <h4 style={{ marginTop: '40px' }}>
                     How does telehealth work?
                   </h4>

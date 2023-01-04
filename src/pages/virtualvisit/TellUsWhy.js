@@ -1,7 +1,53 @@
-import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Link , useNavigate} from 'react-router-dom'
 import Footer from '../../components/Footer'
-
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 export default function TellUsWhy() {
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const navigate = useNavigate()
+  const [symptomField,setSymptomField]=useState("")
+  const [symptom,setSymptom]=useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const handleSubmit = async () => {
+    const controller = new AbortController()
+
+    setIsSubmitting(true)
+    try {
+      console.log(symptomField || symptom)
+      await axiosPrivate
+        .post(
+          'patientSaveSymptoms', 
+          { Email: auth.email,
+            Symptoms: (symptomField || symptom)
+          },
+          {
+            signal: controller.signal,
+          })
+        .then((res) => {
+          console.log(res.data)
+          const { Status, Message } = res.data
+          // const MeetingID=res.data.MeetingID
+          
+          if (Status) {
+            navigate('/virtualvisit/waitingroom')
+          } else {
+            alert(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          throw err
+        })
+        .finally(() => {
+          setIsSubmitting(false)
+        })
+    } catch (error) {
+      setIsSubmitting(false)
+      console.error(error)
+    }
+  }
   return (
     <div className='page-wrapper mt-0'>
       {/* <!-- Page Content--> */}
@@ -23,38 +69,57 @@ export default function TellUsWhy() {
             <div className='col-lg-6'>
               <div className='card'>
                 <div className='card-body'>
-                  <h3>Tell us why you’re here today</h3>
+                  <h3>Tell us why you’re here</h3>
 
                   {/* <Textarea/> */}
-                  <textarea
+                  <select id="symptoms"
+                    className="form-control"
+                    onChange={(choice) => {setSymptom(choice.target.value);console.log(choice.target.value)}}>
+                      
+                    <option value=""></option>
+                    <option value="Headache">Headache</option>
+                    <option value="Stomachache">Stomachache</option>
+                    <option value="Cough">Cough</option>
+                    <option value="Colds">Colds</option>
+                    <option value="Skin Infection">Skin Infection</option>
+                    <option value="Other">Other</option>
+                    
+                    </select>
+                  {(symptom==="Other")?
+                  (<textarea
                     style={{ margin: '30px 0 20px 0' }}
                     className='form-control'
                     rows='5'
                     id='message'
-                    placeholder='Add reason for your virtual visit'
-                  ></textarea>
+                    placeholder='Add a reason for your virtual visit'
+                    value = {symptomField}
+                    onChange={(e)=>{setSymptomField(e.target.value)}}
+                  ></textarea>):(<></>)
+                  }
                   {/* <p className='text-muted mb-3'>Upload your files here</p> */}
                   {/* <input type='file' id='input-file-now' className='dropify' /> */}
                   <div className='wizard_btn' style={{ marginBottom: '50px' }}>
-                    <Link to='waitingroom'>
+                    {/* <Link to='waitingroom'> */}
                       <button
                         type='button'
                         className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
+                        onClick={handleSubmit}
+                        disabled={isSubmitting||!symptom}
                       >
                         Start Your First Virtual Visit
                       </button>
-                    </Link>
+                    {/* </Link> */}
                     <Link to='..'>
                       <button
                         type='button'
-                        className='btn btn-danger btn-round waves-effect waves-light figmaBigButton float-right'
+                        className='btn btn-danger btn-round waves-effect waves-light figmaBigButton float-bottom'
                       >
                         Cancel
                       </button>
                     </Link>
-                    <p>
+                    <p style={{marginTop:'40px'}}>
                       Enjoy our video content while you wait. It’s entertaining,
-                      educational and helps us reduce costs for you
+                      educational, and helps us reduce costs for you.
                     </p>
                   </div>
                   {/* <!--end of row --> */}
@@ -99,7 +164,7 @@ export default function TellUsWhy() {
                 </div>
                 {/* <!--end card-body-->  */}
               </div>
-              {/* <!--end card-->                                    */}
+              {/* <!--end card-->*/}
             </div>
           </div>
           {/* <!--end row--> */}

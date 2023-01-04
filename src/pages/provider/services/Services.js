@@ -197,11 +197,11 @@ function Services({ limit }) {
                   </Link>
                   <div className='card-body product-info'>
                     <Link to='' className='product-title'>
-                      {item.name}
+                      {item.service_description}
                     </Link>
                     <p>{item.description}</p>
                     <div className='d-flex justify-content-between my-2'>
-                      <p className='product-price'>${item.rate}</p>
+                      <p className='product-price'>${item.cost_price}</p>
                       <p className='mb-0 product-review align-self-center'>
                         <Rating
                           fillColor='#ffb822'
