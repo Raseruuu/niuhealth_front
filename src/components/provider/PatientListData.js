@@ -57,7 +57,6 @@ function PatientListData({ limit, search }) {
             }
           )
           .then((res) => {
-            console.log(res)
             const data = res.data || []
             isMounted && setList(data.Data.slice(0, limit))
           })

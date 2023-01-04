@@ -45,8 +45,6 @@ export default function Calendar() {
 
   const INITIAL_EVENTS = (appointments = []) => {
     const schedArray = appointments.map((item) => {
-      console.log(item)
-
       const currentD = moment(item.trans_date_time).format('YYYY-MM-DD')
 
       let timeStr = Number(item.trans_start)
@@ -82,7 +80,6 @@ export default function Calendar() {
           }
         )
         .then((res) => {
-          console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
