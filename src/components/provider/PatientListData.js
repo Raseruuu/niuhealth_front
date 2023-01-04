@@ -29,7 +29,7 @@ function PatientListData({ limit , search}) {
         await axiosPrivate
         .post(
           'searchPatient',
-          { Email: auth.email || "provider1@gmail.com",
+          { Email: auth.email,
             Search: search
           },
           {
@@ -90,16 +90,21 @@ function PatientListData({ limit , search}) {
           state={{
             selectedUser: item,
           }}
-        > 
+        > <div className="row">
           <img
             src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
             alt=''
             className='thumb-sm rounded-circle mr-2'
           />
-          
-          {item.first_name} {item.middle_name} {item.last_name} 
-          <StatusTextInsurance status={item.with_insurance||0}/>
-          
+          <div className="col">
+            <div>
+              {item.first_name} {item.middle_name} {item.last_name} 
+            </div>
+            <div>
+              <StatusTextInsurance status={item.with_insurance||0}/>
+            </div>
+          </div>
+          </div>
         </Link>
       </td>
       <td>

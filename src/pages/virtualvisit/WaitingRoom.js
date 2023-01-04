@@ -9,7 +9,7 @@ export default function WaitingRoom() {
   const axiosPrivate = useAxiosPrivate()
   const [isReady, setIsReady] = useState(false)
   const [delay, setDelay] = useState('10000')
-
+  const [pplInQueue, setPplInQueue] = useState('10')
   const [visitStatus, setVisitStatus] = useState('Step1')
   const getStatus = async () => {
     const controller = new AbortController()
@@ -77,7 +77,7 @@ export default function WaitingRoom() {
                     <div className='steps_title_sub_text'>
                       Keep this window open and active to hold your place in
                       line. Video content is how we keep your healthcare costs
-                      low
+                      low.
                     </div>
 
                     <div className='steps_info_text'>
@@ -88,11 +88,11 @@ export default function WaitingRoom() {
                       {/* <i className='mdi mdi-av-timer green_h'></i> Estimated
                       waiting time is <span className='green_h'>5:20</span> mins */}
                     </div>
-
+                    There are {pplInQueue} people in the queue
                     <div
                       className='wizard_btn'
                       style={{ margin: '50px 0', paddingBottom: '50px' }}
-                    >
+                    > 
                       <button
                         type='button'
                         className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
@@ -101,7 +101,7 @@ export default function WaitingRoom() {
                           cursor: isReady ? 'pointer' : 'not-allowed',
                         }}
                         disabled={!isReady}
-                      >
+                      > 
                         {isReady ? ' Join Virtual Visit Now' : 'Please wait...'}
                       </button>
 
