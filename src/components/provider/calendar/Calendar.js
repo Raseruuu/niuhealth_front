@@ -37,13 +37,9 @@ export default function Calendar({ allowCall }) {
   }
 
   const handleEventClick = (clickInfo) => {
-    console.log(clickInfo)
-
     const selected = appointmentList.find(
       (item) => item.appointment_id === clickInfo.event.id
     )
-
-    console.log(selected)
 
     const currentD = moment(selected.trans_date_time).format('YYYY-MM-DD')
 
