@@ -4,15 +4,15 @@ import { AWS_BUCKET } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
-import useDebounce from "../../hooks/useDebounce"
-import {StatusTextInsurance} from "../../components/status/Status"
+import useDebounce from '../../hooks/useDebounce'
+import { StatusTextInsurance } from '../../components/status/Status'
 
-function PatientListData({ limit , search}) {
+function PatientListData({ limit, search }) {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-  const debouncedSearch = useDebounce(search,500)
+  const debouncedSearch = useDebounce(search, 500)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -25,39 +25,33 @@ function PatientListData({ limit , search}) {
     const controller = new AbortController()
 
     async function getList() {
-      if (search){
+      if (search) {
         await axiosPrivate
-        .post(
-          'searchPatient',
-          { Email: auth.email,
-            Search: search
-          },
-          {
-            signal: controller.signal,
-          }
-        )
-        .then((res) => {
-          console.log(res)
-          const data = res.data || []
-          const searchData=data.Data
-          if (searchData){
-            isMounted && setList(searchData.slice(0, limit))
-          }
-          else{
-            setList([])
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          setErrMsg(err.message)
-        })
-      }
-      else{
+          .post(
+            'searchPatient',
+            { Email: auth.email, Search: search },
+            {
+              signal: controller.signal,
+            }
+          )
+          .then((res) => {
+            const data = res.data || []
+            const searchData = data.Data
+            if (searchData) {
+              isMounted && setList(searchData.slice(0, limit))
+            } else {
+              isMounted && setList([])
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+            setErrMsg(err.message)
+          })
+      } else {
         await axiosPrivate
           .post(
             'getPatients',
-            { Email: auth.email}
-            ,
+            { Email: auth.email },
             {
               signal: controller.signal,
             }
@@ -74,7 +68,7 @@ function PatientListData({ limit , search}) {
       }
     }
 
-    isMounted && getList()
+    getList()
 
     return () => {
       isMounted = false
@@ -90,20 +84,22 @@ function PatientListData({ limit , search}) {
           state={{
             selectedUser: item,
           }}
-        > <div className="row">
-          <img
-            src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
-            alt=''
-            className='thumb-sm rounded-circle mr-2'
-          />
-          <div className="col">
-            <div>
-              {item.first_name} {item.middle_name} {item.last_name} 
+        >
+          {' '}
+          <div className='row'>
+            <img
+              src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+              alt=''
+              className='thumb-sm rounded-circle mr-2'
+            />
+            <div className='col'>
+              <div>
+                {item.first_name} {item.middle_name} {item.last_name}
+              </div>
+              <div>
+                <StatusTextInsurance status={item.with_insurance || 0} />
+              </div>
             </div>
-            <div>
-              <StatusTextInsurance status={item.with_insurance||0}/>
-            </div>
-          </div>
           </div>
         </Link>
       </td>
@@ -118,7 +114,9 @@ function PatientListData({ limit , search}) {
         </a>
       </td>
       <td>
-        <span className='badge badge-md badge-soft-purple'>{(item.status)?"Active":"Inactive"}</span>
+        <span className='badge badge-md badge-soft-purple'>
+          {item.status ? 'Active' : 'Inactive'}
+        </span>
       </td>
       {/* //Action!!
        <td>
