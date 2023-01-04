@@ -12,7 +12,8 @@ function ManageServices() {
   const { action } = useParams()
   const { state } = useLocation()
   const [clinicList, setClinicList] = useState([])
-  
+  const [formData,setFormData]=useState({})
+  const placeholderimage =`${AWS_BUCKET}/assets/images/users/user-4.jpg`
   const {
     register,
     handleSubmit,
@@ -21,21 +22,45 @@ function ManageServices() {
 
   const onSubmit = (data) => {
     console.log(data)
+    setFormData(data)
     // navigate(-1)
   }
 
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
     async function getList() {
       await axiosPrivate
         .post(
+          'getClinics',
+              { Email: auth.email || 'jmmalunao@gmail.com' },
+              {
+                signal: controller.signal,
+              }
+            )
+            .then((res) => {
+              console.log(res)
+              const { Status, Data: data = [], Message } = res.data
+    
+              if (Status) {
+                setClinicList(data)
+              } else {
+                throw new Error(Message)
+              }
+            })
+            .catch((err) => {
+              console.error(err)
+            })
+      await axiosPrivate
+        .post(
           'createService',
-          { Email: auth.email || 'jmmalunao@gmail.com',
-            ServiceDescription:"",
-            CostPrice:""
-
+          { ServiceName: formData.name,
+            Email: auth.email || 'jmmalunao@gmail.com',
+            ServiceDescription:formData.type,
+            CostPrice:formData.rate,
+            Status:(formData.active)||0,
+            ClinicID:"19c90ea6beeb46e883e2e743ff7902ba63ad40abacea3",
+            Image:placeholderimage,
           },
           {
             signal: controller.signal,
@@ -239,13 +264,13 @@ function ManageServices() {
                       </label>
                       <select
                         multiple
-                        class='form-control'
+                        className='select2 form-control mb-3 custom-select select2-hidden-accessible'
                         {...register('clinic', {
                           value: state?.selectedService?.clinic,
                         })}
                       >
                         {clinicList.map((clinic) => (
-                          <option value={clinic.recno}>{clinic.name}</option>
+                          <option value={clinic.clinic_id}>{clinic.clinic_name}</option>
                         ))}
                       </select>
                     </div>
@@ -263,7 +288,10 @@ function ManageServices() {
                           type='file'
                           id='input-file-now-custom-1'
                           class='dropify'
-                          data-default-file={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
+                          data-default-file={placeholderimage}
+                          {...register('clinic', {
+                            value: state?.selectedService?.clinic,
+                          })}
                         />
                       </div>
                     </form>
