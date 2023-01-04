@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { ZoomMtg } from '@zoomus/websdk'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL, USERTYPE } from '../../constants'
 
 function Room() {
   const { auth } = useAuth()
+  const { state } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
   const email = auth?.email || sessionStorage.getItem('email')
@@ -20,8 +21,7 @@ function Room() {
   var signatureEndpoint =
     'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
   var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
-  var meetingNumber = '4737080721'
-  var role = isProvider ? 1 : 0
+  var meetingNumber = state?.MeetingID
   var userName = name
   var userEmail = email
   var passWord = '123456'
@@ -35,8 +35,8 @@ function Room() {
       .post(
         signatureEndpoint,
         {
-          meetingNumber: meetingNumber,
-          role: role,
+          meetingNumber,
+          role: isProvider ? 1 : 0,
         },
         {
           headers: {
@@ -82,7 +82,14 @@ function Room() {
     })
   }
 
+  console.log(state)
+
   useEffect(() => {
+    if (!state?.MeetingID) {
+      navigate(-1)
+      return
+    }
+
     ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
 
     ZoomMtg.preLoadWasm()

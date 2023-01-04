@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 
 function Visits() {
-  const navigate = useNavigate(0)
+  const navigate = useNavigate()
+
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -14,7 +15,11 @@ function Visits() {
                   className='btn btn-success waves-effect waves-light'
                   id='create-visit'
                   // onclick='openModal()'
-                  onClick={() => navigate('/virtualvisit/room')}
+                  onClick={() =>
+                    navigate('/virtualvisit/room', {
+                      state: { MeetingID: 4737080721 },
+                    })
+                  }
                 >
                   New Visit
                 </button>

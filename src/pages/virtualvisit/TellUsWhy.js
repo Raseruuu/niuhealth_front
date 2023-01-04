@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link , useNavigate} from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
@@ -7,31 +7,28 @@ export default function TellUsWhy() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const [symptomField,setSymptomField]=useState("")
-  const [symptom,setSymptom]=useState("")
+  const [symptomTextarea, setSymptomTextArea] = useState('')
+  const [symptom, setSymptom] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const handleSubmit = async () => {
     const controller = new AbortController()
 
     setIsSubmitting(true)
     try {
-      console.log(symptomField || symptom)
+      console.log(symptomTextarea || symptom)
       await axiosPrivate
         .post(
-          'patientSaveSymptoms', 
-          { Email: auth.email,
-            Symptoms: (symptomField || symptom)
-          },
+          'patientSaveSymptoms',
+          { Email: auth.email, Symptoms: symptomTextarea || symptom },
           {
             signal: controller.signal,
-          })
+          }
+        )
         .then((res) => {
           console.log(res.data)
-          const { Status, Message } = res.data
-          // const MeetingID=res.data.MeetingID
-          
+          const { Status, Message, Data } = res.data
           if (Status) {
-            navigate('/virtualvisit/waitingroom')
+            navigate('/virtualvisit/waitingroom', { state: Data })
           } else {
             alert(Message)
           }
@@ -72,42 +69,51 @@ export default function TellUsWhy() {
                   <h3>Tell us why you’re here</h3>
 
                   {/* <Textarea/> */}
-                  <select id="symptoms"
-                    className="form-control"
-                    onChange={(choice) => {setSymptom(choice.target.value);console.log(choice.target.value)}}>
-                      
-                    <option value=""></option>
-                    <option value="Headache">Headache</option>
-                    <option value="Stomachache">Stomachache</option>
-                    <option value="Cough">Cough</option>
-                    <option value="Colds">Colds</option>
-                    <option value="Skin Infection">Skin Infection</option>
-                    <option value="Other">Other</option>
-                    
-                    </select>
-                  {(symptom==="Other")?
-                  (<textarea
-                    style={{ margin: '30px 0 20px 0' }}
+                  <select
+                    id='symptoms'
                     className='form-control'
-                    rows='5'
-                    id='message'
-                    placeholder='Add a reason for your virtual visit'
-                    value = {symptomField}
-                    onChange={(e)=>{setSymptomField(e.target.value)}}
-                  ></textarea>):(<></>)
-                  }
+                    onChange={(choice) => {
+                      setSymptom(choice.target.value)
+                      console.log(choice.target.value)
+                    }}
+                  >
+                    <option value=''></option>
+                    <option value='Headache'>Headache</option>
+                    <option value='Stomachache'>Stomachache</option>
+                    <option value='Cough'>Cough</option>
+                    <option value='Colds'>Colds</option>
+                    <option value='Skin Infection'>Skin Infection</option>
+                    <option value='Other'>Other</option>
+                  </select>
+                  {symptom === 'Other' ? (
+                    <textarea
+                      style={{ margin: '30px 0 20px 0' }}
+                      className='form-control'
+                      rows='5'
+                      id='message'
+                      placeholder='Add a reason for your virtual visit'
+                      value={symptomTextarea}
+                      onChange={(e) => {
+                        setSymptomTextArea(e.target.value)
+                      }}
+                    ></textarea>
+                  ) : null}
                   {/* <p className='text-muted mb-3'>Upload your files here</p> */}
                   {/* <input type='file' id='input-file-now' className='dropify' /> */}
                   <div className='wizard_btn' style={{ marginBottom: '50px' }}>
                     {/* <Link to='waitingroom'> */}
-                      <button
-                        type='button'
-                        className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
-                        onClick={handleSubmit}
-                        disabled={isSubmitting||!symptom}
-                      >
-                        Start Your First Virtual Visit
-                      </button>
+                    <button
+                      type='button'
+                      className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
+                      onClick={handleSubmit}
+                      disabled={
+                        isSubmitting ||
+                        !symptom ||
+                        (symptom === 'Other' && !symptomTextarea)
+                      }
+                    >
+                      Start Your First Virtual Visit
+                    </button>
                     {/* </Link> */}
                     <Link to='..'>
                       <button
@@ -117,7 +123,7 @@ export default function TellUsWhy() {
                         Cancel
                       </button>
                     </Link>
-                    <p style={{marginTop:'40px'}}>
+                    <p style={{ marginTop: '40px' }}>
                       Enjoy our video content while you wait. It’s entertaining,
                       educational, and helps us reduce costs for you.
                     </p>
@@ -134,6 +140,7 @@ export default function TellUsWhy() {
                   <img
                     src='../assets/images/getting-consultation-of-doctor.jpg'
                     className='steps_img'
+                    alt=''
                   />
 
                   <div className='media'>

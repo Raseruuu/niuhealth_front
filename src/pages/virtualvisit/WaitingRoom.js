@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import useInterval from '../../hooks/useInterval'
 
 export default function WaitingRoom() {
   const navigate = useNavigate()
+  const { state } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const [isReady, setIsReady] = useState(false)
   const [delay, setDelay] = useState('10000')
   const [pplInQueue, setPplInQueue] = useState('10')
   const [visitStatus, setVisitStatus] = useState('Step1')
+
+  console.log(state)
+
   const getStatus = async () => {
     const controller = new AbortController()
     await axiosPrivate
       .post(
         'getMeetingDetails',
-        { MeetingID: '4737080721' },
+        { MeetingID: state.MeetingID },
         {
           signal: controller.signal,
         }
@@ -73,13 +77,11 @@ export default function WaitingRoom() {
                       <br />
                       Your provider will soon be with you.
                     </h2>
-
                     <div className='steps_title_sub_text'>
                       Keep this window open and active to hold your place in
                       line. Video content is how we keep your healthcare costs
                       low.
                     </div>
-
                     <div className='steps_info_text'>
                       {/* <i className='dripicons-user-group green_h'></i> There are{" "}
                       <span className='green_h'>12</span> patients ahead of you */}
@@ -92,16 +94,16 @@ export default function WaitingRoom() {
                     <div
                       className='wizard_btn'
                       style={{ margin: '50px 0', paddingBottom: '50px' }}
-                    > 
+                    >
                       <button
                         type='button'
                         className='btn btn-success btn-round waves-effect waves-light figmaBigButton float-left'
-                        onClick={() => navigate('../room')}
+                        onClick={() => navigate('../room', { state })}
                         style={{
                           cursor: isReady ? 'pointer' : 'not-allowed',
                         }}
                         disabled={!isReady}
-                      > 
+                      >
                         {isReady ? ' Join Virtual Visit Now' : 'Please wait...'}
                       </button>
 
