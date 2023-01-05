@@ -35,7 +35,7 @@ function ManageServices() {
             ServiceDescription:data.type,
             CostPrice:data.rate,
             Status:(data.active)||0,
-            ClinicID:data.clinic[0],
+            ClinicID:data.clinic,
             Image:data.image[0],
           },
           {
