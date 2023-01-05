@@ -12,6 +12,7 @@ function ManageServices() {
   const { action } = useParams()
   const { state } = useLocation()
   const [clinicList, setClinicList] = useState([])
+  const [images, setImages] = useState([])
   
   const [isSuccess, setIsSuccess] = useState(false)
   const placeholderimage =`${AWS_BUCKET}/assets/images/users/user-4.jpg`
@@ -40,11 +41,16 @@ function ManageServices() {
             ServiceDescription:data.type,
             CostPrice:data.rate,
             Status:(data.active)||0,
-            ClinicID:data.clinic[0],
-            Image:data?.image[0],
+            ClinicID:data.clinic,
+            Image:data?.image,
+            
           },
           {
+            Accept: 'application/json',
+            headers: { 'Content-Type': 'multipart/form-data' },
             signal: controller.signal,
+            // onUploadProgress:ProgressEvent=>
+            //   {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
           }
         )
         .then((res) => {
@@ -295,10 +301,11 @@ function ManageServices() {
                     <label for='exampleFormControlSelect2'>
                       Upload Service Image
                     </label>
-                    <form method='post' class='card-box'>
+                    {/* <form method='post' class='card-box'> */}
                       <div class='uploadPicContainer'>
                         <input
                           type='file'
+                          multiple
                           id='input-file-now-custom-1'
                           class='dropify'
                           accept='image/*'
@@ -307,12 +314,15 @@ function ManageServices() {
                           {...register('image', {
                             value: state?.selectedService?.image,
                           })}
+                          onChange={(e)=>{console.log(e.target.files);
+                            // setImages(e.target.files)
+                          }}
                         />
                         {errors.Image ? (
                         <div className='text-danger'>Please choose file</div>
                       ) : null}
                       </div>
-                    </form>
+                    {/* </form> */}
                   </div>
                 </div>
 
