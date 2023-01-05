@@ -12,17 +12,22 @@ function ManageServices() {
   const { action } = useParams()
   const { state } = useLocation()
   const [clinicList, setClinicList] = useState([])
+  
+  const [isSuccess, setIsSuccess] = useState(false)
   const placeholderimage =`${AWS_BUCKET}/assets/images/users/user-4.jpg`
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm()
 
   const onSubmit = (data) => {
-    console.log("data",data)
-    createService(data)
-    // navigate(-1)
+    
+      console.log("data",data)
+      createService(data)
+      // navigate(-1)
+      
+    
     
   }
   const controller = new AbortController()
@@ -35,8 +40,8 @@ function ManageServices() {
             ServiceDescription:data.type,
             CostPrice:data.rate,
             Status:(data.active)||0,
-            ClinicID:data.clinic,
-            Image:data.image[0],
+            ClinicID:data.clinic[0],
+            Image:data?.image[0],
           },
           {
             signal: controller.signal,
@@ -63,7 +68,7 @@ function ManageServices() {
       await axiosPrivate
         .post(
           'getClinics',
-              { Email: auth.email || 'jmmalunao@gmail.com' },
+              { Email: auth.email },
               {
                 signal: controller.signal,
               }
@@ -296,31 +301,44 @@ function ManageServices() {
                           type='file'
                           id='input-file-now-custom-1'
                           class='dropify'
+                          accept='image/*'
+                          capture='user'
                           data-default-file={placeholderimage}
                           {...register('image', {
                             value: state?.selectedService?.image,
                           })}
                         />
+                        {errors.Image ? (
+                        <div className='text-danger'>Please choose file</div>
+                      ) : null}
                       </div>
                     </form>
                   </div>
                 </div>
 
                 <div class='row' style={{ marginTop: '40px' }}>
+                
                   <div class='col-lg-12'>
-                    <button
-                      type='submit'
-                      class='btn btn-gradient-success waves-effect waves-light'
-                    >
-                      Save
-                    </button>{' '}
-                    <button
-                      onClick={() => navigate(-1)}
-                      type='button'
-                      class='btn btn-gradient-info waves-effect waves-light'
-                    >
-                      Cancel
-                    </button>
+                    {isSuccess ? (
+                        <div class='alert alert-success' role='alert'>
+                          File successfully uploaded.
+                        </div>
+                      ) : null}
+                      {!isSuccess ? (
+                      <button
+                        type='submit'
+                        class='btn btn-gradient-success waves-effect waves-light'
+                      >
+                        {isSubmitting ? 'Please wait...' : 'Save'}
+                        
+                      </button>) : (
+                      <button
+                        onClick={() => navigate(-1)}
+                        type='button'
+                        class='btn btn-gradient-info waves-effect waves-light'
+                      >
+                        Cancel
+                      </button>)}
                   </div>
                 </div>
               </div>
