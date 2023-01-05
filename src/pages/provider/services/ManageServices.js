@@ -12,7 +12,6 @@ function ManageServices() {
   const { action } = useParams()
   const { state } = useLocation()
   const [clinicList, setClinicList] = useState([])
-  const [formData,setFormData]=useState({})
   const placeholderimage =`${AWS_BUCKET}/assets/images/users/user-4.jpg`
   const {
     register,
@@ -21,11 +20,42 @@ function ManageServices() {
   } = useForm()
 
   const onSubmit = (data) => {
-    console.log(data)
-    setFormData(data)
+    console.log("data",data)
+    createService(data)
     // navigate(-1)
+    
   }
+  const controller = new AbortController()
+  async function createService(data){
+    await axiosPrivate
+        .post(
+          'createService',
+          { ServiceName: data.name,
+            Email: auth.email,
+            ServiceDescription:data.type,
+            CostPrice:data.rate,
+            Status:(data.active)||0,
+            ClinicID:data.clinic,
+            Image:placeholderimage,
+          },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data = [], Message } = res.data
 
+          if (Status) {
+            setClinicList(data)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+  }
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -51,34 +81,7 @@ function ManageServices() {
             .catch((err) => {
               console.error(err)
             })
-      await axiosPrivate
-        .post(
-          'createService',
-          { ServiceName: formData.name,
-            Email: auth.email || 'jmmalunao@gmail.com',
-            ServiceDescription:formData.type,
-            CostPrice:formData.rate,
-            Status:(formData.active)||0,
-            ClinicID:"19c90ea6beeb46e883e2e743ff7902ba63ad40abacea3",
-            Image:placeholderimage,
-          },
-          {
-            signal: controller.signal,
-          }
-        )
-        .then((res) => {
-          console.log(res)
-          const { Status, Data: data = [], Message } = res.data
-
-          if (Status) {
-            setClinicList(data)
-          } else {
-            throw new Error(Message)
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        })
+      
     }
 
     isMounted && getList()
@@ -124,6 +127,7 @@ function ManageServices() {
                   <div class='col-md-12'>
                     <label class='mb-3'>Service Name</label>
                     <input
+                      required
                       class='form-control'
                       type='text'
                       {...register('name', {
@@ -137,6 +141,7 @@ function ManageServices() {
                   <div class='col-md-6'>
                     <label class='mb-3'>Choose Service Type</label>
                     <select
+                      required
                       class='select2 form-control mb-3 custom-select select2-hidden-accessible'
                       style={{ width: '100%', height: '36px' }}
                       tabindex='-1'
@@ -215,6 +220,7 @@ function ManageServices() {
                       Price / Rate
                     </label>
                     <input
+                      required
                       class='form-control'
                       type='text'
                       {...register('rate', {
@@ -231,6 +237,7 @@ function ManageServices() {
                         <div class='form-group'>
                           <label for='message'>Description</label>
                           <textarea
+                            required
                             class='form-control'
                             rows='5'
                             {...register('description', {
@@ -264,6 +271,7 @@ function ManageServices() {
                       </label>
                       <select
                         multiple
+                        required
                         className='select2 form-control mb-3 custom-select select2-hidden-accessible'
                         {...register('clinic', {
                           value: state?.selectedService?.clinic,
@@ -289,9 +297,7 @@ function ManageServices() {
                           id='input-file-now-custom-1'
                           class='dropify'
                           data-default-file={placeholderimage}
-                          {...register('clinic', {
-                            value: state?.selectedService?.clinic,
-                          })}
+                          
                         />
                       </div>
                     </form>
