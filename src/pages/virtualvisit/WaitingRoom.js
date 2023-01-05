@@ -10,11 +10,21 @@ export default function WaitingRoom() {
   const axiosPrivate = useAxiosPrivate()
   const [isReady, setIsReady] = useState(false)
   const [delay, setDelay] = useState('10000')
-  const [pplInQueue, setPplInQueue] = useState('10')
-  const [visitStatus, setVisitStatus] = useState('Step1')
-
+  const [queueCount, setQueueCount] = useState(0)
   console.log(state)
-
+  const getQueueCount=async()=>{
+    await axiosPrivate
+      .post(
+        'getVirtualVisitQue'
+      )
+      .then((res) => {
+        const data = res.data || []
+        setQueueCount(data)
+        console.log(data)
+      })
+      .catch((err) => console.error(err))
+  }
+  
   const getStatus = async () => {
     const controller = new AbortController()
     await axiosPrivate
@@ -35,12 +45,14 @@ export default function WaitingRoom() {
         }
       })
       .catch((err) => console.error(err))
+    
   }
-
+  
   useInterval(getStatus, delay)
 
   useEffect(() => {
     getStatus()
+    getQueueCount()
   }, [])
 
   return (
@@ -63,9 +75,9 @@ export default function WaitingRoom() {
                   height='500'
                   src='https://www.youtube.com/embed/oVAJZMVpL_g'
                   title='YouTube video player'
-                  frameborder='0'
+                  frameBorder='0'
                   allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-                  allowfullscreen
+                  allowFullScreen
                 ></iframe>
               </div>
 
@@ -90,7 +102,7 @@ export default function WaitingRoom() {
                       {/* <i className='mdi mdi-av-timer green_h'></i> Estimated
                       waiting time is <span className='green_h'>5:20</span> mins */}
                     </div>
-                    There are {pplInQueue} people in the queue
+                    There are {queueCount} people in the queue
                     <div
                       className='wizard_btn'
                       style={{ margin: '50px 0', paddingBottom: '50px' }}
