@@ -35,8 +35,8 @@ function ManageServices() {
             ServiceDescription:data.type,
             CostPrice:data.rate,
             Status:(data.active)||0,
-            ClinicID:data.clinic,
-            Image:placeholderimage,
+            ClinicID:data.clinic[0],
+            Image:data.image[0],
           },
           {
             signal: controller.signal,
@@ -297,7 +297,9 @@ function ManageServices() {
                           id='input-file-now-custom-1'
                           class='dropify'
                           data-default-file={placeholderimage}
-                          
+                          {...register('image', {
+                            value: state?.selectedService?.image,
+                          })}
                         />
                       </div>
                     </form>
