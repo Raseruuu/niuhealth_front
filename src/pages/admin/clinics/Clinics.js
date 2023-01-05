@@ -106,4 +106,18 @@ export default function AdminClinics() {
 
     )
   }
+export function Card({children}){
+    return(
+        <div className='row'>
+            <div className='col-lg-3'>
+                <div className='card'>
+                    <div className='card-body'>
+                        {children}
+                    </div>
+                </div>
+            </div>
+      </div>
+
+)
+}
   

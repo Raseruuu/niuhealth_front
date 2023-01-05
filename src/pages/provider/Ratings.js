@@ -1,43 +1,80 @@
+function TitleBox({text}){
+  return(
+    <div className='row'>
+      <div className='col-sm-12'>
+        <div className='page-title-box'>
+          <h4 className='page-title'>{text}</h4>
+        </div>
+      </div>
+    </div>
+  )
+}
+function RatingsBox({score,totalReviews}){
+  const scorestars=[1,1,1,1,0.5]
+  return(
+    <div className='p-4 bg-light text-center align-item-center'>
+    <h1 className='font-weight-semibold'>{score}</h1>
+    <h4 className='header-title'>Overall Rating</h4>
+    <ul className='list-inline mb-0 product-review'>
+      {scorestars.map((star)=>{
+
+        
+        (star===1)?
+          (
+            <li className='list-inline-item mr-0'>
+              <i className='mdi mdi-star text-warning font-24'></i>
+            </li>
+          ):
+        (star===0.5)?
+          (
+            <li className='list-inline-item mr-0'>
+              <i className='mdi mdi-star-half text-warning font-24'></i>
+            </li>
+          )
+        :(
+          <li className='list-inline-item mr-0'>
+            <i className='mdi mdi-star-half light-gray font-24'></i>
+          </li>
+          )
+        }
+      )}
+{/*       
+      <li className='list-inline-item mr-0'>
+        <i className='mdi mdi-star text-warning font-24'></i>
+      </li>
+      <li className='list-inline-item mr-0'>
+        <i className='mdi mdi-star text-warning font-24'></i>
+      </li>
+      <li className='list-inline-item mr-0'>
+        <i className='mdi mdi-star text-warning font-24'></i>
+      </li>
+      <li className='list-inline-item mr-0'>
+        <i className='mdi mdi-star-half text-warning font-24'></i>
+      </li>
+      <li className='list-inline-item mr-0'>
+          <i className='mdi mdi-star light-gray font-24'></i>
+        </li> */}
+      <li className='list-inline-item'>
+        <small className='text-muted'>Total Review ({totalReviews})</small>
+      </li>
+    </ul>
+  </div>
+  )
+}
+
+
+
 function Ratings() {
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'>
-            <h4 className='page-title'>Ratings</h4>
-          </div>
-        </div>
-      </div>
+      <TitleBox text="Ratings"/>
 
       {/* <!-- Calendar --> */}
       <div className='row'>
         <div className='col-lg-3'>
           <div className='card'>
             <div className='card-body'>
-              <div className='p-4 bg-light text-center align-item-center'>
-                <h1 className='font-weight-semibold'>4.8</h1>
-                <h4 className='header-title'>Overall Rating</h4>
-                <ul className='list-inline mb-0 product-review'>
-                  <li className='list-inline-item mr-0'>
-                    <i className='mdi mdi-star text-warning font-24'></i>
-                  </li>
-                  <li className='list-inline-item mr-0'>
-                    <i className='mdi mdi-star text-warning font-24'></i>
-                  </li>
-                  <li className='list-inline-item mr-0'>
-                    <i className='mdi mdi-star text-warning font-24'></i>
-                  </li>
-                  <li className='list-inline-item mr-0'>
-                    <i className='mdi mdi-star text-warning font-24'></i>
-                  </li>
-                  <li className='list-inline-item mr-0'>
-                    <i className='mdi mdi-star-half text-warning font-24'></i>
-                  </li>
-                  <li className='list-inline-item'>
-                    <small className='text-muted'>Total Review (700)</small>
-                  </li>
-                </ul>
-              </div>
+              <RatingsBox score={4.8} totalReviews={42} />
               <ul className='list-unstyled mt-3'>
                 <li className='mb-2'>
                   <span className='text-dark'>5 Star</span>
