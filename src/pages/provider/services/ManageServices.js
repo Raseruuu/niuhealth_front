@@ -42,15 +42,15 @@ function ManageServices() {
             CostPrice:data.rate,
             Status:(data.active)||0,
             ClinicID:data.clinic,
-            Image:data?.image,
+            Image:data?.image[0],
             
           },
           {
             Accept: 'application/json',
             headers: { 'Content-Type': 'multipart/form-data' },
             signal: controller.signal,
-            // onUploadProgress:ProgressEvent=>
-            //   {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
+            onUploadProgress:ProgressEvent=>
+              {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
           }
         )
         .then((res) => {
@@ -305,7 +305,6 @@ function ManageServices() {
                       <div class='uploadPicContainer'>
                         <input
                           type='file'
-                          multiple
                           id='input-file-now-custom-1'
                           class='dropify'
                           accept='image/*'
@@ -318,7 +317,7 @@ function ManageServices() {
                             // setImages(e.target.files)
                           }}
                         />
-                        {errors.Image ? (
+                        {errors.image ? (
                         <div className='text-danger'>Please choose file</div>
                       ) : null}
                       </div>
