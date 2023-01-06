@@ -80,7 +80,7 @@ function Clinics() {
                 alt=''
               />
               <div class='card-body'>
-                <h5 class='card-title'>{item.name || 'Clinic Name Sample'}</h5>
+                <h5 class='card-title'>{item.clinic_name || 'Clinic Name Sample'}</h5>
                 <p class='card-text mb-0'>{item.address}</p>
                 <p className='text-muted mb-0'>
                   {item.services || 'Neurologist / Sleep Doctor / Surgeon'}
