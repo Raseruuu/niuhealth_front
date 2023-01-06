@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
@@ -188,12 +188,11 @@ function Services({ limit }) {
             {list.map((item, index) => (
               <div key={item?.recno || index} className='col-lg-4'>
                 <div className='card e-co-product'>
+                
                   <Link to=''>
                     <img
-
-                      src={`${AWS_BUCKET}/${
-                        item?.picture_file ?? 'assets/images/products/img-1.png'
-                      }`}
+                      style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                      src={AWS_BUCKET_SERVICES+item?.images}
                       alt=''
                       className='img-fluid'
                     />

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
 import Footer from '../../../components/Footer'
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET,AWS_BUCKET_SERVICES } from '../../../constants'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 export default function Marketplace() {
@@ -21,7 +21,7 @@ export default function Marketplace() {
           signal: controller.signal,
         })
         .then((res) => {
-          isMounted && setList(res.data)
+          isMounted && setList(res.data.Data)
         })
         .catch((err) => {
           console.error(err)
@@ -313,9 +313,10 @@ export default function Marketplace() {
                   {list.map((item, index) => (
                     <div key={item?.service_id || index} className="col-lg-4">
                       <div className="card e-co-product">
+                      {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to="booking" state={{ ...item }}>
                           <img
-                            src={`${AWS_BUCKET}/assets/images/products/img-1.png`}
+                            src={(AWS_BUCKET_SERVICES+ item.images)}
                             alt=""
                             className="img-fluid"
                           />

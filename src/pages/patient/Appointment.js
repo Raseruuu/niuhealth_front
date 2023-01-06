@@ -85,7 +85,7 @@ const AppointmentAction = ({ status }) => {
 
 }
 
-function AppointmentItem({provider_description,provider_name,service_description,service_id,trans_date_time,visit_id,status}){
+function AppointmentItem({provider_description,provider_name,service_description,service_name,service_id,trans_date_time,visit_id,status}){
  
   return(
     <div className="card" id={service_id}>
@@ -122,7 +122,7 @@ function AppointmentItem({provider_description,provider_name,service_description
           </div>
         </div>
         <p className="text-muted mb-1 virtDesc">
-          <strong>{provider_description}</strong> 
+          <strong>{service_name}</strong> 
         </p>
       
         <div className="virtDesc d-flex justify-content-between">
@@ -141,6 +141,7 @@ function Appointment() {
     provider_name :"",
     provider_description:"",
     service_description:"",
+    service_name:"",
     service_id:"",
     trans_date_time:"",
     visit_id:"",

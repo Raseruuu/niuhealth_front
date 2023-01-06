@@ -113,8 +113,9 @@ const router = createBrowserRouter(
           errorElement: <ErrorPage />,
           children: [
             { index: true, element: <PatientIndexPage /> },
-            { path: 'virtualvisit', element: <VirtualVisit /> },
+            // { path: 'virtualvisit', element: <VirtualVisit /> },
             
+            { path: 'virtualvisit', element: <PatientIndexPage /> },
             {
               path: 'marketplace',
               element: <Outlet />,
