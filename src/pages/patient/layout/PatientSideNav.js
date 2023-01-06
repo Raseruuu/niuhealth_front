@@ -47,7 +47,7 @@ function PatientSideNav({ openSideNav }) {
         </div>
       </div> */}
 
-      {/* <div className='virtualTourSide'>
+      <div className='virtualTourSide'>
         <button
           type='button'
           className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
@@ -55,7 +55,7 @@ function PatientSideNav({ openSideNav }) {
         >
           Start Your Virtual Visit
         </button>
-      </div> */}
+      </div>
       {location?.pathname === '/patient/virtualvisit' ? (
         <div
           className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'

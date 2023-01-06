@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
@@ -75,8 +75,12 @@ function Clinics() {
             <div class='card flex-sm-col flex-md-row overflow-hidden'>
               <img
                 class='card-img-top'
-                style={{ width: 'unset' }}
-                src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                style={{ 
+                  // width: 'unset', 
+                  width:'200px', height:'150px',objectFit: 'cover'}}
+                // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
+                src={AWS_BUCKET_SERVICES+item.picture_file}
+                // style={{}}
                 alt=''
               />
               <div class='card-body'>

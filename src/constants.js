@@ -11,3 +11,4 @@ export const USERTYPE = {
   patient: 'Patient',
 }
 export const AWS_BUCKET = process.env.REACT_APP_AWS_BUCKET
+export const AWS_BUCKET_SERVICES = process.env.REACT_APP_AWS_BUCKET_SERVICES
