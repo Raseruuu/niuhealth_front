@@ -6,6 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 
 function ManageServices() {
+
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function ManageServices() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
+
   } = useForm();
 
   const onSubmit = async (data) => {
@@ -75,7 +77,11 @@ function ManageServices() {
           "getClinics",
           { Email: auth.email },
           {
+            Accept: 'application/json',
+            headers: { 'Content-Type': 'multipart/form-data' },
             signal: controller.signal,
+            onUploadProgress:ProgressEvent=>
+              {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
           }
         )
         .then((res) => {
@@ -150,6 +156,7 @@ function ManageServices() {
                     <label class="mb-3">Choose Service Type</label>
                     <select
                       required
+
                       class="select2 form-control mb-3 custom-select select2-hidden-accessible"
                       style={{ width: "100%", height: "36px" }}
                       tabindex="-1"
@@ -229,6 +236,7 @@ function ManageServices() {
                     </label>
                     <input
                       required
+
                       class="form-control"
                       type="number"
                       step={"0.01"}
@@ -247,6 +255,7 @@ function ManageServices() {
                           <label for="message">Description</label>
                           <textarea
                             required
+
                             class="form-control"
                             rows="5"
                             {...register("description", {
@@ -281,12 +290,15 @@ function ManageServices() {
                       <select
                         multiple
                         required
+
                         className="select2 form-control mb-3 custom-select select2-hidden-accessible"
                         {...register("clinic", {
+
                           value: state?.selectedService?.clinic,
                         })}
                       >
                         {clinicList.map((clinic) => (
+
                           <option value={clinic.clinic_id}>
                             {clinic.clinic_name}
                           </option>
@@ -302,6 +314,7 @@ function ManageServices() {
                       Upload Service Image
                     </label>
                     {/* <form method='post' class='card-box'> */}
+
                     <div class="uploadPicContainer">
                       <input
                         type="file"
@@ -326,6 +339,7 @@ function ManageServices() {
                     {/* </form> */}
                   </div>
                 </div>
+
 
                 <div class="row" style={{ marginTop: "40px" }}>
                   <div class="col-lg-12">

@@ -190,6 +190,7 @@ function Services({ limit }) {
                 <div className='card e-co-product'>
                   <Link to=''>
                     <img
+
                       src={`${AWS_BUCKET}/${
                         item?.picture_file ?? 'assets/images/products/img-1.png'
                       }`}
