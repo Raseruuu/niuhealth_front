@@ -77,7 +77,7 @@ function Renew() {
               </span>
             </button>
             Your insurance document has expired. Please upload a valid document.
-            If you don’t have insurance, please subscribe to our
+            If you don’t have insurance, please subscribe to our{' '}
             <Link to=''>monthly plan</Link>
           </div>
 
@@ -102,7 +102,7 @@ function Renew() {
                         height='100'
                       />
                       <h6 className='title1 py-3 mt-2 mb-0'>
-                        Plus plan {item.description}
+                        {item.plan_name}
                         <small className='text-muted'></small>
                       </h6>
                       <ul className='list-unstyled pricing-content-2 pb-3'>

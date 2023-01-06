@@ -1,8 +1,8 @@
-import Activity from "../../components/provider/Activity"
-import Calendar from "../../components/provider/calendar/Calendar"
-import TodaySchedule from "../../components/provider/calendar/TodaySchedule"
-import WelcomeCard from "../../components/provider/WelcomeCard"
-import PatientListData from "../../components/provider/PatientListData"
+import Activity from '../../components/provider/Activity'
+import Calendar from '../../components/provider/calendar/Calendar'
+import TodaySchedule from '../../components/provider/calendar/TodaySchedule'
+import WelcomeCard from '../../components/provider/WelcomeCard'
+import PatientListData from '../../components/provider/PatientListData'
 
 function ProviderIndex() {
   return (
@@ -21,14 +21,14 @@ function ProviderIndex() {
 
       {/* <!-- Calendar --> */}
       <div className='row'>
-        <div className='col-lg-4'>
+        {/* <div className='col-lg-4'>
           <TodaySchedule />
-        </div>
-        <div className='col-lg-8'>
+        </div> */}
+        <div className='col-lg-12'>
           <div className='card'>
             <div className='card-body'>
               <Calendar />
-              <div style={{ clear: "both" }}></div>
+              <div style={{ clear: 'both' }}></div>
             </div>
           </div>
         </div>
