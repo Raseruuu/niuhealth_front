@@ -76,21 +76,11 @@ function RatingsStars({score,size=24,children}){
   )
 }
 function RatingsBoxOverall({score,totalReviews,size=24}){
-  let scorestars=[]
-  for (var i=0; i<(score-score%1); i++) (scorestars.push(1))
-  if (score%1>0){scorestars.push(0.5)}
-  for (var i=5; (score+(score%1>0))<=i; i--) (scorestars.push(0))
-  const starswitch={
-    1:"mdi-star text-warning",
-    0.5:"mdi-star-half text-warning",
-    0:"mdi-star light-gray"
-  }
   return(
     <div className='p-4 bg-light text-center align-item-center'>
     <h1 className='font-weight-semibold'>{score}</h1>
     <h4 className='header-title'>Overall Rating</h4>
     <RatingsStars score={score} size={24}>
-      
       <li className='list-inline-item'>
         <small className='text-muted'>Total Reviews ({totalReviews})</small>
       </li>
