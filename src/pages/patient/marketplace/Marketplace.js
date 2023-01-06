@@ -318,6 +318,7 @@ export default function Marketplace() {
                           <img
                             src={(AWS_BUCKET_SERVICES+ item.images)}
                             alt=""
+                            style={{width:'200px', height:'200px',objectFit: 'cover'}}
                             className="img-fluid"
                           />
                         </Link>

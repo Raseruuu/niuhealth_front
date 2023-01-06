@@ -37,9 +37,9 @@ function ManageServices() {
     formData.append("Email", auth.email);
     formData.append("ServiceDescription", data.type);
     formData.append("CostPrice", data.rate);
-    formData.append("Status", data.active);
-    formData.append("ClinicID", data.clinic[0]);
-
+    formData.append("Status", Number(data.active));
+    // formData.append("ClinicID", data.clinic);
+    formData.append("ClinicID",JSON.stringify(data.clinic));
     await axiosPrivate
       .post("createService", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -325,7 +325,7 @@ function ManageServices() {
                         multiple
                         // data-default-file={placeholderimage}
                         {...register("image", {
-                          required: true,
+                          // required: true,
                         })}
                         onChange={(e) => {
                           console.log(e.target.files);

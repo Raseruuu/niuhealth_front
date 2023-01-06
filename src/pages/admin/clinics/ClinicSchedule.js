@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import { TableTitle } from '../../../components/table/Tables'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 function CurrencySelect(currency){
@@ -21,7 +22,12 @@ function CurrencySelect(currency){
 function TimeZoneSelect(timezone){
   return(
     <div class="row">
-      <select className="col-sm form-control" required={true} style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}>
+      <select 
+        className="col-sm form-control" 
+        required={true} 
+        style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
+        
+        >
         
         <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
         <option value={"+01:00"}>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna </option>
@@ -207,21 +213,22 @@ export default function ClinicSchedule() {
     reset,
   } = useForm()
   const navigate = useNavigate()
+  
   const onSubmit = async (data) => {
-    setFeedbackMsg(null)
-    setIsSuccess(false)
-
+    const formData = new FormData();
+    console.log(data)
+    formData.append("ServiceName", data.name);
     await axiosPrivate
       .post('createClinic', {
         ...data,
-        Provider: auth?.email || 'jmmalunao@gmail.com',
+        Provider: auth?.email,
       })
       .then((res) => {
         return res.data
       })
       .then((data) => {
         const { Status, Message } = data || {}
-        setFeedbackMsg(Message)
+        // setFeedbackMsg(Message)
 
         if (Status) {
           setIsSuccess(true)
@@ -231,20 +238,19 @@ export default function ClinicSchedule() {
       })
       .catch((err) => {
         console.log(err)
-        setFeedbackMsg(err)
+        // setFeedbackMsg(err)
       })
   }
 
-  useEffect(() => {
-    reset()
-  }, [isSubmitSuccessful])
+  // useEffect(() => {
+    
+    // reset()
+  // }, [isSubmitSuccessful])
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmcreateRatingit={handleSubmit(onSubmit)}>
       <div className='container-fluid'>
-        <div className='row'>
-          <div className='col-sm-12'>
-            <div className='page-title-box'>
+        <TableTitle title="New Clinic Schedule">
               <div className='float-right'>
                 <ol className='breadcrumb'>
                   <li className='breadcrumb-item'>
@@ -258,10 +264,7 @@ export default function ClinicSchedule() {
                   </li>
                 </ol>
               </div>
-              <h4 className='page-title'> New Clinic Schedule</h4>
-            </div>
-          </div>
-        </div>
+        </TableTitle>
 
         <div className='row '>
           <div className='col-lg-12'>
@@ -508,9 +511,39 @@ export default function ClinicSchedule() {
                     </div>
                   </div>
                 </div>
+                <div class="row" style={{ marginTop: "40px", marginBottom:"40px"}}>
+                  <div class="col-lg-12">
+                    <label for="exampleFormControlSelect2">
+                      Upload Clinic Image
+                    </label>
+                    {/* <form method='post' class='card-box'> */}
 
+                    <div class="uploadPicContainer">
+                      <input
+                        type="file"
+                        id="input-file-now-custom-1"
+                        class="dropify"
+                        accept="image/*"
+                        capture="user"
+                        multiple
+                        // data-default-file={placeholderimage}
+                        {...register("image", {
+                          // required: true,
+                        })}
+                        onChange={(e) => {
+                          console.log(e.target.files);
+                          // setImages(e.target.files)
+                        }}
+                      />
+                      {errors.image ? (
+                        <div className="text-danger">Please choose file</div>
+                      ) : null}
+                    </div>
+                    {/* </form> */}
+                  </div>
+                </div>
                 {feedbackMsg ? (
-                  <div className='row'>
+                  <div className='row' >
                     <div className='col-lg-6'>
                       <div
                         className={`alert  alert-dismissible fade show ${
