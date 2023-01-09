@@ -14,7 +14,7 @@ export default function WaitingRoom() {
   console.log(state)
   const getQueueCount=async()=>{
     await axiosPrivate
-      .post(
+      .get(
         'getVirtualVisitQue'
       )
       .then((res) => {
@@ -36,7 +36,7 @@ export default function WaitingRoom() {
         }
       )
       .then((res) => {
-        const { Status, Message, Data } = res.data
+        const  {Status, Message, Data}  = res.data
         if (Data?.Status === 'started') {
           setDelay(null)
           setIsReady(true)
@@ -60,13 +60,13 @@ export default function WaitingRoom() {
       <div className='page-wrapper'>
         <div className='page-content'>
           <div className='container-fluid'>
-            <div className='row'>
+            {/* <div className='row'>
               <div className='col-sm-12'>
                 <div className='page-title-box'>
                   <h4 className='page-title'></h4>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className='row '>
               <div className='col-lg-6'>

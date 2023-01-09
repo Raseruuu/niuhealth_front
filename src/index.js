@@ -27,7 +27,7 @@ import Renew from './pages/patient/subcription/Renew'
 import Subscription from './pages/patient/subcription/Subcription'
 import VirtualVisit from './pages/patient/VirtualVisit'
 import Clinics from './pages/provider/clinics/Clinics'
-import ClinicSchedule from './pages/provider/clinics/ClinicSchedule'
+import ClinicSchedule from './components/clinics/ClinicSchedule'
 import ProviderDashboard from './pages/provider/layout/ProviderDashboard'
 import Patients from './pages/provider/patient/PatientList'
 import PatientProfile from './pages/provider/patient/Profile'
@@ -46,8 +46,6 @@ const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 const AdminIndex = lazy(() => import('./pages/admin/AdminIndex'))
 const AdminClinics = lazy(() => import('./pages/admin/clinics/Clinics'))
-
-const AdminClinicSchedule = lazy(() => import('./pages/admin/clinics/ClinicSchedule'))
 // AdminClinicSchedule
 const AdminCompanies = lazy(() => import('./pages/admin/Companies'))
 const AdminProviders = lazy(() => import('./pages/admin/Providers'))
@@ -98,7 +96,7 @@ const router = createBrowserRouter(
               element: <Outlet />,
               children: [
                 { index: true, element: <AdminClinics /> },
-                { path: 'create', element: <AdminClinicSchedule /> },
+                { path: 'create', element: <ClinicSchedule /> },
               ],
             },
             { path: 'providers', element: <AdminProviders /> },

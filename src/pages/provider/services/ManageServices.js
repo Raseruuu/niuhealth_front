@@ -107,42 +107,42 @@ function ManageServices() {
   }, []);
 
   return (
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="page-title-box">
-            <div class="float-right">
-              <ol class="breadcrumb">
-                <li class="breadcrumb-item">
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="page-title-box">
+            <div className="float-right">
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
                   <Link to="/">NU Health</Link>
                 </li>
-                <li class="breadcrumb-item">
+                <li className="breadcrumb-item">
                   <Link to="/provider/services">Services</Link>
                 </li>
-                <li class="breadcrumb-item active">Manage Service</li>
+                <li className="breadcrumb-item active">Manage Service</li>
               </ol>
             </div>
-            <h4 class="page-title">Manage Service</h4>
+            <h4 className="page-title">Manage Service</h4>
           </div>
         </div>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                <h4 class="mt-0 header-title">
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="card">
+              <div className="card-body">
+                <h4 className="mt-0 header-title">
                   {action === "new" ? "Create New" : "Update"} Service
                 </h4>
-                <p class="text-muted mb-3">
+                <p className="text-muted mb-3">
                   Lorem ipsum dolor sit amet consucetetur.
                 </p>
-                <div class="row" style={{ marginBottom: "30px" }}>
-                  <div class="col-md-12">
-                    <label class="mb-3">Service Name</label>
+                <div className="row" style={{ marginBottom: "30px" }}>
+                  <div className="col-md-12">
+                    <label className="mb-3">Service Name</label>
                     <input
                       required
-                      class="form-control"
+                      className="form-control"
                       type="text"
                       {...register("name", {
                         value: state?.selectedService?.name,
@@ -151,13 +151,13 @@ function ManageServices() {
                   </div>
                 </div>
 
-                <div class="row" style={{ marginBottom: "30px" }}>
-                  <div class="col-md-6">
-                    <label class="mb-3">Choose Service Type</label>
+                <div className="row" style={{ marginBottom: "30px" }}>
+                  <div className="col-md-6">
+                    <label className="mb-3">Choose Service Type</label>
                     <select
                       required
 
-                      class="select2 form-control mb-3 custom-select select2-hidden-accessible"
+                      className="select2 form-control mb-3 custom-select select2-hidden-accessible"
                       style={{ width: "100%", height: "36px" }}
                       tabindex="-1"
                       aria-hidden="true"
@@ -227,17 +227,17 @@ function ManageServices() {
                     </select>
                   </div>
 
-                  <div class="col-md-6">
+                  <div className="col-md-6">
                     <label
                       for="example-text-input"
-                      class="col-form-label text-right"
+                      className="col-form-label text-right"
                     >
                       Price / Rate
                     </label>
                     <input
                       required
 
-                      class="form-control"
+                      className="form-control"
                       type="number"
                       step={"0.01"}
                       {...register("rate", {
@@ -247,16 +247,16 @@ function ManageServices() {
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="form-group">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <div className="row">
+                      <div className="col-md-12">
+                        <div className="form-group">
                           <label for="message">Description</label>
                           <textarea
                             required
 
-                            class="form-control"
+                            className="form-control"
                             rows="5"
                             {...register("description", {
                               value: state?.selectedService?.description,
@@ -266,15 +266,15 @@ function ManageServices() {
                       </div>
                     </div>
 
-                    <div class="custom-control custom-switch switch-success">
+                    <div className="custom-control custom-switch switch-success">
                       <input
                         id="customSwitchSuccess"
                         type="checkbox"
-                        class="custom-control-input"
+                        className="custom-control-input"
                         {...register("active")}
                       />
                       <label
-                        class="custom-control-label"
+                        className="custom-control-label"
                         for="customSwitchSuccess"
                       >
                         Active
@@ -282,8 +282,8 @@ function ManageServices() {
                     </div>
                   </div>
 
-                  <div class="col-lg-6">
-                    <div class="form-group">
+                  <div className="col-lg-6">
+                    <div className="form-group">
                       <label for="exampleFormControlSelect2">
                         Clinic Availability (choose all that applies)
                       </label>
@@ -291,7 +291,7 @@ function ManageServices() {
                         multiple
                         required
 
-                        className="select2 form-control mb-3 custom-select select2-hidden-accessible"
+                        classNameName="select2 form-control mb-3 custom-select select2-hidden-accessible"
                         {...register("clinic", {
 
                           value: state?.selectedService?.clinic,
@@ -308,18 +308,18 @@ function ManageServices() {
                   </div>
                 </div>
 
-                <div class="row" style={{ marginTop: "40px" }}>
-                  <div class="col-lg-12">
+                <div className="row" style={{ marginTop: "40px" }}>
+                  <div className="col-lg-12">
                     <label for="exampleFormControlSelect2">
                       Upload Service Image
                     </label>
-                    {/* <form method='post' class='card-box'> */}
+                    {/* <form method='post' className='card-box'> */}
 
-                    <div class="uploadPicContainer">
+                    <div className="uploadPicContainer">
                       <input
                         type="file"
                         id="input-file-now-custom-1"
-                        class="dropify"
+                        className="dropify"
                         accept="image/*"
                         capture="user"
                         multiple
@@ -333,7 +333,7 @@ function ManageServices() {
                         }}
                       />
                       {errors.image ? (
-                        <div className="text-danger">Please choose file</div>
+                        <div classNameName="text-danger">Please choose file</div>
                       ) : null}
                     </div>
                     {/* </form> */}
@@ -341,17 +341,17 @@ function ManageServices() {
                 </div>
 
 
-                <div class="row" style={{ marginTop: "40px" }}>
-                  <div class="col-lg-12">
+                <div className="row" style={{ marginTop: "40px" }}>
+                  <div className="col-lg-12">
                     {isSuccess ? (
-                      <div class="alert alert-success" role="alert">
+                      <div className="alert alert-success" role="alert">
                         File successfully uploaded.
                       </div>
                     ) : null}
                     {!isSuccess ? (
                       <button
                         type="submit"
-                        class="btn btn-gradient-success waves-effect waves-light"
+                        className="btn btn-gradient-success waves-effect waves-light"
                       >
                         {isSubmitting ? "Please wait..." : "Save"}
                       </button>
@@ -359,7 +359,7 @@ function ManageServices() {
                       <button
                         onClick={() => navigate(-1)}
                         type="button"
-                        class="btn btn-gradient-info waves-effect waves-light"
+                        className="btn btn-gradient-info waves-effect waves-light"
                       >
                         Cancel
                       </button>

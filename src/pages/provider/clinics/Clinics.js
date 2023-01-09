@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
-
+import { TableTitle } from '../../../components/table/Tables'
 function Clinics() {
   const navigate = useNavigate()
   const { auth, setAuth } = useAuth()
@@ -19,7 +19,7 @@ function Clinics() {
       await axiosPrivate
         .post(
           'getClinics',
-          { Email: auth.email || 'jmmalunao@gmail.com' },
+          { Email: auth.email},
           {
             signal: controller.signal,
           }
@@ -50,10 +50,9 @@ function Clinics() {
 
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'>
-            {/* <div className='float-right'>
+      
+      <TableTitle title={"Clinics"}>
+      <div className='float-right overflow-visible '>
               <ol className='breadcrumb'>
                 <button
                   type='button'
@@ -63,12 +62,8 @@ function Clinics() {
                   New Clinic Schedule
                 </button>
               </ol>
-            </div> */}
-            <h4 className='page-title'>Clinics</h4>
-          </div>
-        </div>
-      </div>
-
+            </div>
+      </TableTitle>
       <div className='row'>
         {list.map((item) => (
           <div className='col-sm-12 col-md-6'>
@@ -84,10 +79,10 @@ function Clinics() {
                 alt=''
               />
               <div class='card-body'>
-                <h5 class='card-title'>{item.clinic_name || 'Clinic Name Sample'}</h5>
+                <h5 class='card-title'>{item.clinic_name}</h5>
                 <p class='card-text mb-0'>{item.address}</p>
                 <p className='text-muted mb-0'>
-                  {item.services || 'Neurologist / Sleep Doctor / Surgeon'}
+                  {item.specialty }
                 </p>
                 <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
               </div>

@@ -1,13 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { TableTitle } from '../../../components/table/Tables'
-import useAuth from '../../../hooks/useAuth'
-import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
-function CurrencySelect(currency){
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { TableTitle } from '../../components/table/Tables'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+
+function CurrencySelect({ setLocalCurrency}){
+  // console.log(props)
   return(
     <div class="row">
-      <select className="col-sm form-control" required={true} style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}>
+      <select 
+        onChange={(e)=>setLocalCurrency(e.target.value)}
+        className="col-sm form-control" 
+        style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}>
         
         <option value={"USD"}>US Dollar (USD) </option>
         <option value={"EUR"}>European Euro (EUR)</option>
@@ -19,14 +24,14 @@ function CurrencySelect(currency){
   </div>
   )
 }
-function TimeZoneSelect(timezone){
+function TimeZoneSelect({setTimeZone}){
   return(
     <div class="row">
       <select 
         className="col-sm form-control" 
         required={true} 
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
-        
+        onChange={(e)=>{setTimeZone(e.target.value)}}
         >
         
         <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
@@ -131,69 +136,55 @@ function TimeZoneSelect(timezone){
   </div>
   )
 }
-
-function ScheduleSelect(){
+function hourformat(hour){
+  if (hour>12){
+    return (hour-12)+" PM"
+  }
+  else if (hour===12){
+    return (12)+" PM"
+  }
+  else if (hour===0){
+    return (12)+" AM"
+  }
+  else{
+    return hour+" AM"
+  }
+}
+function ScheduleSelect({hours,setHours,weekday}){
   // hours = 0
+  let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
+  let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
+  
   return(
     <div class="column" style={{paddingLeft:"20px"}}>
       <div class = "row">Start Time 
-      <select className="col-sm form-control" required={true} style={{marginLeft:"10px",marginRight:"10px",minWidth:40}}>   
-        <option value={8}>8 AM</option>
-        <option value={9}>9 AM</option>
-        <option value={10}>10 AM</option>
-        <option value={11}>11 AM</option>
-        <option value={12}>12 PM</option>
-        <option value={13}>1 PM</option>
-        <option value={14}>2 PM</option>
-        <option value={15}>3 PM</option>
-        <option value={16}>4 PM</option>
-        <option value={17}>5 PM</option>
-        <option value={18}>6 PM</option>
-        <option value={19}>7 PM</option>
-        <option value={20}>8 PM</option>
-        <option value={21}>9 PM</option>
-        <option value={22}>10 PM</option>
-        <option value={23}>11 PM</option>
-        <option value={0}>12 AM</option>
-        <option value={1}>1 AM</option>
-        <option value={2}>2 AM</option>
-        <option value={3}>3 AM</option>
-        <option value={4}>4 AM</option>
-        <option value={5}>5 AM</option>
-        <option value={6}>6 AM</option>
-        <option value={7}>7 AM</option>
+      <select
+         
+        onChange={(e)=>{
+        setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
+        console.log(hours)
+      }
+      }
+        className="col-sm form-control float-right" style={{marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
+        {morning_options.map((option)=>(
+          <option value={option}>{hourformat(option)}</option>
+          ))}
         <option value={null}>N/A</option>
       </select>
       </div>
       <div class = "row">End Time
-        <select className="col-sm form-control" required={true} style={{marginLeft:"10px",marginRight:"10px",minWidth:40}}>
-        
-        <option value={20}>8 PM</option>
-        <option value={21}>9 PM</option>
-        <option value={22}>10 PM</option>
-        <option value={23}>11 PM</option>
-        <option value={0}>12 AM</option>
-        <option value={1}>1 AM</option>
-        <option value={2}>2 AM</option>
-        <option value={3}>3 AM</option>
-        <option value={4}>4 AM</option>
-        <option value={5}>5 AM</option>
-        <option value={6}>6 AM</option>
-        <option value={7}>7 AM</option>
-        <option value={8}>8 AM</option>
-        <option value={9}>9 AM</option>
-        <option value={10}>10 AM</option>
-        <option value={11}>11 AM</option>
-        <option value={12}>12 PM</option>
-        <option value={13}>1 PM</option>
-        <option value={14}>2 PM</option>
-        <option value={15}>3 PM</option>
-        <option value={16}>4 PM</option>
-        <option value={17}>5 PM</option>
-        <option value={18}>6 PM</option>
-        <option value={19}>7 PM</option>
-        <option value={null}>N/A</option>
-      </select>
+        <select  
+          onChange={(e)=>{
+            setHours({...hours,['Hours'+weekday+'End']:e.target.value});
+            console.log(hours)
+          }
+          }
+          className="col-sm form-control float-right" style={{marginLeft:"10px",marginRight:"10px",width:40}}>
+          {night_options.map((option2)=>(
+            <option value={option2}>{hourformat(option2)}</option>
+            ))}
+          <option value={null}>N/A</option>
+        </select>
       </div>
   </div>
   )
@@ -205,7 +196,9 @@ export default function ClinicSchedule() {
   const [isSuccess, setIsSuccess] = useState(false)
   const [feedbackMsg, setFeedbackMsg] = useState(null)
   const alertBtnRef = useRef()
-
+  const [localCurrency,setLocalCurrency]=useState("USD")
+  const [localTimezone,setTimeZone]=useState("+8")
+  const { state } = useLocation();
   const {
     register,
     handleSubmit,
@@ -213,27 +206,76 @@ export default function ClinicSchedule() {
     reset,
   } = useForm()
   const navigate = useNavigate()
-  
+  // default hours:
+  const [hours,setHours]=useState({
+    'HoursMonStart':8,
+    'HoursMonEnd':20,
+    'HoursTueStart':8,
+    'HoursTueEnd':20,
+    'HoursWedStart':8,
+    'HoursWedEnd':20,
+    'HoursThuStart':8,
+    'HoursThuEnd':20,
+    'HoursFriStart':8,
+    'HoursFriEnd':20,
+    'HoursSatStart':8,
+    'HoursSatEnd':20,
+    'HoursSunStart':8,
+    'HoursSunEnd':20
+    })
   const onSubmit = async (data) => {
     const formData = new FormData();
     console.log(data)
-    formData.append("ServiceName", data.name);
+    // formData.append(formData,{...hours});
+    // for (let index = 0; index < data?.image.length; index++) {
+    //   formData.append(formData,{...hours});.
+
+    // }
+    if (data?.Image.length > 0) {
+      for (let index = 0; index < data?.Image.length; index++) {
+        formData.append("Image", data.Image[index], data.Image[index].name);
+      }
+    }
+    formData.append("Email", auth.email);
+    formData.append("ClinicName",data.ClinicName)
+    formData.append("Specialty",data.Specialty)
+    formData.append("Contact_info",data.Contact_info)
+    formData.append("Address",data.Address)
+    for (let key in hours) {
+      if (hours.hasOwnProperty(key)) {
+        formData.append(key,hours[key])
+        console.log(key,hours[key])
+      }
+    }
+    formData.append("LocalCurrency", localCurrency);
+    formData.append("LocalTimeZone", localTimezone);
+
     await axiosPrivate
-      .post('createClinic', {
-        ...data,
-        Provider: auth?.email,
-      })
+      .post('createClinic', 
+        formData,{
+          headers: { "Content-Type": "multipart/form-data" },
+          onUploadProgress: function (ProgressEvent) {
+            console.log(
+              "uploadprogress: " +
+                (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+                "%"
+            );
+          },
+        }
+      )
       .then((res) => {
         return res.data
       })
       .then((data) => {
         const { Status, Message } = data || {}
         // setFeedbackMsg(Message)
-
         if (Status) {
           setIsSuccess(true)
+          alert("Success! You created a new Clinic.")
         } else {
           setIsSuccess(false)
+          
+          alert("Failed to create a new Clinic.")
         }
       })
       .catch((err) => {
@@ -242,17 +284,17 @@ export default function ClinicSchedule() {
       })
   }
 
-  // useEffect(() => {
+  useEffect(() => {
     
-    // reset()
-  // }, [isSubmitSuccessful])
+    reset()
+  }, [isSuccess])
 
   return (
-    <form onSubmcreateRatingit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className='container-fluid'>
         <TableTitle title="New Clinic Schedule">
               <div className='float-right'>
-                <ol className='breadcrumb'>
+                {/* <ol className='breadcrumb'>
                   <li className='breadcrumb-item'>
                     <Link to='/admin'>NU Health</Link>
                   </li>
@@ -262,7 +304,7 @@ export default function ClinicSchedule() {
                   <li className='breadcrumb-item active'>
                     New Clinic Schedule
                   </li>
-                </ol>
+                </ol> */}
               </div>
         </TableTitle>
 
@@ -289,7 +331,10 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='name'
-                          {...register('name', { required: true })}
+                          required
+                          {...register('ClinicName', { 
+                            value: state?.selectedService?.ClinicName,
+                            required: true })}
                         />
                         {errors.name ? (
                           <div
@@ -302,9 +347,9 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                </div>
+                {/* </div>
 
-                <div className='row'>
+                <div className='row'> */}
                   <div className='col-lg-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
@@ -318,11 +363,12 @@ export default function ClinicSchedule() {
                       <div className='col-md-12'>
                         <input
                           className={`form-control ${
-                            errors.specialty ? 'is-invalid' : ''
+                            errors.Specialty ? 'is-invalid' : ''
                           }`}
                           type='text'
-                          id='specialty'
-                          {...register('specialty', { required: true })}
+                          id='Specialty'
+                          required
+                          {...register('Specialty', { required: true })}
                         />
                         {errors.specialty ? (
                           <div
@@ -338,7 +384,7 @@ export default function ClinicSchedule() {
                 </div>
 
                 <div className='row'>
-                  <div className='col-lg-6'>
+                  <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
                         <label
@@ -354,8 +400,9 @@ export default function ClinicSchedule() {
                             errors.contact_info ? 'is-invalid' : ''
                           }`}
                           type='text'
-                          id='contact_info'
-                          {...register('contact_info', { required: true })}
+                          id='Contact_info'
+                          required
+                          {...register('Contact_info', { required: true })}
                         />
                         {errors.contact_info ? (
                           <div
@@ -364,13 +411,12 @@ export default function ClinicSchedule() {
                           >
                             Please enter clinic's contact info.
                           </div>
+                          
                         ) : null}
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className='row'>
-                  <div className='col-lg-6'>
+                  <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
                         <label
@@ -387,6 +433,7 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='Address'
+                          required
                           {...register('Address', { required: true })}
                         />
                         {errors.Address ? (
@@ -402,7 +449,7 @@ export default function ClinicSchedule() {
                   </div>
                 </div>
                 <div className='row'>
-                  <div className='col-lg-6'>
+                  <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
                         <label
@@ -420,8 +467,9 @@ export default function ClinicSchedule() {
                           type='text'
                           id='local_currency'
                           {...register('local_currency', { required: true })}
-                        /> */}
-                        <CurrencySelect/>
+                        /> */}{}
+                        <CurrencySelect register={register} localCurrency ={localCurrency} setLocalCurrency={setLocalCurrency}
+                        />
                         {errors.local_currency ? (
                           <div
                             className='invalid-feedback'
@@ -433,8 +481,6 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                </div>    
-                <div className='row'>
                   <div className='col-lg-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
@@ -454,7 +500,7 @@ export default function ClinicSchedule() {
                           id='local_time_zone'
                           {...register('local_time_zone', { required: true })}
                         /> */}
-                        <TimeZoneSelect/>
+                        <TimeZoneSelect setTimeZone={setTimeZone}/>
                         {errors.local_time_zone ? (
                           <div
                             className='invalid-feedback'
@@ -478,46 +524,54 @@ export default function ClinicSchedule() {
                           Working Hours
                         </label>
                       </div>
-                      <div className='col-md-12'>
-                        <div className='col-sm'>
-                          Sunday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Monday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Tuesday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Wednesday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Thursday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Friday
-                          <ScheduleSelect />
-                        </div>
-                        <div className='col-sm'>
-                          Saturday
-                          <ScheduleSelect />
+                      <div className='col-lg-12'  >
+                        <div className='col' >
+                          <div className='row'style={{width:'1200px'}}>
+                            <div className='col-sm'>
+                              Sunday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun"/>
+                            </div>
+                            <div className='col-sm'>
+                              Monday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon"/>
+                            </div>
+                            <div className='col-sm'>
+                              Tuesday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue"/>
+                            </div>
+                            <div className='col-sm'>
+                              Wednesday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed"/>
+                            </div>
+                          </div>
+                          <div className='row'>
+                            
+                            <div className='col-sm'>
+                              Thursday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu"/>
+                            </div>
+                            <div className='col-sm'>
+                              Friday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri"/>
+                            </div>
+                            <div className='col-sm'>
+                              Saturday
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat"/>
+                            </div>
+                            <div>
+                           
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="row" style={{ marginTop: "40px", marginBottom:"40px"}}>
+                <div class="row" style={{ marginTop: "10px", marginBottom:"40px"}}>
                   <div class="col-lg-12">
-                    <label for="exampleFormControlSelect2">
+                    <label htmlFor="exampleFormControlSelect2">
                       Upload Clinic Image
                     </label>
-                    {/* <form method='post' class='card-box'> */}
-
                     <div class="uploadPicContainer">
                       <input
                         type="file"
@@ -526,20 +580,18 @@ export default function ClinicSchedule() {
                         accept="image/*"
                         capture="user"
                         multiple
-                        // data-default-file={placeholderimage}
-                        {...register("image", {
-                          // required: true,
+                        required
+                        {...register("Image", {
+                          required:true
                         })}
                         onChange={(e) => {
                           console.log(e.target.files);
-                          // setImages(e.target.files)
                         }}
                       />
                       {errors.image ? (
                         <div className="text-danger">Please choose file</div>
                       ) : null}
                     </div>
-                    {/* </form> */}
                   </div>
                 </div>
                 {feedbackMsg ? (
