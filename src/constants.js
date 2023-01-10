@@ -12,3 +12,4 @@ export const USERTYPE = {
 }
 export const AWS_BUCKET = process.env.REACT_APP_AWS_BUCKET
 export const AWS_BUCKET_SERVICES = process.env.REACT_APP_AWS_BUCKET_SERVICES
+export const ZOOM_SDK = process.env.REACT_APP_ZOOM_SDK
