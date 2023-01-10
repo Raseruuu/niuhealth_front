@@ -25,7 +25,8 @@ function Room() {
   var meetingNumber = state?.MeetingID
   var userName = name
   var userEmail = email
-  var passWord = state.Password
+  // var passWord = state.Password
+  var passWord = '3e8NFH'
   var registrantToken = ''
   var leaveUrl = isProvider
     ? `${APP_URL}/provider/visits`
