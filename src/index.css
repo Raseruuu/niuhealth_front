@@ -44,3 +44,14 @@
 .jp-card-container .jp-card {
   min-width: unset;
 }
+
+/* THEMES OVERRIDE */
+.btn-success, .btn-gradient-success {
+  background-color: #127e00;
+    border-color: #127e00;
+    box-shadow: unset;
+}
+
+a {
+  color: #127e00;
+}
