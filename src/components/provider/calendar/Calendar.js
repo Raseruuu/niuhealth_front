@@ -2,14 +2,14 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useAuth from '../../../hooks/useAuth'
 import moment from 'moment'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
-export default function Calendar({ allowCall }) {
+function Calendar({ allowCall }) {
   const { auth } = useAuth()
   const navigate = useNavigate()
   const [slots, setSlots] = useState([])
@@ -142,7 +142,7 @@ export default function Calendar({ allowCall }) {
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       }}
-      initialView='dayGridMonth'
+      initialView="dayGridMonth"
       events={slots}
       // editable={true}
       selectable={true}
@@ -163,3 +163,6 @@ export default function Calendar({ allowCall }) {
     />
   )
 }
+
+// TODO: Refactor. put all business logic to parent component to fully memoize this component
+export default memo(Calendar)

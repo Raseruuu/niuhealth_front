@@ -4,7 +4,7 @@ import { ZoomMtg } from '@zoomus/websdk'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { APP_URL, USERTYPE } from '../../constants'
+import { APP_URL, USERTYPE, ZOOM_SDK } from '../../constants'
 
 function Room() {
   const { auth } = useAuth()
@@ -20,8 +20,8 @@ function Room() {
 
   var signatureEndpoint =
     'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
-  // var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
-  var sdkKey = 'sGzNuhZMBWZCcNBjAxvCFWAwjGlnT9XBrc2v'
+
+  var sdkKey = ZOOM_SDK
   var meetingNumber = state?.MeetingID
   var userName = name
   var userEmail = email
@@ -107,9 +107,9 @@ function Room() {
   }, [])
 
   return (
-    <div className='d-flex vw-100 vh-100'>
-      <div className='flex-fill'>
-        <div id='meetingSDKElement'>
+    <div className="d-flex vw-100 vh-100">
+      <div className="flex-fill">
+        <div id="meetingSDKElement">
           {/* Zoom Meeting SDK Component View Rendered Here */}
         </div>
       </div>
