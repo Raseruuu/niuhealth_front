@@ -26,7 +26,6 @@ function Room() {
   var userName = name
   var userEmail = email
   var passWord = state.Password
-  console.log(state.Password)
   var registrantToken = ''
   var leaveUrl = isProvider
     ? `${APP_URL}/provider/visits`
