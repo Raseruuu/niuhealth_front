@@ -15,7 +15,7 @@ function PatientList() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [search, setSearch] = useState('')
-  const [searchText, setSearchText] = useState(null)
+  const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   /*
   For Status:
