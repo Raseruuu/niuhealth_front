@@ -15,6 +15,7 @@ function PatientList() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [search, setSearch] = useState("")
+  const [searchText, setSearchText] = useState("")
   const debouncedSearch = useDebounce(search,500)
   /*
   For Status:
@@ -24,12 +25,14 @@ function PatientList() {
   */
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(inputs);
+    // alert(event.inputs);
+    
+    setSearch(searchText)
   }
   useEffect(
     () => {
         localStorage.setItem("search", search);
-        console.log(search)
+        // console.log(search)
         // add search request here
         
       },
@@ -48,21 +51,23 @@ function PatientList() {
                 style = {{maxWidth:'300px'}}
                 placeholder='Search Patients...'
                 aria-label='Search Patients...'
-                onChange={e => {
-                  setSearch(e.target.value)
+                onSubmit={() => {
+                  handleSubmit()
                 }}
-                value={search}/>
+                onChange={e => {
+                  setSearchText(e.target.value)
+                }}/>
                 
             </form>
             <span className='input-group-append'>
-              <button className='btn btn-success' type='button'>
+              <button className='btn btn-success' type='submit' >
                 <i class="fas fa-search"></i>
               </button>
             </span>
           </div>
         </div>
       </TableTitle>
-      <TableCard headers={["Patient","Email","Phone No.","Status"]}>
+      <TableCard headers={["Patient","Email","Phone No.","Status","Insurance"]}>
         <PatientListData limit={10} search={search}/>  
       </TableCard>    
     </div>

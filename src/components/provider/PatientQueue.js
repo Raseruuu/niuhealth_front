@@ -7,6 +7,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 import useDebounce from '../../hooks/useDebounce'
 import { StatusTextInsurance } from '../../components/status/Status'
+
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
@@ -49,19 +50,19 @@ function PatientQueue({ limit, search }) {
         await axiosPrivate
           .post(
             action === actionX.meet
-              ? 'startVisit'
+              ? 'providerStartVirtualVisit'
               : 'cancelVisit',
             {
               Email: auth.email,
-              AppointmentID: selectedItem.visit_id,
+              MeetingID: selectedItem.meeting_id,
             }
           )
           .then((res) => {
             if (res.data?.Status && action === actionX.meet) {
               Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'})
-              
+              console.log(res.data.Data)
               navigate('/virtualvisit/room', {
-                  state: { MeetingID: 4737080721 },
+                  state: { MeetingID: res.data.Data.PMI, Password: res.data.Data.Passcode },
                 })
             } else if (res.data?.Status && action === actionX.cancel) {
               Swal.fire('Appointment successfully cancelled.')

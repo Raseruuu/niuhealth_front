@@ -36,6 +36,7 @@ import Ratings from './pages/provider/Ratings'
 import ManageServices from './pages/provider/services/ManageServices'
 import Services from './pages/provider/services/Services'
 import VisitRequest from './pages/provider/VisitRequest'
+import VisitRequestProfile from './pages/provider/VisitRequestProfile'
 import Visits from './pages/provider/Visits'
 import TellUsWhy from './pages/virtualvisit/TellUsWhy'
 import WaitingRoom from './pages/virtualvisit/WaitingRoom'
@@ -172,7 +173,12 @@ const router = createBrowserRouter(
             },
             {
               path: 'visit-requests',
-              element: <VisitRequest />,
+              
+              element: <Outlet />,
+              children: [
+                { index: true, element: <VisitRequest /> },
+                { path: 'profile', element: <VisitRequestProfile /> }
+              ],
             },
             {
               path: 'clinics',

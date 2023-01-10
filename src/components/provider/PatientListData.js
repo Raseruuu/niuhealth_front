@@ -12,7 +12,7 @@ function PatientListData({ limit, search }) {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-  const debouncedSearch = useDebounce(search, 500)
+  // const debouncedSearch = useDebounce(search, 500)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -73,7 +73,7 @@ function PatientListData({ limit, search }) {
       isMounted = false
       controller.abort()
     }
-  }, [debouncedSearch])
+  }, [search])
 
   return list.map((item, index) => (
     <tr key={item?.recno || index}>
@@ -116,9 +116,9 @@ function PatientListData({ limit, search }) {
         </span>
       </td>
       <td>
-          <div>
-            <StatusTextInsurance status={item.with_insurance} />
-          </div>
+          {/* <div> */}
+            <StatusTextInsurance status={item.with_insurance||0} />
+          {/* </div> */}
       </td>
       {/* //Action!!
        <td>
