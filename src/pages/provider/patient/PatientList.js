@@ -96,15 +96,30 @@ function PatientList() {
           </form>
         </div>
       </TableTitle>
-
-      <TableCard
-        headers={['Patient', 'Email', 'Phone No.', 'Status', 'Insurance']}
-      >
-        <PatientListData limit={10} list={list} />
-        {isLoading ? 'Loading please wait...' : null}
-        {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
-        {list.length <= 0 && searchText.length > 0 ? '0 record found.' : null}
-      </TableCard>
+      <div className="row">
+        <div className="col-lg-12">
+          <div className="card">
+            <div className="card-body">
+              <TableCard
+                headers={[
+                  'Patient',
+                  'Email',
+                  'Phone No.',
+                  'Status',
+                  'Insurance',
+                ]}
+              >
+                <PatientListData limit={10} list={list} />
+                {isLoading ? 'Loading please wait...' : null}
+                {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
+                {list.length <= 0 && searchText.length > 0
+                  ? '0 record found.'
+                  : null}
+              </TableCard>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

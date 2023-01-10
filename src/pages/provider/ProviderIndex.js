@@ -4,53 +4,85 @@ import TodaySchedule from '../../components/provider/calendar/TodaySchedule'
 import WelcomeCard from '../../components/provider/WelcomeCard'
 import PatientListData from '../../components/provider/PatientListData'
 import PatientQueue from '../../components/provider/PatientQueue'
+import { useEffect, useState } from 'react'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import TableCard from '../../components/table/Tables'
 
 function ProviderIndex() {
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const [patientList, setPatientList] = useState([])
+
+  useEffect(() => {
+    async function getList() {
+      const controller = new AbortController()
+
+      await axiosPrivate
+        .post(
+          'getPatients',
+          { Email: auth?.email || sessionStorage.getItem('email') },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          const { Data = [] } = res.data
+          setPatientList(Data)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+
+    getList()
+  }, [])
+
   return (
-    <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'></div>
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="page-title-box"></div>
         </div>
       </div>
 
-      <div className='row'>
-        <div className='col-12'>
+      <div className="row">
+        <div className="col-12">
           <WelcomeCard />
         </div>
       </div>
-      <div className='card'>
-      <div className='card-body'>
-              <h4 className='header-title mt-0 mb-3'>Virtual Visit Queue</h4>
-              <div className='table-responsive'>
-                <table className='table'>
-                  <thead className='thead-light'>
-                    <tr>
-                      <th>Patient</th>
-                      <th>Email</th>
-                      <th>Contact Info</th>
-                      <th>Symptoms</th>
-                      <th>Address</th>
-                      
-                      <th>Action</th>
-                    </tr>
-                  </thead>
+      <div className="card">
+        <div className="card-body">
+          <h4 className="header-title mt-0 mb-3">Virtual Visit Queue</h4>
+          <div className="table-responsive">
+            <table className="table">
+              <thead className="thead-light">
+                <tr>
+                  <th>Patient</th>
+                  <th>Email</th>
+                  <th>Contact Info</th>
+                  <th>Symptoms</th>
+                  <th>Address</th>
 
-                  <tbody>
-                    <PatientQueue limit={6} />
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <PatientQueue limit={6} />
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       {/* <!-- Calendar --> */}
-      <div className='row'>
+      <div className="row">
         {/* <div className='col-lg-4'>
           <TodaySchedule />
         </div> */}
-        <div className='col-lg-12'>
-          <div className='card'>
-            <div className='card-body'>
+        <div className="col-lg-12">
+          <div className="card">
+            <div className="card-body">
               <Calendar />
               <div style={{ clear: 'both' }}></div>
             </div>
@@ -58,35 +90,26 @@ function ProviderIndex() {
         </div>
       </div>
 
-      <div className='row'>
-        <div className='col-lg-4'>
+      <div className="row">
+        <div className="col-lg-4">
           <Activity />
         </div>
-        <div className='col-lg-8'>
-          <div className='card'>
-            <div className='card-body'>
-              <h4 className='header-title mt-0 mb-3'>Patient Details</h4>
-              <div className='table-responsive'>
-                <table className='table'>
-                  <thead className='thead-light'>
-                    <tr>
-                      <th>Patient</th>
-                      <th>Email</th>
-                      <th>Phone No</th>
-
-                      <th>Status</th>
-                      
-                      {/* <th>Action</th> */}
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <PatientListData limit={6} />
-                  </tbody>
-                </table>
-              </div>
+        <div className="col-lg-8">
+          <div className="card">
+            <div className="card-body">
+              <h4 className="header-title mt-0 mb-3">Patient Details</h4>
+              <TableCard
+                headers={[
+                  'Patient',
+                  'Email',
+                  'Phone No.',
+                  'Status',
+                  'Insurance',
+                ]}
+              >
+                <PatientListData list={patientList} />
+              </TableCard>
             </div>
-            
           </div>
         </div>
       </div>
