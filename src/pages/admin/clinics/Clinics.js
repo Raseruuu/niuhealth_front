@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect,useState } from 'react'
 import { Link } from 'react-router-dom'
 import SAMPLECLINICS from '../../../mocks/adminlists'
 import Footer from '../../../components/Footer'
 import TableCard, { TableTitle } from "../../../components/table/Tables"
-
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
+import CardItem from '../../../components/cards/Card'
 function ClinicItem({name,company,contactnum,email,address,providers,dateCreated}){
     
     return(
@@ -23,6 +26,13 @@ function ClinicItem({name,company,contactnum,email,address,providers,dateCreated
     
 
 export default function AdminClinics() {
+    
+    const axiosPrivate = useAxiosPrivate()
+    
+    const { auth, setAuth } = useAuth()
+    const [list, setList] = useState([])
+    
+    const [errMsg, setErrMsg] = useState(null)
     const [clinicsList,setClinicsList] = useState([
         {
             name :"Clinic One",
@@ -53,21 +63,56 @@ export default function AdminClinics() {
         }
         ]
     )
+    useEffect(() => {
+        let isMounted = true
+        const controller = new AbortController()
+    
+        async function getList() {
+          await axiosPrivate
+            .post(
+              'getClinics',
+              { Email: auth.email},
+              {
+                signal: controller.signal,
+              }
+            )
+            .then((res) => {
+              console.log(res)
+              const { Status, Data: data = [], Message } = res.data
+    
+              if (Status) {
+                setList(data)
+              } else {
+                throw new Error(Message)
+              }
+            })
+            .catch((err) => {
+              console.error(err)
+              setErrMsg(err.message)
+            })
+        }
+    
+        isMounted && getList()
+    
+        return () => {
+          isMounted = false
+          controller.abort()
+        }
+      }, [])
+    
   return (
 <div className="page-wrapper">
             {/* <!-- Page Content--> */}
             <div className="page-content">
-
                 <div className="container-fluid">
                     <TableTitle title="Clinics">
-                        
                         <div className="float-right">
-                                    <Link to='create'>
-                                        <button type="button" className="btn btn-success waves-effect waves-light">
-                                            New Clinic
-                                        </button>
-                                    </Link>
-                                </div>
+                            <Link to='create'>
+                                <button type="button" className="btn btn-success waves-effect waves-light">
+                                    New Clinic
+                                </button>
+                            </Link>
+                        </div>
                     </TableTitle>
                     {/* <div className="row" style={{marginBottom: "30px"}}>
                         <div className="col-lg-3">
@@ -87,18 +132,38 @@ export default function AdminClinics() {
                             </select>
                         </div>	
                     </div> */}
-                    <TableCard headers={["Clinic Name","Clinics","Contact Info","Email","Address","Providers","Date Created"]}>
-                        
-                        {clinicsList.map((clinic)=>
+                    <div className='row'>
+                        {/* {clinicsList.map((clinic)=>
                         <ClinicItem {...clinic} />
                         )}
-                    </TableCard >
+                        
+                         */}
+                        {list.map((item) => (
+                            <CardItem>
+                                <img
+                                    className='card-img-top'
+                                    style={{ 
+                                        // width: 'unset', 
+                                        width:'200px', height:'150px',objectFit: 'cover'}}
+                                    // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
+                                    src={AWS_BUCKET_SERVICES+item.picture_file}
+                                    // style={{}}
+                                    alt=''
+                                    />
+                                    <div class='card-body'>
+                                        <h5 class='card-title'>{item.clinic_name}</h5>
+                                        <p class='card-text mb-0'>{item.address}</p>
+                                        <p className='text-muted mb-0'>
+                                            {item.specialty }
+                                        </p>
+                                        <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
+                                    </div>
+                            </CardItem>
+                            ))}
+                    </div >
                 </div>
                 {/* <!-- container --> */}
 
-                <footer className="footer text-center text-sm-left">
-                    &copy; 2022 NU Health 
-                </footer>
                 <Footer/>
             </div>
         </div>

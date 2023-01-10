@@ -4,6 +4,8 @@ import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import { TableTitle } from '../../../components/table/Tables'
+
+import CardItem from '../../../components/cards/Card'
 function Clinics() {
   const navigate = useNavigate()
   const { auth, setAuth } = useAuth()
@@ -64,12 +66,13 @@ function Clinics() {
               </ol>
             </div>
       </TableTitle>
+      
       <div className='row'>
         {list.map((item) => (
           <div className='col-sm-12 col-md-6'>
             <div class='card flex-sm-col flex-md-row overflow-hidden'>
               <img
-                class='card-img-top'
+                className='card-img-top'
                 style={{ 
                   // width: 'unset', 
                   width:'200px', height:'150px',objectFit: 'cover'}}

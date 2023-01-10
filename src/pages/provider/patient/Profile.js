@@ -1,5 +1,6 @@
 import { Link, useLocation, useParams } from "react-router-dom"
 import { AWS_BUCKET } from "../../../constants"
+import TableCard, { TableTitle } from "../../../components/table/Tables"
 
 // TODO: check other UI if it has same layout
 function PatientProfile() {
@@ -18,24 +19,20 @@ function PatientProfile() {
   // )
   return (
     <div className='container-fluid'>
-      <div className='row'>
-        <div className='col-sm-12'>
-          <div className='page-title-box'>
-            <div className='float-right'>
-              <ol className='breadcrumb'>
-                <li className='breadcrumb-item'>
-                  <Link to='/provider'>NU Health</Link>
-                </li>
-                <li className='breadcrumb-item'>
-                  <Link to='/provider/patient'>Patient</Link>
-                </li>
-                <li className='breadcrumb-item active'>{selectedUser.name}</li>
-              </ol>
-            </div>
-            <h4 className='page-title'>Patient Profile</h4>
-          </div>
+      <TableTitle title="Patient Profile">
+        <div className='float-right'>
+          <ol className='breadcrumb'>
+            <li className='breadcrumb-item'>
+              <Link to='/provider'>NU Health</Link>
+            </li>
+            <li className='breadcrumb-item'>
+              <Link to='/provider/patient'>Patient</Link>
+            </li>
+            <li className='breadcrumb-item active'>{selectedUser.first_name} {selectedUser.middle_name} {selectedUser.last_name}</li>
+          </ol>
         </div>
-      </div>
+      </TableTitle>
+      
       <div className='row'>
         <div className='col-12'>
           <div className='card'>
@@ -50,15 +47,15 @@ function PatientProfile() {
                           alt=''
                           className='rounded-circle'
                         />
-                        <span className='fro-profile_main-pic-change'>
+                        {/* <span className='fro-profile_main-pic-change'>
                           <i className='fas fa-camera'></i>
-                        </span>
+                        </span> */}
                       </div>
                       <div className='met-profile_user-detail'>
-                        <h5 className='met-user-name'>{selectedUser.name}</h5>
-                        <p className='mb-0 met-user-name-post'>
+                        <h5 className='met-user-name'>{selectedUser.first_name} {selectedUser.middle_name} {selectedUser.last_name}</h5>
+                        {/* <p className='mb-0 met-user-name-post'>
                           {selectedUser.status}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   </div>
@@ -66,7 +63,7 @@ function PatientProfile() {
                     <ul className='list-unstyled personal-detail'>
                       <li className=''>
                         <i className='dripicons-phone mr-2 text-info font-18'></i>{" "}
-                        <b> phone </b> : {selectedUser.phone}
+                        <b> phone </b> : {selectedUser.contact_info}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-mail text-info font-18 mt-2 mr-2'></i>{" "}

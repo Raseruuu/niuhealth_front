@@ -62,16 +62,17 @@ function RatingsStars({score,size=24,children}){
     0:"mdi-star light-gray"
   }
   return(
-    <ul className='list-inline mb-0 product-review'>
-      {score}{' '}
+    <ul className='list-inline mb-0 product-review'><>
+    {(size<24)?(
+      <>{score}</>):<></>}
       {scorestars.map((star)=>(
             <li className='list-inline-item mr-0'>
-              
               <i className={`mdi `+ starswitch[star] +` font-`+size}></i>
             </li>
         )
       )}
       {children}
+      </>
     </ul>
   )
 }
@@ -268,7 +269,7 @@ function Ratings({}) {
           
           if (Status) {
             setList(res.data.Data)
-            console.log("uguu",res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
+            console.log(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setRatingList(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setPatientRatingList(res.data.Data.Ratings)
           } else {

@@ -13,7 +13,7 @@ export const StatusIcon = ({ icontype }) => {
     )
   }
 
-export function StatusTextInsurance({ status }){
+export function StatusTextInsurance({ status=0 }){
     const statusColor = {
       0: 'badge-soft-danger',
       1: "badge-soft-success"
@@ -23,7 +23,7 @@ export function StatusTextInsurance({ status }){
       1: "Insured"
     }
     return (
-      <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
+      <span className={`virtualvisitbadge badge badge-md  ${statusColor[status]}`}>
         {text[status]}
       </span>
     )

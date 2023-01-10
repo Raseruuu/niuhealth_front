@@ -20,11 +20,13 @@ function Room() {
 
   var signatureEndpoint =
     'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
+
   var sdkKey = ZOOM_SDK
   var meetingNumber = state?.MeetingID
   var userName = name
   var userEmail = email
-  var passWord = '123456'
+  var passWord = state.Password
+  console.log(state.Password)
   var registrantToken = ''
   var leaveUrl = isProvider
     ? `${APP_URL}/provider/visits`
