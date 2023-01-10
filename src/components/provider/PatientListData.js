@@ -1,101 +1,27 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { AWS_BUCKET } from '../../constants'
-import useAuth from '../../hooks/useAuth'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import { memo } from 'react'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
-import useDebounce from '../../hooks/useDebounce'
+import { Link } from 'react-router-dom'
 import { StatusTextInsurance } from '../../components/status/Status'
+import { AWS_BUCKET } from '../../constants'
 
-function PatientListData({ limit, search }) {
-  const { auth } = useAuth()
-  const axiosPrivate = useAxiosPrivate()
-  const [errMsg, setErrMsg] = useState(null)
-  const [list, setList] = useState([])
-  // const debouncedSearch = useDebounce(search, 500)
-  /*
-  For Status:
-  Confined -  badge-soft-purple
-  Deceased - badge-soft-danger
-  Follow-up Checkup - badge-soft-success
-  */
-
-  useEffect(() => {
-    let isMounted = true
-    const controller = new AbortController()
-
-    async function getList() {
-      if (search) {
-        await axiosPrivate
-          .post(
-            'searchPatient',
-            { Email: auth.email, Search: search },
-            {
-              signal: controller.signal,
-            }
-          )
-          .then((res) => {
-            const data = res.data || []
-            const searchData = data.Data
-            if (searchData) {
-              isMounted && setList(searchData.slice(0, limit))
-            } else {
-              isMounted && setList([])
-            }
-          })
-          .catch((err) => {
-            console.error(err)
-            setErrMsg(err.message)
-          })
-      } else {
-        await axiosPrivate
-          .post(
-            'getPatients',
-            { Email: auth.email },
-            {
-              signal: controller.signal,
-            }
-          )
-          .then((res) => {
-            const data = res.data || []
-            isMounted && setList(data.Data.slice(0, limit))
-          })
-          .catch((err) => {
-            console.error(err)
-            setErrMsg(err.message)
-          })
-      }
-    }
-
-    getList()
-
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
-  }, [search])
-
+function PatientListData({ list = [] }) {
   return list.map((item, index) => (
-    <tr key={item?.recno || index}>
+    <tr key={item?.patient_id || index}>
       <td>
         <Link
-          to='profile'
+          to="profile"
           state={{
             selectedUser: item,
           }}
         >
-          {' '}
-          <div className='row'>
-            <img
-              src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
-              alt=''
-              className='thumb-sm rounded-circle mr-2'
-            />
-            <div className='col'>
-              <div>
-                {item.first_name} {item.middle_name} {item.last_name}
-              </div>
-              
+          <div className="row">
+            <div className="col">
+              <img
+                src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                alt=""
+                className="thumb-sm rounded-circle mr-2"
+              />
+              {item.first_name} {item.middle_name} {item.last_name}
             </div>
           </div>
         </Link>
@@ -111,14 +37,12 @@ function PatientListData({ limit, search }) {
         </a>
       </td>
       <td>
-        <span className='badge badge-md badge-soft-purple'>
+        <span className="badge badge-md badge-soft-purple">
           {item.status ? 'Active' : 'Inactive'}
         </span>
       </td>
       <td>
-          {/* <div> */}
-            <StatusTextInsurance status={item.with_insurance||0} />
-          {/* </div> */}
+        <StatusTextInsurance status={item.with_insurance || 0} />
       </td>
       {/* //Action!!
        <td>
