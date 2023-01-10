@@ -112,7 +112,7 @@ function PatientListData({ limit, search }) {
       </td>
       <td>
         <span className='badge badge-md badge-soft-purple'>
-          {item.status ? 'Active' : 'Inactive'}
+          {item.status ? 'Subscribed' : 'Not Subscribed'}
         </span>
       </td>
       <td>
