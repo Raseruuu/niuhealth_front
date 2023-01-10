@@ -20,7 +20,8 @@ function Room() {
 
   var signatureEndpoint =
     'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
-  var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
+  // var sdkKey = 'PR20n3Vl85rbugudeRTyHST5pY7RkNimkdpW'
+  var sdkKey = 'sGzNuhZMBWZCcNBjAxvCFWAwjGlnT9XBrc2v'
   var meetingNumber = state?.MeetingID
   var userName = name
   var userEmail = email

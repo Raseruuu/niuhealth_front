@@ -3,6 +3,7 @@ import Calendar from '../../components/provider/calendar/Calendar'
 import TodaySchedule from '../../components/provider/calendar/TodaySchedule'
 import WelcomeCard from '../../components/provider/WelcomeCard'
 import PatientListData from '../../components/provider/PatientListData'
+import PatientQueue from '../../components/provider/PatientQueue'
 
 function ProviderIndex() {
   return (
@@ -18,7 +19,30 @@ function ProviderIndex() {
           <WelcomeCard />
         </div>
       </div>
+      <div className='card'>
+      <div className='card-body'>
+              <h4 className='header-title mt-0 mb-3'>Virtual Visit Queue</h4>
+              <div className='table-responsive'>
+                <table className='table'>
+                  <thead className='thead-light'>
+                    <tr>
+                      <th>Patient</th>
+                      <th>Email</th>
+                      <th>Contact Info</th>
+                      <th>Symptoms</th>
+                      <th>Address</th>
+                      
+                      <th>Action</th>
+                    </tr>
+                  </thead>
 
+                  <tbody>
+                    <PatientQueue limit={6} />
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      </div>
       {/* <!-- Calendar --> */}
       <div className='row'>
         {/* <div className='col-lg-4'>
@@ -51,6 +75,7 @@ function ProviderIndex() {
                       <th>Phone No</th>
 
                       <th>Status</th>
+                      
                       {/* <th>Action</th> */}
                     </tr>
                   </thead>
@@ -61,6 +86,7 @@ function ProviderIndex() {
                 </table>
               </div>
             </div>
+            
           </div>
         </div>
       </div>

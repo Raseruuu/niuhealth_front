@@ -95,9 +95,7 @@ function PatientListData({ limit, search }) {
               <div>
                 {item.first_name} {item.middle_name} {item.last_name}
               </div>
-              <div>
-                <StatusTextInsurance status={item.with_insurance || 0} />
-              </div>
+              
             </div>
           </div>
         </Link>
@@ -116,6 +114,11 @@ function PatientListData({ limit, search }) {
         <span className='badge badge-md badge-soft-purple'>
           {item.status ? 'Active' : 'Inactive'}
         </span>
+      </td>
+      <td>
+          <div>
+            <StatusTextInsurance status={item.with_insurance} />
+          </div>
       </td>
       {/* //Action!!
        <td>
