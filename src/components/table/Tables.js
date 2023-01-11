@@ -6,6 +6,15 @@ export function ContainerFluid({children}){
     </div>
     )
   }
+  export function PageWrapper({children}){
+    return(
+        <div className='page-wrapper'>
+        <div className='page-content'>
+        {children}
+        </div>
+        </div>
+    )
+  }
 export function TableTitle({title,children}){
     return(
     

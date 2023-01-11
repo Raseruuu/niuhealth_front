@@ -10,7 +10,8 @@ function PatientSideNav({ openSideNav }) {
 
   const name = sessionStorage.getItem('name') || 'Welcome'
   const email = sessionStorage.getItem('email')
-
+  console.log("sessionStorage ",sessionStorage)
+  const sessionuser={name:name,email:email}
   function handleLogout(e) {
     e.preventDefault()
     logout()
@@ -113,10 +114,14 @@ function PatientSideNav({ openSideNav }) {
           </NavLink>
         </li>
         <li>
-          <NavLink to='profile'>
+          <NavLink to='profile' state={{
+            selectedUser: sessionuser,
+          }}>
             <i className='dripicons-user'></i>
             <span>Profile</span>
             <span className='menu-arrow'></span>
+            <Link
+        ></Link>
           </NavLink>
         </li>
       </ul>

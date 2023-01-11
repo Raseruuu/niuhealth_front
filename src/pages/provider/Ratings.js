@@ -304,10 +304,10 @@ function Ratings({}) {
                   <i className='far fa-smile font-24 text-warning'></i>
                 </span> */}
                 <i className={`mdi mdi-star text-warning font-24`}></i>
-                <h3 className='d-inline-block mr-2 mb-1 mb-lg-0'>{list.TotalRatings}</h3>
+                {/* <h3 className='d-inline-block mr-2 mb-1 mb-lg-0'>{list.TotalRatings}</h3>
                 <h4 className='header-title d-inline-block mr-2 mb-1 mb-lg-0'>
                   Total Stars
-                </h4>
+                </h4> */}
                 
               </div>
             </div>
