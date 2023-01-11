@@ -25,7 +25,7 @@ export function TableTitle({title,children}){
         {children}
         <h4 className='page-title'>{title}</h4>
         
-
+        </div>
       </div>
     </div>
   )
