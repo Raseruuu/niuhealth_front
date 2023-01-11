@@ -109,8 +109,10 @@ export default function WaitingRoom() {
                     <div className="steps_info_text">
                       {/* <i className='mdi mdi-av-timer green_h'></i> Estimated
                       waiting time is <span className='green_h'>5:20</span> mins */}
+                      There are <strong>{queueCount}</strong> people in the
+                      queue
                     </div>
-                    There are <strong>{queueCount}</strong> people in the queue
+
                     <div
                       className="wizard_btn"
                       style={{ margin: '50px 0', paddingBottom: '50px' }}
