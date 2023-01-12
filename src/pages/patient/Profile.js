@@ -22,6 +22,7 @@ function ProfileEdit(formData) {
   const [address2,setAddress2]=useState("")
   const [countries,setCountries]=useState(["China","America","Japan"])
   const [cities,setCities]=useState(["Tokyo","Kyoto","Ikebukuro"])
+  const [address2active,setAddress2Active]=useState(false)
   function dateFormat(date) {
     return moment(date).format('YYYY-MM-DD')
   }
@@ -56,6 +57,7 @@ function ProfileEdit(formData) {
   
           if (Status) {
             setCities(res.data.Data)
+            setAddress2Active(true)
           } else {
             throw new Error(Message)
           }
@@ -68,18 +70,6 @@ function ProfileEdit(formData) {
   function handleSubmit(list){
     const formData = new FormData();
     
-    console.log("list",list)
-    setList({...list,address:address1+", "+address2})
-    formData.append("Email",auth.email)
-    formData.append("FirstName",list.first_name)
-    formData.append("MiddleName",list.middle_name)
-    formData.append("LastName",list.last_name)
-    formData.append("ContactInfo",list.contact_info)
-    formData.append("Address",list.address)
-    formData.append("DateOfBirth",list.date_of_birth)
-    formData.append("LocalTimeZone",timeZone)
-    if (typeof list.picture!="string"){
-      formData.append("Image",list.picture)}
     // Image:list.image
     async function updatePatient() {
       await axiosPrivate
@@ -94,8 +84,9 @@ function ProfileEdit(formData) {
           const { Status, Data: data = [], Message } = res.data
   
           if (Status) {
-            setList(data)
+            // setList(data)
             Swal.fire("Successfully Updated Your Profile.")
+            toggleDisableForm(!disableForm)
           } else {
             throw new Error(Message)
           }
@@ -104,7 +95,29 @@ function ProfileEdit(formData) {
           console.error(err)
         })
     }
-    updatePatient()
+    if ((list===oldList&&
+        oldList.local_time_zone===timeZone)&&
+        oldList.country_id===address1&&
+        oldList.city_id===address2
+        ){}
+    else{
+      console.log("list",list)
+      // setList({...list,address:address1+", "+address2})
+      formData.append("Email",auth.email)
+      formData.append("FirstName",list.first_name)
+      formData.append("MiddleName",list.middle_name)
+      formData.append("LastName",list.last_name)
+      formData.append("ContactInfo",list.contact_info)
+      formData.append("Address",list.address)
+      formData.append("CountryID",address1)
+      formData.append("CityID",address2)
+      
+      formData.append("DateOfBirth",list.date_of_birth)
+      formData.append("LocalTimeZone",timeZone)
+      if (typeof list.picture==="object"){
+        formData.append("Image",list.picture)}
+      updatePatient()
+    }
   
     // isMounted && getList()
   
@@ -132,8 +145,22 @@ function ProfileEdit(formData) {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
+
             setList(res.data.Data[0])
+            getCities(res.data.Data[0].country_id)
+            setOldList(res.data.Data[0])
             setTimeZone(res.data.Data[0].local_time_zone)
+            setAddress1(res.data.Data[0].country_id)
+            setAddress2(res.data.Data[0].city_id)
+        // 'Email', 
+        // 'FirstName', 
+        // 'LastName', 
+        // 'ContactInfo', 
+        // 'Address', 
+        // 'DateOfBirth', 
+        // 'LocalTimeZone',
+        // 'CountryID',
+        // 'CityID'
           } else {
             throw new Error(Message)
           }
@@ -169,10 +196,7 @@ function ProfileEdit(formData) {
       }
     isMounted && getList()
     getCountries()
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
+   
   }, [])
   return (
     
@@ -188,7 +212,6 @@ function ProfileEdit(formData) {
                       <div className='met-profile-main '>
                         <div className='met-profile-main-pic' style={{position: 'relative'}}>
                         <div className="uploadPicContainer">
-                          <InputImage list={list} setList={setList} />
                           <div className='row'> 
                             <img
                               onClick={()=>{
@@ -198,29 +221,26 @@ function ProfileEdit(formData) {
                                   // html:`<img src={{AWS_BUCKET}+`/assets/images/users/user-4.jpg"}></img>`
                                 })
                               }}
-                              src={AWS_BUCKET_SERVICES+list.picture}
+                              src={(AWS_BUCKET_SERVICES+list.picture)||(AWS_BUCKET_SERVICES+oldList.picture)}
                               alt=''
                               className='rounded-circle profile-pic'
                             />
                           {(!disableForm)?(
-                          <span className='fro-profile_main-pic-change' 
-                            onClick={()=>{
-                              Swal.fire({
-                                title:"Profile Picture",
-                                imageUrl:{AWS_BUCKET_SERVICES}+list.picture
-                              })
-                            }}
-                            style={{position: 'absolute', bottom: 0, left: '103px'}}>
-                            {/* <i className='fas fa-camera'></i> */}
-                            
-                            <i className='fas fa-camera upload-button'>
-                              
-                              </i>
-                              
-                            
-                            
-                            </span>
-                            
+                            <div>
+                              <span className='fro-profile_main-pic-change' 
+                                onClick={()=>{
+                                  Swal.fire({
+                                    title:"Profile Picture",
+                                    imageUrl:{AWS_BUCKET_SERVICES}+list.picture
+                                  })
+                                }}
+                                style={{position: 'absolute', bottom: 0, left: '103px'}}>
+                                {/* <i className='fas fa-camera'></i> */}
+                                <i className='fas fa-camera upload-button'>
+                                </i>  
+                              </span>
+                              <InputImage list={list} setList={setList} style={{marginTop:"50px"}}/>
+                            </div>
                          ):<></>}
                          </div>
                           </div>
@@ -323,8 +343,29 @@ function ProfileEdit(formData) {
                             </div>
                           </div>
 
-
+                        
                           <div className='form-group row'>
+                            <label
+                              for='example-text-input'
+                              className='col-sm-2 col-form-label text-right'
+                            >
+                              Address
+                            </label>
+                            <div className='col-sm-10'>
+                              <input
+                                disabled = {disableForm}
+                                className='form-control'
+                                type='text'
+                                id='example-text-input'
+                                value={list.address}
+                                onChange={(e)=>setList({...list,address:e.target.value})}
+                              />
+                            </div>
+                          </div>
+                            
+                          
+                          <div className='form-group row' style={{marginLeft:"80px"}}>
+                           
                             <label className='col-sm-2 col-form-label text-right'>
                               Country
                             </label>
@@ -333,6 +374,9 @@ function ProfileEdit(formData) {
                               <select className='form-control' 
                                 disabled = {disableForm} 
                                 value={address1} 
+                                onClick={
+                                  (e)=>{
+                                    getCities(e.target.value)}}
                                 onChange={
                                   (e)=>{
                                     setAddress1(e.target.value); getCities(e.target.value)}} >
@@ -342,26 +386,27 @@ function ProfileEdit(formData) {
                                 )}
                               </select>
                             </div>
-                            {(address2)?(<>
+                            
                             <label className='col-sm-2 col-form-label text-right'>
                               City
                             </label>
                             <div className='col-sm-4'>
                               <select 
                                 className='form-control' 
-                                disabled = {disableForm} 
+                                disabled = {(disableForm&&address2active)} 
                                 value={address2} 
                                 onChange={
                                   (e)=>{
                                     setAddress2(e.target.value)}}>
-                             
+                             <option>Select</option>
                               {cities.map((city)=>
                                 (<option value={city.city_id} >{city.description}</option>)
                                 )}
-                                <option>Select</option>
+                                
                               </select>
-                            </div></>):<></>}
+                            </div>
                           </div>
+
                           <div className='form-group row'>
                             <label
                               for='example-date-input'
@@ -398,7 +443,11 @@ function ProfileEdit(formData) {
                           <button
                             onClick={()=>
                               {toggleDisableForm(!disableForm);
-                              setList(oldList)}}
+                              setList(oldList)
+                              setAddress1(oldList.country_id)
+                              setAddress2(oldList.city_id)
+                              setTimeZone(oldList.local_time_zone)
+                            }}
                             type='button'
                             className='float-right btn btn-danger btn-round waves-effect waves-light'>
                             Cancel
