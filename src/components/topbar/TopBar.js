@@ -62,7 +62,33 @@ export function TopBar({ menuClick, homeAddress }) {
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
   const { auth } = useAuth()
+  // useEffect(()=>{
+  //   async function getList() {
+  //     await axiosPrivate
+  //       .post(
+  //         'getPatientDetails',
+  //         { Email: auth.email
+  //         },
+  //         {
+  //           signal: controller.signal,
+  //         }
+  //       )
+  //       .then((res) => {
+  //         console.log(res)
+  //         const { Status, Data: data = [], Message } = res.data
 
+  //         if (Status) {
+  //           console.log()
+  //           setUser(res.data.Data[0])
+  //         } else {
+  //           throw new Error(Message)
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.error(err)
+  //       })
+  //     }
+  // },[])
   return (
     <div className='dev-top-bar'>
       <div>

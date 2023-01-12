@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import PatientListData from '../../../components/provider/PatientListData'
-import TableCard, { TableTitle } from '../../../components/table/Tables'
+import TableCard, { ContainerFluid, TableTitle } from '../../../components/table/Tables'
 // import   from "../../../components/table/Tables"
 import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
@@ -70,7 +70,7 @@ function PatientList() {
   }, [])
 
   return (
-    <div className="container-fluid">
+    <ContainerFluid>
       <TableTitle title="Patients">
         <div className="float-right">
           <form onSubmit={handleSubmit}>
@@ -96,31 +96,23 @@ function PatientList() {
           </form>
         </div>
       </TableTitle>
-      <div className="row">
-        <div className="col-lg-12">
-          <div className="card">
-            <div className="card-body">
-              <TableCard
-                headers={[
-                  'Patient',
-                  'Email',
-                  'Phone No.',
-                  'Status',
-                  'Insurance',
-                ]}
-              >
-                <PatientListData limit={10} list={list} />
-                {isLoading ? 'Loading please wait...' : null}
-                {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
-                {list.length <= 0 && searchText.length > 0
-                  ? '0 record found.'
-                  : null}
-              </TableCard>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      <TableCard
+        headers={[
+          'Patient',
+          'Email',
+          'Phone No.',
+          'Status',
+          'Insurance',
+        ]}
+      >
+        <PatientListData limit={10} list={list} />
+        {isLoading ? 'Loading please wait...' : null}
+        {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
+        {list.length <= 0 && searchText.length > 0
+          ? '0 record found.'
+          : null}
+      </TableCard>
+    </ContainerFluid>
   )
 }
 export default PatientList

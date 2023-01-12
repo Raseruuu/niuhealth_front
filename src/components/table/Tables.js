@@ -40,17 +40,25 @@ export function TableTextLink({ text, to, children }) {
 }
 export default function TableCard({ headers, children }) {
   return (
-    <div className="table-responsive">
-      <table className="table">
-        <thead className="thead-light">
-          <tr>
-            {headers.map((header) => (
-              <th>{header}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>{children}</tbody>
-      </table>
+    <div className="row">
+      <div className="col-lg-12">
+        <div className="card">
+          <div className="card-body">
+            <div className="table-responsive">
+              <table className="table">
+                <thead className="thead-light">
+                  <tr>
+                    {headers.map((header) => (
+                      <th>{header}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>{children}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

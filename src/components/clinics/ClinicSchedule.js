@@ -5,6 +5,8 @@ import { TableTitle } from '../../components/table/Tables'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
+import moment, { min } from 'moment'
+import moment_tz from 'moment-timezone'
 function CurrencySelect({ setLocalCurrency}){
   // console.log(props)
   return(
@@ -24,7 +26,33 @@ function CurrencySelect({ setLocalCurrency}){
   </div>
   )
 }
+function HMFormat(minutes) {
+  let offsetoperator=""
+  if (minutes>0){offsetoperator="+"}
+  else if(minutes<0){offsetoperator="-";minutes=minutes*-1}
+  var hours = Math.floor(minutes / 60);
+  // Getting the minutes.
+  var min = minutes % 60;
+  let dig=""
+  if (min<10){ dig="0"}
+  return offsetoperator+hours+":"+dig+min
+}
+
+function hourFormat(minutes) {
+  return HMFormat(minutes*-1)
+} 
 export function TimeZoneSelect({setTimeZone, disabled=false}){
+  
+  var timezonecountries = moment.tz.countries()
+  console.log(timezonecountries)
+  var timezoneoptions=[]
+  for(var i in timezonecountries){
+    timezoneoptions.push(moment.tz.zonesForCountry(timezonecountries[i], true))
+  }
+  // timezoneoptions
+  let sorted_timezoneoptions=timezoneoptions.sort(function(a, b) { 
+    return a.offset - b.offset;
+  });
   
   return(
     <div class="row">
@@ -37,8 +65,11 @@ export function TimeZoneSelect({setTimeZone, disabled=false}){
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
         onChange={(e)=>{console.log(e.target.value);setTimeZone(e.target.value)}}
         >
-        
-        <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
+        <option>Select a Timezone</option>
+        {sorted_timezoneoptions.map((timezone)=>(
+          <option value={[timezone[0].name]}>UTC {hourFormat(timezone[0].offset)} {timezone[0].name}</option>
+        ))}
+        {/* <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
         <option value={"+01:00"}>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna </option>
         <option value={"+01:00"}>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris </option>
         <option value={"+01:00"}>(UTC+01:00) West Central Africa </option>
@@ -134,7 +165,7 @@ export function TimeZoneSelect({setTimeZone, disabled=false}){
         <option value={"-01:00"}>(UTC-01:00) Azores </option>
         <option value={"+00:00"}>(UTC+00:00) Casablanca </option>
         <option value={"+00:00"}>(UTC+00:00) Monrovia, Reykjavik </option>
-        <option value={"+00:00"}>(UTC+00:00) Dublin, Edinburgh, Lisbon, London </option>
+        <option value={"+00:00"}>(UTC+00:00) Dublin, Edinburgh, Lisbon, London </option> */}
         
       </select>
   </div>
