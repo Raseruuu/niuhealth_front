@@ -60,7 +60,7 @@ export function TimeZoneSelect({setTimeZone, disabled=false}){
         disabled={disabled}
         required={true} 
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
-        onChange={(e)=>{console.log(e.target.value);setTimeZone(e.target.value)}}
+        onChange={(e)=>{setTimeZone(e.target.value)}}
         >
         <option>Select a Timezone</option>
         {sorted_timezoneoptions.map((timezone)=>(
