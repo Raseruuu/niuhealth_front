@@ -118,7 +118,7 @@ function AWSCallback() {
       {errMsg ? <LottieFailed /> : <GreenLock />}
       {errMsg ? (
         <div className='text-center'>
-          <h4>{errMsg}</h4>
+          {/* <h4>{errMsg}</h4> */}
           <p>
             <button
               onClick={() => {

@@ -94,6 +94,7 @@ function ProviderIndex() {
         <div className="col-lg-4">
           <Activity />
         </div>
+
         <div className="col-lg-8">
           <div className="card">
             <div className="card-body">
@@ -109,6 +110,7 @@ function ProviderIndex() {
               >
                 <PatientListData list={patientList} />
               </TableCard>
+
             </div>
           </div>
         </div>

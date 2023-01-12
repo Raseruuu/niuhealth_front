@@ -24,14 +24,18 @@ function CurrencySelect({ setLocalCurrency}){
   </div>
   )
 }
-function TimeZoneSelect({setTimeZone}){
+export function TimeZoneSelect({setTimeZone, disabled=false}){
+  
   return(
     <div class="row">
+        
       <select 
         className="col-sm form-control" 
+        disabled={disabled}
         required={true} 
+
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
-        onChange={(e)=>{setTimeZone(e.target.value)}}
+        onChange={(e)=>{console.log(e.target.value);setTimeZone(e.target.value)}}
         >
         
         <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>

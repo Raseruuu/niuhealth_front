@@ -37,8 +37,9 @@ function PatientListData({ list = [] }) {
         </a>
       </td>
       <td>
-        <span className="badge badge-md badge-soft-purple">
-          {item.status ? 'Active' : 'Inactive'}
+        <span className='badge badge-md badge-soft-purple'>
+          {item.status ? 'Subscribed' : 'Not Subscribed'}
+
         </span>
       </td>
       <td>

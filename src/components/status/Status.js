@@ -23,7 +23,7 @@ export function StatusTextInsurance({ status=0 }){
       1: "Insured"
     }
     return (
-      <span className={`virtualvisitbadge badge badge-md  ${statusColor[status]}`}>
+      <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
         {text[status]}
       </span>
     )

@@ -1,13 +1,30 @@
-export function ContainerFluid({ children }) {
-  return <div className="container-fluid">{children}</div>
-}
-export function TableTitle({ title, children }) {
-  return (
-    <div className="row">
-      <div className="col-sm-12">
-        <div className="page-title-box">
-          {children}
-          <h4 className="page-title">{title}</h4>
+
+export function ContainerFluid({children}){
+    return(
+    
+    <div className='container-fluid'>
+        {children}
+    </div>
+    )
+  }
+  export function PageWrapper({children}){
+    return(
+        <div className='page-wrapper'>
+        <div className='page-content'>
+        {children}
+        </div>
+        </div>
+    )
+  }
+export function TableTitle({title,children}){
+    return(
+    
+    <div className='row'>
+    <div className='col-sm-12'>
+      <div className='page-title-box'>
+        {children}
+        <h4 className='page-title'>{title}</h4>
+        
         </div>
       </div>
     </div>
