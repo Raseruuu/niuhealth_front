@@ -44,12 +44,10 @@ function hourFormat(minutes) {
 export function TimeZoneSelect({setTimeZone, disabled=false}){
   
   var timezonecountries = moment.tz.countries()
-  console.log(timezonecountries)
   var timezoneoptions=[]
   for(var i in timezonecountries){
     timezoneoptions.push(moment.tz.zonesForCountry(timezonecountries[i], true))
   }
-  // timezoneoptions
   let sorted_timezoneoptions=timezoneoptions.sort(function(a, b) { 
     return a.offset - b.offset;
   });
@@ -61,9 +59,8 @@ export function TimeZoneSelect({setTimeZone, disabled=false}){
         className="col-sm form-control" 
         disabled={disabled}
         required={true} 
-
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
-        onChange={(e)=>{console.log(e.target.value);setTimeZone(e.target.value)}}
+        onChange={(e)=>{setTimeZone(e.target.value)}}
         >
         <option>Select a Timezone</option>
         {sorted_timezoneoptions.map((timezone)=>(
