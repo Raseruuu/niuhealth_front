@@ -22,7 +22,7 @@ function ProfileEdit() {
   const [timeZone, setTimeZone] = useState('+00:00')
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
-  const [cityActive,setCityActive]=useState(false)
+  const [cityActive, setCityActive] = useState(false)
   const imgRef = useRef()
 
   function dateFormat(date) {
@@ -31,7 +31,7 @@ function ProfileEdit() {
 
   async function handleSubmit() {
     const formData = new FormData()
-    
+
     console.log('list', profile)
     // setProfile({ ...profile, address: address1 + ', ' + address2 })
     formData.append('Email', auth.email)
@@ -40,9 +40,9 @@ function ProfileEdit() {
     formData.append('LastName', profile.last_name)
     formData.append('ContactInfo', profile.contact_info)
     formData.append('Address', profile.address)
-    
-    formData.append("CountryID",profile.country_id)
-    formData.append("CityID",profile.country_city_id)
+
+    formData.append('CountryID', profile.country_id)
+    formData.append('CityID', profile.country_city_id)
     formData.append('DateOfBirth', profile.date_of_birth)
     formData.append('LocalTimeZone', profile.local_time_zone)
     if (typeof profile.picture != 'string') {
@@ -183,7 +183,6 @@ function ProfileEdit() {
   useEffect(() => {
     if (!profile?.country_id || profile?.country_id === 'undefined') return
 
-    
     getCities()
   }, [profile.country_id])
 
@@ -347,73 +346,76 @@ function ProfileEdit() {
                           />
                         </div>
                       </div>
-                      
-                      <div className='form-group row'>
-                            <label
-                              for='example-text-input'
-                              className='col-sm-2 col-form-label text-right'
-                            >
-                              Address
-                            </label>
-                            <div className='col-sm-10'>
-                              <input
-                                disabled = {disableForm}
-                                className='form-control'
-                                type='text'
-                                id='example-text-input'
-                                
-                                value={profile.address}
-                                onChange={handleInputChange.bind(this)}
-                                // value={list.address}
-                                // onChange={(e)=>setList({...list,address:e.target.value})}
-                              />
-                            </div>
-                          </div>
-                       
-                          
-                          <div className='form-group row' style={{marginLeft:"80px"}}>
-                           
-                            <label className='col-sm-2 col-form-label text-right'>
-                              Country
-                            </label>
-                            
-                            <div className='col-sm-4'>
-                              <select className='form-control' 
-                                disabled = {disableForm} 
-                                name="country_id"
-                                value={profile.country_id}
-                                onChange={
-                                  handleInputChange.bind(this)}
-                                // value={country_id} 
-                                onClick={
-                                  (e)=>{
-                                    getCities(e.target.value)}} >
-                                 <option value={''}>Select</option>
-                                {countries.map((country)=>
-                                (<option value={country.country_id} >{country.description}</option>)
-                                )}
-                              </select>
-                            </div>
-                            <label className='col-sm-2 col-form-label text-right'>
-                              City
-                            </label>
-                            <div className='col-sm-4'>
-                              <select 
-                                className='form-control' 
-                                disabled = {(disableForm)} 
-                                name="city_id"
-                                value={profile.country_city_id}
-                                onChange={handleInputChange.bind(this)}>
-                             <option>Select</option>
-                             {cities.map((city) => (
-                                <option value={city.city_id}>
-                                  {city.description}
-                                </option>
-                              ))}
-                                
-                              </select>
-                            </div>
-                          </div>
+
+                      <div className="form-group row">
+                        <label
+                          for="example-text-input"
+                          className="col-sm-2 col-form-label text-right"
+                        >
+                          Address
+                        </label>
+                        <div className="col-sm-10">
+                          <input
+                            disabled={disableForm}
+                            className="form-control"
+                            type="text"
+                            name="address"
+                            value={profile.address}
+                            onChange={handleInputChange.bind(this)}
+                            // value={list.address}
+                            // onChange={(e)=>setList({...list,address:e.target.value})}
+                          />
+                        </div>
+                      </div>
+
+                      <div
+                        className="form-group row"
+                        style={{ marginLeft: '80px' }}
+                      >
+                        <label className="col-sm-2 col-form-label text-right">
+                          Country
+                        </label>
+
+                        <div className="col-sm-4">
+                          <select
+                            className="form-control"
+                            disabled={disableForm}
+                            name="country_id"
+                            value={profile.country_id}
+                            onChange={handleInputChange.bind(this)}
+                            // value={country_id}
+                            onClick={(e) => {
+                              getCities(e.target.value)
+                            }}
+                          >
+                            <option value={''}>Select</option>
+                            {countries.map((country) => (
+                              <option value={country.country_id}>
+                                {country.description}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <label className="col-sm-2 col-form-label text-right">
+                          City
+                        </label>
+                        <div className="col-sm-4">
+                          <select
+                            className="form-control"
+                            disabled={disableForm}
+                            name="city_id"
+                            value={profile.country_city_id}
+                            onChange={handleInputChange.bind(this)}
+                          >
+                            <option>Select</option>
+                            {cities.map((city) => (
+                              <option value={city.city_id}>
+                                {city.description}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
                       <div className="form-group row">
                         <label
                           for="example-date-input"
