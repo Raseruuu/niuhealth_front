@@ -1,6 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom"
 import { AWS_BUCKET } from "../../../constants"
 import TableCard, { TableTitle } from "../../../components/table/Tables"
+import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../../constants'
 
 // TODO: check other UI if it has same layout
 function PatientProfile() {
@@ -43,7 +44,8 @@ function PatientProfile() {
                     <div className='met-profile-main'>
                       <div className='met-profile-main-pic'>
                         <img
-                          src={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
+                          // src={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
+                          src={AWS_BUCKET_SERVICES + selectedUser.picture||`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
                           alt=''
                           className='rounded-circle'
                         />

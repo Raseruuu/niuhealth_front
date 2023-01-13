@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { StatusTextInsurance } from '../../components/status/Status'
-import { AWS_BUCKET } from '../../constants'
 
+import { AWS_BUCKET_SERVICES, AWS_BUCKET, AWS_BUCKET_PROFILES } from '../../constants'
 function PatientListData({ list = [] }) {
   return list.map((item, index) => (
     <tr key={item?.patient_id || index}>
@@ -17,7 +17,8 @@ function PatientListData({ list = [] }) {
           <div className="row">
             <div className="col">
               <img
-                src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                // src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                src={AWS_BUCKET_SERVICES +"profiles/pictures/"+ item.picture}
                 alt=""
                 className="thumb-sm rounded-circle mr-2"
               />
