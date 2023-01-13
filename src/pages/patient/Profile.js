@@ -362,8 +362,6 @@ function ProfileEdit() {
                             name="address"
                             value={profile.address}
                             onChange={handleInputChange.bind(this)}
-                            // value={list.address}
-                            // onChange={(e)=>setList({...list,address:e.target.value})}
                           />
                         </div>
                       </div>
@@ -383,10 +381,6 @@ function ProfileEdit() {
                             name="country_id"
                             value={profile.country_id}
                             onChange={handleInputChange.bind(this)}
-                            // value={country_id}
-                            onClick={(e) => {
-                              getCities(e.target.value)
-                            }}
                           >
                             <option value={''}>Select</option>
                             {countries.map((country) => (
