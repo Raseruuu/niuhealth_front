@@ -13,13 +13,40 @@ export default function Booking() {
   const { state: selectedProvider } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
-  const [providerSched, setProviderSched] = useState([])
+  const [providerSched, setProviderSched] = useState({
+    hours_mon_start: '8',
+    hours_mon_end: '17',
+    hours_tue_start: '8',
+    hours_tue_end: '17',
+    hours_wed_start: '8',
+    hours_wed_end: '17',
+    hours_thu_start: '8',
+    hours_thu_end: '17',
+    hours_fri_start: '8',
+    hours_fri_end: '17',
+    hours_sat_start: '8',
+    hours_sat_end: '17',
+    hours_sun_start: '8',
+    hours_sun_end: '17',
+  })
+  const [weeklySched, setWeeklySched] = useState({
+    Mon: { start: 8, end: 17 },
+    Tue: { start: 8, end: 17 },
+    Wed: { start: 8, end: 17 },
+    Thu: { start: 8, end: 17 },
+    Fri: { start: 8, end: 17 },
+    Sat: { start: 8, end: 17 },
+    Sun: { start: 8, end: 17 },
+  })
+  const [calendarStartEndTime, setCalendarSartEndTime] = useState({
+    start: 8,
+    end: 17,
+  })
+
   const navigate = useNavigate()
   const [slots, setSlots] = useState([])
 
   const handleDateSelect = (selectInfo) => {
-    console.log(selectInfo)
-
     let title = prompt('Please enter a new title for your event')
     let calendarApi = selectInfo.view.calendar
 
@@ -77,7 +104,13 @@ export default function Booking() {
         .add(index === 0 ? 0 : 1, 'days')
         .format('YYYY-MM-DD')
 
-      for (let j = 4; j < 24; j++) {
+      const _today = startDate.format('ddd')
+
+      for (
+        let j = weeklySched[_today].start;
+        j <= weeklySched[_today].end;
+        j++
+      ) {
         let doAppend = appointments.some(
           (item) =>
             item.trans_date_time === currentD && item.trans_start === String(j)
@@ -102,9 +135,71 @@ export default function Booking() {
         }
       }
     }
-    // console.log(schedArray)
     setSlots(schedArray)
   }
+
+  useEffect(() => {
+    // TODO: CHECK IF providerSched is not SET e.g. not available on sat and sun
+    const startTimeArr = []
+    const endTimeArr = []
+    const _weeklySched = weeklySched
+
+    const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+
+    for (const [key, value] of Object.entries(providerSched)) {
+      for (const day of weekdays) {
+        if (key.includes(day.toLowerCase())) {
+          if (key.includes('start')) {
+            _weeklySched[day].start = Number(value)
+            startTimeArr.push(Number(value))
+          } else {
+            _weeklySched[day].end = Number(value)
+            endTimeArr.push(Number(value))
+          }
+        }
+      }
+    }
+
+    const startTime = startTimeArr.reduce((a, b) => Math.min(a, b), [8])
+    const endTime = endTimeArr.reduce((a, b) => Math.max(a, b), [17])
+
+    setCalendarSartEndTime({ start: startTime, end: endTime })
+    setWeeklySched(weeklySched)
+  }, [providerSched])
+
+  useEffect(() => {
+    let isMounted = true
+    const controller = new AbortController()
+
+    async function getDoctorSchedule() {
+      await axiosPrivate
+        .post(
+          'getDoctorSchedule',
+          { ProviderID: selectedProvider.provider_id },
+          { signal: controller.signal }
+        )
+        .then((res) => {
+          const { Status, Data: data = [], Message } = res.data
+
+          if (Status) {
+            isMounted && setProviderSched(data)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
+        })
+    }
+
+    getDoctorSchedule()
+
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  }, [])
 
   useEffect(() => {
     let isMounted = true
@@ -120,7 +215,6 @@ export default function Booking() {
           }
         )
         .then((res) => {
-          console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
@@ -144,81 +238,81 @@ export default function Booking() {
   }, [])
 
   return (
-    <div className='page-wrapper'>
-      <div className='page-content'>
-        <div className='container-fluid'>
-          <div className='row'>
-            <div className='col-sm-12'>
-              <div className='page-title-box'>
-                <div className='float-right'>
-                  <ol className='breadcrumb'>
-                    <li className='breadcrumb-item'>
-                      <Link to='..'>Marketplace</Link>
+    <div className="page-wrapper">
+      <div className="page-content">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="page-title-box">
+                <div className="float-right">
+                  <ol className="breadcrumb">
+                    <li className="breadcrumb-item">
+                      <Link to="..">Marketplace</Link>
                     </li>
-                    <li className='breadcrumb-item active'>
-                      {selectedProvider.provider_name}
+                    <li className="breadcrumb-item active">
+                      {selectedProvider?.provider_name}
                     </li>
                   </ol>
                 </div>
-                <h4 className='page-title'>Book Appointment</h4>
+                <h4 className="page-title">Book Appointment</h4>
               </div>
             </div>
           </div>
 
-          <div className='row'>
-            <div className='col-12'>
-              <div className='card'>
-                <div className='card-body doctor'>
-                  <div className='met-profile'>
-                    <div className='row'>
-                      <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
-                        <div className='met-profile-main'>
-                          <div className='met-profile-main-pic'>
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-body doctor">
+                  <div className="met-profile">
+                    <div className="row">
+                      <div className="col-lg-4 align-self-center mb-3 mb-lg-0">
+                        <div className="met-profile-main">
+                          <div className="met-profile-main-pic">
                             <img
                               src={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
-                              alt=''
-                              className='rounded-circle'
+                              alt=""
+                              className="rounded-circle"
                             />
                           </div>
-                          <div className='met-profile_user-detail'>
-                            <Link href='providerprofile'>
-                              <h5 className='met-user-name'>
-                                {selectedProvider.provider_name}
+                          <div className="met-profile_user-detail">
+                            <Link href="providerprofile">
+                              <h5 className="met-user-name">
+                                {selectedProvider?.provider_name}
                               </h5>
                             </Link>
-                            <p className='mb-0 met-user-name-post'>
+                            <p className="mb-0 met-user-name-post">
                               Neurologist / Sleep Doctor / Surgeon
                             </p>
                             <p>
-                              <label for='checkbox3'>
-                                <i className='mdi mdi-star text-warning'></i>
-                                <i className='mdi mdi-star text-warning'></i>
-                                <i className='mdi mdi-star text-warning'></i>
-                                <i className='mdi mdi-star text-warning'></i>
-                                <i className='mdi mdi-star text-warning'></i>
+                              <label htmlFor="checkbox3">
+                                <i className="mdi mdi-star text-warning"></i>
+                                <i className="mdi mdi-star text-warning"></i>
+                                <i className="mdi mdi-star text-warning"></i>
+                                <i className="mdi mdi-star text-warning"></i>
+                                <i className="mdi mdi-star text-warning"></i>
                               </label>
                             </p>
                             <h5>
                               <b>Service:</b>{' '}
-                              {selectedProvider.service_description}
+                              {selectedProvider?.service_description}
                             </h5>
                           </div>
                         </div>
                       </div>
-                      <div className='col-lg-4 ml-auto'>
-                        <ul className='list-unstyled personal-detail'>
-                          <li className=''>
-                            <i className='dripicons-message mr-2 text-info font-18 mt-2 mr-2'></i>{' '}
+                      <div className="col-lg-4 ml-auto">
+                        <ul className="list-unstyled personal-detail">
+                          <li className="">
+                            <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
                             <b> Clinic </b> :
                           </li>
-                          <li className='mt-2'>
-                            <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
+                          <li className="mt-2">
+                            <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
                             <b>Location</b> :
                           </li>
-                          <li className='mt-2'>
-                            <i className='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>
+                          <li className="mt-2">
+                            <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
                             <b>Service Rate </b> : $
-                            {selectedProvider.cost_price}
+                            {selectedProvider?.cost_price}
                           </li>
                         </ul>
                       </div>
@@ -229,12 +323,12 @@ export default function Booking() {
             </div>
           </div>
 
-          <div className='row'>
-            <div className='col-md-12'>
+          <div className="row">
+            <div className="col-md-12">
               <h4>Choose Appointment Schedule</h4>
-              <div className='card'>
-                <div className='card-body'>
-                  <div id='calendar'></div>
+              <div className="card">
+                <div className="card-body">
+                  <div id="calendar"></div>
                   <FullCalendar
                     plugins={[timeGridPlugin]}
                     headerToolbar={{
@@ -242,10 +336,12 @@ export default function Booking() {
                       center: 'title',
                       right: '',
                     }}
-                    initialView='timeGridWeek'
+                    initialView="timeGridWeek"
                     events={slots}
-                    // slotMinTime={'06:00:00'}
-                    // slotMaxTime={'22:00:00'}
+                    slotMinTime={`${calendarStartEndTime.start - 1}:00:00`}
+                    slotMaxTime={`${Number(
+                      calendarStartEndTime.end + 1
+                    )}:59:00`}
                     allDaySlot={false}
                     editable={false}
                     selectable={true}
@@ -263,7 +359,7 @@ export default function Booking() {
                       console.log('eventRemove', event)
                     }}
                   />
-                  <div className='clearfix'></div>
+                  <div className="clearfix"></div>
                 </div>
               </div>
             </div>
