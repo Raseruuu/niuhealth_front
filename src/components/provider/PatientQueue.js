@@ -62,7 +62,9 @@ function PatientQueue({ limit, search }) {
               Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'})
               console.log(res.data.Data)
               navigate('/virtualvisit/room', {
-                  state: { MeetingID: res.data.Data.PMI, Password: res.data.Data.Passcode },
+                  state: {
+                     MeetingID: res.data.Data.MeetingID,
+                     Password: res.data.Data.Passcode },
                 })
             } else if (res.data?.Status && action === actionX.cancel) {
               Swal.fire('Appointment successfully cancelled.')

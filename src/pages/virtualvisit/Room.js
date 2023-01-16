@@ -89,10 +89,11 @@ function Room() {
   console.log(state)
 
   useEffect(() => {
-    if (!state?.MeetingID) {
-      navigate(-1)
-      return
-    }
+    // if (!state?.MeetingID) {
+    //   // navigate(-1)
+    //   console.log("ugu")
+    //   return
+    // }
 
     ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
 
