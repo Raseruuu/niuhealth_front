@@ -7,8 +7,12 @@ import { AWS_BUCKET } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useDebounce from '../../../hooks/useDebounce'
-
+import Pagination from "react-js-pagination";
 // Provider list of patients
+function handlePageChange(pageNumber) {
+  console.log(`active page is ${pageNumber}`);
+  // this.setState({activePage: pageNumber});
+}
 function PatientList() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
@@ -23,7 +27,8 @@ function PatientList() {
   Deceased - badge-soft-danger
   Follow-up Checkup - badge-soft-success
   */
-
+ 
+ 
   async function getList() {
     const controller = new AbortController()
     setIsLoading(true)
@@ -74,6 +79,7 @@ function PatientList() {
       <TableTitle title="Patients">
         <div className="float-right">
           <form onSubmit={handleSubmit}>
+            
             <div
               className="input-group"
               style={{ paddingTop: '10px', paddingBottom: '10px' }}
@@ -111,7 +117,17 @@ function PatientList() {
         {list.length <= 0 && searchText.length > 0
           ? '0 record found.'
           : null}
+        <Pagination
+          activePage={1}
+          itemsCountPerPage={10}
+          totalItemsCount={450}
+          pageRangeDisplayed={5}
+          itemClass="page-item"
+          linkClass="page-link"
+          // onChange={this.handlePageChange.bind(this)}
+        />
       </TableCard>
+      
     </ContainerFluid>
   )
 }

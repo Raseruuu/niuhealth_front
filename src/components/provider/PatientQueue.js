@@ -49,9 +49,7 @@ function PatientQueue({ limit, search }) {
       if (isConfirmed) {
         await axiosPrivate
           .post(
-            action === actionX.meet
-              ? 'providerStartVirtualVisit'
-              : 'cancelVisit',
+            'providerStartVirtualVisit',
             {
               Email: auth.email,
               MeetingID: selectedItem.meeting_id,
