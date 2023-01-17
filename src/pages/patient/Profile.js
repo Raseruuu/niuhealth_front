@@ -209,6 +209,8 @@ function ProfileEdit() {
 
                         <img
                           alt=""
+
+                          style={{objectFit: 'cover', margin: 'unset' }}
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
@@ -219,7 +221,7 @@ function ProfileEdit() {
                           }}
                           src={AWS_BUCKET_SERVICES + profile.picture}
                           className="rounded-circle profile-pic"
-                          style={{ margin: 'unset' }}
+                          // style={{ margin: 'unset' }}
                         />
 
                         {disableForm ? null : (

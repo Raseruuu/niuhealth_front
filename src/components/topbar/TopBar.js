@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SideNavLogo from '../../components/SideNavLogo'
 import { AWS_BUCKET } from '../../constants'
@@ -57,38 +57,43 @@ function NotifLink({ type, subject, body, timeReceived }) {
 
 export function TopBar({ menuClick, homeAddress }) {
   const [notifs, setNotifs] = useState(SAMPLENOTIF)
+  const [profile, setProfile] = useState()
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
   const { auth } = useAuth()
-  // useEffect(()=>{
-  //   async function getList() {
-  //     await axiosPrivate
-  //       .post(
-  //         'getPatientDetails',
-  //         { Email: auth.email
-  //         },
-  //         {
-  //           signal: controller.signal,
-  //         }
-  //       )
-  //       .then((res) => {
-  //         console.log(res)
-  //         const { Status, Data: data = [], Message } = res.data
+  console.log("Auth ",auth)
+  useEffect(()=>{
+    async function getProfileDetails() {
+      await axiosPrivate
+        .post(
+          'getPatientDetails',
+          { Email: auth.email
+          },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data = [], Message } = res.data
 
-  //         if (Status) {
-  //           console.log()
-  //           setUser(res.data.Data[0])
-  //         } else {
-  //           throw new Error(Message)
-  //         }
-  //       })
-  //       .catch((err) => {
-  //         console.error(err)
-  //       })
-  //     }
-  // },[])
+          if (Status) {
+            console.log(res.data.Data[0])
+            setProfile(res.data.Data[0])
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+      }
+    if (auth.userType==="Patient"){
+      getProfileDetails()
+    }
+  },[])
   return (
     <div className='dev-top-bar'>
       <div>
