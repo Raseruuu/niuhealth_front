@@ -1,10 +1,11 @@
 import { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import SideNavLogo from '../../components/SideNavLogo'
-import { AWS_BUCKET } from '../../constants'
+import {AWS_BUCKET, AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import SAMPLENOTIF from '../../mocks/topbarNotifs'
 
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 const NotifIconSwitch = ({ icontype }) => {
   const iconsGen = {
     order: {
@@ -57,30 +58,30 @@ function NotifLink({ type, subject, body, timeReceived }) {
 
 export function TopBar({ menuClick, homeAddress }) {
   const [notifs, setNotifs] = useState(SAMPLENOTIF)
-  const [profile, setProfile] = useState()
+  
+  const axiosPrivate = useAxiosPrivate()
+  const { auth,setAuth } = useAuth()
+  const [profile, setProfile] = useState({})
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
-  const { auth } = useAuth()
   console.log("Auth ",auth)
+ 
   useEffect(()=>{
-    async function getProfileDetails() {
+    
+    const controller = new AbortController()
+    async function getProfile() {
       await axiosPrivate
         .post(
           'getPatientDetails',
-          { Email: auth.email
-          },
-          {
-            signal: controller.signal,
-          }
+          { Email: auth.email},{signal: controller.signal}
         )
         .then((res) => {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
-
           if (Status) {
-            console.log(res.data.Data[0])
+            console.log("patientdata",res.data.Data[0])
             setProfile(res.data.Data[0])
           } else {
             throw new Error(Message)
@@ -90,10 +91,17 @@ export function TopBar({ menuClick, homeAddress }) {
           console.error(err)
         })
       }
+     
+      
     if (auth.userType==="Patient"){
-      getProfileDetails()
+      
+      getProfile()
     }
-  },[])
+    // else if (auth.userType==="Provider"){
+    //   getProviderDetails()
+    // }
+    
+  },[auth])
   return (
     <div className='dev-top-bar'>
       <div>
@@ -110,38 +118,6 @@ export function TopBar({ menuClick, homeAddress }) {
       </div>
 
       <ul className='list-unstyled dev-top-bar-right mb-0'>
-        {/* <li className='dropdown notification-list'>
-          <Link
-            className='nav-link dropdown-toggle arrow-none waves-light waves-effect'
-            data-toggle='dropdown'
-            to='#'
-            onClick={(e) => e.preventDefault()}
-            role='button'
-            aria-haspopup='false'
-            aria-expanded='false'
-          >
-            <i className='ti-bell noti-icon'></i>
-            {ntfBadgeNum > 0 && (
-              <span className='badge badge-danger badge-pill noti-icon-badge'>
-                {ntfBadgeNum}
-              </span>
-            )}
-          </Link>
-          <div className='dropdown-menu dropdown-menu-right dropdown-lg pt-0'>
-            <h6 className='dropdown-item-text font-15 m-0 py-3 bg-primary text-white d-flex justify-content-between align-items-center'>
-              Notifications{' '}
-              <span className='badge badge-light badge-pill'>
-                {ntfBadgeNum}
-              </span>
-            </h6>
-            <div className='slimscroll notification-list'>
-              {notifs.map((notif) => {
-                return <NotifLink {...notif} />
-              })}
-            </div>
-          </div>
-        </li> */}
-
         <li className='dropdown'>
           <Link
             className='nav-link dropdown-toggle waves-effect waves-light nav-user'
@@ -150,12 +126,14 @@ export function TopBar({ menuClick, homeAddress }) {
             role='button'
             aria-haspopup='false'
             aria-expanded='false'
-          >
+          > 
+            {(profile)?
             <img
-              src={`${AWS_BUCKET}/assets/images/users/user-1.png`}
+              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
-            />
+              style={{objectFit:"cover"}}
+            />:null}
             <span className='ml-1 nav-user-name hidden-sm'>
               {auth.name}
               {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}

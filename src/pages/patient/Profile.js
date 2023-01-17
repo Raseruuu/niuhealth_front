@@ -48,11 +48,11 @@ function ProfileEdit() {
     formData.append('CityID', profile.country_city_id)
     formData.append('DateOfBirth', profile.date_of_birth)
     formData.append('LocalTimeZone', profile.local_time_zone)
-    console.log(typeof profile.picture)
+    // console.log(typeof profile.picture)
     
-    if (typeof profile.picture != 'string') {
-      formData.append('Image', profile.picturefile ,"profile pic") 
-      }
+    // if (typeof profile.picture != 'string') {
+    formData.append('Image', profile.picturefile ,"profile_pic") 
+      // }
     
     await axiosPrivate
       .post('updatePatientDetails', formData, {
@@ -271,7 +271,7 @@ function ProfileEdit() {
 
                         <img
                           alt=""
-                          style={{objectFit: 'cover', margin: 'unset' }}
+                          style={{objectFit: 'cover', margin: 'unset' ,width:100,height:100}}
 
                           onClick={() => {
                             Swal.fire({
@@ -448,8 +448,8 @@ function ProfileEdit() {
                             onChange={handleInputChange.bind(this)}
                           >
                             <option value={''}>Select</option>
-                            {countries.map((country) => (
-                              <option value={country.country_id}>
+                            {countries.map((country,index) => (
+                              <option value={country.country_id} key ={index}>
                                 {country.description}
                               </option>
                             ))}
@@ -467,8 +467,8 @@ function ProfileEdit() {
                             onChange={handleInputChange.bind(this)}
                           >
                             <option>Select</option>
-                            {cities.map((city) => (
-                              <option value={city.city_id}>
+                            {cities.map((city,index) => (
+                              <option value={city.city_id}  key ={index}>
                                 {city.description}
                               </option>
                             ))}
