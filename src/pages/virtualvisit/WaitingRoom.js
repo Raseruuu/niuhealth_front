@@ -12,7 +12,8 @@ export default function WaitingRoom() {
   const [isReady, setIsReady] = useState(false)
   const [delay, setDelay] = useState('10000')
   const [queueCount, setQueueCount] = useState('-')
-  const [meetingDetails, setMeetingDetails] = useState({})
+  const [meetingID, setMeetingID] = useState({})
+  const [password, setPassword] = useState({})
 
   const getQueueCount = async () => {
     const controller = new AbortController()
@@ -42,7 +43,8 @@ export default function WaitingRoom() {
         const { Data } = res.data
 
         console.log(Data)
-        setMeetingDetails(Data)
+        setMeetingID(Data.MeetingID)
+        setPassword(Data.Passcode)
 
         if (Data?.Status === 'started') {
           setDelay(null)
@@ -83,7 +85,7 @@ export default function WaitingRoom() {
                   height="500"
                   src="https://www.youtube.com/embed/oVAJZMVpL_g"
                   title="YouTube video player"
-                  frameBorder="0"
+                  // frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                 ></iframe>
@@ -109,10 +111,8 @@ export default function WaitingRoom() {
                     <div className="steps_info_text">
                       {/* <i className='mdi mdi-av-timer green_h'></i> Estimated
                       waiting time is <span className='green_h'>5:20</span> mins */}
-                      There are <strong>{queueCount}</strong> people in the
-                      queue
                     </div>
-
+                    There are <strong>{queueCount}</strong> people in the queue
                     <div
                       className="wizard_btn"
                       style={{ margin: '50px 0', paddingBottom: '50px' }}
@@ -121,7 +121,11 @@ export default function WaitingRoom() {
                         type="button"
                         className="btn btn-success btn-round waves-effect waves-light figmaBigButton float-left"
                         onClick={() =>
-                          navigate('../room', { state: meetingDetails })
+                          navigate('../room', {
+                             state: 
+                             {MeetingID:meetingID,
+                              Password:password}
+                            })
                         }
                         style={{
                           cursor: isReady ? 'pointer' : 'not-allowed',

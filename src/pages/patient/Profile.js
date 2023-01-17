@@ -23,6 +23,8 @@ function ProfileEdit() {
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
   const [cityActive, setCityActive] = useState(false)
+  const [imagepreview, setImagePreview] = useState(false)
+  imagepreview
   const imgRef = useRef()
 
   function dateFormat(date) {
@@ -32,7 +34,8 @@ function ProfileEdit() {
   async function handleSubmit() {
     const formData = new FormData()
 
-    console.log('list', profile)
+    console.log('profile', profile)
+    
     // setProfile({ ...profile, address: address1 + ', ' + address2 })
     formData.append('Email', auth.email)
     formData.append('FirstName', profile.first_name)
@@ -45,13 +48,22 @@ function ProfileEdit() {
     formData.append('CityID', profile.country_city_id)
     formData.append('DateOfBirth', profile.date_of_birth)
     formData.append('LocalTimeZone', profile.local_time_zone)
+    console.log(typeof profile.picture)
+    
     if (typeof profile.picture != 'string') {
-      formData.append('Image', profile.picture)
-    }
-
+      formData.append('Image', profile.picturefile ,"profile pic") 
+      }
+    
     await axiosPrivate
       .post('updatePatientDetails', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: function (ProgressEvent) {
+          console.log(
+            "uploadprogress: " +
+              (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+              "%"
+          );
+        },
       })
       .then((res) => {
         console.log(res)
@@ -60,6 +72,7 @@ function ProfileEdit() {
         if (Status) {
           setAuth((prev) => ({ ...prev, profile }))
           Swal.fire('Successfully Updated Your Profile.')
+          setDisableForm(!disableForm)
         } else {
           throw new Error(Message)
         }
@@ -76,6 +89,7 @@ function ProfileEdit() {
   }
 
   function handleCancelEdit() {
+    setImagePreview(false)
     setDisableForm((prev) => !prev)
     setProfile(auth)
   }
@@ -85,11 +99,53 @@ function ProfileEdit() {
     const value = e.target.value
     setProfile((prev) => ({ ...prev, [name]: value }))
   }
-
+  const changeHandler = (e) => {
+    const file = e.target.files[0];
+    if (!file.type.match(imageMimeType)) {
+      alert("Image mime type is not valid");
+      return;
+    }
+    setFile(file);
+  }
+  
+  const handleImageInputChange = (e) => {
+    const [file] = e.target.files;
+    console.log("FILE HERE: ",file);
+    // console.log(imgRef.current.value+"")
+    setProfile({
+      ...profile,
+      picturefile:file
+    })
+    // onChange={()=>
+    //   {console.log("image", imgRef.current.files[0])
+    //   setProfile({...profile,Image:imgRef.current.current.files[0]})
+    //   }}
+  };
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
+    let fileReader, isCancel = false;
+    if (profile.picturefile) {
+      fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          // setFileDataURL(result)
+          setProfile({
+            ...profile,
+            picture:result 
+          })
+          setImagePreview(true)
+        }
+      }
+      fileReader.readAsDataURL(profile.picturefile);
+    }
+    return () => {
+      isCancel = true;
+      if (fileReader && fileReader.readyState === 1) {
+        fileReader.abort();
+      }
+    }
     async function getCountries() {
       await axiosPrivate
         .post(
@@ -100,7 +156,7 @@ function ProfileEdit() {
           }
         )
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
@@ -121,7 +177,7 @@ function ProfileEdit() {
       isMounted = false
       controller.abort()
     }
-  }, [])
+  }, [profile])
   async function getCities() {
     const result = await axiosPrivate
       .post('getCities', {
@@ -151,7 +207,7 @@ function ProfileEdit() {
           'getPatientDetails',
           { Email: auth.email },
           {
-            signal: controller.signal,
+            signal: controller.signal
           }
         )
         .then((res) => {
@@ -187,7 +243,7 @@ function ProfileEdit() {
   }, [profile.country_id])
 
   return (
-    <form>
+    <form >
       <PageWrapper>
         <ContainerFluid>
           <TableTitle title="My Profile" />
@@ -204,22 +260,28 @@ function ProfileEdit() {
                           id="input-file-now-custom-1"
                           accept="image/*"
                           capture="user"
+                          name="Image"
                           ref={imgRef}
+                          onChange={handleImageInputChange}
+                          // onChange={()=>
+                          //   {console.log("image", imgRef.current.files[0])
+                          //   setProfile({...profile,Image:imgRef.current.current.files[0]})
+                          //   }}
                         />
 
                         <img
                           alt=""
-
                           style={{objectFit: 'cover', margin: 'unset' }}
+
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img width="250px" height="250px" src="${AWS_BUCKET_SERVICES}${profile.picture}"></img>`,
+                              html: `<img width="250px" height="250px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${profile.picture}"></img>`,
 
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
-                          src={AWS_BUCKET_SERVICES + profile.picture}
+                          src={!imagepreview?AWS_BUCKET_SERVICES + profile.picture: (profile.picture)}
                           className="rounded-circle profile-pic"
                           // style={{ margin: 'unset' }}
                         />
@@ -229,6 +291,7 @@ function ProfileEdit() {
                             type="button"
                             className="btn btn-success btn-round waves-effect waves-light mt-2"
                             onClick={triggerFileInput}
+                            
                           >
                             Upload
                           </button>
@@ -399,7 +462,7 @@ function ProfileEdit() {
                           <select
                             className="form-control"
                             disabled={disableForm}
-                            name="city_id"
+                            name="country_city_id"
                             value={profile.country_city_id}
                             onChange={handleInputChange.bind(this)}
                           >
