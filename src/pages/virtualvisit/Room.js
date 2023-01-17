@@ -13,6 +13,7 @@ function Room() {
   const navigate = useNavigate()
   const email = auth?.email || sessionStorage.getItem('email')
   const name = auth?.name || sessionStorage.getItem('name')
+  const [symptomVisible,setSymptomVisible] = useState(false)
   const isProvider =
     (auth?.userType || sessionStorage.getItem('userType')) === USERTYPE.provider
       ? true
@@ -48,7 +49,10 @@ function Room() {
         }
       )
       .then((response) => {
+        state.MeetingStatus=true
         startMeeting(response.data?.signature)
+        // setSymptomVisible(true)
+        
       })
       .catch((error) => {
         console.error(error)
@@ -62,7 +66,7 @@ function Room() {
       leaveUrl: leaveUrl,
       success: (success) => {
         console.log(success)
-
+        
         ZoomMtg.join({
           // signature: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZGtLZXkiOiJzR3pOdWhaTUJXWkNjTkJqQXh2Q0ZXQXdqR2xuVDlYQnJjMnYiLCJtbiI6IjQ3MzcwODA3MjEiLCJyb2xlIjoiMSIsImlhdCI6MTY3MzYwMTcwMSwiZXhwIjoxNjczNjA1MzAxLCJ0b2tlbkV4cCI6MTY3MzYwNTMwMX0.xC8b0A1BFiJWbco0j3HdCdlPe7DgXCnozKB2KxhVi5g',
           signature: signature,
@@ -74,6 +78,14 @@ function Room() {
           tk: registrantToken,
           success: (success) => {
             console.log(success)
+            state.MeetingStatus=true
+            console.log("meeting object ",ZoomMtg)
+            
+            
+            
+            // ZoomMtg.showMeetingHeader()
+            // if (state.Symptom){
+            //   alert(`The patient's symptom is listed as: \n"`+state.Symptom+`"`)}
           },
           error: (error) => {
             console.log(error)
@@ -103,6 +115,7 @@ function Room() {
     ZoomMtg.i18n.reload('en-US')
 
     getSignature()
+    
     // startMeeting()
 
     return () => {
@@ -111,13 +124,27 @@ function Room() {
   }, [])
 
   return (
+    
     <div className="d-flex vw-100 vh-100">
-      <div className="flex-fill">
+      <div className="flex-fill" style={{ display:'flex', justifyContent: 'center'}} >
+      
+      {(state.MeetingStatus)?
+      (<div style={{ position: 'absolute', zIndex: 99, marginTop:'60px' }}>
+        <div className='notification-message-wrap__layer column'>
+          <div className="notification-message-wrap__txt-container"> 
+            {`The patient's symptom is listed as: \n"`+(state.Symptom)+`" `}
+          </div>
+          <button className='zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} onclick={()=>state.MeetingStatus=false}>OK</button>
+          <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>state.MeetingStatus=false}></i>
+        </div>
+      </div>):null
+      }
         <div id="meetingSDKElement">
           {/* Zoom Meeting SDK Component View Rendered Here */}
         </div>
       </div>
     </div>
+    
   )
 }
 

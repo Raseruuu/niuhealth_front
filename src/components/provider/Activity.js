@@ -17,7 +17,7 @@ function Activity() {
       await axiosPrivate
         .post(
           'getActivities',
-          { Email: auth.email || 'jmmalunao@gmail.com' },
+          { Email: auth.email },
           {
             signal: controller.signal,
           }

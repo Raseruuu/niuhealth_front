@@ -8,7 +8,7 @@ import moment from "moment"
 import TableCard from "../../components/table/Tables"
 import CardItem from "../../components/cards/Card"
 function dateTimeFormat(date) {
-  return moment(date).format('MMM DD, YYYY, hh:mm A')
+  return moment(date).format('MMM DD, YYYY, hh:mm A z')
 }
 const timenow=moment()
 const CancelButton = () => {

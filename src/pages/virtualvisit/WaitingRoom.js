@@ -108,11 +108,13 @@ export default function WaitingRoom() {
                       {/* <i className='dripicons-user-group green_h'></i> There are{" "}
                       <span className='green_h'>12</span> patients ahead of you */}
                     </div>
-                    <div className="steps_info_text">
+                    <div className="steps_info_text" style={{fontSize:16}}>
                       {/* <i className='mdi mdi-av-timer green_h'></i> Estimated
                       waiting time is <span className='green_h'>5:20</span> mins */}
                     </div>
+                    <div className="steps_info_text">
                     There are <strong>{queueCount}</strong> people in the queue
+                    </div>
                     <div
                       className="wizard_btn"
                       style={{ margin: '50px 0', paddingBottom: '50px' }}

@@ -101,7 +101,7 @@ export default function TellUsWhy() {
                     placeholder="Add a reason for your virtual visit"
                     value={symptom}
                     onChange={handleTextarea}
-                    maxLength="500"
+                    maxLength="150"
                   ></textarea>
                   <div
                     className="d-flex  flex-row justify-content-start align-items-center overflow-auto"

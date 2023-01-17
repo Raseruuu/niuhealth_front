@@ -1,11 +1,13 @@
-import { useState,useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { useState,useEffect, } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import SideNavLogo from '../../components/SideNavLogo'
 import {AWS_BUCKET, AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import SAMPLENOTIF from '../../mocks/topbarNotifs'
 
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import useLogout from '../../hooks/useLogout'
+
 const NotifIconSwitch = ({ icontype }) => {
   const iconsGen = {
     order: {
@@ -57,8 +59,9 @@ function NotifLink({ type, subject, body, timeReceived }) {
 }
 
 export function TopBar({ menuClick, homeAddress }) {
+  const logout = useLogout()
   const [notifs, setNotifs] = useState(SAMPLENOTIF)
-  
+  const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
   const [profile, setProfile] = useState({})
@@ -66,8 +69,11 @@ export function TopBar({ menuClick, homeAddress }) {
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
-  console.log("Auth ",auth)
- 
+  function handleLogout(e) {
+    e.preventDefault()
+    logout()
+    navigate('/')
+  }
   useEffect(()=>{
     
     const controller = new AbortController()
@@ -81,8 +87,8 @@ export function TopBar({ menuClick, homeAddress }) {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
           if (Status) {
-            console.log("patientdata",res.data.Data[0])
             setProfile(res.data.Data[0])
+            
           } else {
             throw new Error(Message)
           }
@@ -132,27 +138,30 @@ export function TopBar({ menuClick, homeAddress }) {
               src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
-              style={{objectFit:"cover"}}
+              style={{objectFit:"cover", width:50, height:50}}
             />:null}
             <span className='ml-1 nav-user-name hidden-sm'>
-              {auth.name}
+              {auth.firstName||auth.name}
               {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
             </span>
           </Link>
-          {/* <div className='dropdown-menu dropdown-menu-right'>
+          <div className='dropdown-menu dropdown-menu-right'>
             <Link className='dropdown-item' to='profile'>
               <i className='ti-user text-muted mr-2'></i> Profile
             </Link>
 
-            <Link className='dropdown-item' to='#'>
+            {/* <Link className='dropdown-item' to='#'>
               <i className='ti-settings text-muted mr-2'></i> Settings
-            </Link>
+            </Link> */}
 
             <div className='dropdown-divider mb-0'></div>
-            <Link className='dropdown-item' to='#'>
+            <Link className='dropdown-item' to='/' onClick={handleLogout.bind(this)}>
               <i className='ti-power-off text-muted mr-2'></i> Logout
             </Link>
-          </div> */}
+            {/* <div className='logoutDiv'> */}
+              {/* <Link className='ti-power-off text-muted mr-2' onClick={handleLogout.bind(this)}>Logout</Link> */}
+            {/* </div> */}
+          </div>
         </li>
       </ul>
     </div>

@@ -18,6 +18,7 @@ function ProfileEdit() {
   const { auth, setAuth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [profile, setProfile] = useState(auth)
+  const [oldProfile, setOldProfile] = useState({})
   const [disableForm, setDisableForm] = useState(true)
   const [timeZone, setTimeZone] = useState('+00:00')
   const [countries, setCountries] = useState([])
@@ -34,7 +35,7 @@ function ProfileEdit() {
   async function handleSubmit() {
     const formData = new FormData()
 
-    console.log('profile', profile)
+    // console.log('profile', profile)
     
     // setProfile({ ...profile, address: address1 + ', ' + address2 })
     formData.append('Email', auth.email)
@@ -48,11 +49,11 @@ function ProfileEdit() {
     formData.append('CityID', profile.country_city_id)
     formData.append('DateOfBirth', profile.date_of_birth)
     formData.append('LocalTimeZone', profile.local_time_zone)
-    // console.log(typeof profile.picture)
+    console.log(typeof profile.picturefile)
+    if (typeof profile.picturefile === 'object'){
+    formData.append('Image', profile.picturefile ,"profile_pic")
+    }
     
-    // if (typeof profile.picture != 'string') {
-    formData.append('Image', profile.picturefile ,"profile_pic") 
-      // }
     
     await axiosPrivate
       .post('updatePatientDetails', formData, {
@@ -71,6 +72,7 @@ function ProfileEdit() {
 
         if (Status) {
           setAuth((prev) => ({ ...prev, profile }))
+          setOldProfile(profile)
           Swal.fire('Successfully Updated Your Profile.')
           setDisableForm(!disableForm)
         } else {
@@ -91,7 +93,8 @@ function ProfileEdit() {
   function handleCancelEdit() {
     setImagePreview(false)
     setDisableForm((prev) => !prev)
-    setProfile(auth)
+    setProfile(oldProfile)
+    
   }
 
   function handleInputChange(e) {
@@ -99,14 +102,7 @@ function ProfileEdit() {
     const value = e.target.value
     setProfile((prev) => ({ ...prev, [name]: value }))
   }
-  const changeHandler = (e) => {
-    const file = e.target.files[0];
-    if (!file.type.match(imageMimeType)) {
-      alert("Image mime type is not valid");
-      return;
-    }
-    setFile(file);
-  }
+  
   
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
@@ -146,37 +142,8 @@ function ProfileEdit() {
         fileReader.abort();
       }
     }
-    async function getCountries() {
-      await axiosPrivate
-        .post(
-          'getCountries',
-          { Email: auth.email },
-          {
-            signal: controller.signal,
-          }
-        )
-        .then((res) => {
-          // console.log(res)
-          const { Status, Data: data = [], Message } = res.data
+    
 
-          if (Status) {
-            isMounted && setCountries(data)
-            setCityActive(true)
-          } else {
-            throw new Error(Message)
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        })
-    }
-
-    getCountries()
-
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
   }, [profile])
   async function getCities() {
     const result = await axiosPrivate
@@ -217,6 +184,7 @@ function ProfileEdit() {
 
           if (Status && details?.email) {
             setProfile(details)
+            setOldProfile(details)
             setAuth((prev) => ({ ...prev, ...details }))
             setTimeZone(details?.local_time_zone)
           } else {
@@ -227,9 +195,33 @@ function ProfileEdit() {
           console.error(err)
         })
     }
+    async function getCountries() {
+      await axiosPrivate
+        .post(
+          'getCountries',
+          { Email: auth.email },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          // console.log(res)
+          const { Status, Data: data = [], Message } = res.data
 
+          if (Status) {
+            isMounted && setCountries(data)
+            setCityActive(true)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+    setAuth((prev) => ({ ...prev, profile,name:profile.first_name })) 
     getProfileDetails()
-
+    getCountries()
     return () => {
       isMounted = false
       controller.abort()
@@ -509,7 +501,7 @@ function ProfileEdit() {
                             type="date"
                             placeholder={'mm/dd/yyyy'}
                             name="date_of_birth"
-                            defaultValue={dateFormat(profile.date_of_birth)}
+                            // defaultValue={dateFormat(profile.date_of_birth)}
                             value={dateFormat(profile.date_of_birth)}
                             onChangeCapture={handleInputChange.bind(this)}
                           />
@@ -526,6 +518,7 @@ function ProfileEdit() {
                           onClick={handleSubmit}
                           type="button"
                           className="btn btn-success btn-round waves-effect waves-light"
+                          disabled={profile===oldProfile}
                         >
                           Submit
                         </button>

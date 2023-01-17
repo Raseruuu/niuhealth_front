@@ -20,7 +20,7 @@ function PatientQueue({ limit, search }) {
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
   const [refreshList, setRefreshList] = useState(false)
   const navigate = useNavigate()
-
+  const [meetingStatus, setMeetingStatus] = useState(false)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -29,9 +29,6 @@ function PatientQueue({ limit, search }) {
   */
   
   function handleActionClick(action, selectedItem) {
-    console.log(action)
-    console.log("uguu",selectedItem)
-
     Swal.fire({
       title:
         action === actionX.meet
@@ -62,7 +59,11 @@ function PatientQueue({ limit, search }) {
               navigate('/virtualvisit/room', {
                   state: {
                      MeetingID: res.data.Data.MeetingID,
-                     Password: res.data.Data.Passcode },
+                     Password: res.data.Data.Passcode,
+                     Symptom: selectedItem.symptoms,
+                     SelectedItem: selectedItem,
+                     MeetingStatus: meetingStatus
+                    },
                 })
             } else if (res.data?.Status && action === actionX.cancel) {
               Swal.fire('Appointment successfully cancelled.')
