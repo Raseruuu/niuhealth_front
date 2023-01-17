@@ -4,7 +4,7 @@ import { ZoomMtg } from '@zoomus/websdk'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { APP_URL, USERTYPE, ZOOM_SDK } from '../../constants'
+import { APP_URL,API_URL, USERTYPE, ZOOM_SDK } from '../../constants'
 
 function Room() {
   const { auth } = useAuth()
@@ -18,15 +18,16 @@ function Room() {
       ? true
       : false
 
-  var signatureEndpoint =
-    'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
-
+  var signatureEndpoint =API_URL+"/generateZoomSignature"
+    // 'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
+    // REACT_APP_API_URL
   var sdkKey = ZOOM_SDK
   var meetingNumber = state?.MeetingID
+  // var meetingNumber = '4737080721'
   var userName = name
   var userEmail = email
-  // var passWord = state.Password
-  var passWord = '3e8NFH'
+  var passWord = state.Password
+  // var passWord = '123456'
   var registrantToken = ''
   var leaveUrl = isProvider
     ? `${APP_URL}/provider/visits`
@@ -37,8 +38,8 @@ function Room() {
       .post(
         signatureEndpoint,
         {
-          meetingNumber,
-          role: isProvider ? 1 : 0,
+          MeetingID:meetingNumber,
+          Role: isProvider ? 1 : 0,
         },
         {
           headers: {
@@ -63,6 +64,7 @@ function Room() {
         console.log(success)
 
         ZoomMtg.join({
+          // signature: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZGtLZXkiOiJzR3pOdWhaTUJXWkNjTkJqQXh2Q0ZXQXdqR2xuVDlYQnJjMnYiLCJtbiI6IjQ3MzcwODA3MjEiLCJyb2xlIjoiMSIsImlhdCI6MTY3MzYwMTcwMSwiZXhwIjoxNjczNjA1MzAxLCJ0b2tlbkV4cCI6MTY3MzYwNTMwMX0.xC8b0A1BFiJWbco0j3HdCdlPe7DgXCnozKB2KxhVi5g',
           signature: signature,
           meetingNumber: meetingNumber,
           userName: userName,
@@ -87,10 +89,11 @@ function Room() {
   console.log(state)
 
   useEffect(() => {
-    if (!state?.MeetingID) {
-      navigate(-1)
-      return
-    }
+    // if (!state?.MeetingID) {
+    //   // navigate(-1)
+    //   console.log("ugu")
+    //   return
+    // }
 
     ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
 
@@ -100,6 +103,7 @@ function Room() {
     ZoomMtg.i18n.reload('en-US')
 
     getSignature()
+    // startMeeting()
 
     return () => {
       document.getElementById('zmmtg-root').style.display = 'none'

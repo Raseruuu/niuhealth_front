@@ -19,7 +19,7 @@ function Calendar({ allowCall }) {
 
   const handleDateSelect = (selectInfo) => {
     console.log(selectInfo)
-
+    
     // let title = prompt('Please enter a new title for your event')
     // let calendarApi = selectInfo.view.calendar
 
@@ -40,7 +40,7 @@ function Calendar({ allowCall }) {
     const selected = appointmentList.find(
       (item) => item.appointment_id === clickInfo.event.id
     )
-
+    
     const currentD = moment(selected.trans_date_time).format('YYYY-MM-DD')
 
     let timeStr = Number(selected.trans_start)
@@ -61,13 +61,45 @@ function Calendar({ allowCall }) {
     </div>`,
       confirmButtonText: allowCall ? 'Start Zoom meeting' : 'Ok',
       showCancelButton: allowCall,
-    }).then(({ isConfirmed }) => {
-      if (allowCall && isConfirmed) {
-        navigate('/virtualvisit/room', {
-          state: { MeetingID: 4737080721 },
-        })
+    }).then(async ({ isConfirmed }) => {
+      
+      if (isConfirmed) {
+        await axiosPrivate
+          .post('providerStartAppointment',
+            {
+              Email: auth.email,
+              MeetingID: selected.appointment_id,
+            }
+          )
+          .then((res) => {
+            if (res.data?.Status ) {
+              Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'})
+              console.log(res.data.Data)
+              if (allowCall && isConfirmed) {
+                navigate('/virtualvisit/room', {
+                    state: {
+                      MeetingID: res.data.Data.MeetingID,
+                      Password: res.data.Data.Passcode },
+                  })
+              }
+            } else {
+              Swal.fire(res.data?.Message)
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+            Swal.fire('Action failed.')
+          })
+        // setRefreshList((prev) => !prev)
       }
     })
+    // .then(({ isConfirmed }) => {
+    //   if (allowCall && isConfirmed) {
+    //     navigate('/virtualvisit/room', {
+    //       state: { MeetingID: 4737080721 },
+    //     })
+    //   }
+    // })
   }
 
   const handleEvents = (events) => {
