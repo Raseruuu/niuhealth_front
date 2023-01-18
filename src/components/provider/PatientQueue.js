@@ -16,7 +16,7 @@ function PatientQueue({ limit, search }) {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-  const debouncedSearch = useDebounce(search, 500)
+  const debouncedSearch = useDebounce(search, 100)
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
   const [refreshList, setRefreshList] = useState(false)
   const navigate = useNavigate()

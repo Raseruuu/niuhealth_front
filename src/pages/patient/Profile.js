@@ -25,7 +25,6 @@ function ProfileEdit() {
   const [cities, setCities] = useState([])
   const [cityActive, setCityActive] = useState(false)
   const [imagepreview, setImagePreview] = useState(false)
-  imagepreview
   const imgRef = useRef()
 
   function dateFormat(date) {
@@ -56,6 +55,7 @@ function ProfileEdit() {
     
     
     await axiosPrivate
+      
       .post('updatePatientDetails', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: function (ProgressEvent) {
@@ -255,10 +255,6 @@ function ProfileEdit() {
                           name="Image"
                           ref={imgRef}
                           onChange={handleImageInputChange}
-                          // onChange={()=>
-                          //   {console.log("image", imgRef.current.files[0])
-                          //   setProfile({...profile,Image:imgRef.current.current.files[0]})
-                          //   }}
                         />
 
                         <img
@@ -269,7 +265,6 @@ function ProfileEdit() {
                             Swal.fire({
                               title: 'Profile Picture',
                               html: `<img width="250px" height="250px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${profile.picture}"></img>`,
-
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
@@ -289,26 +284,6 @@ function ProfileEdit() {
                           </button>
                         )}
 
-                        {/* {!disableForm ? (
-                          <span
-                            className="fro-profile_main-pic-change"
-                            onClick={() => {
-                              Swal.fire({
-                                title: 'Profile Picture',
-                                imageUrl:
-                                  { AWS_BUCKET_SERVICES } + profile.picture,
-                              })
-                            }}
-                            style={{
-                              position: 'absolute',
-                              bottom: 0,
-                              left: '103px',
-                            }}
-                          >
-                            
-                            <i className="fas fa-camera upload-button"></i>
-                          </span>
-                        ) : null} */}
                       </div>
                     </div>
                     <div className="col">

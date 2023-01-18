@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams} from "react-router-dom";
 import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -70,7 +70,9 @@ function Clinics() {
       <div className='row'>
         {list.map((item) => (
           <div className='col-sm-12 col-md-6'>
+            <Link to={"profile/"+item.clinic_id}>
             <div class='card flex-sm-col flex-md-row overflow-hidden'>
+              
               <img
                 className='card-img-top'
                 style={{ 
@@ -82,14 +84,17 @@ function Clinics() {
                 alt=''
               />
               <div class='card-body'>
+                
                 <h5 class='card-title'>{item.clinic_name}</h5>
                 <p class='card-text mb-0'>{item.address}</p>
                 <p className='text-muted mb-0'>
-                  {item.specialty }
+                  {item.specialty}
                 </p>
                 <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
+                
               </div>
-            </div>
+              
+            </div></Link>
           </div>
         ))}
       </div>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { StatusTextInsurance } from '../../components/status/Status'
 import { AWS_BUCKET } from '../../constants'
 
-function PatientListData({ list = [] }) {
+function PatientListData({ limit, list = [] }) {
   return list.map((item, index) => (
     <tr key={item?.patient_id || index}>
       <td>

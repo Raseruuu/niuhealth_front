@@ -29,6 +29,8 @@ import VirtualVisit from './pages/patient/VirtualVisit'
 import Clinics from './pages/provider/clinics/Clinics'
 import ClinicSchedule from './components/clinics/ClinicSchedule'
 import ProviderDashboard from './pages/provider/layout/ProviderDashboard'
+
+// import ProviderProfile from './pages/provider/Profile'
 import Patients from './pages/provider/patient/PatientList'
 import PatientProfile from './pages/provider/patient/Profile'
 import ProviderIndex from './pages/provider/ProviderIndex'
@@ -40,7 +42,7 @@ import VisitRequestProfile from './pages/provider/VisitRequestProfile'
 import Visits from './pages/provider/Visits'
 import TellUsWhy from './pages/virtualvisit/TellUsWhy'
 import WaitingRoom from './pages/virtualvisit/WaitingRoom'
-
+import Login from './pages/Login'
 const Registration = lazy(() => import('./pages/patient/PatientRegistration'))
 const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
@@ -81,6 +83,11 @@ const router = createBrowserRouter(
             },
           ],
         },
+        {
+          path: 'login',
+          element: <Login/>
+        },
+        
         {
           path: 'admin',
           element: <AdminDashboard />,
@@ -124,6 +131,7 @@ const router = createBrowserRouter(
                 { path: 'booking', element: <Booking /> },
                 { path: 'checkout', element: <Checkout /> },
                 { path: 'success', element: <Success /> },
+                
               ],
             },
             { path: 'profile', element: <Profile /> },
@@ -154,6 +162,7 @@ const router = createBrowserRouter(
           errorElement: <ErrorPage />,
           children: [
             { index: true, element: <ProviderIndex /> },
+            { path: 'profile', element: <Profile /> },
             {
               path: 'patient',
               element: <Outlet />,
@@ -185,7 +194,8 @@ const router = createBrowserRouter(
               element: <Outlet />,
               children: [
                 { index: true, element: <Clinics /> },
-                { path: 'create', element: <ClinicSchedule /> },
+                { path: ':action', element: <ClinicSchedule /> },
+                { path: ':action/:clinicID', element: <ClinicSchedule /> },
               ],
             },
             {

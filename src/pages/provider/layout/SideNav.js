@@ -14,7 +14,7 @@ function SideNav({ openSideNav }) {
   return (
     <div
       className='left-sidenav'
-      style={{ display: openSideNav ? 'block' : 'none' }}
+      style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' }}
     >
       <ul className='metismenu left-sidenav-menu'>
         <li>

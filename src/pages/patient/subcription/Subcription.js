@@ -108,7 +108,7 @@ function Subscription() {
                         </tr>
                         <tr>
                           <td className='payment-title'>End Date</td>
-                          <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
+                          <td>{moment(subs.subsEnd).format('MM/DD/YYYY')}</td>
                         </tr>
                       </tbody>
                     </table>

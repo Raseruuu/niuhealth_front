@@ -1,21 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { TableTitle } from '../../components/table/Tables'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
+import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import moment, { min } from 'moment'
 import moment_tz from 'moment-timezone'
-function CurrencySelect({ setLocalCurrency}){
-  // console.log(props)
+function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
     <div class="row">
       <select 
+        value={value}
+        disabled={disabled}
         onChange={(e)=>setLocalCurrency(e.target.value)}
         className="col-sm form-control" 
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}>
-        
+        <option value={""}>Select </option>
         <option value={"USD"}>US Dollar (USD) </option>
         <option value={"EUR"}>European Euro (EUR)</option>
         <option value={"JPY"}>Japanese Yen (JPY)</option>
@@ -41,7 +43,7 @@ function HMFormat(minutes) {
 function hourFormat(minutes) {
   return HMFormat(minutes*-1)
 } 
-export function TimeZoneSelect({setTimeZone, disabled=false}){
+export function TimeZoneSelect({setTimeZone,value, disabled=false}){
   
   var timezonecountries = moment.tz.countries()
   var timezoneoptions=[]
@@ -59,8 +61,10 @@ export function TimeZoneSelect({setTimeZone, disabled=false}){
         className="col-sm form-control" 
         disabled={disabled}
         required={true} 
+        value={value}
         style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
         onChange={(e)=>{setTimeZone(e.target.value)}}
+        
         >
         <option>Select a Timezone</option>
         {sorted_timezoneoptions.map((timezone)=>(
@@ -182,41 +186,48 @@ function hourformat(hour){
     return hour+" AM"
   }
 }
-function ScheduleSelect({hours,setHours,weekday}){
+function ScheduleSelect({hours,setHours,weekday,disabled}){
   // hours = 0
   let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
   let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
   
   return(
     <div class="column" style={{paddingLeft:"20px"}}>
-      <div class = "row">Start Time 
+      <div class = "row">
+        <div>Start Time </div>
+        <div class = "col">
       <select
-         
+        disabled={disabled}
         onChange={(e)=>{
         setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
         console.log(hours)
       }
       }
-        className="col-sm form-control float-right" style={{marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
+        className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
         {morning_options.map((option)=>(
           <option value={option}>{hourformat(option)}</option>
           ))}
         <option value={null}>N/A</option>
       </select>
       </div>
-      <div class = "row">End Time
+      </div>
+      <div class = "row">
+        <div>End Time </div>
+        <div class = "col">
         <select  
+          disabled={disabled}
           onChange={(e)=>{
             setHours({...hours,['Hours'+weekday+'End']:e.target.value});
             console.log(hours)
           }
           }
-          className="col-sm form-control float-right" style={{marginLeft:"10px",marginRight:"10px",width:40}}>
+          className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>
           {night_options.map((option2)=>(
             <option value={option2}>{hourformat(option2)}</option>
             ))}
           <option value={null}>N/A</option>
         </select>
+        </div>
       </div>
   </div>
   )
@@ -224,13 +235,20 @@ function ScheduleSelect({hours,setHours,weekday}){
 
 export default function ClinicSchedule() {
   const { auth } = useAuth()
+  const { action, clinicID } = useParams()
+  // console.log(useParams())
   const axiosPrivate = useAxiosPrivate()
   const [isSuccess, setIsSuccess] = useState(false)
   const [feedbackMsg, setFeedbackMsg] = useState(null)
   const alertBtnRef = useRef()
   const [localCurrency,setLocalCurrency]=useState("USD")
   const [localTimezone,setTimeZone]=useState("+8")
+  const [clinicProfile,setClinicProfile]=useState({})
   const { state } = useLocation();
+  
+  const [imagepreview, setImagePreview] = useState(false)
+  const imgRef = useRef()
+
   const {
     register,
     handleSubmit,
@@ -255,6 +273,7 @@ export default function ClinicSchedule() {
     'HoursSunStart':8,
     'HoursSunEnd':20
     })
+  
   const onSubmit = async (data) => {
     const formData = new FormData();
     console.log(data)
@@ -315,16 +334,93 @@ export default function ClinicSchedule() {
         // setFeedbackMsg(err)
       })
   }
+  useEffect(() => {
+    const controller = new AbortController()
 
+    async function getClinicDetails() {
+      await axiosPrivate
+        .post(
+          'getClinicDetails',
+          { Email: auth.email, ClinicID:clinicID },
+          {
+            signal: controller.signal
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data, Message } = res.data
+          const details = data
+
+          if (Status) {
+            console.log('details',res.data.Data)
+            setClinicProfile(res.data.Data)
+            // setOldProfile(register)
+            // setAuth((prev) => ({ ...prev, ...details }))
+            // setTimeZone(details?.local_time_zone)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+    getClinicDetails()
+  }, [])
   useEffect(() => {
     
     reset()
   }, [isSuccess])
+  function triggerFileInput() {
+    if (imgRef.current) {
+      imgRef.current.click()
+    }
+  }
+  const handleImageInputChange = (e) => {
+    const [file] = e.target.files;
+    console.log("FILE HERE: ",file);
+    // console.log(imgRef.current.value+"")
+    setClinicProfile({
+      ...clinicProfile,
+      picturefile:file
+    })
+  };
+
+  useEffect(() => {
+    // let isMounted = true
+    // const controller = new AbortController()
+    let fileReader, isCancel = false;
+    if (clinicProfile.picturefile) {
+      fileReader = new FileReader();
+      fileReader.onload = (e) => {
+        const { result } = e.target;
+        if (result && !isCancel) {
+          // setFileDataURL(result)
+          // console.log('result',result)
+          setClinicProfile({
+            ...clinicProfile,
+            picture:result 
+          })
+          setImagePreview(true)
+        }
+      }
+      fileReader.readAsDataURL(clinicProfile.picturefile);
+    }
+    return () => {
+      isCancel = true;
+      if (fileReader && fileReader.readyState === 1) {
+        fileReader.abort();
+      }
+    }
+    
+
+  }, [clinicProfile])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='container-fluid'>
-        <TableTitle title="New Clinic Schedule">
+        <TableTitle title={"Clinic Profile"}>
+          
               <div className='float-right'>
                 {/* <ol className='breadcrumb'>
                   <li className='breadcrumb-item'>
@@ -344,262 +440,7 @@ export default function ClinicSchedule() {
           <div className='col-lg-12'>
             <div className='card'>
               <div className='card-body'>
-                
-                <div className='row'>
-                  <div className='col-lg-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='name'
-                          className='col-form-label text-right'
-                        >
-                          Clinic Name
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        <input
-                          className={`form-control ${
-                            errors.Name ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='name'
-                          required
-                          {...register('ClinicName', { 
-                            value: state?.selectedService?.ClinicName,
-                            required: true })}
-                        />
-                        {errors.name ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic name.
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                {/* </div>
-
-                <div className='row'> */}
-                  <div className='col-lg-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='example-text-input'
-                          className='col-form-label text-right'
-                        >
-                          Specialty
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        <input
-                          className={`form-control ${
-                            errors.Specialty ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='Specialty'
-                          required
-                          {...register('Specialty', { required: true })}
-                        />
-                        {errors.specialty ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic's service specialty.
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='row'>
-                  <div className='col-md-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='Contact_info'
-                          className='col-form-label text-right'
-                        >
-                          Contact Info
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        <input
-                          className={`form-control ${
-                            errors.contact_info ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='Contact_info'
-                          required
-                          {...register('Contact_info', { required: true })}
-                        />
-                        {errors.contact_info ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic's contact info.
-                          </div>
-                          
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                  <div className='col-md-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='example-text-input'
-                          className='col-form-label text-right'
-                        >
-                          Address
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        <input
-                          className={`form-control ${
-                            errors.Address ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='Address'
-                          required
-                          {...register('Address', { required: true })}
-                        />
-                        {errors.Address ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic address.
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='row'>
-                  <div className='col-md-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='local_currency'
-                          className='col-form-label text-right'
-                        >
-                          Local Currency
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        {/* <input
-                          className={`form-control ${
-                            errors.Services ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='local_currency'
-                          {...register('local_currency', { required: true })}
-                        /> */}{}
-                        <CurrencySelect register={register} localCurrency ={localCurrency} setLocalCurrency={setLocalCurrency}
-                        />
-                        {errors.local_currency ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic's local currency(s).
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                  <div className='col-lg-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='local_time_zone'
-                          className='col-form-label text-right'
-                        >
-                          Local Time Zone
-                        </label>
-                      </div>
-                      <div className='col-md-12'>
-                        {/* <input
-                          className={`form-control ${
-                            errors.Services ? 'is-invalid' : ''
-                          }`}
-                          type='text'
-                          id='local_time_zone'
-                          {...register('local_time_zone', { required: true })}
-                        /> */}
-                        <TimeZoneSelect setTimeZone={setTimeZone}/>
-                        {errors.local_time_zone ? (
-                          <div
-                            className='invalid-feedback'
-                            style={{ display: 'block' }}
-                          >
-                            Please enter clinic's local time zone(s).
-                          </div>
-                        ) : null}
-                      </div>
-                    </div>
-                  </div>
-                </div>         
-                <div className='row'>
-                  <div className='col-lg-6'>
-                    <div className='form-group row'>
-                      <div className='col-md-12'>
-                        <label
-                          htmlFor='Working_hours'
-                          className='col-form-label text-right'
-                        >
-                          Working Hours
-                        </label>
-                      </div>
-                      <div className='col-lg-12'  >
-                        <div className='col' >
-                          <div className='row'style={{width:'1200px'}}>
-                            <div className='col-sm'>
-                              Sunday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun"/>
-                            </div>
-                            <div className='col-sm'>
-                              Monday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon"/>
-                            </div>
-                            <div className='col-sm'>
-                              Tuesday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue"/>
-                            </div>
-                            <div className='col-sm'>
-                              Wednesday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed"/>
-                            </div>
-                          </div>
-                          <div className='row'>
-                            
-                            <div className='col-sm'>
-                              Thursday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu"/>
-                            </div>
-                            <div className='col-sm'>
-                              Friday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri"/>
-                            </div>
-                            <div className='col-sm'>
-                              Saturday
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat"/>
-                            </div>
-                            <div>
-                           
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" style={{ marginTop: "10px", marginBottom:"40px"}}>
+              {/* <div class="row" style={{ marginTop: "10px", marginBottom:"40px"}}>
                   <div class="col-lg-12">
                     <label htmlFor="exampleFormControlSelect2">
                       Upload Clinic Image
@@ -648,9 +489,336 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                ) : null}
+                ) : null} */}
+                <div className='col-lg-6'>
+                    <div className='form-group row'>
+                      
+                      <div className="d-flex flex-column justify-content-center align-items-center">
+                        <input
+                          hidden
+                          type="file"
+                          id="input-file-now-custom-1"
+                          accept="image/*"
+                          capture="user"
+                          name="Image"
+                          ref={imgRef}
+                          onChange={handleImageInputChange}
+                        />
+      
+                        <img
+                          alt=""
+                          style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
+
+                          onClick={() => {
+                            Swal.fire({
+                              title: 'Profile Picture',
+                              html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${clinicProfile.picture_file}"></img>`,
+                              // { AWS_BUCKET_SERVICES } + profile.picture,
+                            })
+                          }}
+                          src={!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}
+                          // className="ob"
+                          // style={{ margin: 'unset' }}
+                        />
+
+                        {/* {action==='edit' ? ( */}
+                          <button
+                            type="button"
+                            className="btn btn-success btn-round waves-effect waves-light mt-2"
+                            onClick={triggerFileInput}
+                            
+                          >
+                            Upload
+                          </button>
+                        {/* ): null } */}
+                        </div>
+                      </div>
+                    </div>
+                <div className='row'>
+                  <div className='col-lg-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='name'
+                          className='col-form-label text-right'
+                        >
+                          Clinic Name
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        <input
+                          className={`form-control ${
+                            errors.Name ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='name'
+                          required3
+                          disabled={action==='profile'}
+                          value={clinicProfile.clinic_name}
+                          onChange={(e)=>setClinicProfile({...clinicProfile,clinic_name:e.target.value})}
+                          {...register('ClinicName', { 
+                            required: true })}
+                        />
+                        {errors.name ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic name.
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                {/* </div>
+
+                <div className='row'> */}
+                  <div className='col-lg-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='example-text-input'
+                          className='col-form-label text-right'
+                        >
+                          Specialty
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        <input
+                          className={`form-control ${
+                            errors.Specialty ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Specialty'
+                          disabled={action==='profile'}
+                          value={clinicProfile.specialty}
+                          required
+                          {...register('Specialty', { required: true })}
+                        />
+                        {errors.specialty ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic's service specialty.
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 <div className='row'>
+                  <div className='col-md-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='Contact_info'
+                          className='col-form-label text-right'
+                        >
+                          Contact Info
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        <input
+                          className={`form-control ${
+                            errors.contact_info ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Contact_info'
+                          required
+                          disabled={action==='profile'}
+                          value={clinicProfile.contact_info}
+                          {...register('Contact_info', { required: true })}
+                        />
+                        {errors.contact_info ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic's contact info.
+                          </div>
+                          
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='col-md-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='example-text-input'
+                          className='col-form-label text-right'
+                        >
+                          Address
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        <input
+                          className={`form-control ${
+                            errors.Address ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address'
+                          required
+                          disabled={action==='profile'}
+                          value={clinicProfile.address}
+                          {...register('Address', { required: true })}
+                        />
+                        {errors.Address ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic address.
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className='row'>
+                  <div className='col-md-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='local_currency'
+                          className='col-form-label text-right'
+                        >
+                          Local Currency
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        {/* <input
+                          className={`form-control ${
+                            errors.Services ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='local_currency'
+                          {...register('local_currency', { required: true })}
+                        /> */}{}
+                        <CurrencySelect value={clinicProfile.specialty} disabled={action==='profile'} register={register} localCurrency ={localCurrency} setLocalCurrency={setLocalCurrency}
+                        />
+                        {errors.local_currency ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic's local currency(s).
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='col-lg-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='local_time_zone'
+                          className='col-form-label text-right'
+                        >
+                          Local Time Zone
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        {/* <input
+                          className={`form-control ${
+                            errors.Services ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='local_time_zone'
+                          {...register('local_time_zone', { required: true })}
+                        /> */}
+                        <TimeZoneSelect setTimeZone={setTimeZone} disabled={action==='profile'}/>
+                        {errors.local_time_zone ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic's local time zone(s).
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                </div>         
+                <div className='row'>
+                  <div >
+                    <div >
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='Working_hours'
+                          className='col-form-label text-right'
+                        >
+                          Working Hours
+                        </label>
+                      </div>
+                      <div className='col-lg-12'  >
+                        <div className='form-group col' >
+                          <div className='row'>
+                            <div className='col-md-4' >
+                              <h5>Sunday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun" disabled={action==='profile'}/>
+                            </div>
+                            <div className='col-md-4'>
+                              <h5>Monday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon" disabled={action==='profile'}/>
+                            </div>
+                            <div className='col-md-4'>
+                              <h5>Tuesday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue" disabled={action==='profile'}/>
+                            </div>
+                            <div className='col-md-4'>
+                              <h5>Wednesday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed" disabled={action==='profile'}/>
+                            </div>
+                          
+                            {/* <div className='row'> */}
+                            
+                            <div className='col-md-4'>
+                              <h5>Thursday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu" disabled={action==='profile'}/>
+                            </div>
+                            <div className='col-md-4'>
+                              <h5>Friday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri" disabled={action==='profile'}/>
+                            </div>
+                            <div className='col-md-4'>
+                              <h5>Saturday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat" disabled={action==='profile'}/>
+                            </div>
+                            <div>
+                            </div>
+                          </div>
+                          {/* </div> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+
+                <div className='row'>
+                 { (action==='profile')?(
+                  <div className='col-lg-12'>
+                    <button
+                      type='button'
+                      className='btn btn-gradient-success waves-effect waves-light'
+                      onClick={() =>navigate('/provider/clinics/edit/'+clinicID)}
+                      style={{marginRight:'10px'}}
+                    >
+                      Edit Clinic
+                    </button>
+                    <button
+                      type='button'
+                      className='btn btn-gradient-info waves-effect waves-light'
+                      onClick={() => navigate(-1)}
+                    >
+                      Back
+                    </button>
+                  </div>):
+                  (action==='edit')?(
                   <div className='col-lg-12'>
                     <button
                       type='submit'
@@ -666,8 +834,19 @@ export default function ClinicSchedule() {
                     >
                       Cancel
                     </button>
-                  </div>
+                    </div>):( 
+                    <button
+                      type='button'
+                      className='btn btn-gradient-danger waves-effect waves-light'
+                      onClick={() =>alert('You cannot delete this clinic.')}
+                    >
+                      Delete Clinic
+                    </button>
+                    )
+                  }
+                  
                 </div>
+                
               </div>
             </div>
           </div>

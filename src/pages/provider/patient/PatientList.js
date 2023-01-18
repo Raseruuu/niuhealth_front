@@ -9,10 +9,7 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useDebounce from '../../../hooks/useDebounce'
 import Pagination from "react-js-pagination";
 // Provider list of patients
-function handlePageChange(pageNumber) {
-  console.log(`active page is ${pageNumber}`);
-  // this.setState({activePage: pageNumber});
-}
+
 function PatientList() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
@@ -21,6 +18,8 @@ function PatientList() {
   const [search, setSearch] = useState('')
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [pageNum,setPageNum]=useState(1)
+  const [pageLimit,setPageLimit]=useState(3)
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -28,6 +27,97 @@ function PatientList() {
   Follow-up Checkup - badge-soft-success
   */
  
+  const [dummylist,setDummyList] = useState([
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null},
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "Allen",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+  ])
  
   async function getList() {
     const controller = new AbortController()
@@ -63,7 +153,7 @@ function PatientList() {
 
     await getList()
   }
-
+  
   useEffect(() => {
     if (searchText?.length === 0) {
       getList()
@@ -111,21 +201,23 @@ function PatientList() {
           'Insurance',
         ]}
       >
-        <PatientListData limit={10} list={list} />
+        <PatientListData limit={pageLimit} list={dummylist} />
+        <Pagination
+          activePage={pageNum}
+          itemsCountPerPage={3}
+          totalItemsCount={dummylist.length}
+          pageRangeDisplayed={5}
+          // onPageChange={}
+          itemClass="page-item"
+          linkClass="page-link"
+          onChange={(e)=>{console.log(e);setPageNum(e)}}
+          
+        />
         {isLoading ? 'Loading please wait...' : null}
         {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {list.length <= 0 && searchText.length > 0
           ? '0 record found.'
           : null}
-        <Pagination
-          activePage={1}
-          itemsCountPerPage={10}
-          totalItemsCount={450}
-          pageRangeDisplayed={5}
-          itemClass="page-item"
-          linkClass="page-link"
-          // onChange={this.handlePageChange.bind(this)}
-        />
       </TableCard>
       
     </ContainerFluid>

@@ -84,7 +84,7 @@ export function TopBar({ menuClick, homeAddress }) {
           { Email: auth.email},{signal: controller.signal}
         )
         .then((res) => {
-          console.log(res)
+          console.log(res.data.Data[0])
           const { Status, Data: data = [], Message } = res.data
           if (Status) {
             setProfile(res.data.Data[0])
@@ -141,7 +141,7 @@ export function TopBar({ menuClick, homeAddress }) {
               style={{objectFit:"cover", width:50, height:50}}
             />:null}
             <span className='ml-1 nav-user-name hidden-sm'>
-              {auth.firstName||auth.name}
+              {profile.first_name}
               {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
             </span>
           </Link>
