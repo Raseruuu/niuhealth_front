@@ -524,7 +524,8 @@ export default function ClinicSchedule() {
                         {/* {action==='edit' ? ( */}
                           <button
                             type="button"
-                            className="btn btn-success btn-round waves-effect waves-light mt-2"
+                            className="btn btn-gradient-success waves-effect waves-light"
+                            
                             onClick={triggerFileInput}
                             
                           >
