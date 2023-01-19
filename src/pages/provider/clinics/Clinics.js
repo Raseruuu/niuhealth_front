@@ -61,7 +61,7 @@ function Clinics() {
                   className='btn btn-success waves-effect waves-light'
                   onClick={() => navigate('create')}
                 >
-                  New Clinic Schedule
+                  New Clinic
                 </button>
               </ol>
             </div>

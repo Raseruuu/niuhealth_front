@@ -20,6 +20,9 @@ function PatientList() {
   const [isLoading, setIsLoading] = useState(true)
   const [pageNum,setPageNum]=useState(1)
   const [pageLimit,setPageLimit]=useState(3)
+  // const [,setPageLimit]=useState(3)
+
+  itemsCountPerPage
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -44,9 +47,9 @@ function PatientList() {
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
-    last_name: "Walker",
-    middle_name: "Grayman",
+    first_name: "Guy",
+    last_name: "Man",
+    middle_name: "Dude",
     patient_id: "63a551c0565d9",
     picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
     status: "1",
@@ -201,16 +204,18 @@ function PatientList() {
           'Insurance',
         ]}
       >
-        <PatientListData limit={pageLimit} list={dummylist} />
+        <PatientListData limit={pageLimit} offset={pageNum} list={dummylist} />
         <Pagination
           activePage={pageNum}
-          itemsCountPerPage={3}
+          itemsCountPerPage={itemsCountPerPage}
           totalItemsCount={dummylist.length}
           pageRangeDisplayed={5}
           // onPageChange={}
           itemClass="page-item"
           linkClass="page-link"
-          onChange={(e)=>{console.log(e);setPageNum(e)}}
+          onChange={(e)=>{
+            console.log(e);
+            setPageNum(e)}}
           
         />
         {isLoading ? 'Loading please wait...' : null}

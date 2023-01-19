@@ -129,6 +129,16 @@ function PatientProfile() {
                     Settings
                   </a>
                 </li>
+                <li className='nav-item'>
+                  <a
+                    className='nav-link'
+                    id='settings_detail_tab'
+                    data-toggle='pill'
+                    href='#settings_detail'
+                  >
+                    Insurance
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

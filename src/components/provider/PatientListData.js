@@ -1,11 +1,20 @@
 import { memo } from 'react'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
+import Pagination from 'react-js-pagination'
 import { Link } from 'react-router-dom'
 import { StatusTextInsurance } from '../../components/status/Status'
 import { AWS_BUCKET } from '../../constants'
 
-function PatientListData({ limit, list = [] }) {
-  return list.map((item, index) => (
+function PatientListData({ limit,pagenum, list = [] }) {
+  var paginatedlist = new List('users', options);
+  paginatedlist=[]
+  for (var i in list){
+    var j=(pagenum*limit)-1
+    if(j===i){
+      paginatedlist.push(list[pagenum+j])
+    }
+  }
+  return paginatedlist.map((item, index) => (
     <tr key={item?.patient_id || index}>
       <td>
         <Link

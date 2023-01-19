@@ -6,8 +6,10 @@ import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
-import moment, { min } from 'moment'
-import moment_tz from 'moment-timezone'
+
+import TimeZoneSelect from  '../time/Timezone'
+import ProfileEdit from '../../pages/patient/Profile'
+import UploadImage from '../form/UploadImage'
 function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
     <div class="row">
@@ -28,164 +30,21 @@ function CurrencySelect({ setLocalCurrency, value,disabled }){
   </div>
   )
 }
-function HMFormat(minutes) {
-  let offsetoperator=""
-  if (minutes>0){offsetoperator="+"}
-  else if(minutes<0){offsetoperator="-";minutes=minutes*-1}
-  var hours = Math.floor(minutes / 60);
-  // Getting the minutes.
-  var min = minutes % 60;
-  let dig=""
-  if (min<10){ dig="0"}
-  return offsetoperator+hours+":"+dig+min
-}
 
-function hourFormat(minutes) {
-  return HMFormat(minutes*-1)
-} 
-export function TimeZoneSelect({setTimeZone,value, disabled=false}){
-  
-  var timezonecountries = moment.tz.countries()
-  var timezoneoptions=[]
-  for(var i in timezonecountries){
-    timezoneoptions.push(moment.tz.zonesForCountry(timezonecountries[i], true))
-  }
-  let sorted_timezoneoptions=timezoneoptions.sort(function(a, b) { 
-    return a.offset - b.offset;
-  });
-  
-  return(
-    <div class="row">
-        
-      <select 
-        className="col-sm form-control" 
-        disabled={disabled}
-        required={true} 
-        value={value}
-        style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
-        onChange={(e)=>{setTimeZone(e.target.value)}}
-        
-        >
-        <option>Select a Timezone</option>
-        {sorted_timezoneoptions.map((timezone)=>(
-          <option value={[timezone[0].name]}>UTC {hourFormat(timezone[0].offset)} {timezone[0].name}</option>
-        ))}
-        {/* <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
-        <option value={"+01:00"}>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna </option>
-        <option value={"+01:00"}>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris </option>
-        <option value={"+01:00"}>(UTC+01:00) West Central Africa </option>
-        <option value={"+01:00"}>(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague </option>
-        <option value={"+01:00"}>(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb </option>
-        <option value={"+01:00"}>(UTC+01:00) Windhoek </option>
-        <option value={"+02:00"}>(UTC+02:00) Athens, Bucharest, Istanbul </option>
-        <option value={"+02:00"}>(UTC+02:00) Helsinki, Kiev, Riga, Sofia, Tallinn, Vilnius </option>
-        <option value={"+02:00"}>(UTC+02:00) Cairo </option>
-        <option value={"+02:00"}>(UTC+02:00) Damascus </option>
-        <option value={"+02:00"}>(UTC+02:00) Cairo </option>
-        <option value={"+02:00"}>(UTC+02:00) Amman</option>
-        <option value={"+02:00"}>(UTC+02:00) Harare, Pretoria </option>
-        <option value={"+02:00"}>(UTC+02:00) Jerusalem</option>
-        <option value={"+02:00"}>(UTC+02:00) Beirut</option>
-        <option value={"+03:00"}>(UTC+03:00) Baghdad</option>
-        <option value={"+03:00"}>(UTC+03:00) Minsk </option>
-        <option value={"+03:00"}>(UTC+03:00) Kuwait, Riyadh</option>
-        <option value={"+03:00"}>(UTC+03:00) Nairobi</option>
-        <option value={"+3:30"}>(UTC+03:30) Tehran</option>
-        <option value={"+4:00"}>(UTC+04:00) Moscow, St. Petersburg, Volgograd</option>
-        <option value={"+4:00"}>(UTC+04:00) Tbilisi</option>
-        <option value={"+4:00"}>(UTC+04:00) Yerevan</option>
-        <option value={"+4:00"}>(UTC+04:00) Abu Dhabi, Muscat</option>
-        <option value={"+4:00"}>(UTC+04:00) Baku</option>
-        <option value={"+4:00"}>(UTC+04:00) Port Louis</option>
-        <option value={"+4:30"}>(UTC+04:30) Kabul</option>
-        <option value={"+5:00"}>(UTC+05:00) Tashkent</option>
-        <option value={"+5:00"}>(UTC+05:00) Islamabad, Karachi</option>
-        <option value={"+5:30"}>(UTC+05:30) Sri Jayewardenepura Kotte </option>
-        <option value={"+5:30"}>(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi </option>
-        <option value={"+5:45"}>(UTC+05:45) Kathmandu </option>
-        <option value={"+6:00"}>(UTC+06:00) Astana </option>
-        <option value={"+6:00"}>(UTC+06:00) Dhaka </option>
-        <option value={"+6:00"}>(UTC+06:00) Yekaterinburg </option>
-        <option value={"+6:30"}>(UTC+06:30) Yangon </option>
-        <option value={"+7:00"}>(UTC+07:00) Bangkok, Hanoi, Jakarta </option>
-        <option value={"+7:00"}>(UTC+07:00) Novosibirsk </option>
-        <option value={"+8:00"}>(UTC+08:00) Krasnoyarsk </option>
-        <option value={"+8:00"}>(UTC+08:00) Ulaanbaatar </option>
-        <option value={"+8:00"}>(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi </option>
-        <option value={"+8:00"}>(UTC+08:00) Perth </option>
-        <option value={"+8:00"}>(UTC+08:00) Kuala Lumpur, Singapore </option>
-        <option value={"+8:00"}>(UTC+08:00) Taipei </option>
-        <option value={"+9:00"}>(UTC+09:00) Irkutsk </option>
-        <option value={"+9:00"}>(UTC+09:00) Seoul </option>
-        <option value={"+9:00"}>(UTC+09:00) Osaka, Sapporo, Tokyo </option>
-        <option value={"+9:30"}>(UTC+09:30) Darwin </option>
-        <option value={"+9:30"}>(UTC+09:30) Adelaide </option>
-        <option value={"+10:00"}>(UTC+10:00) Hobart </option>
-        <option value={"+10:00"}>(UTC+10:00) Yakutsk </option>
-        <option value={"+10:00"}>(UTC+10:00) Brisbane </option>
-        <option value={"+10:00"}>(UTC+10:00) Guam, Port Moresby </option>
-        <option value={"+10:00"}>(UTC+10:00) Canberra, Melbourne, Sydney </option>
-        <option value={"+11:00"}>(UTC+11:00) Vladivostok </option>
-        <option value={"+11:00"}>(UTC+11:00) Solomon Islands, New Caledonia </option>
-        <option value={"+12:00"}>(UTC+12:00) Coordinated Universal Time+12 </option>
-        <option value={"+12:00"}>(UTC+12:00) Fiji, Marshall Islands </option>
-        <option value={"+12:00"}>(UTC+12:00) Magadan </option>
-        <option value={"+12:00"}>(UTC+12:00) Auckland, Wellington(UTC+13:00) Nuku'alofa </option>
-        <option value={"+13:00"}>(UTC+13:00) Nuku'alofa </option>
-        <option value={"+13:00"}>(UTC+13:00) Samoa </option>
-        <option value={"-12:00"}>(UTC-12:00) International Date Line West</option>
-        <option value={"-11:00"}>(UTC-11:00) Coordinated Universal Time-11</option>
-        <option value={"-10:00"}>(UTC-10:00) Hawaii</option>
-        <option value={"-9:00"}>(UTC-09:00) Alaska</option>
-        <option value={"-8:00"}>(UTC-08:00) Baja California</option>
-        <option value={"-8:00"}>(UTC-08:00) Pacific Time (US and Canada)</option>
-        <option value={"-8:00"}>(UTC-07:00) Chihuahua, La Paz, Mazatlan</option>
-        <option value={"-8:00"}>(UTC-07:00) Arizona</option>
-        <option value={"-7:00"}>(UTC-07:00) Mountain Time (US and Canada)</option>
-        <option value={"-6:00"}>(UTC-06:00) Central America</option>
-        <option value={"-6:00"}>(UTC-06:00) Central Time (US and Canada)</option>
-        <option value={"-6:00"}>(UTC-06:00) Saskatchewan</option>
-        <option value={"-6:00"}>(UTC-06:00) Guadalajara, Mexico City, Monterey</option>
-        <option value={"-5:00"}>(UTC-05:00) Bogota, Lima, Quito</option>
-        <option value={"-5:00"}>(UTC-05:00) Indiana (East) </option>
-        <option value={"-5:00"}>(UTC-05:00) Eastern Time (US and Canada) </option>
-        <option value={"-04:30"}>(UTC-04:30) Caracas </option>
-        <option value={"-04:00"}>(UTC-04:00) Atlantic Time (Canada) </option>
-        <option value={"-04:00"}>(UTC-04:00) Asuncion </option>
-        <option value={"-04:00"}>(UTC-04:00) Georgetown, La Paz, Manaus, San Juan </option>
-        <option value={"-04:00"}>(UTC-04:00) Cuiaba </option>
-        <option value={"-04:00"}>(UTC-04:00) Santiago </option>
-        <option value={"-03:30"}>(UTC-03:30) Newfoundland</option>
-        <option value={"03:00"}>(UTC-03:00) Brasilia </option>
-        <option value={"03:00"}>(UTC-03:00) Greenland </option>
-        <option value={"03:00"}>(UTC-03:00) Cayenne, Fortaleza </option>
-        <option value={"03:00"}>(UTC-03:00) Buenos Aires </option>
-        <option value={"03:00"}>(UTC-03:00) Montevideo </option>
-        <option value={"02:00"}>(UTC-02:00) Coordinated Universal Time-2 </option>
-        <option value={"-01:00"}>(UTC-01:00) Cape Verde</option>
-        <option value={"-01:00"}>(UTC-01:00) Azores </option>
-        <option value={"+00:00"}>(UTC+00:00) Casablanca </option>
-        <option value={"+00:00"}>(UTC+00:00) Monrovia, Reykjavik </option>
-        <option value={"+00:00"}>(UTC+00:00) Dublin, Edinburgh, Lisbon, London </option> */}
-        
-      </select>
-  </div>
-  )
-}
 function hourformat(hour){
-  if (hour>12){
-    return (hour-12)+" PM"
+    if (hour>12){
+      return (hour-12)+" PM"
+    }
+    else if (hour===12){
+      return (12)+" PM"
+    }
+    else if (hour===0){
+      return (12)+" AM"
+    }
+    else{
+      return hour+" AM"
+    }
   }
-  else if (hour===12){
-    return (12)+" PM"
-  }
-  else if (hour===0){
-    return (12)+" AM"
-  }
-  else{
-    return hour+" AM"
-  }
-}
 function ScheduleSelect({hours,setHours,weekday,disabled}){
   // hours = 0
   let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
@@ -245,7 +104,7 @@ export default function ClinicSchedule() {
   const [localTimezone,setTimeZone]=useState("+8")
   const [clinicProfile,setClinicProfile]=useState({})
   const { state } = useLocation();
-  
+  const [clinicImages,setClinicImages]=useState([])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
 
@@ -274,19 +133,15 @@ export default function ClinicSchedule() {
     'HoursSunEnd':20
     })
   
+    function handleInputChange(e) {
+      const name = e.target.name
+      const value = e.target.value
+      setClinicProfile((prev) => ({ ...prev, [name]: value }))
+    }
   const onSubmit = async (data) => {
     const formData = new FormData();
     console.log(data)
-    // formData.append(formData,{...hours});
-    // for (let index = 0; index < data?.image.length; index++) {
-    //   formData.append(formData,{...hours});.
-
-    // }
-    if (data?.Image.length > 0) {
-      for (let index = 0; index < data?.Image.length; index++) {
-        formData.append("Image", data.Image[index], data.Image[index].name);
-      }
-    }
+    
     formData.append("Email", auth.email);
     formData.append("ClinicName",data.ClinicName)
     formData.append("Specialty",data.Specialty)
@@ -300,39 +155,51 @@ export default function ClinicSchedule() {
     }
     formData.append("LocalCurrency", localCurrency);
     formData.append("LocalTimeZone", localTimezone);
-
-    await axiosPrivate
-      .post('createClinic', 
-        formData,{
-          headers: { "Content-Type": "multipart/form-data" },
-          onUploadProgress: function (ProgressEvent) {
-            console.log(
-              "uploadprogress: " +
-                (ProgressEvent.loaded / ProgressEvent.total) * 100 +
-                "%"
-            );
-          },
-        }
-      )
-      .then((res) => {
-        return res.data
-      })
-      .then((data) => {
-        const { Status, Message } = data || {}
-        // setFeedbackMsg(Message)
-        if (Status) {
-          setIsSuccess(true)
-          alert("Success! You created a new Clinic.")
-        } else {
-          setIsSuccess(false)
-          
-          alert("Failed to create a new Clinic.")
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-        // setFeedbackMsg(err)
-      })
+    for (var index in clinicImages){
+      
+      formData.append('image'+(parseInt(index)+1), clinicImages[index].file)
+    }
+    
+    let endpoint=(
+      (action==='edit')?
+      "providerUpdateClinicDetails":
+      (action==='create')?
+      "createClinic":
+      "none")
+    if (endpoint!="none"){
+      await axiosPrivate
+        .post(endpoint, 
+          formData,{
+            headers: { "Content-Type": "multipart/form-data" },
+            onUploadProgress: function (ProgressEvent) {
+              console.log(
+                "uploadprogress: " +
+                  (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+                  "%"
+              );
+            },
+          }
+        )
+        .then((res) => {
+          return res.data
+        })
+        .then((data) => {
+          const { Status, Message } = data || {}
+          // setFeedbackMsg(Message)
+          if (Status) {
+            setIsSuccess(true)
+            alert("Success! You created a new Clinic.")
+          } else {
+            setIsSuccess(false)
+            
+            alert((action==='create')?"Failed to create a new Clinic.":(action==='edit')?"Failed to update Clinic.":null)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+          // setFeedbackMsg(err)
+        })
+    }
   }
   useEffect(() => {
     const controller = new AbortController()
@@ -354,6 +221,15 @@ export default function ClinicSchedule() {
           if (Status) {
             console.log('details',res.data.Data)
             setClinicProfile(res.data.Data)
+            var tempImgList=[]
+            if (res.data.Data.image1){tempImgList.push({path:res.data.Data.image1,file:null})}
+            if (res.data.Data.image2){tempImgList.push({path:res.data.Data.image2,file:null})}
+            if (res.data.Data.image3){tempImgList.push({path:res.data.Data.image3,file:null})}
+            if (res.data.Data.image4){tempImgList.push({path:res.data.Data.image4,file:null})}
+            if (res.data.Data.image5){tempImgList.push({path:res.data.Data.image5,file:null})}
+            
+            setClinicImages(tempImgList)
+            setImagePreview(true)
             // setOldProfile(register)
             // setAuth((prev) => ({ ...prev, ...details }))
             // setTimeZone(details?.local_time_zone)
@@ -365,12 +241,18 @@ export default function ClinicSchedule() {
           console.error(err)
         })
     }
-    getClinicDetails()
+    if (action==='profile'||action==='edit'){
+      getClinicDetails()
+    }
+    else if (action==='create'){
+
+      setClinicProfile({...clinicProfile, image1:{path:"clinics/Default.png"}})
+    }
   }, [])
-  useEffect(() => {
-    
-    reset()
-  }, [isSuccess])
+  // useEffect(() => {
+  //   reset()
+  // }, [isSuccess])
+  
   function triggerFileInput() {
     if (imgRef.current) {
       imgRef.current.click()
@@ -379,7 +261,6 @@ export default function ClinicSchedule() {
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
     console.log("FILE HERE: ",file);
-    // console.log(imgRef.current.value+"")
     setClinicProfile({
       ...clinicProfile,
       picturefile:file
@@ -490,51 +371,89 @@ export default function ClinicSchedule() {
                     </div>
                   </div>
                 ) : null} */}
-                <div className='col-lg-6'>
-                    <div className='form-group row'>
-                      
-                      <div className="d-flex flex-column justify-content-center align-items-center">
-                        <input
-                          hidden
-                          type="file"
-                          id="input-file-now-custom-1"
-                          accept="image/*"
-                          capture="user"
-                          name="Image"
-                          ref={imgRef}
-                          onChange={handleImageInputChange}
-                        />
-      
-                        <img
-                          alt=""
-                          style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
+                <div className='row'>
+                  <div className='col'>
+                      <div className='form-group row'>
+                        
+                        
+                        
+                        {clinicImages.map((clinicImage,index)=>(
+                          
+                          <UploadImage 
+                            id={index} 
+                            images={clinicImages} 
+                            setImages={setClinicImages} 
+                            previewImage={clinicImage} 
+                            formData={clinicProfile} 
+                            setFormData={setClinicProfile} 
+                            imagepreview={imagepreview} 
+                            setImagePreview={setImagePreview}
+                            action={action}/>
+                        // <UploadImage id={3} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
+                        // <UploadImage id={4} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
+                        // <UploadImage id={5} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
+                       
+                        ))}
+                        {(clinicImages.length<4&&(action==='edit'||action==='create'))?(
+                        <button className="btn btn-gradient-success waves-effect waves-light" minWidth="200px" height="150px" onClick={()=>{if (clinicImages.length<4){setClinicImages([...clinicImages,{path:'clinics/Default.png'}])}}}>+</button>
+                        ):(clinicImages.length===0)?(
+                          <UploadImage 
+                            id={index} 
+                            images={clinicImages} 
+                            setImages={setClinicImages} 
+                            previewImage={clinicImage} 
+                            formData={clinicProfile} 
+                            setFormData={setClinicProfile} 
+                            imagepreview={imagepreview} 
+                            setImagePreview={setImagePreview}
+                            action={action}/>
+                        //   <div className="d-flex flex-column justify-content-center align-items-center">
+                        //   <input
+                        //     hidden
+                        //     type="file"
+                        //     id="input-file-now-custom-1"
+                        //     accept="image/*"
+                        //     capture="user"
+                        //     name="Image"
+                        //     ref={imgRef}
+                        //     // value={clinicProfile.Image}
+                        //     onChange={handleImageInputChange}
+                        //   />
+        
+                        //   <img
+                        //     alt=""
+                        //     style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
 
-                          onClick={() => {
-                            Swal.fire({
-                              title: 'Profile Picture',
-                              html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${clinicProfile.picture_file}"></img>`,
-                              // { AWS_BUCKET_SERVICES } + profile.picture,
-                            })
-                          }}
-                          src={!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}
-                          // className="ob"
-                          // style={{ margin: 'unset' }}
-                        />
+                        //     onClick={() => {
+                        //       Swal.fire({
+                        //         // title: 'Profile Picture',
+                        //         html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}"></img>`,
+                        //         // { AWS_BUCKET_SERVICES } + profile.picture,
+                        //       })
+                        //     }}
+                        //     src={!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}
+                        //     className="ob"
+                        //     // style={{ margin: 'unset' }}
+                        //   />
 
-                        {/* {action==='edit' ? ( */}
-                          <button
-                            type="button"
-                            className="btn btn-gradient-success waves-effect waves-light"
-                            
-                            onClick={triggerFileInput}
-                            
-                          >
-                            Upload
-                          </button>
-                        {/* ): null } */}
-                        </div>
-                      </div>
+                        //     <button
+                        //       type="button"
+                        //       className="btn btn-gradient-success waves-effect waves-light"
+                              
+                        //       onClick={triggerFileInput}
+                              
+                        //     >
+                        //       Upload
+                        //     </button>
+                        // </div>
+                        ):null}
+                        
+                        
+                        
                     </div>
+                  </div>
+                  
+                </div>
                 <div className='row'>
                   <div className='col-lg-6'>
                     <div className='form-group row'>
@@ -553,12 +472,12 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='name'
-                          required3
                           disabled={action==='profile'}
+                          name="clinic_name"
                           value={clinicProfile.clinic_name}
-                          onChange={(e)=>setClinicProfile({...clinicProfile,clinic_name:e.target.value})}
-                          {...register('ClinicName', { 
-                            required: true })}
+                          onChange={handleInputChange.bind(this)}
+                          // onChange={(e)=>setClinicProfile({...clinicProfile,clinic_name:e.target.value})}
+                          {...register('ClinicName')}
                         />
                         {errors.name ? (
                           <div
@@ -593,8 +512,9 @@ export default function ClinicSchedule() {
                           id='Specialty'
                           disabled={action==='profile'}
                           value={clinicProfile.specialty}
-                          required
-                          {...register('Specialty', { required: true })}
+                          name="specialty"
+                          onChange={handleInputChange.bind(this)}
+                          {...register('Specialty')}
                         />
                         {errors.specialty ? (
                           <div
@@ -627,10 +547,11 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='Contact_info'
-                          required
                           disabled={action==='profile'}
+                          name="contact_info"
                           value={clinicProfile.contact_info}
-                          {...register('Contact_info', { required: true })}
+                          onChange={handleInputChange.bind(this)}
+                          {...register('Contact_info')}
                         />
                         {errors.contact_info ? (
                           <div
@@ -661,10 +582,11 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='Address'
-                          required
                           disabled={action==='profile'}
                           value={clinicProfile.address}
-                          {...register('Address', { required: true })}
+                          name="address"
+                          onChange={handleInputChange.bind(this)}
+                          {...register('Address')}
                         />
                         {errors.Address ? (
                           <div
@@ -698,7 +620,13 @@ export default function ClinicSchedule() {
                           id='local_currency'
                           {...register('local_currency', { required: true })}
                         /> */}{}
-                        <CurrencySelect value={clinicProfile.specialty} disabled={action==='profile'} register={register} localCurrency ={localCurrency} setLocalCurrency={setLocalCurrency}
+                        <CurrencySelect 
+                          value={clinicProfile.specialty}
+                          onChange={handleInputChange.bind(this)}
+                          disabled={action==='profile'} 
+                          register={register} 
+                          localCurrency ={localCurrency} 
+                          setLocalCurrency={setLocalCurrency}
                         />
                         {errors.local_currency ? (
                           <div
@@ -730,7 +658,9 @@ export default function ClinicSchedule() {
                           id='local_time_zone'
                           {...register('local_time_zone', { required: true })}
                         /> */}
-                        <TimeZoneSelect setTimeZone={setTimeZone} disabled={action==='profile'}/>
+                        <TimeZoneSelect 
+                          setTimeZone={setTimeZone}
+                          disabled={action==='profile'}/>
                         {errors.local_time_zone ? (
                           <div
                             className='invalid-feedback'
@@ -835,15 +765,31 @@ export default function ClinicSchedule() {
                     >
                       Cancel
                     </button>
-                    </div>):( 
                     <button
                       type='button'
-                      className='btn btn-gradient-danger waves-effect waves-light'
-                      onClick={() =>alert('You cannot delete this clinic.')}
+                      className='btn btn-gradient-info waves-effect waves-light'
+                      onClick={() => navigate(-1)}
                     >
-                      Delete Clinic
+                      Cancel
                     </button>
-                    )
+                    </div>):
+                    (action==='create')?(
+                      <div className='col-lg-12'>
+                        <button
+                          type='submit'
+                          className='btn btn-gradient-success waves-effect waves-light'
+                          disabled={isSubmitting}
+                        >
+                          Save
+                        </button>{' '}
+                        <button
+                          type='button'
+                          className='btn btn-gradient-info waves-effect waves-light'
+                          onClick={() => navigate(-1)}
+                        >
+                          Cancel
+                        </button>
+                        </div>):null
                   }
                   
                 </div>

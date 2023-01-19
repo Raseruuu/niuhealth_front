@@ -6,7 +6,9 @@ import TableCard, {
   TableTitle,
 } from '../../components/table/Tables'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
-import { TimeZoneSelect } from '../../components/clinics/ClinicSchedule'
+// import { TimeZoneSelect } from '../../components/clinics/ClinicSchedule'
+
+import TimeZoneSelect from  '../../components/time/Timezone'
 import './icon.css'
 import useAuth from '../../hooks/useAuth'
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
@@ -451,7 +453,7 @@ function ProfileEdit() {
                         </label>
                         <div className="col-sm-8">
                           <TimeZoneSelect
-                            value={timeZone}
+                            value={profile.local_time_zone}
                             setTimeZone={(selected) =>
                               setProfile((prev) => ({
                                 ...prev,
