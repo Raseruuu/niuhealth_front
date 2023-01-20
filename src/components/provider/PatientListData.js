@@ -6,16 +6,26 @@ import { StatusTextInsurance } from '../../components/status/Status'
 import { AWS_BUCKET } from '../../constants'
 
 function PatientListData({ limit,pagenum, list = [] }) {
-  var paginatedlist = new List('users', options);
-  paginatedlist=[]
+  // var paginatedlist = new List('users', options);
+  let paginatedlist=[]
+  var j=0
+  var k=0
   for (var i in list){
-    var j=(pagenum*limit)-1
-    if(j===i){
-      paginatedlist.push(list[pagenum+j])
+    console.log("list",list)
+    console.log(paginatedlist,limit, pagenum,(pagenum*limit)-limit,i,j,list[i])
+    // console.log(parseInt(i)===((pagenum*limit)-limit),i,(pagenum*limit)-limit)
+    console.log("Page "+(pagenum))
+    if((parseInt(i))===((pagenum*limit)-limit)){
+      
+      for (var k=0; k<limit;k++){
+        if (list[parseInt(i)+k]){
+        paginatedlist.push(list[parseInt(i)+k])}
+      }
     }
+    j=j+1
   }
   return paginatedlist.map((item, index) => (
-    <tr key={item?.patient_id || index}>
+    <tr key={index}>
       <td>
         <Link
           to="profile"

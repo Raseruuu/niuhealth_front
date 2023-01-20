@@ -134,8 +134,8 @@ function Room() {
           <div className="notification-message-wrap__txt-container"> 
             {`The patient's symptom is listed as: \n"`+(state.Symptom)+`" `}
           </div>
-          {/* <button className='zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} onclick={()=>state.MeetingStatus=false}>OK</button>
-          <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>state.MeetingStatus=false}></i> */}
+          <button className='zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} onclick={()=>console.log(this)}>OK</button>
+          <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>state.MeetingStatus=false}></i>
         </div>
       </div>):null
       }

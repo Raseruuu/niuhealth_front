@@ -16,10 +16,10 @@ function TitleBox({text}){
 }
 function RatingsItem({patientName,service_name,service_description,patientEmail,rating}){
   return(
-    <div className='col-lg-4'>
-      <div className='card'>
+    <div className='col-lg-4' style={{minWidth: '250px'}}>
+      <div className='card' >
         <div className='card-body'>
-          <div className='media'>
+          <div className='media' >
             <a className='' href='#'>
               <img
                 src='../assets/images/users/user-1.jpg'
@@ -27,15 +27,15 @@ function RatingsItem({patientName,service_name,service_description,patientEmail,
                 className='rounded-circle thumb-md'
               />
             </a>
-            <div className='media-body align-self-center ml-3'>
-              <p className='font-14 font-weight-bold mb-0'>
+            <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
+              <p className='font-14 font-weight-bold mb-0 responsive'>
                 {/* John Tamez */}
                 {patientName}
               </p>
-              <p className='mb-0 font-12 text-muted'>
+              <p className='mb-0 font-12 text-muted responsive'>
                 {patientEmail}
               </p>
-              <p className='mb-0 font-14 '>
+              <p className='mb-0 font-14 responsive'>
                 {service_name}
                 
                 {service_description}

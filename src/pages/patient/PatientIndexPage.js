@@ -13,7 +13,7 @@ function PatientIndexPage() {
           <div className='row figmaFirstBox'>
             {/* added paddingTop for space covered by topbar */}
             <div className='col-sm-12'>
-              {isEmailVerified ? (
+              {/* {isEmailVerified ? (
                 <div
                   className='alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
                   role='alert'
@@ -32,7 +32,7 @@ function PatientIndexPage() {
                   services if you dont see the email, you may need to check your
                   spam folder. <a href=''>Resend verification email</a>
                 </div>
-              ) : null}
+              ) : null} */}
             </div>
           </div>
           <div className='row figmaFirstBox'>

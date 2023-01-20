@@ -19,10 +19,9 @@ function PatientList() {
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [pageNum,setPageNum]=useState(1)
-  const [pageLimit,setPageLimit]=useState(3)
-  // const [,setPageLimit]=useState(3)
+  const [pageLimit,setPageLimit]=useState(10)
 
-  itemsCountPerPage
+  // itemsCountPerPage
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -31,11 +30,11 @@ function PatientList() {
   */
  
   const [dummylist,setDummyList] = useState([
-    {address: "Test Address",
+    {address: "1111111",
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "11111",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -43,11 +42,11 @@ function PatientList() {
     status: "1",
     subscription_plan: "3",
     with_insurance: null},
-    {address: "Test Address",
+    {address: "2222222",
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Guy",
+    first_name: "22222",
     last_name: "Man",
     middle_name: "Dude",
     patient_id: "63a551c0565d9",
@@ -56,11 +55,11 @@ function PatientList() {
     subscription_plan: "3",
     with_insurance: null}
     ,
-    {address: "Test Address",
+    {address: "33333",
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "33333",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -73,7 +72,7 @@ function PatientList() {
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "44444",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -86,7 +85,7 @@ function PatientList() {
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "555555",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -99,7 +98,7 @@ function PatientList() {
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "66666666",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -112,7 +111,7 @@ function PatientList() {
     contact_info: "+639774011554",
     date_of_birth: "1996-01-27",
     email: "patient2@gmail.com",
-    first_name: "Allen",
+    first_name: "777777",
     last_name: "Walker",
     middle_name: "Grayman",
     patient_id: "63a551c0565d9",
@@ -120,6 +119,174 @@ function PatientList() {
     status: "1",
     subscription_plan: "3",
     with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "88888",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "99999",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "10",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null},
+    {address: "11",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "11",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null},
+    {address: "12",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "12121212121",
+    last_name: "Man",
+    middle_name: "Dude",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "3113131313333",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "13131313",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "1414114144",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "151515151515",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "161616161616166",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "17171717177",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "1818181818",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "1919191919",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    ,
+    {address: "Test Address",
+    contact_info: "+639774011554",
+    date_of_birth: "1996-01-27",
+    email: "patient2@gmail.com",
+    first_name: "2020202002020",
+    last_name: "Walker",
+    middle_name: "Grayman",
+    patient_id: "63a551c0565d9",
+    picture: "63a551c0565d9.24bf99b46f8b496caf28d888a072f6ff63c66148b53b9.webp",
+    status: "1",
+    subscription_plan: "3",
+    with_insurance: null}
+    
   ])
  
   async function getList() {
@@ -204,15 +371,15 @@ function PatientList() {
           'Insurance',
         ]}
       >
-        <PatientListData limit={pageLimit} offset={pageNum} list={dummylist} />
+        <PatientListData limit={pageLimit} pagenum={pageNum} list={list} />
         <Pagination
           activePage={pageNum}
-          itemsCountPerPage={itemsCountPerPage}
-          totalItemsCount={dummylist.length}
+          itemsCountPerPage={pageLimit}
+          totalItemsCount={list.length}
           pageRangeDisplayed={5}
           // onPageChange={}
-          itemClass="page-item"
-          linkClass="page-link"
+          itemClass="page-item "
+          linkClass="page-link float-center"
           onChange={(e)=>{
             console.log(e);
             setPageNum(e)}}

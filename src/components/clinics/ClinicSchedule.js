@@ -51,7 +51,7 @@ function ScheduleSelect({hours,setHours,weekday,disabled}){
   let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
   
   return(
-    <div class="column" style={{paddingLeft:"20px"}}>
+    <div class="column" style={{maxWidth:'250px', paddingLeft:"20px"}}>
       <div class = "row">
         <div>Start Time </div>
         <div class = "col">
@@ -397,55 +397,55 @@ export default function ClinicSchedule() {
                         {(clinicImages.length<4&&(action==='edit'||action==='create'))?(
                         <button className="btn btn-gradient-success waves-effect waves-light" minWidth="200px" height="150px" onClick={()=>{if (clinicImages.length<4){setClinicImages([...clinicImages,{path:'clinics/Default.png'}])}}}>+</button>
                         ):(clinicImages.length===0)?(
-                          <UploadImage 
-                            id={index} 
-                            images={clinicImages} 
-                            setImages={setClinicImages} 
-                            previewImage={clinicImage} 
-                            formData={clinicProfile} 
-                            setFormData={setClinicProfile} 
-                            imagepreview={imagepreview} 
-                            setImagePreview={setImagePreview}
-                            action={action}/>
-                        //   <div className="d-flex flex-column justify-content-center align-items-center">
-                        //   <input
-                        //     hidden
-                        //     type="file"
-                        //     id="input-file-now-custom-1"
-                        //     accept="image/*"
-                        //     capture="user"
-                        //     name="Image"
-                        //     ref={imgRef}
-                        //     // value={clinicProfile.Image}
-                        //     onChange={handleImageInputChange}
-                        //   />
+                          // <UploadImage 
+                          //   id={0} 
+                          //   images={clinicImages} 
+                          //   setImages={setClinicImages} 
+                          //   previewImage={clinicImages[0]} 
+                          //   formData={clinicProfile} 
+                          //   setFormData={setClinicProfile} 
+                          //   imagepreview={imagepreview} 
+                          //   setImagePreview={setImagePreview}
+                          //   action={action}/>
+                          <div className="d-flex flex-column justify-content-center align-items-center">
+                          <input
+                            hidden
+                            type="file"
+                            id="input-file-now-custom-1"
+                            accept="image/*"
+                            capture="user"
+                            name="Image"
+                            ref={imgRef}
+                            // value={clinicProfile.Image}
+                            onChange={handleImageInputChange}
+                          />
         
-                        //   <img
-                        //     alt=""
-                        //     style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
+                          <img
+                            alt=""
+                            style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
 
-                        //     onClick={() => {
-                        //       Swal.fire({
-                        //         // title: 'Profile Picture',
-                        //         html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}"></img>`,
-                        //         // { AWS_BUCKET_SERVICES } + profile.picture,
-                        //       })
-                        //     }}
-                        //     src={!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}
-                        //     className="ob"
-                        //     // style={{ margin: 'unset' }}
-                        //   />
+                            onClick={() => {
+                              Swal.fire({
+                                // title: 'Profile Picture',
+                                html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}"></img>`,
+                                // { AWS_BUCKET_SERVICES } + profile.picture,
+                              })
+                            }}
+                            src={!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}
+                            className="ob"
+                            // style={{ margin: 'unset' }}
+                          />
 
-                        //     <button
-                        //       type="button"
-                        //       className="btn btn-gradient-success waves-effect waves-light"
+                            <button
+                              type="button"
+                              className="btn btn-gradient-success waves-effect waves-light"
                               
-                        //       onClick={triggerFileInput}
+                              onClick={triggerFileInput}
                               
-                        //     >
-                        //       Upload
-                        //     </button>
-                        // </div>
+                            >
+                              Upload
+                            </button>
+                        </div>
                         ):null}
                         
                         
@@ -685,41 +685,41 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-lg-12'  >
-                        <div className='form-group col' >
-                          <div className='row'>
-                            <div className='col-md-4' >
+                        <div className='form-group row' >
+                          {/* <div className='row'> */}
+                            <div className='col-md-3' >
                               <h5>Sunday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun" disabled={action==='profile'}/>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Monday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon" disabled={action==='profile'}/>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Tuesday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue" disabled={action==='profile'}/>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Wednesday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed" disabled={action==='profile'}/>
                             </div>
                           
                             {/* <div className='row'> */}
                             
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Thursday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu" disabled={action==='profile'}/>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Friday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri" disabled={action==='profile'}/>
                             </div>
-                            <div className='col-md-4'>
+                            <div className='col-md-3'>
                               <h5>Saturday</h5>
                               <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat" disabled={action==='profile'}/>
                             </div>
                             <div>
-                            </div>
+                            {/* </div> */}
                           </div>
                           {/* </div> */}
                         </div>
@@ -734,7 +734,7 @@ export default function ClinicSchedule() {
                  { (action==='profile')?(
                   <div className='col-lg-12'>
                     <button
-                      type='button'
+                      // type='button'
                       className='btn btn-gradient-success waves-effect waves-light'
                       onClick={() =>navigate('/provider/clinics/edit/'+clinicID)}
                       style={{marginRight:'10px'}}

@@ -9,7 +9,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 // import { TimeZoneSelect } from '../../components/clinics/ClinicSchedule'
 
 import TimeZoneSelect from  '../../components/time/Timezone'
-import './icon.css'
+// import './icon.css'
 import useAuth from '../../hooks/useAuth'
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import { useLocation } from 'react-router-dom'

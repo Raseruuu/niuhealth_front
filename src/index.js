@@ -11,6 +11,7 @@ import GreenLock from './components/lottie/LottieGreenLock'
 import { AuthProvider } from './context/AuthProvider'
 import './index.css'
 import ErrorPage from './pages/ErrorPage'
+import About from './pages/About'
 import Appointment from './pages/patient/Appointment'
 import Insurance from './pages/patient/insurance/Insurance'
 import Upload from './pages/patient/insurance/Upload'
@@ -21,7 +22,7 @@ import Marketplace from './pages/patient/marketplace/Marketplace'
 import ProvidersList from './pages/patient/marketplace/ProvidersList'
 import Success from './pages/patient/marketplace/Success'
 import PatientIndexPage from './pages/patient/PatientIndexPage'
-import Profile from './pages/patient/Profile'
+import Profile from './components/profile/Profile'
 import PaymentForm from './pages/patient/subcription/PaymentForm'
 import Renew from './pages/patient/subcription/Renew'
 import Subscription from './pages/patient/subcription/Subcription'
@@ -87,7 +88,7 @@ const router = createBrowserRouter(
           path: 'login',
           element: <Login/>
         },
-        
+       
         {
           path: 'admin',
           element: <AdminDashboard />,
@@ -135,6 +136,8 @@ const router = createBrowserRouter(
               ],
             },
             { path: 'profile', element: <Profile /> },
+            { path: 'about', element: <About/>},
+          
             { path: 'appointments', element: <Appointment /> },
             {
               path: 'subscription',
@@ -172,6 +175,7 @@ const router = createBrowserRouter(
                 { path: 'profile/:action', element: <PatientProfile /> },
               ],
             },
+            { path: 'about', element: <About/>},
             {
               path: 'ratings',
               element: <Ratings />,

@@ -80,14 +80,15 @@ export function TopBar({ menuClick, homeAddress }) {
     async function getProfile() {
       await axiosPrivate
         .post(
-          'getPatientDetails',
+          'get'+auth.userType+'Details',
           { Email: auth.email},{signal: controller.signal}
         )
         .then((res) => {
-          console.log(res.data.Data[0])
+          console.log("userdata",res.data.Data[0])
           const { Status, Data: data = [], Message } = res.data
           if (Status) {
             setProfile(res.data.Data[0])
+            
             
           } else {
             throw new Error(Message)
@@ -99,14 +100,18 @@ export function TopBar({ menuClick, homeAddress }) {
       }
      
       
-    if (auth.userType==="Patient"){
+    // if (auth.userType==="Patient"){
       
-      getProfile()
-    }
+    //   getProfile()
+    // }
+    // if (auth.userType==="Patient"){
+      
+    getProfile()
+    // }
     // else if (auth.userType==="Provider"){
     //   getProviderDetails()
     // }
-    
+    console.log(profile)
   },[auth])
   return (
     <div className='dev-top-bar'>
@@ -134,14 +139,16 @@ export function TopBar({ menuClick, homeAddress }) {
             aria-expanded='false'
           > 
             {(profile)?
+
             <img
-              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
+              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
               style={{objectFit:"cover", width:50, height:50}}
             />:null}
             <span className='ml-1 nav-user-name hidden-sm'>
-              {profile.first_name}
+              
+              {(auth.userType==='Patient')?(profile.first_name):(auth.userType==='Provider')?profile.provider_name:null}
               {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
             </span>
           </Link>
@@ -149,7 +156,9 @@ export function TopBar({ menuClick, homeAddress }) {
             <Link className='dropdown-item' to='profile'>
               <i className='ti-user text-muted mr-2'></i> Profile
             </Link>
-
+            <Link className='dropdown-item' to='about'>
+              <i className='ti-info text-muted mr-2'></i> About
+            </Link>
             {/* <Link className='dropdown-item' to='#'>
               <i className='ti-settings text-muted mr-2'></i> Settings
             </Link> */}
