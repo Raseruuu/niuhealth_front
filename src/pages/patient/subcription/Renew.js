@@ -31,7 +31,7 @@ function Renew() {
       await axiosPrivate
         .get(
           'getSubscriptions',
-          { Email: auth.email },
+          { },
           {
             signal: controller.signal,
           }

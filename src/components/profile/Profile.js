@@ -9,6 +9,8 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 // import { TimeZoneSelect } from '../clinics/ClinicSchedule'
 
 import TimeZoneSelect from  '../time/Timezone'
+import ScheduleSelect from  '../time/Hours'
+
 import './icon.css'
 import useAuth from '../../hooks/useAuth'
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
@@ -28,7 +30,38 @@ function ProfileEdit() {
   const [cityActive, setCityActive] = useState(false)
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
-
+  const [hours,setHours]=useState({
+    'HoursMonStart':8,
+    'HoursMonEnd':20,
+    'HoursTueStart':8,
+    'HoursTueEnd':20,
+    'HoursWedStart':8,
+    'HoursWedEnd':20,
+    'HoursThuStart':8,
+    'HoursThuEnd':20,
+    'HoursFriStart':8,
+    'HoursFriEnd':20,
+    'HoursSatStart':8,
+    'HoursSatEnd':20,
+    'HoursSunStart':8,
+    'HoursSunEnd':20
+    })
+  const [oldHours,setOldHours]=useState({
+    'HoursMonStart':8,
+    'HoursMonEnd':20,
+    'HoursTueStart':8,
+    'HoursTueEnd':20,
+    'HoursWedStart':8,
+    'HoursWedEnd':20,
+    'HoursThuStart':8,
+    'HoursThuEnd':20,
+    'HoursFriStart':8,
+    'HoursFriEnd':20,
+    'HoursSatStart':8,
+    'HoursSatEnd':20,
+    'HoursSunStart':8,
+    'HoursSunEnd':20
+    })
   function dateFormat(date) {
     return moment(date).format('YYYY-MM-DD') // moment can initialize passing empty params
   }
@@ -39,26 +72,49 @@ function ProfileEdit() {
     // console.log('profile', profile)
     
     // setProfile({ ...profile, address: address1 + ', ' + address2 })
-    formData.append('Email', auth.email)
-    formData.append('FirstName', profile.first_name)
-    formData.append('MiddleName', profile.middle_name)
-    formData.append('LastName', profile.last_name)
-    formData.append('ContactInfo', profile.contact_info)
-    formData.append('Address', profile.address)
-
-    formData.append('CountryID', profile.country_id)
-    formData.append('CityID', profile.country_city_id)
-    formData.append('DateOfBirth', profile.date_of_birth)
-    formData.append('LocalTimeZone', profile.local_time_zone)
+    if (auth.userType==="Patient"){
+      formData.append('Email', auth.email)
+      formData.append('FirstName', profile.first_name)
+      formData.append('MiddleName', profile.middle_name)
+      formData.append('LastName', profile.last_name)
+      formData.append('ContactInfo', profile.contact_info)
+      formData.append('Address', profile.address)
+      formData.append('CountryID', profile.country_id)
+      formData.append('CityID', profile.country_city_id)
+      formData.append('DateOfBirth', profile.date_of_birth)
+      formData.append('LocalTimeZone', profile.local_time_zone)
+    }
+    if (auth.userType==="Provider"){
+      formData.append('Email', auth.email)
+      formData.append('Name', profile.provider_name)
+      
+      formData.append('ProviderDescription', profile.provider_description)
+      formData.append('Practice', profile.practice)
+      formData.append('ContactInfo', profile.contact_info)
+      
+      for (let key in hours) {
+        if (hours.hasOwnProperty(key)) {
+          formData.append(key,hours[key])
+          console.log(key,hours[key])
+        }
+      }
+      
+      // formData.append('ContactInfo', profile.contact_info)
+      // formData.append('Address', profile.address)
+      // formData.append('CountryID', profile.country_id)
+      // formData.append('CityID', profile.country_city_id)
+      // formData.append('DateOfBirth', profile.date_of_birth)
+      // formData.append('LocalTimeZone', profile.local_time_zone)
+    }
     console.log(typeof profile.picturefile)
     if (typeof profile.picturefile === 'object'){
     formData.append('Image', profile.picturefile ,"profile_pic")
     }
     
-    
+    let profile_endpoint=((auth.userType==='Provider')?"providerUpdateDetails":(auth.userType==='Provider')?"updateProviderDetails":"none")
     await axiosPrivate
       
-      .post('update'+auth.userType+"Details", formData, {
+      .post(profile_endpoint, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: function (ProgressEvent) {
           console.log(
@@ -96,6 +152,8 @@ function ProfileEdit() {
     setImagePreview(false)
     setDisableForm((prev) => !prev)
     setProfile(oldProfile)
+    setHours(oldHours)
+    
     
   }
 
@@ -154,6 +212,7 @@ function ProfileEdit() {
             ...profile,
             picture:result 
           })
+          
           setImagePreview(true)
         }
       }
@@ -208,6 +267,54 @@ function ProfileEdit() {
           if (Status) {
             setProfile(details)
             console.log('deets',details)
+            setHours({
+              HoursSunStart:  details.hours_sun_start,
+              HoursSunEnd:    details.hours_sun_end,
+              HoursMonStart:  details.hours_mon_start,
+              HoursMonEnd:    details.hours_mon_end,
+              HoursTueStart:  details.hours_tue_start,
+              HoursTueEnd:    details.hours_tue_end,
+              HoursWedStart:  details.hours_wed_start,
+              HoursWedEnd:    details.hours_wed_end,
+              HoursThuStart:  details.hours_thu_start,
+              HoursThuEnd:    details.hours_thu_end,
+              HoursFriStart:  details.hours_fri_end,
+              HoursFriEnd:    details.hours_fri_start,
+              HoursSatStart:  details.hours_sat_start,
+              HoursSatEnd:    details.hours_sat_end
+              })
+              setOldHours({
+                HoursSunStart:  details.hours_sun_start,
+                HoursSunEnd:    details.hours_sun_end,
+                HoursMonStart:  details.hours_mon_start,
+                HoursMonEnd:    details.hours_mon_end,
+                HoursTueStart:  details.hours_tue_start,
+                HoursTueEnd:    details.hours_tue_end,
+                HoursWedStart:  details.hours_wed_start,
+                HoursWedEnd:    details.hours_wed_end,
+                HoursThuStart:  details.hours_thu_start,
+                HoursThuEnd:    details.hours_thu_end,
+                HoursFriStart:  details.hours_fri_end,
+                HoursFriEnd:    details.hours_fri_start,
+                HoursSatStart:  details.hours_sat_start,
+                HoursSatEnd:    details.hours_sat_end
+                })
+            console.log("Hours GET!",{
+              HoursSunStart:  details.hours_sun_start,
+              HoursSunEnd:    details.hours_sun_end,
+              HoursMonStart:  details.hours_mon_start,
+              HoursMonEnd:    details.hours_mon_end,
+              HoursTueStart:  details.hours_tue_start,
+              HoursTueEnd:    details.hours_tue_end,
+              HoursWedStart:  details.hours_wed_start,
+              HoursWedEnd:    details.hours_wed_end,
+              HoursThuStart:  details.hours_thu_start,
+              HoursThuEnd:    details.hours_thu_end,
+              HoursFriStart:  details.hours_fri_end,
+              HoursFriEnd:    details.hours_fri_start,
+              HoursSatStart:  details.hours_sat_start,
+              HoursSatEnd:    details.hours_sat_end
+              })
             setOldProfile(details)
             setAuth((prev) => ({ ...prev, ...details }))
             setTimeZone(details?.local_time_zone)
@@ -254,8 +361,8 @@ function ProfileEdit() {
   }, [])
 
   useEffect(() => {
+    
     if (!profile?.country_id || profile?.country_id === 'undefined') return
-
     getCities()
   }, [profile.country_id])
 
@@ -411,6 +518,45 @@ function ProfileEdit() {
                           />
                         </div>
                       </div>
+                      {(auth.userType==='Provider')?(
+                      <>
+                      <div className="form-group row">
+                        <label
+                          for="example-tel-input"
+                          className="col-sm-2 col-form-label text-right"
+                        >
+                          About Me
+                        </label>
+                        <div className="col-sm-10">
+                          <input
+                            disabled={disableForm}
+                            className="form-control"
+                            type="tel"
+                            name="provider_description"
+                            value={profile.provider_description}
+                            onChange={handleInputChange.bind(this)}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                      <label
+                        for="example-tel-input"
+                        className="col-sm-2 col-form-label text-right"
+                      >
+                        Specialization
+                      </label>
+                      <div className="col-sm-10">
+                        <input
+                          disabled={disableForm}
+                          className="form-control"
+                          type="tel"
+                          name="practice"
+                          value={profile.practice}
+                          onChange={handleInputChange.bind(this)}
+                        />
+                      </div>
+                    </div>
+                    </>):null}
                       <div className="form-group row">
                         <label
                           for="example-tel-input"
@@ -429,7 +575,8 @@ function ProfileEdit() {
                           />
                         </div>
                       </div>
-
+                     
+                      {(auth.userType==='Patient')?(
                       <div className="form-group row">
                         <label
                           for="example-text-input"
@@ -447,8 +594,9 @@ function ProfileEdit() {
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
-                      </div>
-
+                      </div>):null}
+                      {(auth.userType==='Country')?(
+                        <>
                       <div
                         className="form-group row"
                         style={{ marginLeft: '80px' }}
@@ -493,6 +641,7 @@ function ProfileEdit() {
                           </select>
                         </div>
                       </div>
+                     
                       <div className="form-group row">
                         <label
                           for="example-date-input"
@@ -513,6 +662,7 @@ function ProfileEdit() {
                           />
                         </div>
                       </div>
+                      
                       <div className="form-group row">
                         <label
                           for="example-date-input"
@@ -532,7 +682,51 @@ function ProfileEdit() {
                             onChangeCapture={handleInputChange.bind(this)}
                           />
                         </div>
+                      </div></>
+                      ):
+                      <div className='col-lg-12'  >
+                        <div className='form-group row' >
+                          {/* <div className='row'> */}
+                            <div className='col-md-3' >
+                              <h5>Sunday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun" disabled={disableForm}/>
+                            </div>
+                            <div className='col-md-3'>
+                              <h5>Monday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon" disabled={disableForm}/>
+                            </div>
+                            <div className='col-md-3'>
+                              <h5>Tuesday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue" disabled={disableForm}/>
+                            </div>
+                            <div className='col-md-3'>
+                              <h5>Wednesday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed" disabled={disableForm}/>
+                            </div>
+                          
+                            {/* <div className='row'> */}
+                            
+                            <div className='col-md-3'>
+                              <h5>Thursday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu" disabled={disableForm}/>
+                            </div>
+                            <div className='col-md-3'>
+                              <h5>Friday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri" disabled={disableForm}/>
+                            </div>
+                            <div className='col-md-3'>
+                              <h5>Saturday</h5>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat" disabled={disableForm}/>
+                            </div>
+                            <div>
+                            {/* </div> */}
+                          </div>
+                          {/* </div> */}
+                        </div>
                       </div>
+                      
+                      
+                      }
                     </div>
                   </div>
 
@@ -544,7 +738,7 @@ function ProfileEdit() {
                           onClick={handleSubmit}
                           type="button"
                           className="btn btn-success btn-round waves-effect waves-light"
-                          disabled={profile===oldProfile}
+                          disabled={hours===oldHours}
                         >
                           Submit
                         </button>

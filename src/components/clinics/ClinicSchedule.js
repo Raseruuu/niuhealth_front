@@ -8,6 +8,8 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 
 import TimeZoneSelect from  '../time/Timezone'
+import ScheduleSelect from  '../time/Hours'
+
 import ProfileEdit from '../../pages/patient/Profile'
 import UploadImage from '../form/UploadImage'
 import Swal from 'sweetalert2'
@@ -32,66 +34,6 @@ function CurrencySelect({ setLocalCurrency, value,disabled }){
   )
 }
 
-function hourformat(hour){
-    if (hour>12){
-      return (hour-12)+" PM"
-    }
-    else if (hour===12){
-      return (12)+" PM"
-    }
-    else if (hour===0){
-      return (12)+" AM"
-    }
-    else{
-      return hour+" AM"
-    }
-  }
-function ScheduleSelect({hours,setHours,weekday,disabled}){
-  // hours = 0
-  let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
-  let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
-  
-  return(
-    <div class="column" style={{maxWidth:'250px', paddingLeft:"20px"}}>
-      <div class = "row">
-        <div>Start Time </div>
-        <div class = "col">
-      <select
-        disabled={disabled}
-        onChange={(e)=>{
-        setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
-        console.log(hours)
-      }
-      }
-        className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
-        {morning_options.map((option)=>(
-          <option value={option}>{hourformat(option)}</option>
-          ))}
-        <option value={null}>N/A</option>
-      </select>
-      </div>
-      </div>
-      <div class = "row">
-        <div>End Time </div>
-        <div class = "col">
-        <select  
-          disabled={disabled}
-          onChange={(e)=>{
-            setHours({...hours,['Hours'+weekday+'End']:e.target.value});
-            console.log(hours)
-          }
-          }
-          className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>
-          {night_options.map((option2)=>(
-            <option value={option2}>{hourformat(option2)}</option>
-            ))}
-          <option value={null}>N/A</option>
-        </select>
-        </div>
-      </div>
-  </div>
-  )
-}
 
 export default function ClinicSchedule() {
   const { auth } = useAuth()
@@ -202,11 +144,15 @@ export default function ClinicSchedule() {
           if (Status) {
             setIsSuccess(true)
             if (action==="create")
-              {alert("Success! You created a new Clinic.")}
+            { 
+              alert("Success! You created a new Clinic.")
               navigate('/provider/clinics')
-            if (action==="edit")
-              {alert("Clinic Info is now updated.")}
+            }
+            else if (action==="edit")
+              {
+              alert("Clinic Info is now updated.")
               navigate('/provider/clinics/profile/'+clinicID)
+              }
 
           } else {
             setIsSuccess(false)

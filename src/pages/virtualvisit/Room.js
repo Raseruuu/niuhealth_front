@@ -5,7 +5,7 @@ import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL,API_URL, USERTYPE, ZOOM_SDK } from '../../constants'
-
+import "./zoom.css"
 function Room() {
   const { auth } = useAuth()
   const { state } = useLocation()
@@ -14,6 +14,7 @@ function Room() {
   const email = auth?.email || sessionStorage.getItem('email')
   const name = auth?.name || sessionStorage.getItem('name')
   const [symptomVisible,setSymptomVisible] = useState(false)
+  let zindex=0
   const isProvider =
     (auth?.userType || sessionStorage.getItem('userType')) === USERTYPE.provider
       ? true
@@ -78,8 +79,6 @@ function Room() {
           tk: registrantToken,
           success: (success) => {
             console.log(success)
-            state.MeetingStatus=true
-            console.log("meeting object ",ZoomMtg)
             
             
             
@@ -121,6 +120,7 @@ function Room() {
     return () => {
       document.getElementById('zmmtg-root').style.display = 'none'
     }
+  
   }, [])
 
   return (
@@ -134,7 +134,7 @@ function Room() {
           <div className="notification-message-wrap__txt-container"> 
             {`The patient's symptom is listed as: \n"`+(state.Symptom)+`" `}
           </div>
-          <button className='zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} onclick={()=>console.log(this)}>OK</button>
+          <button onClick={()=>{zindex=0;}}className='close-button zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} >OK</button>
           <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>state.MeetingStatus=false}></i>
         </div>
       </div>):null
