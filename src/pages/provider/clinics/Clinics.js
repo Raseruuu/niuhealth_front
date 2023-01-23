@@ -68,10 +68,10 @@ function Clinics() {
       </TableTitle>
       
       <div className='row'>
-        {list.map((item) => (
-          <div className='col-sm-12 col-md-6'>
+        {list.map((item,index) => (
+          <div key={index} className='col-sm-12 col-md-6' >
             <Link to={"profile/"+item.clinic_id}>
-            <div class='card flex-sm-col flex-md-row overflow-hidden'>
+            <div className='card flex-sm-col flex-md-row overflow-hidden'>
               
               <img
                 className='card-img-top'
@@ -83,10 +83,10 @@ function Clinics() {
                 // style={{}}
                 alt=''
               />
-              <div class='card-body'>
+              <div className='card-body'>
                 
-                <h5 class='card-title'>{item.clinic_name}</h5>
-                <p class='card-text mb-0'>{item.address}</p>
+                <h5 className='card-title'>{item.clinic_name}</h5>
+                <p className='card-text mb-0'>{item.address}</p>
                 <p className='text-muted mb-0'>
                   {item.specialty}
                 </p>

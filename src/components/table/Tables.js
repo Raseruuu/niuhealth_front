@@ -48,8 +48,8 @@ export default function TableCard({ headers, children }) {
               <table className="table">
                 <thead className="thead-light">
                   <tr>
-                    {headers.map((header) => (
-                      <th>{header}</th>
+                    {headers.map((header,index) => (
+                      <th key={index}>{header}</th>
                     ))}
                   </tr>
                 </thead>

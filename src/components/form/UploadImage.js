@@ -22,7 +22,11 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
         // let imageid='image'+id+'_file'
         console.log('editing now: ', id)
         setImage({...image, file:file})
-        setFormData({...formData,imagefile:file})
+        // setFormData({...formData,imagefile:file})
+
+        setFormData({...formData,images:[...images,image]})
+        console.log('uguu',images)
+        
       };
     function triggerFileInput() {
         if (imgRef.current) {
@@ -37,14 +41,8 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
             ...existingItems.slice(i + 1),
           ]
         })
-        setImage(images[parseInt(id)])
-      }
-    useEffect(() => {
-        // setImage(images[id-]) 
         
-        setFormData({...images,images:[...images,image]})
-        console.log('uguu',images)
-    }, [images])
+      }
     useEffect(() => {
         
         // let isMounted = true
@@ -78,7 +76,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
             fileReader.abort();
           }
         }
-      }, [image])
+      }, [formData])
     return (
 
         <div className="upload-container d-flex flex-column justify-content-center align-items-center">
@@ -92,36 +90,34 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                     ref={imgRef}
                     onChange={handleImageInputChange}
                 />
+                {(previewImage)?(
+                  <>
+                  <img
+                      alt=""
+                      style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
 
-                <img
-                    alt=""
-                    style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
-
-                    onClick={() => {
-                    Swal.fire({
-                        // title: 'Profile Picture',
-                        html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}"></img>`,
-                        // { AWS_BUCKET_SERVICES } + profile.picture,
-                    })
-                    }}
-                    src={!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}
-                    className="ob waves-effect waves-light"
-                    // style={{ margin: 'unset' }}
-                    
-                />
-                {/* <button className="btn" minWidth="200px" height="150px" onClick={()=>{if (clinicImages.length<4){setClinicImages([...clinicImages,'clinics/Default.png'])}}}>x</button> */}
-                {/* <span className='fro-profile_main-pic-change'>
-                          <i className='fas fa-camera'></i>
-                        </span> */}
-                {action==='edit' ||action==='create'? (
-                    <button
-                    type="button"
-                    className="btn btn-gradient-success waves-effect waves-light"
-                    onClick={triggerFileInput}
-                    >
-                    Upload
-                    </button>
+                      onClick={() => {
+                      Swal.fire({
+                          // title: 'Profile Picture',
+                          html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}"></img>`,
+                          // { AWS_BUCKET_SERVICES } + profile.picture,
+                      })
+                      }}
+                      src={!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}
+                      className="ob waves-effect waves-light"
+                      
+                  />
+                  {action==='edit' ||action==='create'? (
+                      <button
+                      type="button"
+                      className="btn btn-gradient-success waves-effect waves-light"
+                      onClick={triggerFileInput}
+                      >
+                      Upload
+                      </button>
                  ): null }
+                 </>
+                 ):null}
                 </div>
            
               )

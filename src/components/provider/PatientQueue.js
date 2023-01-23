@@ -150,9 +150,8 @@ function PatientQueue({ limit, search }) {
         </a>
       </td>
       <td>
-        <a href={`tel:${item.symptoms}`}>
-          {item.symptoms}
-        </a>
+        {item.symptoms}
+        
       </td>
       <td>
         <a href={`tel:${item.address}`}>

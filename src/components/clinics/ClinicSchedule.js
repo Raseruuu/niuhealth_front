@@ -10,6 +10,7 @@ import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import TimeZoneSelect from  '../time/Timezone'
 import ProfileEdit from '../../pages/patient/Profile'
 import UploadImage from '../form/UploadImage'
+import Swal from 'sweetalert2'
 function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
     <div class="row">
@@ -103,6 +104,7 @@ export default function ClinicSchedule() {
   const [localCurrency,setLocalCurrency]=useState("USD")
   const [localTimezone,setTimeZone]=useState("+8")
   const [clinicProfile,setClinicProfile]=useState({})
+  const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
   const [clinicImages,setClinicImages]=useState([])
   const [imagepreview, setImagePreview] = useState(false)
@@ -139,14 +141,25 @@ export default function ClinicSchedule() {
       setClinicProfile((prev) => ({ ...prev, [name]: value }))
     }
   const onSubmit = async (data) => {
+    
     const formData = new FormData();
     console.log(data)
+    if (action==='create'){
+      formData.append("Email", auth.email);
+      formData.append("ClinicName",data.ClinicName)
+      formData.append("Specialty",data.Specialty)
+      formData.append("ContactInfo",data.ContactInfo)
+      formData.append("Address",data.Address)
+    }
+    else if (action==='edit'){
+      formData.append("Email", auth.email);
+      formData.append("ClinicName",clinicProfile.clinic_name)
+      formData.append("ClinicID",clinicID)
+      formData.append("Specialty",clinicProfile.specialty)
+      formData.append("ContactInfo",clinicProfile.contact_info)
+      formData.append("Address",clinicProfile.address)
+    }
     
-    formData.append("Email", auth.email);
-    formData.append("ClinicName",data.ClinicName)
-    formData.append("Specialty",data.Specialty)
-    formData.append("Contact_info",data.Contact_info)
-    formData.append("Address",data.Address)
     for (let key in hours) {
       if (hours.hasOwnProperty(key)) {
         formData.append(key,hours[key])
@@ -188,7 +201,13 @@ export default function ClinicSchedule() {
           // setFeedbackMsg(Message)
           if (Status) {
             setIsSuccess(true)
-            alert("Success! You created a new Clinic.")
+            if (action==="create")
+              {alert("Success! You created a new Clinic.")}
+              navigate('/provider/clinics')
+            if (action==="edit")
+              {alert("Clinic Info is now updated.")}
+              navigate('/provider/clinics/profile/'+clinicID)
+
           } else {
             setIsSuccess(false)
             
@@ -220,6 +239,8 @@ export default function ClinicSchedule() {
 
           if (Status) {
             console.log('details',res.data.Data)
+            
+            setOldProfile(res.data.Data)
             setClinicProfile(res.data.Data)
             var tempImgList=[]
             if (res.data.Data.image1){tempImgList.push({path:res.data.Data.image1,file:null})}
@@ -230,7 +251,6 @@ export default function ClinicSchedule() {
             
             setClinicImages(tempImgList)
             setImagePreview(true)
-            // setOldProfile(register)
             // setAuth((prev) => ({ ...prev, ...details }))
             // setTimeZone(details?.local_time_zone)
           } else {
@@ -321,61 +341,9 @@ export default function ClinicSchedule() {
           <div className='col-lg-12'>
             <div className='card'>
               <div className='card-body'>
-              {/* <div class="row" style={{ marginTop: "10px", marginBottom:"40px"}}>
-                  <div class="col-lg-12">
-                    <label htmlFor="exampleFormControlSelect2">
-                      Upload Clinic Image
-                    </label>
-                    <div class="uploadPicContainer">
-                      <input
-                        type="file"
-                        id="input-file-now-custom-1"
-                        class="dropify"
-                        accept="image/*"
-                        capture="user"
-                        multiple
-                        required
-                        {...register("Image", {
-                          required:true
-                        })}
-                        onChange={(e) => {
-                          console.log(e.target.files);
-                        }}
-                      />
-                      {errors.image ? (
-                        <div className="text-danger">Please choose file</div>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-                {feedbackMsg ? (
-                  <div className='row' >
-                    <div className='col-lg-6'>
-                      <div
-                        className={`alert  alert-dismissible fade show ${
-                          isSuccess ? 'alert-success' : 'alert-danger'
-                        }`}
-                        role='alert'
-                      >
-                        {feedbackMsg}
-                        <button
-                          type='button'
-                          className='close'
-                          data-dismiss='alert'
-                          aria-label='Close'
-                          ref={alertBtnRef}
-                        >
-                          <span aria-hidden='true'>&times;</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : null} */}
                 <div className='row'>
                   <div className='col'>
                       <div className='form-group row'>
-                        
-                        
                         
                         {clinicImages.map((clinicImage,index)=>(
                           
@@ -466,19 +434,32 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-md-12'>
+                        {(action==="create")?(
                         <input
                           className={`form-control ${
                             errors.Name ? 'is-invalid' : ''
                           }`}
                           type='text'
-                          id='name'
+                          id='ClinicName'
+                          name="clinic_name"
+                          {...register('ClinicName')}
+                        />):
+                        
+                        (<input
+                          className={`form-control ${
+                            errors.Name ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='clinic_name'
                           disabled={action==='profile'}
                           name="clinic_name"
                           value={clinicProfile.clinic_name}
                           onChange={handleInputChange.bind(this)}
+                          // {...register('ClinicName')}
                           // onChange={(e)=>setClinicProfile({...clinicProfile,clinic_name:e.target.value})}
-                          {...register('ClinicName')}
-                        />
+                          // {...register('clinic_name')}
+                        />)
+                        }
                         {errors.name ? (
                           <div
                             className='invalid-feedback'
@@ -504,6 +485,17 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-md-12'>
+                      {(action==="create")?(
+                        <input
+                          className={`form-control ${
+                            errors.Specialty ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Specialty'
+                          disabled={action==='profile'}
+                          name="specialty"
+                          {...register('Specialty')}
+                        />):
                         <input
                           className={`form-control ${
                             errors.Specialty ? 'is-invalid' : ''
@@ -514,8 +506,8 @@ export default function ClinicSchedule() {
                           value={clinicProfile.specialty}
                           name="specialty"
                           onChange={handleInputChange.bind(this)}
-                          {...register('Specialty')}
-                        />
+                          // {...register('Specialty')}
+                        />}
                         {errors.specialty ? (
                           <div
                             className='invalid-feedback'
@@ -541,18 +533,27 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-md-12'>
+                      {(action==="create")?(
                         <input
                           className={`form-control ${
                             errors.contact_info ? 'is-invalid' : ''
                           }`}
                           type='text'
-                          id='Contact_info'
+                          id='contact_info'
+                          disabled={action==='profile'}
+                          name="contact_info"
+                          {...register('ContactInfo')}
+                        />):<input
+                          className={`form-control ${
+                            errors.contact_info ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='contact_info'
                           disabled={action==='profile'}
                           name="contact_info"
                           value={clinicProfile.contact_info}
                           onChange={handleInputChange.bind(this)}
-                          {...register('Contact_info')}
-                        />
+                        />}
                         {errors.contact_info ? (
                           <div
                             className='invalid-feedback'
@@ -576,6 +577,17 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-md-12'>
+                        {(action==="create")?(
+                        <input
+                          className={`form-control ${
+                            errors.Address ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address'
+                          disabled={action==='profile'}
+                          name="address"
+                          {...register('Address')}
+                        />):
                         <input
                           className={`form-control ${
                             errors.Address ? 'is-invalid' : ''
@@ -586,8 +598,8 @@ export default function ClinicSchedule() {
                           value={clinicProfile.address}
                           name="address"
                           onChange={handleInputChange.bind(this)}
-                          {...register('Address')}
-                        />
+                          // {...register('Address')}
+                        />}
                         {errors.Address ? (
                           <div
                             className='invalid-feedback'
@@ -734,9 +746,9 @@ export default function ClinicSchedule() {
                  { (action==='profile')?(
                   <div className='col-lg-12'>
                     <button
-                      // type='button'
+                      type='button'
                       className='btn btn-gradient-success waves-effect waves-light'
-                      onClick={() =>navigate('/provider/clinics/edit/'+clinicID)}
+                      onClick={(e) =>{navigate('/provider/clinics/edit/'+clinicID);e.preventDefault()}}
                       style={{marginRight:'10px'}}
                     >
                       Edit Clinic
@@ -755,15 +767,17 @@ export default function ClinicSchedule() {
                       type='submit'
                       className='btn btn-gradient-success waves-effect waves-light'
                       disabled={isSubmitting}
+                      style={{marginRight:'10px'}}
                     >
                       Save
                     </button>{' '}
                     <button
                       type='button'
-                      className='btn btn-gradient-info waves-effect waves-light'
-                      onClick={() => navigate(-1)}
+                      className='btn btn-gradient-danger waves-effect waves-light'
+                      onClick={() => Swal.fire({html:"You cannot delete this clinic."})}
+                      style={{marginRight:'10px'}}
                     >
-                      Cancel
+                      Delete
                     </button>
                     <button
                       type='button'
