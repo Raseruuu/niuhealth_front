@@ -171,8 +171,8 @@ const router = createBrowserRouter(
               element: <Outlet />,
               children: [
                 { index: true, element: <Patients /> },
-                { path: 'profile', element: <PatientProfile /> },
-                { path: 'profile/:action', element: <PatientProfile /> },
+                { path: 'profile/:id', element: <PatientProfile /> },
+                { path: 'profile/:id/:action', element: <PatientProfile /> },
               ],
             },
             { path: 'about', element: <About/>},

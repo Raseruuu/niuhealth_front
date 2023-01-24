@@ -3,7 +3,7 @@ import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 import Pagination from 'react-js-pagination'
 import { Link } from 'react-router-dom'
 import { StatusTextInsurance } from '../../components/status/Status'
-import { AWS_BUCKET } from '../../constants'
+import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 
 function PatientListData({ limit,pagenum, list = [] }) {
   // var paginatedlist = new List('users', options);
@@ -36,9 +36,10 @@ function PatientListData({ limit,pagenum, list = [] }) {
           <div className="row">
             <div className="col">
               <img
-                src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+                src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
                 alt=""
                 className="thumb-sm rounded-circle mr-2"
+                style={{objectFit:'cover'}}
               />
               {item.first_name} {item.middle_name} {item.last_name}
             </div>

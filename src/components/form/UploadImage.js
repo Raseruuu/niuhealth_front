@@ -26,8 +26,13 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
 
         setFormData({...formData,images:[...images,image]})
         console.log('uguu',images)
-        
       };
+    const removeClinicImage = (index) => {
+      setImages([
+        ...images.slice(0, index),
+        ...images.slice(index + 1, images.length)
+      ]);
+    }
     function triggerFileInput() {
         if (imgRef.current) {
             imgRef.current.click()
@@ -79,7 +84,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
       }, [formData])
     return (
 
-        <div className="upload-container d-flex flex-column justify-content-center align-items-center">
+        <div className="upload-container d-flex flex-column justify-content-center align-items-center" style={{marginBottom:'10px',marginLeft:'10px',marginRight:'10px'}}>
                 <input
                     hidden
                     type="file"
@@ -108,13 +113,23 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                       
                   />
                   {action==='edit' ||action==='create'? (
+                      <div className='row'>
                       <button
                       type="button"
                       className="btn btn-gradient-success waves-effect waves-light"
                       onClick={triggerFileInput}
                       >
-                      Upload
+                      Change
                       </button>
+                      <button
+                      type="button"
+                      className="btn btn-gradient-danger waves-effect waves-light"
+                      onClick={()=>
+                        {removeClinicImage(id)}}
+                      >
+                      Remove
+                      </button>
+                      </div>
                  ): null }
                  </>
                  ):null}

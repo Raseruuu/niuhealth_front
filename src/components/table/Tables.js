@@ -22,9 +22,9 @@ export function TableTitle({title,children}){
     <div className='row'>
     <div className='col-sm-12'>
       <div className='page-title-box'>
-        {children}
-        <h4 className='page-title'>{title}</h4>
         
+        <h4 className='page-title'>{title}</h4>
+        {children}
         </div>
       </div>
     </div>

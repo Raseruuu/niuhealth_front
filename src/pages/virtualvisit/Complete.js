@@ -13,7 +13,8 @@ export default function Complete() {
   const [review, setReview] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { meetingId } = useParams()
-
+  const [provider, setProvider] = useState({provider_name:"John Doe"})
+  
   const handleRating = (rate) => {
     setRating(rate)
   }
@@ -23,11 +24,11 @@ export default function Complete() {
     try {
       await axiosPrivate
         .post('createRating', {
-          Provider: 'jmmalunao@gmail.com',
+          Provider: provider.email,
           Patient: auth.email,
           MeetingID: meetingId,
           Rating: rating,
-          Review: 'Sample meeting review',
+          Review: review,
         })
         .then((res) => {
           console.log(res.data)
@@ -86,7 +87,7 @@ export default function Complete() {
                         className='thumb-md rounded-circle mr-2'
                       />
                       <div className='media-body align-self-center'>
-                        <h5>Rate your visit experience with Dr. Nefario.</h5>
+                        <h5>Rate your visit experience with {provider.provider_name}</h5>
                       </div>
                     </div>
                     <h4 style={{ marginTop: '30px' }}>

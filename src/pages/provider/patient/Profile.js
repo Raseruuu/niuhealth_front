@@ -1,15 +1,60 @@
 import { Link, useLocation, useParams } from "react-router-dom"
-import { AWS_BUCKET } from "../../../constants"
+import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from "../../../constants"
 import TableCard, { TableTitle } from "../../../components/table/Tables"
-
+import { useEffect, useState } from 'react'
 // TODO: check other UI if it has same layout
 function PatientProfile() {
-  const { action } = useParams()
+  const { action,id } = useParams()
   let {
     state: { selectedUser },
   } = useLocation()
 
-  console.log("selectedUser", selectedUser)
+  // console.log("selectedUser", selectedUser)
+  useEffect(() => {
+    let isMounted = true
+    const controller = new AbortController()
+    
+    async function getProfileDetails() {
+      await axiosPrivate
+        .post(
+          'getPatientDetails',
+          { Email: auth.email ,PatientID:id},
+          {
+            signal: controller.signal
+          }
+        )
+        .then((res) => {
+          
+          const { Status, Data: data = [], Message } = res.data
+          const details = data[0]
+         
+          if (Status) {
+            setProfile(details)
+            console.log('deets',details)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+        })
+    }
+    getProfileDetails()
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  }, [])
+
+
+
+
+
+
+
+
+
+
   // return (
   //   <div>
   //     Profile from Provider
@@ -42,10 +87,12 @@ function PatientProfile() {
                   <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
                     <div className='met-profile-main'>
                       <div className='met-profile-main-pic'>
+                      {}
                         <img
-                          src={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
+                          src={AWS_BUCKET_SERVICES+"profiles/pictures/"+selectedUser.patient_id+"/"+selectedUser.picture}
                           alt=''
                           className='rounded-circle'
+                          style={{width:125,height:125,objectFit:'cover'}}
                         />
                         {/* <span className='fro-profile_main-pic-change'>
                           <i className='fas fa-camera'></i>

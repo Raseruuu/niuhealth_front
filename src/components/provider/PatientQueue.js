@@ -1,7 +1,7 @@
 import { useEffect, useMemo,useState } from 'react'
 import moment from 'moment'
 import { Link } from 'react-router-dom'
-import { AWS_BUCKET } from '../../constants'
+import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
@@ -34,7 +34,8 @@ function PatientQueue({ limit, search }) {
         action === actionX.meet
           ? 'Meet with '+selectedItem.full_name+"?"
           : 'Cancel Appointment',
-      html: selectedItem.full_name+` is suffering from "${selectedItem.symptoms}".
+      html: selectedItem.full_name+` is suffering from <br>
+      "${selectedItem.symptoms}".<br>
       <span class="text-muted">Patient: ${selectedItem.email}</span><br />`,
       icon: action === actionX.meet ? 'question' : 'warning',
       confirmButtonText: 'Yes',
@@ -116,15 +117,17 @@ function PatientQueue({ limit, search }) {
     <tr key={item?.recno || index}>
       <td>
         <Link
-          to='profile'
+          // to={'/provider/patient/profile'}
+          to={"/provider/patient/profile/"+item.patient_id}
           state={{
             selectedUser: item,
           }}
         >
           {' '}
           <div className='row'>
+          
             <img
-              src={`${AWS_BUCKET}/assets/images/users/user-10.jpg`}
+              src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
               alt=''
               className='thumb-sm rounded-circle mr-2'
             />
@@ -154,9 +157,7 @@ function PatientQueue({ limit, search }) {
         
       </td>
       <td>
-        <a href={`tel:${item.address}`}>
-          {item.address}
-        </a>
+        {item.address}
       </td>
       {/* <td>
         <span className='badge badge-md badge-soft-purple'>

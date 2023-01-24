@@ -337,7 +337,7 @@ function PatientList() {
   return (
     <ContainerFluid>
       <TableTitle title="Patients">
-        <div className="float-right">
+        <div className="float-left">
           <form onSubmit={handleSubmit}>
             
             <div

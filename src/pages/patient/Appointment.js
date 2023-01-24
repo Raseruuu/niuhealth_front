@@ -7,6 +7,9 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import moment from "moment"
 import TableCard from "../../components/table/Tables"
 import CardItem from "../../components/cards/Card"
+import useInterval from '../../hooks/useInterval'
+import { useLocation, useNavigate } from 'react-router-dom'
+
 function dateTimeFormat(date) {
   return moment(date).format('MMM DD, YYYY, hh:mm A z')
 }
@@ -34,12 +37,69 @@ const ViewVisitButton = () => {
       </button>
     </div>
   )}
-const StartButton = () => {
+function StartButton({appointment}){
+  const [meetingID, setMeetingID] = useState({})
+  const [password, setPassword] = useState({})
+  const [errMsg, setErrMsg] = useState(null)
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  
+  const [isReady, setIsReady] = useState(false)
+    useEffect(() => {
+      let isMounted = true
+      const controller = new AbortController()
+      const joinAppointment = async () => {
+        const controller = new AbortController()
+        await axiosPrivate
+          .post(
+            'patientJoinAppointment',
+            { Email: auth.email,VisitID:appointment},
+            {
+              signal: controller.signal,
+            }
+          )
+          .then((res) => {
+            const { Data } = res.data
+
+            console.log("Data",Data)
+            setMeetingID(Data.MeetingID)
+            setPassword(Data.Passcode)
+
+            if (Data?.Status === 'started') {
+              setDelay(null)
+              setIsReady(true)
+            } else {
+              setIsReady(false)
+            }
+          })
+          .catch((err) => console.error(err))
+      }
+      
+      // isMounted
+      // useInterval(joinAppointment, 10000)
+
+      joinAppointment()
+      
+
+
+      return () => {
+        isMounted = false
+        controller.abort()
+      }
+    }, [])
+  const navigate = useNavigate()
   return(
     <div className="list-inline mb-0 align-self-center">
       <button
         type="button"
         className="btn btn-gradient-success btn-round waves-effect waves-light"
+        onClick={() =>
+          navigate('/virtualvisit/room', {
+             state: 
+             {MeetingID:meetingID,
+              Password:password}
+            })
+        }
       >
         Join Virtual Visit
       </button>
@@ -63,16 +123,16 @@ const StatusIcon = ({ icontype }) => {
 const StatusText = ({ status }) => {
   const statusColor = {
     0: 'badge-soft-purple',
+    1: "badge-soft-success",
     2: 'badge-soft-danger',
     3: 'badge-soft-danger',
-    1: "badge-soft-success",
     4: "badge-soft-success",
   }
   const statusText = {
     0: 'For Approval',
+    1: "Completed",
     2: 'Cancelled By You',
     3: 'Cancelled By Doctor',
-    1: "Completed",
     4: "Approved",
   }
   return (
@@ -102,7 +162,7 @@ function HMFormat(minutes) {
   return days+" days, "+ hours+" hrs and "+dig+min+" mins"}
   // return hours+":"+dig+min+":"+sec
 }
-const AppointmentAction = ({ status , appointmentTime }) => {
+const AppointmentAction = ({ status , appointmentTime, appointment }) => {
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
   const appointmentETA=HMFormat(moment(appointmentTime).diff(timenow, 'minutes', true))
@@ -112,16 +172,13 @@ const AppointmentAction = ({ status , appointmentTime }) => {
   
   if (status==="4"&& withinAppointmentPeriod){
     return (
-      <StartButton/>
-    )}
-  else if (status==="4"&& withinAppointmentPeriod){
-    return (
-      <StartButton/>
+      <StartButton appointment={appointment}/>
     )}
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
         <><h6>Virtual visit period is over.</h6>
         <ViewVisitButton/>
+        {/* <StartButton appointment={appointment}/> */}
         </>
       )}
   else if (status==="4" && timenow<appointmentPeriod[1]){
@@ -219,7 +276,7 @@ function AppointmentItem({provider_description,provider_name,service_description
           <div className="br-wrapper br-theme-fontawesome-stars">
             <strong>{provider_description}</strong> 
           </div>
-          <AppointmentAction status={status} appointmentTime={dateTime} />
+          <AppointmentAction status={status} appointmentTime={dateTime} appointment={visit_id} />
           
         </div>
       </div>
@@ -237,8 +294,8 @@ function Appointment() {
     visit_id:"",
     status:0
   }
-
   const [appointmentsList,setAppointmentsList] = useState([])
+  const [delay, setDelay] = useState('10000')
   const [sample_appointmentsList,setSample_AppointmentsList] = useState([
     {provider_description:"Hi! I`m Jane Doe",
       provider_name:"Jane Doe",
@@ -246,50 +303,45 @@ function Appointment() {
       service_id: "16",
       service_name: "Service Name",
       status: "4",
-      trans_date_time: "2023-01-13",
+      trans_date_time: "2023-01-24",
       trans_end:null,
-      trans_start:"13",
+      trans_start:"18",
       visit_id: "378"}
   ])
-     
-    const [errMsg, setErrMsg] = useState(null)
-    const { auth } = useAuth()
-    const axiosPrivate = useAxiosPrivate()
-    useEffect(() => {
-      let isMounted = true
-      const controller = new AbortController()
-  
-      async function getList() {
-        await axiosPrivate
-          .post(
-            'getPatientAppointments',
-            { Email: auth.email },
-            // {
-            //   signal: controller.signal,
-            // }
-          )
-          .then((res) => {
-            const { Status, Data: data = [], Message } = res.data
-  
-            if (Status && isMounted) {
-              console.log(data)
-              setAppointmentsList(data)
-            } else {
-              throw new Error(Message)
-            }
-          })
-          .catch((err) => {
-            setErrMsg(err.message)
-          })
-      }
-  
-      isMounted && getList()
-  
-      return () => {
-        isMounted = false
-        controller.abort()
-      }
-    }, [])
+  const axiosPrivate = useAxiosPrivate()
+  let isMounted = true
+  const controller = new AbortController()
+  const { auth } = useAuth()
+  async function getList() {
+    await axiosPrivate
+      .post(
+        'getPatientAppointments',
+        { Email: auth.email },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        const { Status, Data: data = [], Message } = res.data
+
+        if (Status && isMounted) {
+          console.log(data)
+          setAppointmentsList(data)
+        } else {
+          throw new Error(Message)
+        }
+      })
+      .catch((err) => {
+        setErrMsg(err.message)
+      })
+  }
+  useEffect(()=>{
+
+
+    getList()  
+  }, [])
+      
+      
     var emptylist=[]
   return (
     <div className="page-wrapper">

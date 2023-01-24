@@ -111,10 +111,10 @@ function ProfileEdit() {
     formData.append('Image', profile.picturefile ,"profile_pic")
     }
     
-    let profile_endpoint=((auth.userType==='Provider')?"providerUpdateDetails":(auth.userType==='Provider')?"updateProviderDetails":"none")
+    let profile_endpoint2=((auth.userType==='Provider')?"providerUpdateDetails":(auth.userType==='Patient')?"updatePatientDetails":"none")
     await axiosPrivate
       
-      .post(profile_endpoint, formData, {
+      .post(profile_endpoint2, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: function (ProgressEvent) {
           console.log(
@@ -267,6 +267,7 @@ function ProfileEdit() {
           if (Status) {
             setProfile(details)
             console.log('deets',details)
+            
             setHours({
               HoursSunStart:  details.hours_sun_start,
               HoursSunEnd:    details.hours_sun_end,
@@ -299,22 +300,7 @@ function ProfileEdit() {
                 HoursSatStart:  details.hours_sat_start,
                 HoursSatEnd:    details.hours_sat_end
                 })
-            console.log("Hours GET!",{
-              HoursSunStart:  details.hours_sun_start,
-              HoursSunEnd:    details.hours_sun_end,
-              HoursMonStart:  details.hours_mon_start,
-              HoursMonEnd:    details.hours_mon_end,
-              HoursTueStart:  details.hours_tue_start,
-              HoursTueEnd:    details.hours_tue_end,
-              HoursWedStart:  details.hours_wed_start,
-              HoursWedEnd:    details.hours_wed_end,
-              HoursThuStart:  details.hours_thu_start,
-              HoursThuEnd:    details.hours_thu_end,
-              HoursFriStart:  details.hours_fri_end,
-              HoursFriEnd:    details.hours_fri_start,
-              HoursSatStart:  details.hours_sat_start,
-              HoursSatEnd:    details.hours_sat_end
-              })
+            
             setOldProfile(details)
             setAuth((prev) => ({ ...prev, ...details }))
             setTimeZone(details?.local_time_zone)
@@ -352,8 +338,8 @@ function ProfileEdit() {
     }
     setAuth((prev) => ({ ...prev, profile,name:profile.first_name })) 
     getProfileDetails()
-    if (auth.userType==='patient'){
-    getCountries()}
+    if (auth.userType==='Patient'){
+      getCountries()}
     return () => {
       isMounted = false
       controller.abort()
@@ -595,7 +581,7 @@ function ProfileEdit() {
                           />
                         </div>
                       </div>):null}
-                      {(auth.userType==='Country')?(
+                      {(auth.userType==='Patient')?(
                         <>
                       <div
                         className="form-group row"

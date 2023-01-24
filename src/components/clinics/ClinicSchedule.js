@@ -48,7 +48,7 @@ export default function ClinicSchedule() {
   const [clinicProfile,setClinicProfile]=useState({})
   const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
-  const [clinicImages,setClinicImages]=useState([])
+  const [clinicImages,setClinicImages]=useState([{path:"",file:{}}])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
 
@@ -112,7 +112,7 @@ export default function ClinicSchedule() {
     formData.append("LocalTimeZone", localTimezone);
     for (var index in clinicImages){
       
-      formData.append('image'+(parseInt(index)+1), clinicImages[index].file)
+      formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
     }
     
     let endpoint=(
@@ -146,7 +146,7 @@ export default function ClinicSchedule() {
             if (action==="create")
             { 
               alert("Success! You created a new Clinic.")
-              navigate('/provider/clinics')
+              // navigate('/provider/clinics')
             }
             else if (action==="edit")
               {
@@ -188,6 +188,8 @@ export default function ClinicSchedule() {
             
             setOldProfile(res.data.Data)
             setClinicProfile(res.data.Data)
+            setLocalCurrency(res.data.Data.local_currency)
+            setTimeZone(res.data.Data.local_time_zone)
             var tempImgList=[]
             if (res.data.Data.image1){tempImgList.push({path:res.data.Data.image1,file:null})}
             if (res.data.Data.image2){tempImgList.push({path:res.data.Data.image2,file:null})}
@@ -308,8 +310,15 @@ export default function ClinicSchedule() {
                         // <UploadImage id={5} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
                        
                         ))}
-                        {(clinicImages.length<4&&(action==='edit'||action==='create'))?(
-                        <button className="btn btn-gradient-success waves-effect waves-light" minWidth="200px" height="150px" onClick={()=>{if (clinicImages.length<4){setClinicImages([...clinicImages,{path:'clinics/Default.png'}])}}}>+</button>
+                        {(clinicImages.length<4&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1].path!="clinics/Default.png")))?(
+                        <button
+                          className="btn btn-gradient-success waves-effect waves-light"
+                          minWidth="200px" height="150px"
+                          onClick={(e)=>{
+                            e.preventDefault();
+                            if (clinicImages.length<4)
+                              {setClinicImages([...clinicImages,{path:'clinics/Default.png'}])}
+                            }}>+</button>
                         ):(clinicImages.length===0)?(
                           // <UploadImage 
                           //   id={0} 
@@ -383,7 +392,7 @@ export default function ClinicSchedule() {
                         {(action==="create")?(
                         <input
                           className={`form-control ${
-                            errors.Name ? 'is-invalid' : ''
+                            errors.ClinicName ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='ClinicName'
@@ -393,7 +402,7 @@ export default function ClinicSchedule() {
                         
                         (<input
                           className={`form-control ${
-                            errors.Name ? 'is-invalid' : ''
+                            errors.ClinicName ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='clinic_name'
@@ -454,7 +463,7 @@ export default function ClinicSchedule() {
                           onChange={handleInputChange.bind(this)}
                           // {...register('Specialty')}
                         />}
-                        {errors.specialty ? (
+                        {errors.Specialty ? (
                           <div
                             className='invalid-feedback'
                             style={{ display: 'block' }}
@@ -482,7 +491,7 @@ export default function ClinicSchedule() {
                       {(action==="create")?(
                         <input
                           className={`form-control ${
-                            errors.contact_info ? 'is-invalid' : ''
+                            errors.ContactInfo ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='contact_info'
@@ -491,7 +500,7 @@ export default function ClinicSchedule() {
                           {...register('ContactInfo')}
                         />):<input
                           className={`form-control ${
-                            errors.contact_info ? 'is-invalid' : ''
+                            errors.ContactInfo ? 'is-invalid' : ''
                           }`}
                           type='text'
                           id='contact_info'
@@ -500,7 +509,7 @@ export default function ClinicSchedule() {
                           value={clinicProfile.contact_info}
                           onChange={handleInputChange.bind(this)}
                         />}
-                        {errors.contact_info ? (
+                        {errors.ContactInfo ? (
                           <div
                             className='invalid-feedback'
                             style={{ display: 'block' }}
@@ -579,11 +588,11 @@ export default function ClinicSchedule() {
                           {...register('local_currency', { required: true })}
                         /> */}{}
                         <CurrencySelect 
-                          value={clinicProfile.specialty}
+                          value={localCurrency}
                           onChange={handleInputChange.bind(this)}
                           disabled={action==='profile'} 
                           register={register} 
-                          localCurrency ={localCurrency} 
+                          // localCurrency ={clinicProfile.localCurrency} 
                           setLocalCurrency={setLocalCurrency}
                         />
                         {errors.local_currency ? (
@@ -618,6 +627,7 @@ export default function ClinicSchedule() {
                         /> */}
                         <TimeZoneSelect 
                           setTimeZone={setTimeZone}
+                          value={localTimezone}
                           disabled={action==='profile'}/>
                         {errors.local_time_zone ? (
                           <div
@@ -696,13 +706,14 @@ export default function ClinicSchedule() {
                       className='btn btn-gradient-success waves-effect waves-light'
                       onClick={(e) =>{navigate('/provider/clinics/edit/'+clinicID);e.preventDefault()}}
                       style={{marginRight:'10px'}}
+                      
                     >
                       Edit Clinic
                     </button>
                     <button
                       type='button'
                       className='btn btn-gradient-info waves-effect waves-light'
-                      onClick={() => navigate(-1)}
+                      onClick={() => navigate('/provider/clinics')}
                     >
                       Back
                     </button>
@@ -713,6 +724,7 @@ export default function ClinicSchedule() {
                       type='submit'
                       className='btn btn-gradient-success waves-effect waves-light'
                       disabled={isSubmitting}
+                      
                       style={{marginRight:'10px'}}
                     >
                       Save
@@ -720,7 +732,7 @@ export default function ClinicSchedule() {
                     <button
                       type='button'
                       className='btn btn-gradient-danger waves-effect waves-light'
-                      onClick={() => Swal.fire({html:"You cannot delete this clinic."})}
+                      onClick={() => Swal.fire({html:"This clinic cannot be deleted due to an active booking."})}
                       style={{marginRight:'10px'}}
                     >
                       Delete

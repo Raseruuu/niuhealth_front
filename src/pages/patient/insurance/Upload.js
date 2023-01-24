@@ -13,12 +13,36 @@ function Upload() {
   const [errMsg, setErrMsg] = useState()
   const [isSuccess, setIsSuccess] = useState(false)
   const navigate = useNavigate()
+  const [insuranceCoverage, setInsuranceCoverage] = useState('')
+  const [selectedCoverage, setSelectedCoverage] = useState([])
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm()
+  function handleTextarea(e) {
+    const val = e.target.value
+    setInsuranceCoverage(val)
+
+    if (val.length <= 0) {
+      setSelectedCoverage([])
+    }
+  }
+  function handleButtonClick(selected) {
+    const currentSelected = new Set(selectedCoverage)
+
+    if (currentSelected.has(selected)) return
+
+    currentSelected.add(selected)
+    setSelectedCoverage((prev) => [...prev, selected])
+
+    if (insuranceCoverage.trim().length <= 0) {
+      setInsuranceCoverage(selected)
+    } else {
+      setInsuranceCoverage((prev) => `${prev}, ${selected}`)
+    }
+  }
 
   const handleUpload = async (data) => {
     if (!data?.Image[0]) {
@@ -37,6 +61,7 @@ function Upload() {
             Email: auth?.email,
             Type: 'Health Insurance',
             Provider: data.Provider,
+            Coverage: data.Coverage
           },
           {
             Accept: 'application/json',
@@ -84,7 +109,7 @@ function Upload() {
                 <div className='card'>
                   <div className='card-body'>
                     <h4 className='header-title mt-0 mb-3'>
-                      Upload your insurance document to enjoy free service
+                      Upload your insurance document to enjoy free/discounted service
                     </h4>
 
                     <div>
@@ -241,7 +266,40 @@ function Upload() {
                         </optgroup>
                       </select>
                     </div>
-
+                    <label>Insurance Coverage</label>
+                    <div>
+                    <textarea
+                      style={{ margin: '5px 0 0 0' }}
+                      className="form-control"
+                      rows="3"
+                      id="message"
+                      placeholder="List which services can be covered by your Insurance "
+                      value={insuranceCoverage}
+                      onChange={handleTextarea}
+                      maxLength="150"
+                    ></textarea>
+                    </div>
+                    <div
+                    className="d-flex  flex-row justify-content-start align-items-center overflow-auto"
+                    style={{ height: '80px' }}
+                  >
+                    {[
+                      'Dental', 'General', 'Emergency'
+                    ].map((e) => (
+                      <button
+                        key={e}
+                        type="button"
+                        className="btn btn-light btn-sm mr-1 text-nowrap"
+                        style={{
+                          boxShadow: 'unset',
+                          borderRadius: '15px',
+                        }}
+                        onClick={handleButtonClick.bind(this, e)}
+                      >
+                        {e}
+                      </button>
+                    ))}
+                  </div>
                     <div>
                       <input
                         type='file'
