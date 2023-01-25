@@ -39,7 +39,7 @@ function ManageServices() {
     formData.append("CostPrice", data.rate);
     formData.append("Status", Number(data.active));
     // formData.append("ClinicID", data.clinic);
-    formData.append("ClinicID",JSON.stringify(data.clinic));
+    formData.append("ClinicID",[data.clinic]);
     await axiosPrivate
       .post("createService", formData, {
         headers: { "Content-Type": "multipart/form-data" },

@@ -199,6 +199,7 @@ function Services({ limit }) {
                   </Link>
                   <div className='card-body product-info'>
                     <Link to='' className='product-title'>
+                    {item.service_name}
                       {item.service_description}
                     </Link>
                     <p>{item.description}</p>

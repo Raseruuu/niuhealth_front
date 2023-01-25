@@ -8,7 +8,7 @@ function PatientItem({name,email,contactnum,address}){
     return(
         <tr>
         <th><a href="manage_patients.html">
-            <img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/>
+            <img src="../assets/images/users/user-10.jpg" alt="user" className="thumb-sm rounded-circle"/>
             {name}</a></th>
         <th>{email}</th>
         <th>{contactnum}</th>
@@ -45,19 +45,19 @@ export default function AdminPatients() {
         ]
     )
   return (
-<div class="page-wrapper">
+<div className="page-wrapper">
             {/* <!-- Page Content--> */}
-            <div class="page-content">
+            <div className="page-content">
 
-                <div class="container-fluid">
+                <div className="container-fluid">
                     {/* <!-- Page-Title --> */}
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="float-right">
-                                    <a href="manage_patients.html"><button type="button" class="btn btn-success waves-effect waves-light">New Patient</button></a>
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <div className="page-title-box">
+                                <div className="float-right">
+                                    <a href="manage_patients.html"><button type="button" className="btn btn-success waves-effect waves-light">New Patient</button></a>
                                 </div>
-                                <h4 class="page-title">Patients</h4>
+                                <h4 className="page-title">Patients</h4>
                             </div>
                             {/* <!--end page-title-box--> */}
                         </div>
@@ -67,15 +67,15 @@ export default function AdminPatients() {
  
 
  
-					<div class="row ">                               
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
+					<div className="row ">                               
+                        <div className="col-lg-12">
+                            <div className="card">
+                                <div className="card-body">
                                  
 								 
 								 
-								 <div class="">
-                                        <table id="datatable2" class="table dt-responsive nowrap" style={{borderCollapse: "collapse", borderSpacing: 0, width: "100%"}}>
+								 <div className="">
+                                        <table id="datatable2" className="table dt-responsive nowrap" style={{borderCollapse: "collapse", borderSpacing: 0, width: "100%"}}>
                                             <thead>
                                             <tr>
 												<th>Patient</th>
@@ -111,7 +111,7 @@ export default function AdminPatients() {
                 </div>
                 {/* <!-- container --> */}
 
-                <footer class="footer text-center text-sm-left">
+                <footer className="footer text-center text-sm-left">
                     &copy; 2022 NU Health 
                 </footer>
                 {/* <!--end footer--> */}

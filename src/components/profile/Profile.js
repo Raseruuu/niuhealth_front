@@ -378,11 +378,10 @@ function ProfileEdit() {
                         <img
                           alt=""
                           style={{objectFit: 'cover', margin: 'unset' ,width:100,height:100}}
-
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${auth.userType==='Provider'?"providers/":""}${profile.picture}"></img>`,
+                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${!imagepreview&&auth.userType==='Provider'?"providers/":""}${profile.picture}"></img>`,
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
@@ -398,7 +397,7 @@ function ProfileEdit() {
                             onClick={triggerFileInput}
                             
                           >
-                            Upload
+                            Change
                           </button>
                         )}
 
@@ -502,6 +501,106 @@ function ProfileEdit() {
                             value={profile.email}
                             onChange={handleInputChange.bind(this)}
                           />
+                        </div>
+                      </div>
+                      <div className="form-group col">
+                        <label
+                          for="example-email-input"
+                          className="col-sm-2 col-form-label text-right"
+                        >
+                          Social Media
+                        </label>
+                        
+                        <div className="form-group row" style={{ marginLeft: '160px' }}>
+                          <div className='row'>
+                            <div className=' form-group col-md-6' >
+                              <div className='row'>
+                              <label
+                                for="example-email-input"
+                                className="col-sm-4 col-form-label text-right"
+                              >
+                                Facebook
+                              </label>
+                              {/* <i className='ti-facebook' /> */}
+                              <div className="col" style={{ marginBottom: '10px' }}>
+                                <input
+                                  disabled={false}
+                                  className="form-control"
+                                  type="facebook"
+                                  name="facebook"
+                                  placeholder="facebook.com/"
+                                  value={profile.facebook}
+                                  onChange={handleInputChange.bind(this)}
+                                />
+                              </div>
+                              </div>
+                              <div className='row'>
+                              <label
+                                for="example-email-input"
+                                className="col-sm-4 col-form-label text-right"
+                              >
+                                Twitter
+                              </label>
+                              {/* <i className='ti-facebook' /> */}
+                              <div className="col" style={{ marginBottom: '10px' }}>
+                                <input
+                                  disabled={false}
+                                  className="form-control"
+                                  type="twitter"
+                                  name="twitter"
+                                  placeholder="twitter.com/"
+                                  value={profile.twitter}
+                                  onChange={handleInputChange.bind(this)}
+                                />
+                              </div>
+                              </div>
+                            </div>
+                            <div className=' form-group col-md-6' >
+                              <div className='row'>
+                              <div
+                                htmlFor="example-email-input"
+                                className="col-sm-4 col-form-label text-right"
+                              >
+                                Instagram
+                              </div>
+                              {/* <i className='ti-instagram' /> */}
+                              <div className="col" style={{ marginBottom: '10px' }}>
+                                <input
+                                  disabled={false}
+                                  className="form-control"
+                                  type="instagram"
+                                  name="instagram"
+                                  placeholder="instagram.com/"
+                                  value={profile.instagram}
+                                  onChange={handleInputChange.bind(this)}
+                                />
+                              </div>
+                              </div>
+                              <div className='row'>
+                              <label
+                                for="example-email-input"
+                                className="col-sm-4 col-form-label text-right"
+                              >
+                                Other
+                              </label>
+                              {/* <i className='ti-facebook' /> */}
+                              <div className="col" style={{ marginBottom: '10px' }}>
+                                <input
+                                  disabled={false}
+                                  className="form-control"
+                                  type="othersocial"
+                                  name="othersocial"
+                                  placeholder=""
+                                  value={profile.othersocial}
+                                  onChange={handleInputChange.bind(this)}
+                                />
+                              </div>
+                              </div>
+                            </div>
+                            
+                            
+                            
+                          </div>
                         </div>
                       </div>
                       {(auth.userType==='Provider')?(

@@ -14,9 +14,9 @@ function TitleBox({text}){
     </div>
   )
 }
-function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating}){
+function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating,review="Meh-ass Service this was."}){
   return(
-    <div className='col-lg-4' style={{minWidth: '250px'}}>
+    <div className='col-lg-4' style={{minWidth: '400px'}}>
       <div className='card' >
         <div className='card-body'>
           <div className='media' >
@@ -29,21 +29,26 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
               />
             </a>
             <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
-              <p className='font-14 font-weight-bold mb-0 responsive'>
-                {/* John Tamez */}
-                {patientName}
-              </p>
-              <p className='mb-0 font-12 text-muted responsive'>
-                {patientEmail}
-              </p>
-              <p className='mb-0 font-14 responsive'>
-                {service_name}
-                
-                {service_description}
-              </p>
               <ul className='list-inline mb-2 product-review ratingsPage'>
                 <RatingsStars score={rating} size={14}/>
               </ul>
+              <div className='row'>
+                <div className='col'>
+                  <p className='font-14 font-weight-bold mb-0 responsive'>
+                    {patientName}
+                  </p>
+                  <p className='mb-0 font-12 text-muted responsive'>
+                    {patientEmail}
+                  </p>
+                </div>
+              
+              </div>
+              <h6 className='mb-0 font-14 responsive'>
+                {service_description+",  "+service_name  }
+              </h6>
+              
+              <p>"{review}"
+              </p>
             </div>
           </div>
         </div>
@@ -320,7 +325,7 @@ function Ratings({}) {
             <div className='card-body'>
               <div className='row'>
               {patientRatingList.map((item,index)=>
-                  (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.  rating}/>)
+                  (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
                 
                 )}
                </div> 

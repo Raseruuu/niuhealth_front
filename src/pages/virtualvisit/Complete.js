@@ -108,7 +108,7 @@ export default function Complete() {
                     /> */}
                     <div className='media-body align-self-center'>
                       <h2 className='mt-0 mb-1 text-success'>
-                        Your Visit is complete.
+                        Your virtual visit is complete.
                       </h2>
                       <h3 className='mt-0 mb-1 '>See you next time!</h3>
                     </div>

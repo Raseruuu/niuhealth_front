@@ -282,7 +282,7 @@ function ProfileEdit() {
                             onClick={triggerFileInput}
                             
                           >
-                            Upload
+                            Change
                           </button>
                         )}
 

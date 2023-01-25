@@ -28,43 +28,43 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled}){
             {...hours,['Hours'+weekday+'Start']:null,['Hours'+weekday+'End']:null
             })}>      
       </input> */}
-      <div class = "row">
+      <div className = "row">
         <div>Start Time </div>
         <div class = "col">
-      <select
-        disabled={disabled}
-        value={hours['Hours'+weekday+'Start']}
-        onChange={(e)=>{
-        setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
-        console.log(hours)
-      }
-      }
-        className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
-        {morning_options.map((option)=>(
-          <option value={option}>{hourformat(option)}</option>
-          ))}
-          
-        <option value={null}>--:--</option>
-      </select>
-      </div>
+          <select
+            disabled={disabled}
+            value={hours['Hours'+weekday+'Start']}
+            onChange={(e)=>{
+            setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
+            console.log(hours)
+          }
+          }
+            className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
+            {morning_options.map((option)=>(
+              <option value={option}>{hourformat(option)}</option>
+              ))}
+              
+            <option value={null}>--:--</option>
+          </select>
+        </div>
       </div>
       <div class = "row">
         <div>End Time </div>
         <div class = "col">
-        <select  
-          disabled={disabled}
-          value={hours['Hours'+weekday+'End']}
-          onChange={(e)=>{
-            setHours({...hours,['Hours'+weekday+'End']:e.target.value});
-            console.log(hours)
-          }
-          }
-          className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>
-          {night_options.map((option2)=>(
-            <option value={option2}>{hourformat(option2)}</option>
-            ))}
-          <option value={null}>--:--</option>
-        </select>
+          <select  
+            disabled={disabled}
+            value={hours['Hours'+weekday+'End']}
+            onChange={(e)=>{
+              setHours({...hours,['Hours'+weekday+'End']:e.target.value});
+              console.log(hours)
+            }
+            }
+            className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>
+            {night_options.map((option2)=>(
+              <option value={option2}>{hourformat(option2)}</option>
+              ))}
+            <option value={null}>--:--</option>
+          </select>
         </div>
       </div>
   </div>
