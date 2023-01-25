@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AWS_BUCKET } from '../../constants'
+import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 import { Rating } from 'react-simple-star-rating'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
@@ -13,8 +13,9 @@ export default function Complete() {
   const [review, setReview] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { meetingId } = useParams()
-  const [provider, setProvider] = useState({provider_name:"John Doe"})
-  
+  // const [provider, setProvider] = useState({provider_name:"John Doe"})
+  const [meetingDetails, setMeetingDetails] = useState({})
+ 
   const handleRating = (rate) => {
     console.log(rate)
     setRating(rate)
@@ -25,9 +26,11 @@ export default function Complete() {
     try {
       await axiosPrivate
         .post('createRating', {
-          Provider: provider.email,
-          Patient: auth.email,
+          Email: auth.email,
+          ProviderEmail: meetingDetails.provider_email,
           MeetingID: meetingId,
+          TransType:meetingDetails.trans_type,
+          ServiceID:meetingDetails.service_id,
           Rating: rating,
           Review: review,
         })
@@ -56,8 +59,8 @@ export default function Complete() {
     const controller = new AbortController()
     await axiosPrivate
       .post(
-        'getCompleteMeetingDetails',
-        { Email: auth.email, MeetingID:id },
+        'getCompletedMeetingDetails',
+        { Email: auth.email, MeetingID:meetingId },
         {
           signal: controller.signal,
         }
@@ -66,7 +69,9 @@ export default function Complete() {
         const { Data } = res.data
 
         console.log(Data)
-        setMeetingID(Data.MeetingID)
+        // setMeetingID(Data.MeetingID)
+        setMeetingDetails(Data)
+        console.log(meetingDetails)
         
         // if (Data?.Status === 'started') {
         //   setDelay(null)
@@ -96,11 +101,11 @@ export default function Complete() {
               <div className='card auth-card shadow-lg'>
                 <div className='card-body'>
                   <div className='media'>
-                    <img
-                      src={`${AWS_BUCKET}/assets/images/users/user-1.png`}
+                    {/* <img
+                      src={`${AWS_BUCKET}${auth.picture}`}
                       alt=''
                       className='thumb-md rounded-circle mr-2'
-                    />
+                    /> */}
                     <div className='media-body align-self-center'>
                       <h2 className='mt-0 mb-1 text-success'>
                         Your Visit is complete.
@@ -112,12 +117,12 @@ export default function Complete() {
                   <div style={{ margin: '30px 0' }}>
                     <div className='media'>
                       <img
-                        src={`${AWS_BUCKET}/assets/images/users/user-1.png`}
+                        src={`${AWS_BUCKET_SERVICES}providers/${meetingDetails?.image}`}
                         alt=''
                         className='thumb-md rounded-circle mr-2'
                       />
                       <div className='media-body align-self-center'>
-                        <h5>Rate your visit experience with {provider.provider_name}</h5>
+                        <h5>Rate your visit experience with {meetingDetails?.provider_name}</h5>
                       </div>
                     </div>
                     <h4 style={{ marginTop: '30px' }}>

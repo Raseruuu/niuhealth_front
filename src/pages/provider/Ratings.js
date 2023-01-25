@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AWS_BUCKET } from '../../constants'
+import { AWS_BUCKET ,AWS_BUCKET_PROFILES} from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
@@ -14,7 +14,7 @@ function TitleBox({text}){
     </div>
   )
 }
-function RatingsItem({patientName,service_name,service_description,patientEmail,rating}){
+function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating}){
   return(
     <div className='col-lg-4' style={{minWidth: '250px'}}>
       <div className='card' >
@@ -22,7 +22,8 @@ function RatingsItem({patientName,service_name,service_description,patientEmail,
           <div className='media' >
             <a className='' href='#'>
               <img
-                src='../assets/images/users/user-1.jpg'
+                // src='../assets/images/users/user-1.jpg'
+                src={(AWS_BUCKET_PROFILES)+(patientPicture)}
                 alt='user'
                 className='rounded-circle thumb-md'
               />
@@ -319,7 +320,7 @@ function Ratings({}) {
             <div className='card-body'>
               <div className='row'>
               {patientRatingList.map((item,index)=>
-                  (<RatingsItem patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.  rating}/>)
+                  (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.  rating}/>)
                 
                 )}
                </div> 

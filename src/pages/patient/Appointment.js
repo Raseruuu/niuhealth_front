@@ -293,17 +293,18 @@ function Appointment() {
         .then((res) => {
           const { Data } = res.data
 
-          console.log("Data",Data,Data?.Status === true)
+          console.log("Data",Data,res.data?.Status)
           setMeetingID(Data.MeetingID)
           setPassword(Data.Passcode)
           
-          if (Data?.Status === true) {
+          if (res.data?.Status === true) {
             setDelay(null)
             setIsReady(true)
+           
             navigate('/virtualvisit/room', {
               state: 
-              {MeetingID:meetingID,
-              Password:password}
+              {MeetingID:Data.MeetingID,
+              Password:Data.Passcode}
             })
           } else {
             setIsReady(false)
