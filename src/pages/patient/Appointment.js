@@ -11,9 +11,12 @@ import useInterval from '../../hooks/useInterval'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 function dateTimeFormat(date) {
-  return moment(date).format('MMM DD, YYYY, hh:mm A z')
+  return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
 }
 const timenow=moment()
+
+  
+      
 const CancelButton = () => {
 return(
   <div className="list-inline mb-0 align-self-center">
@@ -37,69 +40,14 @@ const ViewVisitButton = () => {
       </button>
     </div>
   )}
-function StartButton({appointment}){
-  const [meetingID, setMeetingID] = useState({})
-  const [password, setPassword] = useState({})
-  const [errMsg, setErrMsg] = useState(null)
-  const { auth } = useAuth()
-  const axiosPrivate = useAxiosPrivate()
+function StartButton({appointment,joinAppointment}){
   
-  const [isReady, setIsReady] = useState(false)
-    useEffect(() => {
-      let isMounted = true
-      const controller = new AbortController()
-      const joinAppointment = async () => {
-        const controller = new AbortController()
-        await axiosPrivate
-          .post(
-            'patientJoinAppointment',
-            { Email: auth.email,VisitID:appointment},
-            {
-              signal: controller.signal,
-            }
-          )
-          .then((res) => {
-            const { Data } = res.data
-
-            console.log("Data",Data)
-            setMeetingID(Data.MeetingID)
-            setPassword(Data.Passcode)
-
-            if (Data?.Status === 'started') {
-              setDelay(null)
-              setIsReady(true)
-            } else {
-              setIsReady(false)
-            }
-          })
-          .catch((err) => console.error(err))
-      }
-      
-      // isMounted
-      // useInterval(joinAppointment, 10000)
-
-      joinAppointment()
-      
-
-
-      return () => {
-        isMounted = false
-        controller.abort()
-      }
-    }, [])
-  const navigate = useNavigate()
   return(
     <div className="list-inline mb-0 align-self-center">
       <button
         type="button"
         className="btn btn-gradient-success btn-round waves-effect waves-light"
-        onClick={() =>
-          navigate('/virtualvisit/room', {
-             state: 
-             {MeetingID:meetingID,
-              Password:password}
-            })
-        }
+        onClick={()=>joinAppointment(appointment)}
       >
         Join Virtual Visit
       </button>
@@ -162,7 +110,7 @@ function HMFormat(minutes) {
   return days+" days, "+ hours+" hrs and "+dig+min+" mins"}
   // return hours+":"+dig+min+":"+sec
 }
-const AppointmentAction = ({ status , appointmentTime, appointment }) => {
+const AppointmentAction = ({ status , appointmentTime, appointment ,joinAppointment}) => {
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
   const appointmentETA=HMFormat(moment(appointmentTime).diff(timenow, 'minutes', true))
@@ -172,7 +120,7 @@ const AppointmentAction = ({ status , appointmentTime, appointment }) => {
   
   if (status==="4"&& withinAppointmentPeriod){
     return (
-      <StartButton appointment={appointment}/>
+      <StartButton appointment={appointment} joinAppointment={joinAppointment}/>
     )}
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
@@ -222,12 +170,22 @@ const AppointmentAction = ({ status , appointmentTime, appointment }) => {
 function TimeCard(){
     return(
       <CardItem>
-        <h3>Time Now:</h3> 
-        <i className="far fa-fw fa-clock"></i>{dateTimeFormat(timenow)}
+        <div width={"1000px"}>
+          <h3>Time Now:</h3> 
+          <i className="far fa-fw fa-clock"></i>{dateTimeFormat(timenow)}
+        </div>
       </CardItem>
     )
 }
-function AppointmentItem({provider_description,provider_name,service_description,service_name,service_id,trans_start,trans_date_time,visit_id,status}){
+function AppointmentItem({
+    provider_description,
+    provider_name,
+    service_description,
+    service_name,
+    service_id,
+    trans_start,
+    trans_date_time,
+    visit_id,status,joinAppointment}){
   
   const dateTime=(trans_date_time+", "+trans_start+":00")
 
@@ -276,7 +234,7 @@ function AppointmentItem({provider_description,provider_name,service_description
           <div className="br-wrapper br-theme-fontawesome-stars">
             <strong>{provider_description}</strong> 
           </div>
-          <AppointmentAction status={status} appointmentTime={dateTime} appointment={visit_id} />
+          <AppointmentAction status={status} appointmentTime={dateTime} appointment={visit_id} joinAppointment={joinAppointment} />
           
         </div>
       </div>
@@ -284,6 +242,8 @@ function AppointmentItem({provider_description,provider_name,service_description
   </div>
     )}
 function Appointment() {
+  
+  const { auth } = useAuth()
   const sampleappointment ={   
     provider_name :"",
     provider_description:"",
@@ -296,6 +256,7 @@ function Appointment() {
   }
   const [appointmentsList,setAppointmentsList] = useState([])
   const [delay, setDelay] = useState('10000')
+  
   const [sample_appointmentsList,setSample_AppointmentsList] = useState([
     {provider_description:"Hi! I`m Jane Doe",
       provider_name:"Jane Doe",
@@ -308,10 +269,48 @@ function Appointment() {
       trans_start:"18",
       visit_id: "378"}
   ])
+  const [meetingID, setMeetingID] = useState({})
+  const [password, setPassword] = useState({})
+  const [isReady, setIsReady] = useState(false)
+  const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   let isMounted = true
   const controller = new AbortController()
-  const { auth } = useAuth()
+  
+  async function joinAppointment (appointment) {
+    
+    // const [errMsg, setErrMsg] = useState(null)
+      let isMounted = true
+      await axiosPrivate
+        .post(
+          'patientJoinAppointment',
+          { Email: auth.email,
+            VisitID:appointment},
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          const { Data } = res.data
+
+          console.log("Data",Data,Data?.Status === true)
+          setMeetingID(Data.MeetingID)
+          setPassword(Data.Passcode)
+          
+          if (Data?.Status === true) {
+            setDelay(null)
+            setIsReady(true)
+            navigate('/virtualvisit/room', {
+              state: 
+              {MeetingID:meetingID,
+              Password:password}
+            })
+          } else {
+            setIsReady(false)
+          }
+        })
+        .catch((err) => console.error(err))
+    }
   async function getList() {
     await axiosPrivate
       .post(
@@ -336,13 +335,9 @@ function Appointment() {
       })
   }
   useEffect(()=>{
-
-
     getList()  
   }, [])
       
-      
-    var emptylist=[]
   return (
     <div className="page-wrapper">
       <div className="page-content">
@@ -359,8 +354,8 @@ function Appointment() {
           {(appointmentsList.length>0)?
           (<div className="row">
             <div className="col-lg-12">
-              {appointmentsList.map((appointment)=>
-              <AppointmentItem {...appointment} />
+              {appointmentsList.map((appointment,index)=>
+              <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index} />
               )}
             </div>
           </div>):<CardItem><h4>There are no appointments to display.</h4></CardItem>}

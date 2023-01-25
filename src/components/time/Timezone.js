@@ -36,11 +36,7 @@ function TimeZoneSelect({setTimeZone,value, disabled=false}){
     for(var i in timezonecountries){
         let pushobject=moment.tz.zonesForCountry(timezonecountries[i], true)[0]
         timezoneoptions.push(pushobject)
-        
-        // if (timezoneoptions.contains(pushobject)){
-        //     timezoneoptions.push(pushobject)}
     }
-    
     let sorted_timezoneoptions=timezoneoptions.sort((a, b) => (moment(a.offset) > moment(b.offset)) ? 1 : -1)
     let tzOptions=[]
     for (var i in sorted_timezoneoptions){
@@ -63,7 +59,7 @@ function TimeZoneSelect({setTimeZone,value, disabled=false}){
     
     
     return(
-      <div class="row">
+      <div className="row">
           
         <select 
           className="col-sm form-control" 
@@ -75,8 +71,8 @@ function TimeZoneSelect({setTimeZone,value, disabled=false}){
           
           >
           <option>Select a Timezone</option>
-          {sorted_timezoneoptions.map((timezone)=>(
-            <option value={hourFormat(timezone.offset)}>UTC {hourFormat(timezone.offset)} {timezone.name}</option>
+          {sorted_timezoneoptions.map((timezone,index)=>(
+            <option key={index} value={hourFormat(timezone.offset)}>UTC {hourFormat(timezone.offset)} {timezone.name}</option>
           ))}
           {/* <option value={"+00:00"}>(UTC+00:00) Coordinated Universal Time </option>
           <option value={"+01:00"}>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna </option>

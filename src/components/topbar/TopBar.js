@@ -84,7 +84,7 @@ export function TopBar({ menuClick, homeAddress }) {
           { Email: auth.email},{signal: controller.signal}
         )
         .then((res) => {
-          console.log("userdata",res.data.Data[0])
+          // console.log("userdata",res.data.Data[0])
           const { Status, Data: data = [], Message } = res.data
           if (Status) {
             setProfile(res.data.Data[0])
@@ -111,7 +111,6 @@ export function TopBar({ menuClick, homeAddress }) {
     // else if (auth.userType==="Provider"){
     //   getProviderDetails()
     // }
-    console.log(profile)
   },[auth])
   return (
     <div className='dev-top-bar'>

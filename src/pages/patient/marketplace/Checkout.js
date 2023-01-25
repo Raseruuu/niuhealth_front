@@ -83,32 +83,32 @@ export default function Checkout() {
   }, [])
 
   return (
-    <div class='page-wrapper'>
-      <div class='page-content'>
-        <div class='container-fluid'>
-          <div class='row'>
-            <div class='col-sm-12'>
-              <div class='page-title-box'>
-                <div class='float-right'>
-                  <ol class='breadcrumb'>
-                    <li class='breadcrumb-item'>
+    <div className='page-wrapper'>
+      <div className='page-content'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-sm-12'>
+              <div className='page-title-box'>
+                <div className='float-right'>
+                  <ol className='breadcrumb'>
+                    <li className='breadcrumb-item'>
                       <Link to='/patient/marketplace'>Marketplace</Link>
                     </li>
-                    <li class='breadcrumb-item active'>Checkout</li>
+                    <li className='breadcrumb-item active'>Checkout</li>
                   </ol>
                 </div>
-                <h4 class='page-title'>Checkout</h4>
+                <h4 className='page-title'>Checkout</h4>
               </div>
             </div>
           </div>
           <form onSubmit={(e) => e.preventDefault()}>
-            <div class='row'>
-              <div class='col-lg-4'>
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Order Summary</h4>
-                    <div class='table-responsive shopping-cart'>
-                      <table class='table mb-0'>
+            <div className='row'>
+              <div className='col-lg-4'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <h4 className='header-title mt-0 mb-3'>Order Summary</h4>
+                    <div className='table-responsive shopping-cart'>
+                      <table className='table mb-0'>
                         <thead>
                           <tr>
                             <th>Service</th>
@@ -124,7 +124,7 @@ export default function Checkout() {
                                 alt=''
                                 height='52'
                               />
-                              <p class='d-inline-block align-middle mb-0 product-name'>
+                              <p className='d-inline-block align-middle mb-0 product-name'>
                                 {
                                   selectedService?.selectedProvider
                                     ?.provider_name
@@ -148,22 +148,22 @@ export default function Checkout() {
                         </tbody>
                       </table>
                     </div>
-                    <div class='total-payment'>
-                      <table class='table mb-0'>
+                    <div className='total-payment'>
+                      <table className='table mb-0'>
                         <tbody>
                           <tr>
-                            <td class='payment-title'>Subtotal</td>
+                            <td className='payment-title'>Subtotal</td>
                             <td>
                               ${selectedService?.selectedProvider?.cost_price}
                             </td>
                           </tr>
                           <tr>
-                            <td class='payment-title'>Promo Code</td>
+                            <td className='payment-title'>Promo Code</td>
                             <td>-$0.00</td>
                           </tr>
                           <tr>
-                            <td class='payment-title'>Total</td>
-                            <td class='text-dark'>
+                            <td className='payment-title'>Total</td>
+                            <td className='text-dark'>
                               <strong>${totalAmount}</strong>
                             </td>
                           </tr>
@@ -173,27 +173,27 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                {/* <div class='card'>
+                {/* <div className='card'>
                   <div
-                    class='col-md-12 align-self-center'
+                    className='col-md-12 align-self-center'
                     style={{ padding: '30px 20px' }}
                   >
-                    <div class='text-center'>
-                      <h4 class=''>Have a promo code ?</h4>
-                      <p class='font-13'>
+                    <div className='text-center'>
+                      <h4 className=''>Have a promo code ?</h4>
+                      <p className='font-13'>
                         If you have a promocode, You can take discount !
                       </p>
-                      <div class='input-group w-75 mx-auto'>
+                      <div className='input-group w-75 mx-auto'>
                         <input
                           type='text'
-                          class='form-control'
+                          className='form-control'
                           placeholder='Use Promo code'
                           aria-describedby='button-addon2'
                           {...register('coupon')}
                         />
-                        <div class='input-group-append'>
+                        <div className='input-group-append'>
                           <button
-                            class='btn btn-gradient-success'
+                            className='btn btn-gradient-success'
                             type='button'
                             id='button-addon2'
                           >
@@ -206,21 +206,21 @@ export default function Checkout() {
                 </div> */}
               </div>
 
-              <div class='col-lg-8'>
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Billing Address</h4>
+              <div className='col-lg-8'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <h4 className='header-title mt-0 mb-3'>Billing Address</h4>
 
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             First Name{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.firstname ? 'is-invalid' : null
                             }`}
                             {...register('firstname', {
@@ -230,15 +230,15 @@ export default function Checkout() {
                           />
                         </div>
                       </div>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Last Name{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.lastname ? 'is-invalid' : null
                             }`}
                             {...register('lastname', {
@@ -249,15 +249,15 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-12'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-12'>
+                        <div className='form-group'>
                           <label>
-                            Address <small class='text-danger font-13'>*</small>
+                            Address <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.address ? 'is-invalid' : null
                             }`}
                             {...register('address', {
@@ -268,15 +268,15 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
-                            City <small class='text-danger font-13'>*</small>
+                            City <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.city ? 'is-invalid' : null
                             }`}
                             {...register('city', {
@@ -287,13 +287,13 @@ export default function Checkout() {
                         </div>
                       </div>
 
-                      <div class='col-md-6'>
-                        <div class='form-group'>
-                          <label class='col-form-label pt-0 pb-1'>
-                            Country <small class='text-danger font-13'>*</small>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
+                          <label className='col-form-label pt-0 pb-1'>
+                            Country <small className='text-danger font-13'>*</small>
                           </label>
                           <select
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.country ? 'is-invalid' : null
                             }`}
                             {...register('country', {
@@ -309,16 +309,16 @@ export default function Checkout() {
                         </div>
                       </div>
                     </div>
-                    <div class='row'>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Email Address{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='email'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.email ? 'is-invalid' : null
                             }`}
                             {...register('email', {
@@ -328,15 +328,15 @@ export default function Checkout() {
                           />
                         </div>
                       </div>
-                      <div class='col-md-6'>
-                        <div class='form-group'>
+                      <div className='col-md-6'>
+                        <div className='form-group'>
                           <label>
                             Mobile No{' '}
-                            <small class='text-danger font-13'>*</small>
+                            <small className='text-danger font-13'>*</small>
                           </label>
                           <input
                             type='text'
-                            class={`form-control ${
+                            className={`form-control ${
                               errors.mobileno ? 'is-invalid' : null
                             }`}
                             {...register('mobileno', {
@@ -350,64 +350,64 @@ export default function Checkout() {
                   </div>
                 </div>
 
-                <div class='card'>
-                  <div class='card-body'>
-                    <h4 class='header-title mt-0 mb-3'>Payment Details</h4>
-                    <div class='billing-nav'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <h4 className='header-title mt-0 mb-3'>Payment Details</h4>
+                    <div className='billing-nav'>
                       {/* <ul
-                        class='nav nav-pills justify-content-center text-center mb-3'
+                        className='nav nav-pills justify-content-center text-center mb-3'
                         id='pills-tab'
                         role='tablist'
                       >
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link active'
+                            className='nav-link active'
                             id='pills-credit-card-tab'
                             data-toggle='pill'
                             href='#pills-credit-card'
                           >
-                            <i class='mdi mdi-credit-card d-block mx-auto text-danger font-18'></i>
+                            <i className='mdi mdi-credit-card d-block mx-auto text-danger font-18'></i>
                             Credit-Card
                           </a>
                         </li>
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link'
+                            className='nav-link'
                             id='pills-paypal-tab'
                             data-toggle='pill'
                             href='#pills-paypal'
                           >
-                            <i class='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
+                            <i className='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
                             Paypal
                           </a>
                         </li>
-                        <li class='nav-item'>
+                        <li className='nav-item'>
                           <a
-                            class='nav-link'
+                            className='nav-link'
                             id='pills-bitcoin-tab'
                             data-toggle='pill'
                             href='#pills-bitcoin'
                           >
-                            <i class='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
+                            <i className='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
                             Bitcoin
                           </a>
                         </li>
                       </ul> */}
-                      <div class='tab-content' id='pills-tabContent'>
+                      <div className='tab-content' id='pills-tabContent'>
                         <div
-                          class='tab-pane fade show active'
+                          className='tab-pane fade show active'
                           id='pills-credit-card'
                         >
-                          <div class='demo-container w-100 h-100'>
-                            <div class='card-wrapper mb-4'></div>
-                            <div class='form-container'>
-                              <div ref={cardRef} class='bill-form'>
-                                <div class='row'>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                          <div className='demo-container w-100 h-100'>
+                            <div className='card-wrapper mb-4'></div>
+                            <div className='form-container'>
+                              <div ref={cardRef} className='bill-form'>
+                                <div className='row'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='Card number'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.cardnumber
                                             ? 'is-invalid'
                                             : null
@@ -420,11 +420,11 @@ export default function Checkout() {
                                       />
                                     </div>
                                   </div>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='Full name'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.fullname ? 'is-invalid' : null
                                         }`}
                                         type='text'
@@ -436,12 +436,12 @@ export default function Checkout() {
                                     </div>
                                   </div>
                                 </div>
-                                <div class='row'>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                <div className='row'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='MM/YY'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.expiry ? 'is-invalid' : null
                                         }`}
                                         type='tel'
@@ -452,11 +452,11 @@ export default function Checkout() {
                                       />
                                     </div>
                                   </div>
-                                  <div class='col-md-6'>
-                                    <div class='form-group'>
+                                  <div className='col-md-6'>
+                                    <div className='form-group'>
                                       <input
                                         placeholder='CVC'
-                                        class={`form-control ${
+                                        className={`form-control ${
                                           errors.cvc ? 'is-invalid' : ''
                                         }`}
                                         type='number'
@@ -470,7 +470,7 @@ export default function Checkout() {
                                 </div>
                                 <button
                                   type='button'
-                                  class='btn btn-success px-3'
+                                  className='btn btn-success px-3'
                                   onClick={hanldePayNow}
                                 >
                                   Pay Now
@@ -479,16 +479,16 @@ export default function Checkout() {
                             </div>
                           </div>
                         </div>
-                        <div class='tab-pane fade' id='pills-paypal'>
-                          <div class='row'>
-                            <div class='col-md-12 col-lg-6 offset-lg-3'>
-                              <div class='card border'>
-                                <div class='card-body'>
-                                  <h4 class='title-text'>
-                                    <i class='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
+                        <div className='tab-pane fade' id='pills-paypal'>
+                          <div className='row'>
+                            <div className='col-md-12 col-lg-6 offset-lg-3'>
+                              <div className='card border'>
+                                <div className='card-body'>
+                                  <h4 className='title-text'>
+                                    <i className='mdi mdi-paypal d-block mx-auto text-secondary font-18'></i>
                                     Add Paypal Form
                                   </h4>
-                                  <p class='mb-0 text-muted'>
+                                  <p className='mb-0 text-muted'>
                                     There are many variations of passages of
                                     Lorem Ipsum available, but the majority have
                                     suffered alteration in some form, by
@@ -499,16 +499,16 @@ export default function Checkout() {
                             </div>
                           </div>
                         </div>
-                        <div class='tab-pane fade' id='pills-bitcoin'>
-                          <div class='row'>
-                            <div class='col-md-12 col-lg-6 offset-lg-3'>
-                              <div class='card border'>
-                                <div class='card-body'>
-                                  <h4 class='title-text'>
-                                    <i class='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
+                        <div className='tab-pane fade' id='pills-bitcoin'>
+                          <div className='row'>
+                            <div className='col-md-12 col-lg-6 offset-lg-3'>
+                              <div className='card border'>
+                                <div className='card-body'>
+                                  <h4 className='title-text'>
+                                    <i className='mdi mdi-bitcoin d-block mx-auto text-warning font-18'></i>
                                     Add Bitcoin Form
                                   </h4>
-                                  <p class='mb-0 text-muted'>
+                                  <p className='mb-0 text-muted'>
                                     There are many variations of passages of
                                     Lorem Ipsum available, but the majority have
                                     suffered alteration in some form, by
@@ -549,7 +549,7 @@ const ConfirmModal = ({ show, handleClose, handleSubmit, isSubmitting }) => (
     <Modal.Footer>
       <button
         type='submit'
-        class='btn btn-success px-3'
+        className='btn btn-success px-3'
         onClick={handleSubmit}
         disabled={isSubmitting}
       >

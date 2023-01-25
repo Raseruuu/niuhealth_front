@@ -130,6 +130,7 @@ function PatientQueue({ limit, search }) {
               src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
               alt=''
               className='thumb-sm rounded-circle mr-2'
+              style={{width:100,height:100}}
             />
             <div className='col'>
               <div>

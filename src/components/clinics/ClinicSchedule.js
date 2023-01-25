@@ -15,7 +15,7 @@ import UploadImage from '../form/UploadImage'
 import Swal from 'sweetalert2'
 function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
-    <div class="row">
+    <div className="row">
       <select 
         value={value}
         disabled={disabled}

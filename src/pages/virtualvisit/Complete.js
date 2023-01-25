@@ -9,13 +9,14 @@ export default function Complete() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const [rating, setRating] = useState(3)
+  const [rating, setRating] = useState(4.5)
   const [review, setReview] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { meetingId } = useParams()
   const [provider, setProvider] = useState({provider_name:"John Doe"})
   
   const handleRating = (rate) => {
+    console.log(rate)
     setRating(rate)
   }
 
@@ -51,7 +52,36 @@ export default function Complete() {
       console.error(error)
     }
   }
+  const getCompleteMeetingDetails = async () => {
+    const controller = new AbortController()
+    await axiosPrivate
+      .post(
+        'getCompleteMeetingDetails',
+        { Email: auth.email, MeetingID:id },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        const { Data } = res.data
 
+        console.log(Data)
+        setMeetingID(Data.MeetingID)
+        
+        // if (Data?.Status === 'started') {
+        //   setDelay(null)
+        //   setIsReady(true)
+        // } else {
+        //   setIsReady(false)
+        // }
+      })
+      .catch((err) => console.error(err))
+  }
+  useEffect(()=>{
+    
+    getCompleteMeetingDetails()
+
+  }, [])
   return (
     <div
       className='account-body visitsuccess vw-100'

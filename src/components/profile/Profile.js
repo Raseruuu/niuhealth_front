@@ -166,7 +166,7 @@ function ProfileEdit() {
     return (
       <div className="form-group row">
         <label
-          for="example-text-input"
+          htmlFor="example-text-input"
           className="col-sm-2 col-form-label text-right"
         >
           {label}
@@ -382,7 +382,7 @@ function ProfileEdit() {
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img width="250px" height="250px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${auth.userType==='Provider'?"providers/":""}${profile.picture}"></img>`,
+                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${auth.userType==='Provider'?"providers/":""}${profile.picture}"></img>`,
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
@@ -724,7 +724,7 @@ function ProfileEdit() {
                           onClick={handleSubmit}
                           type="button"
                           className="btn btn-success btn-round waves-effect waves-light"
-                          disabled={hours===oldHours}
+                          disabled={profile===oldProfile||hours===oldHours}
                         >
                           Submit
                         </button>

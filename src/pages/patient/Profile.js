@@ -291,7 +291,7 @@ function ProfileEdit() {
                     <div className="col">
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           First Name
@@ -310,7 +310,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Middle Name
@@ -328,7 +328,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Last Name
@@ -346,7 +346,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-email-input"
+                          htmlFor="example-email-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Email
@@ -364,7 +364,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-tel-input"
+                          htmlFor="example-tel-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Contact Info
@@ -383,7 +383,7 @@ function ProfileEdit() {
 
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Address
@@ -446,7 +446,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-date-input"
+                          htmlFor="example-date-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Local Timezone
@@ -466,7 +466,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-date-input"
+                          htmlFor="example-date-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Date of Birth

@@ -102,7 +102,7 @@ function Upload() {
             ref={formRef}
             onSubmit={handleSubmit(handleUpload)}
             id='formUpload'
-            enctype='multipart/form-data'
+            encType='multipart/form-data'
           >
             <div className='row'>
               <div className='col-lg-12'>
@@ -115,9 +115,9 @@ function Upload() {
                     <div>
                       <label>Insurance Provider</label>
                       <select
-                        class='select2 form-control mb-3 custom-select select2-hidden-accessible'
+                        className='select2 form-control mb-3 custom-select select2-hidden-accessible'
                         style={{ width: '100%', height: '36px' }}
-                        tabindex='-1'
+                        tabIndex='-1'
                         aria-hidden='true'
                         // {...register('Provider')}
                         name='Provider'
@@ -284,7 +284,7 @@ function Upload() {
                     style={{ height: '80px' }}
                   >
                     {[
-                      'Dental', 'General', 'Emergency'
+                      'Dental', 'General', 'Emergency','Individual Health Insurance','Critical Illness Insurance','Top Up Health Insurance','Hospital Daily Cash'
                     ].map((e) => (
                       <button
                         key={e}
@@ -324,12 +324,12 @@ function Upload() {
                     <p>The document will be checked during your first visit</p>
 
                     {errMsg ? (
-                      <div class='alert alert-danger' role='alert'>
+                      <div className='alert alert-danger' role='alert'>
                         Upload Failed. {errMsg}
                       </div>
                     ) : null}
                     {isSuccess ? (
-                      <div class='alert alert-success' role='alert'>
+                      <div className='alert alert-success' role='alert'>
                         File successfully uploaded.
                       </div>
                     ) : null}

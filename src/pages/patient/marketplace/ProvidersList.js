@@ -4,30 +4,30 @@ import Footer from '../../../components/Footer'
 
 export default function ProvidersList() {
   return (
-    <div class='page-wrapper'>
-      <div class='page-content'>
-        <div class='container-fluid'>
-          <div class='row'>
-            <div class='col-sm-12'>
-              <div class='page-title-box'>
-                <h4 class='page-title'>Marketplace</h4>
+    <div className='page-wrapper'>
+      <div className='page-content'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-sm-12'>
+              <div className='page-title-box'>
+                <h4 className='page-title'>Marketplace</h4>
               </div>
             </div>
           </div>
 
-          <div class='row'>
-            <div class='col-lg-3'>
-              <div class='card'>
-                <div class='card-body'>
-                  <div class='row'>
-                    <div class='col-lg-12'>
-                      <h5 class='mt-0 mb-4'>Filter</h5>
+          <div className='row'>
+            <div className='col-lg-3'>
+              <div className='card'>
+                <div className='card-body'>
+                  <div className='row'>
+                    <div className='col-lg-12'>
+                      <h5 className='mt-0 mb-4'>Filter</h5>
 
-                      <div class='p-3'>
-                        <h6 class='mb-3 mt-0'>Location</h6>
+                      <div className='p-3'>
+                        <h6 className='mb-3 mt-0'>Location</h6>
 
                         <select
-                          class='form-control '
+                          className='form-control '
                           style={{ marginBottom: '15px' }}
                         >
                           <option>Hawaii</option>
@@ -37,7 +37,7 @@ export default function ProvidersList() {
                           <option>Thailand</option>
                         </select>
 
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox0'
                             type='checkbox'
@@ -45,7 +45,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox0'>Central</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox1'
                             type='checkbox'
@@ -53,7 +53,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox1'>Diamond Head</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox2'
                             type='checkbox'
@@ -61,7 +61,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox2'>Ewa Plain</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox3'
                             type='checkbox'
@@ -69,7 +69,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox3'>Hawaii Kai</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox4'
                             type='checkbox'
@@ -77,7 +77,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox4'>Kalua</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox5'
                             type='checkbox'
@@ -85,7 +85,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox5'>Kaneohe</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox6'
                             type='checkbox'
@@ -93,7 +93,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox6'>Leeward</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox7'
                             type='checkbox'
@@ -101,7 +101,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox7'>Makakilo</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox8'
                             type='checkbox'
@@ -109,7 +109,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox8'>Metro Honolulu</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox9'
                             type='checkbox'
@@ -117,7 +117,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox9'>North Shore</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox10'
                             type='checkbox'
@@ -125,7 +125,7 @@ export default function ProvidersList() {
                           />
                           <label for='checkbox10'>Pearl City</label>
                         </div>
-                        <div class='checkbox checkbox-success '>
+                        <div className='checkbox checkbox-success '>
                           <input
                             id='checkbox11'
                             type='checkbox'
@@ -137,71 +137,71 @@ export default function ProvidersList() {
                     </div>
                   </div>
 
-                  <div class='row'>
-                    <div class='col-lg-12'>
-                      <div class='p-3'>
-                        <h6 class='mb-3 mt-0'>Price Range</h6>
+                  <div className='row'>
+                    <div className='col-lg-12'>
+                      <div className='p-3'>
+                        <h6 className='mb-3 mt-0'>Price Range</h6>
                         <input type='text' id='range_doctors_rate' />
                       </div>
                     </div>
                   </div>
-                  <div class='row'>
-                    <div class='col-lg-12'>
-                      <div class='p-3'>
-                        <h6 class='mt-0 mb-4'>Ratings</h6>
-                        <div class='checkbox checkbox-success'>
+                  <div className='row'>
+                    <div className='col-lg-12'>
+                      <div className='p-3'>
+                        <h6 className='mt-0 mb-4'>Ratings</h6>
+                        <div className='checkbox checkbox-success'>
                           <input id='checkboxs3' type='checkbox' />
                           <label for='checkboxs3'>
                             {' '}
-                            5<i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
+                            5<i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
                           </label>
                         </div>
-                        <div class='checkbox checkbox-success'>
+                        <div className='checkbox checkbox-success'>
                           <input id='checkboxs4' type='checkbox' />
                           <label for='checkboxs4'>
                             {' '}
-                            4<i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star light-gray'></i>
+                            4<i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star light-gray'></i>
                           </label>
                         </div>
-                        <div class='checkbox checkbox-success'>
+                        <div className='checkbox checkbox-success'>
                           <input id='checkboxs5' type='checkbox' />
                           <label for='checkboxs5'>
                             {' '}
-                            3<i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
+                            3<i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
                           </label>
                         </div>
-                        <div class='checkbox checkbox-success'>
+                        <div className='checkbox checkbox-success'>
                           <input id='checkboxs6' type='checkbox' />
                           <label for='checkboxs6'>
                             {' '}
-                            2<i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
+                            2<i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
                           </label>
                         </div>
-                        <div class='checkbox checkbox-success'>
+                        <div className='checkbox checkbox-success'>
                           <input id='checkboxs7' type='checkbox' />
                           <label for='checkboxs7'>
                             {' '}
-                            1<i class='mdi mdi-star text-warning'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
-                            <i class='mdi mdi-star light-gray'></i>
+                            1<i className='mdi mdi-star text-warning'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
+                            <i className='mdi mdi-star light-gray'></i>
                           </label>
                         </div>
                       </div>
@@ -211,40 +211,40 @@ export default function ProvidersList() {
               </div>
             </div>
 
-            <div class='col-lg-9'>
-              <div class='row'>
-                <div class='col-sm-12'>
-                  <div class='page-title-box'>
-                    <div class='float-right'>
-                      <ol class='breadcrumb'>
-                        <li class='breadcrumb-item'>
+            <div className='col-lg-9'>
+              <div className='row'>
+                <div className='col-sm-12'>
+                  <div className='page-title-box'>
+                    <div className='float-right'>
+                      <ol className='breadcrumb'>
+                        <li className='breadcrumb-item'>
                           <Link to='/patient/marketplace'>Marketplace</Link>
                         </li>
-                        <li class='breadcrumb-item'>
+                        <li className='breadcrumb-item'>
                           <Link to=''>Family medicine</Link>
                         </li>
-                        <li class='breadcrumb-item active'>
+                        <li className='breadcrumb-item active'>
                           Child Medical Checkup
                         </li>
                       </ol>
                     </div>
-                    <h3 class='page-title'>Child Medical Checkup</h3>
+                    <h3 className='page-title'>Child Medical Checkup</h3>
                   </div>
                 </div>
               </div>
 
-              <div class='row'>
-                <div class='col-lg-6'>
-                  <div class='form-group'>
-                    <div class='input-group'>
+              <div className='row'>
+                <div className='col-lg-6'>
+                  <div className='form-group'>
+                    <div className='input-group'>
                       <input
                         type='text'
-                        class='form-control'
+                        className='form-control'
                         placeholder='Search Doctors...'
                         aria-label='Search Doctors...'
                       />
-                      <span class='input-group-append'>
-                        <button class='btn btn-success' type='button'>
+                      <span className='input-group-append'>
+                        <button className='btn btn-success' type='button'>
                           Go!
                         </button>
                       </span>
@@ -254,62 +254,62 @@ export default function ProvidersList() {
               </div>
 
               <div>
-                <div class='row'>
-                  <div class='col-12'>
-                    <div class='card'>
-                      <div class='card-body doctor'>
-                        <div class='met-profile'>
-                          <div class='row'>
-                            <div class='col-lg-4 align-self-center mb-3 mb-lg-0'>
-                              <div class='met-profile-main'>
-                                <div class='met-profile-main-pic'>
+                <div className='row'>
+                  <div className='col-12'>
+                    <div className='card'>
+                      <div className='card-body doctor'>
+                        <div className='met-profile'>
+                          <div className='row'>
+                            <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
+                              <div className='met-profile-main'>
+                                <div className='met-profile-main-pic'>
                                   <Link to='marketplace-3-book.html'>
                                     <img
                                       src='../assets/images/users/user-4.jpg'
                                       alt=''
-                                      class='rounded-circle'
+                                      className='rounded-circle'
                                     />
                                   </Link>
                                 </div>
-                                <div class='met-profile_user-detail'>
+                                <div className='met-profile_user-detail'>
                                   <Link to='marketplace-3-book.html'>
-                                    <h5 class='met-user-name'>Rosa Dodson</h5>
+                                    <h5 className='met-user-name'>Rosa Dodson</h5>
                                   </Link>
-                                  <p class='mb-0 met-user-name-post'>
+                                  <p className='mb-0 met-user-name-post'>
                                     Pediatrician
                                   </p>
                                   <p>
                                     <label for='checkbox3'>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
                                     </label>
                                   </p>
                                 </div>
                               </div>
                             </div>
-                            <div class='col-lg-4 ml-auto'>
-                              <ul class='list-unstyled personal-detail'>
-                                <li class='mt-2'>
-                                  <i class='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
+                            <div className='col-lg-4 ml-auto'>
+                              <ul className='list-unstyled personal-detail'>
+                                <li className='mt-2'>
+                                  <i className='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b> Rate </b> : $35-$70
                                 </li>
-                                <li class=''>
-                                  <i class='dripicons-message mr-2 text-info font-18'></i>{' '}
+                                <li className=''>
+                                  <i className='dripicons-message mr-2 text-info font-18'></i>{' '}
                                   <b> Feedbacks </b> : 24
                                 </li>
-                                <li class='mt-2'>
-                                  <i class='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
+                                <li className='mt-2'>
+                                  <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b>Location</b> : Central, Hawaii
                                 </li>
                               </ul>
-                              <div class=''>
+                              <div className=''>
                                 <Link to='../checkout'>
                                   <button
                                     type='button'
-                                    class='btn btn-success btn-md m-1'
+                                    className='btn btn-success btn-md m-1'
                                   >
                                     Book Appointment
                                   </button>
@@ -317,7 +317,7 @@ export default function ProvidersList() {
                                 <Link to='marketplace-3-profile.html'>
                                   <button
                                     type='button'
-                                    class='btn btn-outline-success btn-md m-1'
+                                    className='btn btn-outline-success btn-md m-1'
                                   >
                                     View Profile
                                   </button>
@@ -331,62 +331,62 @@ export default function ProvidersList() {
                   </div>
                 </div>
 
-                <div class='row'>
-                  <div class='col-12'>
-                    <div class='card'>
-                      <div class='card-body doctor'>
-                        <div class='met-profile'>
-                          <div class='row'>
-                            <div class='col-lg-4 align-self-center mb-3 mb-lg-0'>
-                              <div class='met-profile-main'>
-                                <div class='met-profile-main-pic'>
+                <div className='row'>
+                  <div className='col-12'>
+                    <div className='card'>
+                      <div className='card-body doctor'>
+                        <div className='met-profile'>
+                          <div className='row'>
+                            <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
+                              <div className='met-profile-main'>
+                                <div className='met-profile-main-pic'>
                                   <Link to='marketplace-3-book.html'>
                                     <img
                                       src='../assets/images/users/user-4.jpg'
                                       alt=''
-                                      class='rounded-circle'
+                                      className='rounded-circle'
                                     />
                                   </Link>
                                 </div>
-                                <div class='met-profile_user-detail'>
+                                <div className='met-profile_user-detail'>
                                   <Link to='marketplace-3-book.html'>
-                                    <h5 class='met-user-name'>Darwin Stone</h5>
+                                    <h5 className='met-user-name'>Darwin Stone</h5>
                                   </Link>
-                                  <p class='mb-0 met-user-name-post'>
+                                  <p className='mb-0 met-user-name-post'>
                                     Pediatrician / ENT
                                   </p>
                                   <p>
                                     <label for='checkbox3'>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
                                     </label>
                                   </p>
                                 </div>
                               </div>
                             </div>
-                            <div class='col-lg-4 ml-auto'>
-                              <ul class='list-unstyled personal-detail'>
-                                <li class='mt-2'>
-                                  <i class='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
+                            <div className='col-lg-4 ml-auto'>
+                              <ul className='list-unstyled personal-detail'>
+                                <li className='mt-2'>
+                                  <i className='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b> Rate </b> : $50-$80
                                 </li>
-                                <li class=''>
-                                  <i class='dripicons-message mr-2 text-info font-18'></i>{' '}
+                                <li className=''>
+                                  <i className='dripicons-message mr-2 text-info font-18'></i>{' '}
                                   <b> Feedbacks </b> : 24
                                 </li>
-                                <li class='mt-2'>
-                                  <i class='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
+                                <li className='mt-2'>
+                                  <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b>Location</b> : Central, Hawaii
                                 </li>
                               </ul>
-                              <div class=''>
+                              <div className=''>
                                 <Link to='../checkout'>
                                   <button
                                     type='button'
-                                    class='btn btn-success btn-md m-1'
+                                    className='btn btn-success btn-md m-1'
                                   >
                                     Book Appointment
                                   </button>
@@ -394,7 +394,7 @@ export default function ProvidersList() {
                                 <Link to='marketplace-3-profile.html'>
                                   <button
                                     type='button'
-                                    class='btn btn-outline-success btn-md m-1'
+                                    className='btn btn-outline-success btn-md m-1'
                                   >
                                     View Profile
                                   </button>
@@ -408,62 +408,62 @@ export default function ProvidersList() {
                   </div>
                 </div>
 
-                <div class='row'>
-                  <div class='col-12'>
-                    <div class='card'>
-                      <div class='card-body doctor'>
-                        <div class='met-profile'>
-                          <div class='row'>
-                            <div class='col-lg-4 align-self-center mb-3 mb-lg-0'>
-                              <div class='met-profile-main'>
-                                <div class='met-profile-main-pic'>
+                <div className='row'>
+                  <div className='col-12'>
+                    <div className='card'>
+                      <div className='card-body doctor'>
+                        <div className='met-profile'>
+                          <div className='row'>
+                            <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
+                              <div className='met-profile-main'>
+                                <div className='met-profile-main-pic'>
                                   <Link to='marketplace-3-book.html'>
                                     <img
                                       src='../assets/images/users/user-4.jpg'
                                       alt=''
-                                      class='rounded-circle'
+                                      className='rounded-circle'
                                     />
                                   </Link>
                                 </div>
-                                <div class='met-profile_user-detail'>
+                                <div className='met-profile_user-detail'>
                                   <Link to='marketplace-3-book.html'>
-                                    <h5 class='met-user-name'>Janice Castro</h5>
+                                    <h5 className='met-user-name'>Janice Castro</h5>
                                   </Link>
-                                  <p class='mb-0 met-user-name-post'>
+                                  <p className='mb-0 met-user-name-post'>
                                     Pediatrician / Orthopedic
                                   </p>
                                   <p>
                                     <label for='checkbox3'>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
-                                      <i class='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
+                                      <i className='mdi mdi-star text-warning'></i>
                                     </label>
                                   </p>
                                 </div>
                               </div>
                             </div>
-                            <div class='col-lg-4 ml-auto'>
-                              <ul class='list-unstyled personal-detail'>
-                                <li class='mt-2'>
-                                  <i class='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
+                            <div className='col-lg-4 ml-auto'>
+                              <ul className='list-unstyled personal-detail'>
+                                <li className='mt-2'>
+                                  <i className='far fa-money-bill-alt text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b> Rate </b> : $40-$75
                                 </li>
-                                <li class=''>
-                                  <i class='dripicons-message mr-2 text-info font-18'></i>{' '}
+                                <li className=''>
+                                  <i className='dripicons-message mr-2 text-info font-18'></i>{' '}
                                   <b> Feedbacks </b> : 24
                                 </li>
-                                <li class='mt-2'>
-                                  <i class='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
+                                <li className='mt-2'>
+                                  <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{' '}
                                   <b>Location</b> : Central, Hawaii
                                 </li>
                               </ul>
-                              <div class=''>
+                              <div className=''>
                                 <Link to='../checkout'>
                                   <button
                                     type='button'
-                                    class='btn btn-success btn-md m-1'
+                                    className='btn btn-success btn-md m-1'
                                   >
                                     Book Appointment
                                   </button>
@@ -471,7 +471,7 @@ export default function ProvidersList() {
                                 <Link to='marketplace-3-profile.html'>
                                   <button
                                     type='button'
-                                    class='btn btn-outline-success btn-md m-1'
+                                    className='btn btn-outline-success btn-md m-1'
                                   >
                                     View Profile
                                   </button>

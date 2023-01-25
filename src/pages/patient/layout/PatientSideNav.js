@@ -119,8 +119,8 @@ function PatientSideNav({ openSideNav }) {
             <i className='dripicons-user'></i>
             <span>Profile</span>
             <span className='menu-arrow'></span>
-            <Link
-        ></Link>
+            {/* <Link
+        ></Link> */}
           </NavLink>
         </li>
       </ul>

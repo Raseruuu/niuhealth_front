@@ -105,7 +105,7 @@ export default function Booking() {
         .format('YYYY-MM-DD')
 
       const _today = startDate.format('ddd')
-
+      console.log('weeklysched',weeklySched)
       for (
         let j = weeklySched[_today].start;
         j <= weeklySched[_today].end;
@@ -147,6 +147,7 @@ export default function Booking() {
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
     for (const [key, value] of Object.entries(providerSched)) {
+      // console.log("provsched",key,value)
       for (const day of weekdays) {
         if (key.includes(day.toLowerCase())) {
           if (key.includes('start')) {
@@ -182,7 +183,18 @@ export default function Booking() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
+            // console.log("providerschedule",data)
             isMounted && setProviderSched(data)
+            // setWeeklySched(
+            //   {
+            //     Sun:{start:data.hours_sun_start,end:hours_sun_end},
+            //     Mon:{start:data.hours_mon_start,end:hours_mon_end},
+            //     Tue:{start:data.hours_tue_start,end:hours_tue_end},
+            //     Wed:{start:data.hours_wed_start,end:hours_wed_end},
+            //     Thu:{start:data.hours_thu_start,end:hours_thu_end},
+            //     Fri:{start:data.hours_fri_start,end:hours_fri_end},
+            //     Sat:{start:data.hours_sat_start,end:hours_sat_end},
+            //   })
           } else {
             throw new Error(Message)
           }

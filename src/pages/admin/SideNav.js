@@ -9,13 +9,13 @@ function SideNav({ openSideNav=true }) {
       <ul className='metismenu left-sidenav-menu'  style = {{marginTop: "50px"}}>
         <li>
         <a href="javascript: void(0);">
-          <i class="ti-crown"></i>
+          <i className="ti-crown"></i>
             Accounts 
-            <span class="menu-arrow left-has-menu">
-              <i class="mdi mdi-chevron-right"></i>
+            <span className="menu-arrow left-has-menu">
+              <i className="mdi mdi-chevron-right"></i>
             </span>
         </a>  
-          <ul class="nav-second-level" aria-expanded="false">
+          <ul className="nav-second-level" aria-expanded="false">
             <li>
               <NavLink to='/admin/companies'>
                 <i className='ti-bar-chart'></i>

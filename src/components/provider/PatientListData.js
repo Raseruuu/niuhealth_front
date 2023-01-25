@@ -28,7 +28,7 @@ function PatientListData({ limit,pagenum, list = [] }) {
     <tr key={index}>
       <td>
         <Link
-          to="profile"
+          to={"profile/"+item.patient_id}
           state={{
             selectedUser: item,
           }}

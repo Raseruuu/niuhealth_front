@@ -150,9 +150,9 @@ export default function AdminClinics() {
                                     // style={{}}
                                     alt=''
                                     />
-                                    <div class='card-body'>
-                                        <h5 class='card-title'>{item.clinic_name}</h5>
-                                        <p class='card-text mb-0'>{item.address}</p>
+                                    <div className='card-body'>
+                                        <h5 className='card-title'>{item.clinic_name}</h5>
+                                        <p className='card-text mb-0'>{item.address}</p>
                                         <p className='text-muted mb-0'>
                                             {item.specialty }
                                         </p>

@@ -8,7 +8,7 @@ function ProviderItem({name,clinics,specialty,rating}){
     return(
         <tr>
             <th><a href="manage_provider.html">
-                <img src="../assets/images/users/user-10.jpg" alt="user" class="thumb-sm rounded-circle"/>
+                <img src="../assets/images/users/user-10.jpg" alt="user" className="thumb-sm rounded-circle"/>
             {name} </a></th>
             <th>{clinics}</th>
             <th>{specialty}</th>
@@ -38,14 +38,14 @@ export default function AdminProviders() {
         ]
     )
   return (
-<div class="page-wrapper">
-    <div class="page-wrapper">
-        <div class="page-content">
+<div className="page-wrapper">
+    <div className="page-wrapper">
+        <div className="page-content">
 
-                <div class="container-fluid">
+                <div className="container-fluid">
                     <TableTitle title="Providers">
-                        <div class="float-right">
-                            <a href="manage_provider.html"><button type="button" class="btn btn-success waves-effect waves-light">New Provider</button></a>
+                        <div className="float-right">
+                            <a href="manage_provider.html"><button type="button" className="btn btn-success waves-effect waves-light">New Provider</button></a>
                         </div>
                     {/* <!-- Page-Title --> */}
                     </TableTitle>
