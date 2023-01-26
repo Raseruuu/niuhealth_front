@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { AWS_BUCKET ,AWS_BUCKET_PROFILES} from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
+import Swal from 'sweetalert2'
 
+import { Link } from 'react-router-dom'
+import { Rating } from 'react-simple-star-rating'
 function TitleBox({text}){
   return(
     <div className='row'>
@@ -14,23 +17,79 @@ function TitleBox({text}){
     </div>
   )
 }
-function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating,review="Meh-ass Service this was."}){
+function showReview({patientPicture,patientName,patientEmail,rating,service_name,service_description,review}){
+  Swal.fire({
+    title: `Patient's Review`,
+    html: 
+      `
+      <div class='row'>
+          <div class='col-sm-2'>
+            <img 
+              class='rounded-circle'
+              height="100px"
+              src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
+              style={width: 60px; height: 60px; object-fit: cover;}
+              >  
+            </img>
+          </div>
+          <div class='col-sm-8'>
+            <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
+            <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
+            <div class='col'>
+              <i class='mdi mdi-star text-warning'></i>
+              ${rating} Stars
+            </div>  
+          </div>
+         
+          
+      </div>
+      <b>${service_name}</b> <br>
+      <i>${service_description}</i> <br>
+      <p class='mb-0 font-18 text-dark responsive'>"${review}"</p> <br>
+      `
+  })
+}
+function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating,review="It was certainly one of the consultations of all time."}){
   return(
     <div className='col-lg-4' style={{minWidth: '400px'}}>
       <div className='card' >
         <div className='card-body'>
           <div className='media' >
-            <a className='' href='#'>
+            
+            <Link className=''
+              to='#'
+              style={{textDecoration: 'none'}}
+              onClick={()=>
+                showReview(
+                  {patientPicture,
+                  patientName,
+                  patientEmail,
+                  rating,
+                  service_name,
+                  service_description,
+                  review})
+              }
+              >
               <img
                 // src='../assets/images/users/user-1.jpg'
                 src={(AWS_BUCKET_PROFILES)+(patientPicture)}
                 alt='user'
                 className='rounded-circle thumb-md'
+                style={{width:60,height:60, objectFit:'cover'}}
               />
-            </a>
             <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
               <ul className='list-inline mb-2 product-review ratingsPage'>
-                <RatingsStars score={rating} size={14}/>
+                {/* <RatingsStars score={rating} size={14}/> */}
+                <Rating
+                  fillColor="#ffb822"
+                  emptyColor="white"
+                  SVGstrokeColor="#f1a545"
+                  SVGstorkeWidth={1}
+                  size={14}
+                  allowFraction={true}
+                  initialValue={rating}
+                  readonly={true}
+                />
               </ul>
               <div className='row'>
                 <div className='col'>
@@ -50,6 +109,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
               <p>"{review}"
               </p>
             </div>
+            </Link>
           </div>
         </div>
       </div>
@@ -69,14 +129,25 @@ function RatingsStars({score,size=24,children}){
   }
   return(
     <ul className='list-inline mb-0 product-review'><>
-    {(size<24)?(
-      <>{score}</>):<></>}
-      {scorestars.map((star)=>(
-            <li className='list-inline-item mr-0'>
-              <i className={`mdi `+ starswitch[star] +` font-`+size}></i>
-            </li>
-        )
-      )}
+      <Rating
+            fillColor="#ffb822"
+            emptyColor="white"
+            SVGstrokeColor="#f1a545"
+            SVGstorkeWidth={1}
+            size={size}
+            allowFraction={true}
+            initialValue={score}
+            readonly={true}
+          />
+      {/* {scorestars.map((star)=>( */}
+          {/* <li className='list-inline-item mr-0'>
+            <i className={`mdi `+ starswitch[star] +` font-`+size}></i>
+          </li> */}
+            
+        {/* )
+      )} */}
+      {/* {(size<24)?(
+      <div style={{marginLeft:'5px'}}>({score})</div>):<></>} */}
       {children}
       </>
     </ul>

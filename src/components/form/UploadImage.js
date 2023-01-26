@@ -99,12 +99,12 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                   <>
                   <img
                       alt=""
-                      style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}
+                      style={{objectFit: 'cover', margin: 'unset' ,width:180,height:130}}
 
                       onClick={() => {
                       Swal.fire({
                           // title: 'Profile Picture',
-                          html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}"></img>`,
+                          html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}"></img>`,
                           // { AWS_BUCKET_SERVICES } + profile.picture,
                       })
                       }}

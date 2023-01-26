@@ -192,15 +192,19 @@ function Services({ limit }) {
                   <Link to=''>
                     <img
                       style={{width:'200px', height:'200px',objectFit: 'cover'}}
-                      src={AWS_BUCKET_SERVICES+item?.images}
+                      src={AWS_BUCKET_SERVICES+item?.default_image}
                       alt=''
                       className='img-fluid'
                     />
                   </Link>
                   <div className='card-body product-info'>
-                    <Link to='' className='product-title'>
-                    {item.service_name}
-                      {item.service_description}
+                  <Link to='' className='product-title'>
+                    {/* <div className='col'> */}
+                      
+                     {item.service_name}<br/>{item.service_description}
+                        
+                      
+                    {/* </div> */}
                     </Link>
                     <p>{item.description}</p>
                     <div className='d-flex justify-content-between my-2'>

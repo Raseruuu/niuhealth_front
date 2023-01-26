@@ -48,7 +48,7 @@ export default function ClinicSchedule() {
   const [clinicProfile,setClinicProfile]=useState({})
   const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
-  const [clinicImages,setClinicImages]=useState([{path:"",file:{}}])
+  const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png',file:{}}])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
 
@@ -305,18 +305,15 @@ export default function ClinicSchedule() {
                             imagepreview={imagepreview} 
                             setImagePreview={setImagePreview}
                             action={action}/>
-                        // <UploadImage id={3} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
-                        // <UploadImage id={4} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
-                        // <UploadImage id={5} formData={clinicProfile} setFormData={setClinicProfile} imagepreview={imagepreview}/>
                        
                         ))}
-                        {(clinicImages.length<4&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1].path!="clinics/Default.png")))?(
+                        {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1].path!="clinics/Default.png")))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
                           minWidth="200px" height="150px"
                           onClick={(e)=>{
                             e.preventDefault();
-                            if (clinicImages.length<4)
+                            if (clinicImages.length<=4)
                               {setClinicImages([...clinicImages,{path:'clinics/Default.png'}])}
                             }}>+</button>
                         ):(clinicImages.length===0)?(

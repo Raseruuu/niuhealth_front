@@ -1,7 +1,7 @@
 import Footer from "../../components/Footer"
 import React, { useEffect,useState } from 'react'
 
-import { AWS_BUCKET } from '../../constants'
+import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import moment from "moment"
@@ -9,7 +9,7 @@ import TableCard from "../../components/table/Tables"
 import CardItem from "../../components/cards/Card"
 import useInterval from '../../hooks/useInterval'
 import { useLocation, useNavigate } from 'react-router-dom'
-
+import Swal from 'sweetalert2'
 function dateTimeFormat(date) {
   return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
 }
@@ -35,6 +35,13 @@ const ViewVisitButton = () => {
         type="button"
         // className="btn btn-success btn-round waves-effect waves-light"
         className="btn btn-outline-success btn-round waves-effect waves-light"
+        onClick={() => {
+          Swal.fire({
+            // title: 'Profile Picture',
+            html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}"></img>`,
+            // { AWS_BUCKET_SERVICES } + profile.picture,
+          })
+        }}
       >
         View Visit Summary
       </button>
@@ -111,6 +118,7 @@ function HMFormat(minutes) {
   // return hours+":"+dig+min+":"+sec
 }
 const AppointmentAction = ({ status , appointmentTime, appointment ,joinAppointment}) => {
+
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
   const appointmentETA=HMFormat(moment(appointmentTime).diff(timenow, 'minutes', true))
@@ -125,15 +133,15 @@ const AppointmentAction = ({ status , appointmentTime, appointment ,joinAppointm
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
         <><h6>Virtual visit period is over.</h6>
-        <ViewVisitButton/>
+        <ViewVisitButton appointmentPeriod={appointmentPeriod}/>
         {/* <StartButton appointment={appointment}/> */}
         </>
       )}
   else if (status==="4" && timenow<appointmentPeriod[1]){
     return (
       <>
-        {/* <h6>Appointment ETA: {appointmentETA}
-        </h6> */}
+        <h6>Appointment ETA: {appointmentETA}
+        </h6>
         <CancelButton/>
       </>
     )}
@@ -180,6 +188,7 @@ function TimeCard(){
 function AppointmentItem({
     provider_description,
     provider_name,
+    image,
     service_description,
     service_name,
     service_id,
@@ -213,7 +222,7 @@ function AppointmentItem({
         <div className="media">
           <a className="" href="#">
             <img
-              src="../assets/images/users/user-1.jpg"
+              src={AWS_BUCKET_SERVICES+"providers/"+image}
               alt="user"
               className="rounded-circle thumb-md"
             />

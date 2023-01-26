@@ -14,7 +14,7 @@ function hourformat(hour){
     }
   }
 
-export default function ScheduleSelect({hours,setHours,weekday,disabled}){
+export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours}){
   // hours = 0
   let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
   let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
@@ -36,7 +36,7 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled}){
             value={hours['Hours'+weekday+'Start']}
             onChange={(e)=>{
             setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
-            console.log(hours)
+            console.log("hours = oldhours",hours===oldHours)
           }
           }
             className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   

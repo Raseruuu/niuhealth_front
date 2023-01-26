@@ -341,7 +341,7 @@ export default function Marketplace() {
                                 SVGstorkeWidth={1}
                                 size={17}
                                 allowFraction={true}
-                                initialValue={4.5}
+                                initialValue={item.average_ratings}
                                 readonly={true}
                               />
                             </p>

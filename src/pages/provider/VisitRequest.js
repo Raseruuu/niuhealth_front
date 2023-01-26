@@ -1,12 +1,13 @@
 import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import TableCard, { TableTextLink , TableTitle } from "../../components/table/Tables"
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import Swal from 'sweetalert2'
-import {StatusTextInsurance} from "../../components/status/Status"
 
+import {StatusTextInsurance} from "../../components/status/Status"
+import { AWS_BUCKET_PROFILES } from "../../constants";
 function VisitRequest() {
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
 
@@ -16,7 +17,35 @@ function VisitRequest() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [refreshList, setRefreshList] = useState(false)
-
+  function showVisitRequest({patientPicture,patientName,patientEmail,service_name,service_description}){
+    Swal.fire({
+      title: 'Appointment Request',
+      html: 
+        `
+        <div class='row' style={max-width:300}>
+            <div class='col-sm-2'>
+              <img 
+                class='rounded-circle'
+                height="100px"
+                src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
+                style={width: 60px; height: 60px; object-fit: cover;}
+                >  
+              </img>
+            </div>
+            <div class='col-sm-8'>
+              <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
+              <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
+              
+            </div>
+           
+            </div>
+            
+          </div>
+        <b>${service_name}</b> <br>
+        <i>${service_description}</i> <br>
+        `
+    })
+  }
   function handleActionClick(action, selectedItem) {
     console.log(action)
     console.log(selectedItem)
@@ -114,15 +143,37 @@ function VisitRequest() {
             <td>{item.visit_id}</td>
             <td>
               <div className='media'>
-                <a href='../pages/visit-request-profile.html'>
+                <Link 
+                  to='#'
+                  style={{textDecoration: 'none'}}
+                  onClick={showVisitRequest(
+                      patientPicture=item.picture,
+                      patientName=item.full_name,
+                      patientEmail=item.email,
+                      // service_name=item.service_name,
+                      service_description=item.service_description,
+                      trans_date_time=item.trans_date_time)
+                  }>
                   <img
-                    src='../assets/images/users/user-1.png'
+                    src={AWS_BUCKET_PROFILES+item.picture}
                     alt=''
                     className='thumb-sm rounded-circle mr-2'
                   />
-                </a>
+                </Link>
                 <div className='media-body align-self-center text-truncate'>
-                  <TableTextLink text = {item.full_name} to = '../pages/visit-request-profile.html'>
+                  <TableTextLink 
+                    text = {item.full_name} 
+                    to = ''
+                    onClick={()=>
+                      {showVisitRequest(
+                        patientPicture=item.picture,
+                        patientName=item.full_name,
+                        patientEmail=item.email,
+                        // service_name=item.service_name,
+                        service_description=item.service_description,
+                        trans_date_time=item.trans_date_time)}
+                    }
+                  >
                   <StatusTextInsurance status={item.with_insurance||0}
                       />
                   </TableTextLink>

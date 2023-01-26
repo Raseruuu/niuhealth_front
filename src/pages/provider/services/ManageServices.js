@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { AWS_BUCKET } from "../../../constants";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
-
+import UploadImage from '../../../components/form/UploadImage'
 function ManageServices() {
 
   const { auth } = useAuth();
@@ -13,7 +13,9 @@ function ManageServices() {
   const { action } = useParams();
   const { state } = useLocation();
   const [clinicList, setClinicList] = useState([]);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState([{path:'clinics/Default.png',file:{}}]);
+  const [service, setService] = useState({});
+  const [imagepreview, setImagePreview] = useState(true);
 
   const [isSuccess, setIsSuccess] = useState(false);
   // const placeholderimage = `${AWS_BUCKET}/assets/images/users/user-4.jpg`;
@@ -27,19 +29,26 @@ function ManageServices() {
   const onSubmit = async (data) => {
     const formData = new FormData();
 
-    if (data?.image.length > 0) {
-      for (let index = 0; index < data?.image.length; index++) {
-        formData.append("Image", data.image[index], data.image[index].name);
+    // if (data?.image.length > 0) {
+    //   for (let index = 0; index < data?.image.length; index++) {
+    //     formData.append("Image"+parseInt(index+1), data.image[index], data.image[index].name);
+    //   }
+    // }
+    console.log("images",images)
+    console.log("service",service)
+    if (images.length > 0) {
+      for (let index = 0; index < images.length; index++) {
+        formData.append("Image"+parseInt(index+1), images[index].file);
       }
     }
-
     formData.append("ServiceName", data.name);
     formData.append("Email", auth.email);
-    formData.append("ServiceDescription", data.type);
+    // formData.append("ServiceType", data.type);
+    formData.append("ServiceDescription", data.description);
     formData.append("CostPrice", data.rate);
     formData.append("Status", Number(data.active));
-    // formData.append("ClinicID", data.clinic);
-    formData.append("ClinicID",[data.clinic]);
+    formData.append("ClinicIDs", data.clinic);
+    // formData.append("ClinicIDs",(JSON.stringify(data.clinic)));
     await axiosPrivate
       .post("createService", formData, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -57,7 +66,7 @@ function ManageServices() {
 
         if (Status) {
           setClinicList(data);
-          navigate(-1);
+          // navigate(-1);
         } else {
           throw new Error(Message);
         }
@@ -150,8 +159,8 @@ function ManageServices() {
                     />
                   </div>
                 </div>
-
                 <div className="row" style={{ marginBottom: "30px" }}>
+                {/*
                   <div className="col-md-6">
                     <label className="mb-3">Choose Service Type</label>
                     <select
@@ -226,7 +235,7 @@ function ManageServices() {
                       </optgroup>
                     </select>
                   </div>
-
+*/}
                   <div className="col-md-6">
                     <label
                       for="example-text-input"
@@ -245,7 +254,7 @@ function ManageServices() {
                       })}
                     />
                   </div>
-                </div>
+                </div> 
 
                 <div className="row">
                   <div className="col-lg-6">
@@ -283,7 +292,8 @@ function ManageServices() {
                   </div>
 
                   <div className="col-lg-6">
-                    <div className="form-group">
+                  <div className="col-md-12">
+                    <div className="form-group row">
                       <label for="exampleFormControlSelect2">
                         Clinic Availability (choose all that applies)
                       </label>
@@ -305,6 +315,7 @@ function ManageServices() {
                         ))}
                       </select>
                     </div>
+                    </div>
                   </div>
                 </div>
 
@@ -314,8 +325,33 @@ function ManageServices() {
                       Upload Service Image
                     </label>
                     {/* <form method='post' className='card-box'> */}
-
-                    <div className="uploadPicContainer">
+                    <div className="row">
+                    {images.map((image,index)=>(
+                          
+                          <UploadImage 
+                            id={index} 
+                            images={images} 
+                            setImages={setImages} 
+                            previewImage={image} 
+                            formData={service} 
+                            setFormData={setService} 
+                            imagepreview={imagepreview} 
+                            setImagePreview={setImagePreview}
+                            action={"create"}/>
+                       
+                        ))}
+                        {(images.length<=4)?(
+                        <button
+                          className="btn btn-gradient-success waves-effect waves-light"
+                          minWidth="200px" height="150px"
+                          onClick={(e)=>{
+                            e.preventDefault();
+                            if (images.length<=4)
+                              {setImages([...images,{path:'clinics/Default.png'}])}
+                            }}>+</button>
+                        ):null}
+                        </div>
+                    {/* <div className="uploadPicContainer">
                       <input
                         type="file"
                         id="input-file-now-custom-1"
@@ -335,7 +371,7 @@ function ManageServices() {
                       {errors.image ? (
                         <div classNameName="text-danger">Please choose file</div>
                       ) : null}
-                    </div>
+                    </div> */}
                     {/* </form> */}
                   </div>
                 </div>
@@ -358,6 +394,7 @@ function ManageServices() {
                     ) : (
                       <button
                         onClick={() => navigate(-1)}
+
                         type="button"
                         className="btn btn-gradient-info waves-effect waves-light"
                       >

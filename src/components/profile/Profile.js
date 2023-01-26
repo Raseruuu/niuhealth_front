@@ -284,22 +284,22 @@ function ProfileEdit() {
               HoursSatStart:  details.hours_sat_start,
               HoursSatEnd:    details.hours_sat_end
               })
-              setOldHours({
-                HoursSunStart:  details.hours_sun_start,
-                HoursSunEnd:    details.hours_sun_end,
-                HoursMonStart:  details.hours_mon_start,
-                HoursMonEnd:    details.hours_mon_end,
-                HoursTueStart:  details.hours_tue_start,
-                HoursTueEnd:    details.hours_tue_end,
-                HoursWedStart:  details.hours_wed_start,
-                HoursWedEnd:    details.hours_wed_end,
-                HoursThuStart:  details.hours_thu_start,
-                HoursThuEnd:    details.hours_thu_end,
-                HoursFriStart:  details.hours_fri_end,
-                HoursFriEnd:    details.hours_fri_start,
-                HoursSatStart:  details.hours_sat_start,
-                HoursSatEnd:    details.hours_sat_end
-                })
+            setOldHours({
+              HoursSunStart:  details.hours_sun_start,
+              HoursSunEnd:    details.hours_sun_end,
+              HoursMonStart:  details.hours_mon_start,
+              HoursMonEnd:    details.hours_mon_end,
+              HoursTueStart:  details.hours_tue_start,
+              HoursTueEnd:    details.hours_tue_end,
+              HoursWedStart:  details.hours_wed_start,
+              HoursWedEnd:    details.hours_wed_end,
+              HoursThuStart:  details.hours_thu_start,
+              HoursThuEnd:    details.hours_thu_end,
+              HoursFriStart:  details.hours_fri_end,
+              HoursFriEnd:    details.hours_fri_start,
+              HoursSatStart:  details.hours_sat_start,
+              HoursSatEnd:    details.hours_sat_end
+              })
             
             setOldProfile(details)
             setAuth((prev) => ({ ...prev, ...details }))
@@ -420,8 +420,10 @@ function ProfileEdit() {
                               type="text"
                               name="provider_name"
                               value={profile.provider_name}
+                              
                               onChange={handleInputChange.bind(this)}
                               required
+                              
                             />
                         </div>
                       </div>):
@@ -774,34 +776,34 @@ function ProfileEdit() {
                           {/* <div className='row'> */}
                             <div className='col-md-3' >
                               <h5>Sunday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sun" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div className='col-md-3'>
                               <h5>Monday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Mon" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div className='col-md-3'>
                               <h5>Tuesday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Tue" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div className='col-md-3'>
                               <h5>Wednesday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Wed" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                           
                             {/* <div className='row'> */}
                             
                             <div className='col-md-3'>
                               <h5>Thursday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Thu" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div className='col-md-3'>
                               <h5>Friday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Fri" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div className='col-md-3'>
                               <h5>Saturday</h5>
-                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat" disabled={disableForm}/>
+                              <ScheduleSelect hours= {hours} setHours={setHours} weekday="Sat" disabled={disableForm} oldHours={oldHours}/>
                             </div>
                             <div>
                             {/* </div> */}
@@ -823,7 +825,7 @@ function ProfileEdit() {
                           onClick={handleSubmit}
                           type="button"
                           className="btn btn-success btn-round waves-effect waves-light"
-                          disabled={profile===oldProfile||hours===oldHours}
+                          disabled={profile===oldProfile&&(hours===oldHours)}
                         >
                           Submit
                         </button>
