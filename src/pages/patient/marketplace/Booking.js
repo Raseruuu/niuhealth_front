@@ -2,7 +2,7 @@ import FullCalendar from '@fullcalendar/react'
 import React, { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET_SERVICES } from '../../../constants'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -105,7 +105,7 @@ export default function Booking() {
         .format('YYYY-MM-DD')
 
       const _today = startDate.format('ddd')
-      console.log('weeklysched',weeklySched)
+      // console.log('weeklysched',weeklySched)
       for (
         let j = weeklySched[_today].start;
         j <= weeklySched[_today].end;
@@ -134,6 +134,7 @@ export default function Booking() {
           })
         }
       }
+      console.log(schedArray)
     }
     setSlots(schedArray)
   }
@@ -281,9 +282,11 @@ export default function Booking() {
                         <div className="met-profile-main">
                           <div className="met-profile-main-pic">
                             <img
-                              src={`${AWS_BUCKET}/assets/images/users/user-4.jpg`}
+                              src={`${AWS_BUCKET_SERVICES}${selectedProvider?.images}`}
                               alt=""
-                              className="rounded-circle"
+                              width={120}
+                              height={120}
+                              // className="rounded-circle"
                             />
                           </div>
                           <div className="met-profile_user-detail">
@@ -293,7 +296,8 @@ export default function Booking() {
                               </h5>
                             </Link>
                             <p className="mb-0 met-user-name-post">
-                              Neurologist / Sleep Doctor / Surgeon
+                              {selectedProvider?.service_description}
+
                             </p>
                             <p>
                               <label htmlFor="checkbox3">

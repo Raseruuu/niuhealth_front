@@ -99,7 +99,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                   <>
                   <img
                       alt=""
-                      style={{objectFit: 'cover', margin: 'unset' ,width:180,height:130}}
+                      style={{objectFit: 'cover', margin: 'unset' ,width:180,height:150}}
 
                       onClick={() => {
                       Swal.fire({
@@ -113,24 +113,26 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                       
                   />
                   {action==='edit' ||action==='create'? (
-                      <div className='row'>
-                      <button
-                      type="button"
-                      className="btn btn-gradient-success waves-effect waves-light"
-                      onClick={triggerFileInput}
-                      >
-                      Change
-                      </button>
-                      <button
-                      type="button"
-                      className="btn btn-gradient-danger waves-effect waves-light"
-                      onClick={()=>
-                        {removeClinicImage(id)}}
-                      >
-                      Remove
-                      </button>
+                      <div className='row' style ={{marginTop:'10px'}}>
+                        <button
+                          type="button"
+                          className="btn btn-gradient-success waves-effect waves-light"
+                          onClick={triggerFileInput}
+                          >
+                            Change
+                        </button>
+                        {images.length>1? (
+                          <button
+                            type="button"
+                            className="btn btn-gradient-danger waves-effect waves-light"
+                            onClick={()=>
+                              {removeClinicImage(id)}}
+                            >
+                            Remove
+                          </button>
+                        ): null }
                       </div>
-                 ): null }
+                  ): null }
                  </>
                  ):null}
                 </div>

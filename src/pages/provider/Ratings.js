@@ -40,8 +40,7 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
               ${rating} Stars
             </div>  
           </div>
-         
-          
+  
       </div>
       <b>${service_name}</b> <br>
       <i>${service_description}</i> <br>

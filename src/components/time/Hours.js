@@ -30,7 +30,7 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
       </input> */}
       <div className = "row">
         <div>Start Time </div>
-        <div class = "col">
+        <div className = "col">
           <select
             disabled={disabled}
             value={hours['Hours'+weekday+'Start']}
@@ -40,17 +40,17 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
           }
           }
             className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
-            {morning_options.map((option)=>(
-              <option value={option}>{hourformat(option)}</option>
+            {morning_options.map((option, index)=>(
+              <option key={index} value={option}>{hourformat(option)}</option>
               ))}
               
             <option value={null}>--:--</option>
           </select>
         </div>
       </div>
-      <div class = "row">
+      <div className = "row">
         <div>End Time </div>
-        <div class = "col">
+        <div className = "col">
           <select  
             disabled={disabled}
             value={hours['Hours'+weekday+'End']}
@@ -60,8 +60,8 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
             }
             }
             className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>
-            {night_options.map((option2)=>(
-              <option value={option2}>{hourformat(option2)}</option>
+            {night_options.map((option2,index)=>(
+              <option key={index} value={option2}>{hourformat(option2)}</option>
               ))}
             <option value={null}>--:--</option>
           </select>

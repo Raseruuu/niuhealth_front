@@ -13,7 +13,7 @@ function ManageServices() {
   const { action } = useParams();
   const { state } = useLocation();
   const [clinicList, setClinicList] = useState([]);
-  const [images, setImages] = useState([{path:'clinics/Default.png',file:{}}]);
+  const [images, setImages] = useState([{path:'services/Default.png',file:{}}]);
   const [service, setService] = useState({});
   const [imagepreview, setImagePreview] = useState(true);
 
@@ -146,6 +146,7 @@ function ManageServices() {
                 <p className="text-muted mb-3">
                   Lorem ipsum dolor sit amet consucetetur.
                 </p>
+                
                 <div className="row" style={{ marginBottom: "30px" }}>
                   <div className="col-md-12">
                     <label className="mb-3">Service Name</label>
@@ -322,7 +323,7 @@ function ManageServices() {
                 <div className="row" style={{ marginTop: "40px" }}>
                   <div className="col-lg-12">
                     <label for="exampleFormControlSelect2">
-                      Upload Service Image
+                     Service Image
                     </label>
                     {/* <form method='post' className='card-box'> */}
                     <div className="row">
@@ -340,42 +341,20 @@ function ManageServices() {
                             action={"create"}/>
                        
                         ))}
-                        {(images.length<=4)?(
+                        {(images.length<=5&&(images[images.length-1]?.path!="services/Default.png"))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
                           minWidth="200px" height="150px"
                           onClick={(e)=>{
                             e.preventDefault();
                             if (images.length<=4)
-                              {setImages([...images,{path:'clinics/Default.png'}])}
+                              {setImages([...images,{path:'services/Default.png'}])}
                             }}>+</button>
                         ):null}
                         </div>
-                    {/* <div className="uploadPicContainer">
-                      <input
-                        type="file"
-                        id="input-file-now-custom-1"
-                        className="dropify"
-                        accept="image/*"
-                        capture="user"
-                        multiple
-                        // data-default-file={placeholderimage}
-                        {...register("image", {
-                          // required: true,
-                        })}
-                        onChange={(e) => {
-                          console.log(e.target.files);
-                          // setImages(e.target.files)
-                        }}
-                      />
-                      {errors.image ? (
-                        <div classNameName="text-danger">Please choose file</div>
-                      ) : null}
-                    </div> */}
-                    {/* </form> */}
+                   
                   </div>
                 </div>
-
 
                 <div className="row" style={{ marginTop: "40px" }}>
                   <div className="col-lg-12">
@@ -385,12 +364,22 @@ function ManageServices() {
                       </div>
                     ) : null}
                     {!isSuccess ? (
-                      <button
-                        type="submit"
-                        className="btn btn-gradient-success waves-effect waves-light"
-                      >
-                        {isSubmitting ? "Please wait..." : "Save"}
-                      </button>
+                      <>
+                        <button
+                          type="submit"
+                          className="btn btn-gradient-success waves-effect waves-light"
+                        >
+                          {isSubmitting ? "Please wait..." : "Save"}
+                        </button>
+                        <button
+                          type='button'
+                          className='btn btn-gradient-info waves-effect waves-light'
+                          onClick={() => navigate(-1)}
+                          style={{ marginLeft: "10px" }}
+                        >
+                          Cancel
+                        </button>
+                      </>
                     ) : (
                       <button
                         onClick={() => navigate(-1)}

@@ -355,7 +355,7 @@ function PatientList() {
 
               <span className="input-group-append">
                 <button className="btn btn-success" type="submit">
-                  <i class="fas fa-search"></i>
+                  <i className="fas fa-search"></i>
                 </button>
               </span>
             </div>
@@ -378,7 +378,7 @@ function PatientList() {
           totalItemsCount={list.length}
           pageRangeDisplayed={5}
           // onPageChange={}
-          itemClass="page-item "
+          itemclassName="page-item "
           linkClass="page-link float-center"
           onChange={(e)=>{
             console.log(e);

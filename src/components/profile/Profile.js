@@ -21,7 +21,43 @@ import moment from 'moment'
 function ProfileEdit() {
   const { auth, setAuth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
-  const [profile, setProfile] = useState(auth)
+  const [profile, setProfile] = useState({
+    ...auth,
+    hours_sun_end: "20",
+    hours_sun_start: "8",
+    hours_mon_end: "20",
+    hours_mon_start: "8",
+    hours_tue_end: "20",
+    hours_tue_start: "8",
+    hours_wed_end: "20",
+    hours_wed_start: "8",
+    hours_thu_end: "20",
+    hours_thu_start: "8",
+    hours_fri_end: "20",
+    hours_fri_start: "8",
+    hours_sat_end: "20",
+    hours_sat_start: "8",
+    picture: (auth.userType==='Patient'?"profiles/pictures/":"")+"Default.jpg",
+    contact_info: "",
+    practice: "",
+    provider_description: "",
+    provider_name: "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    local_time_zone: "",
+    address:"",
+    first_name: "",
+    country_city_id:"",
+    country_id:"0",
+    date_of_birth:"2000-01-01",
+    picturefile:"",
+    facebook:"",
+    twitter:"",
+    instagram:"",
+    othersocial:"",
+    email:auth.email
+  })
   const [oldProfile, setOldProfile] = useState({})
   const [disableForm, setDisableForm] = useState(true)
   const [timeZone, setTimeZone] = useState('+00:00')
@@ -68,10 +104,6 @@ function ProfileEdit() {
 
   async function handleSubmit() {
     const formData = new FormData()
-
-    // console.log('profile', profile)
-    
-    // setProfile({ ...profile, address: address1 + ', ' + address2 })
     if (auth.userType==="Patient"){
       formData.append('Email', auth.email)
       formData.append('FirstName', profile.first_name)
@@ -87,7 +119,6 @@ function ProfileEdit() {
     if (auth.userType==="Provider"){
       formData.append('Email', auth.email)
       formData.append('Name', profile.provider_name)
-      
       formData.append('ProviderDescription', profile.provider_description)
       formData.append('Practice', profile.practice)
       formData.append('ContactInfo', profile.contact_info)
@@ -106,9 +137,8 @@ function ProfileEdit() {
       // formData.append('DateOfBirth', profile.date_of_birth)
       // formData.append('LocalTimeZone', profile.local_time_zone)
     }
-    console.log(typeof profile.picturefile)
     if (typeof profile.picturefile === 'object'){
-    formData.append('Image', profile.picturefile ,"profile_pic")
+      formData.append('Image', profile.picturefile ,"profile_pic")
     }
     
     let profile_endpoint2=((auth.userType==='Provider')?"providerUpdateDetails":(auth.userType==='Patient')?"updatePatientDetails":"none")
@@ -125,7 +155,6 @@ function ProfileEdit() {
         },
       })
       .then((res) => {
-        console.log(res)
         const { Status, Data: data = [], Message } = res.data
 
         if (Status) {
@@ -188,15 +217,10 @@ function ProfileEdit() {
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
     console.log("FILE HERE: ",file);
-    // console.log(imgRef.current.value+"")
     setProfile({
       ...profile,
       picturefile:file
     })
-    // onChange={()=>
-    //   {console.log("image", imgRef.current.files[0])
-    //   setProfile({...profile,Image:imgRef.current.current.files[0]})
-    //   }}
   };
   useEffect(() => {
     let isMounted = true
@@ -234,7 +258,6 @@ function ProfileEdit() {
         Email: auth.email,
       })
       .then((res) => {
-        console.log(res)
         const { Status, Data: data = [], Message } = res.data
 
         if (Status) {
@@ -266,8 +289,9 @@ function ProfileEdit() {
          
           if (Status) {
             setProfile(details)
-            console.log('deets',details)
+            // console.log('deets',details,moment(details.date_of_birth).format('yyyy-MM-dd'))
             
+            // setProfile({...profile, date_of_birth:(moment(details.date_of_birth).format('yyyy-MM-dd'))})
             setHours({
               HoursSunStart:  details.hours_sun_start,
               HoursSunEnd:    details.hours_sun_end,
@@ -348,7 +372,7 @@ function ProfileEdit() {
 
   useEffect(() => {
     
-    if (!profile?.country_id || profile?.country_id === 'undefined') return
+    if (!profile?.country_id || profile?.country_id === 'undefined'|| profile?.country_id === '') return
     getCities()
   }, [profile.country_id])
 
@@ -374,7 +398,7 @@ function ProfileEdit() {
                           ref={imgRef}
                           onChange={handleImageInputChange}
                         />
-                            {auth.userType}
+                            {/* {auth.userType} */}
                         <img
                           alt=""
                           style={{objectFit: 'cover', margin: 'unset' ,width:100,height:100}}
@@ -408,7 +432,7 @@ function ProfileEdit() {
                       {(auth.userType==='Provider')?
                      ( <div className="form-group row">
                           <label
-                            for="example-text-input"
+                            htmlFor="example-text-input"
                             className="col-sm-2 col-form-label text-right"
                           >
                             Full Name
@@ -431,7 +455,7 @@ function ProfileEdit() {
                       (<>
                         <div className="form-group row">
                           <label
-                            for="example-text-input"
+                            htmlFor="example-text-input"
                             className="col-sm-2 col-form-label text-right"
                           >
                             First Name
@@ -451,7 +475,7 @@ function ProfileEdit() {
                       
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Middle Name
@@ -469,7 +493,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Last Name
@@ -489,7 +513,7 @@ function ProfileEdit() {
                       ):null}
                       <div className="form-group row">
                         <label
-                          for="example-email-input"
+                          htmlFor="example-email-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Email
@@ -500,125 +524,44 @@ function ProfileEdit() {
                             className="form-control"
                             type="email"
                             name="email"
-                            value={profile.email}
-                            onChange={handleInputChange.bind(this)}
+                            value={auth.email}
+                            // onChange={handleInputChange.bind(this)}
                           />
                         </div>
                       </div>
-                      <div className="form-group col">
+                      {/* <div className="form-group row">
                         <label
-                          for="example-email-input"
+                          htmlFor="example-tel-input"
                           className="col-sm-2 col-form-label text-right"
                         >
-                          Social Media
-                        </label>
-                        
-                        <div className="form-group row" style={{ marginLeft: '160px' }}>
-                          <div className='row'>
-                            <div className=' form-group col-md-6' >
-                              <div className='row'>
-                              <label
-                                for="example-email-input"
-                                className="col-sm-4 col-form-label text-right"
-                              >
-                                Facebook
-                              </label>
-                              {/* <i className='ti-facebook' /> */}
-                              <div className="col" style={{ marginBottom: '10px' }}>
-                                <input
-                                  disabled={false}
-                                  className="form-control"
-                                  type="facebook"
-                                  name="facebook"
-                                  placeholder="facebook.com/"
-                                  value={profile.facebook}
-                                  onChange={handleInputChange.bind(this)}
-                                />
-                              </div>
-                              </div>
-                              <div className='row'>
-                              <label
-                                for="example-email-input"
-                                className="col-sm-4 col-form-label text-right"
-                              >
-                                Twitter
-                              </label>
-                              {/* <i className='ti-facebook' /> */}
-                              <div className="col" style={{ marginBottom: '10px' }}>
-                                <input
-                                  disabled={false}
-                                  className="form-control"
-                                  type="twitter"
-                                  name="twitter"
-                                  placeholder="twitter.com/"
-                                  value={profile.twitter}
-                                  onChange={handleInputChange.bind(this)}
-                                />
-                              </div>
-                              </div>
-                            </div>
-                            <div className=' form-group col-md-6' >
-                              <div className='row'>
-                              <div
-                                htmlFor="example-email-input"
-                                className="col-sm-4 col-form-label text-right"
-                              >
-                                Instagram
-                              </div>
-                              {/* <i className='ti-instagram' /> */}
-                              <div className="col" style={{ marginBottom: '10px' }}>
-                                <input
-                                  disabled={false}
-                                  className="form-control"
-                                  type="instagram"
-                                  name="instagram"
-                                  placeholder="instagram.com/"
-                                  value={profile.instagram}
-                                  onChange={handleInputChange.bind(this)}
-                                />
-                              </div>
-                              </div>
-                              <div className='row'>
-                              <label
-                                for="example-email-input"
-                                className="col-sm-4 col-form-label text-right"
-                              >
-                                Other
-                              </label>
-                              {/* <i className='ti-facebook' /> */}
-                              <div className="col" style={{ marginBottom: '10px' }}>
-                                <input
-                                  disabled={false}
-                                  className="form-control"
-                                  type="othersocial"
-                                  name="othersocial"
-                                  placeholder=""
-                                  value={profile.othersocial}
-                                  onChange={handleInputChange.bind(this)}
-                                />
-                              </div>
-                              </div>
-                            </div>
-                            
-                            
-                            
-                          </div>
-                        </div>
-                      </div>
-                      {(auth.userType==='Provider')?(
-                      <>
-                      <div className="form-group row">
-                        <label
-                          for="example-tel-input"
-                          className="col-sm-2 col-form-label text-right"
-                        >
-                          About Me
+                          Facebook
                         </label>
                         <div className="col-sm-10">
                           <input
                             disabled={disableForm}
                             className="form-control"
                             type="tel"
+                            name="facebook"
+                            value={profile.facebook}
+                            onChange={handleInputChange.bind(this)}
+                          />
+                        </div>
+                      </div> */}
+                      {(auth.userType==='Provider')?(
+                      <>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="example-tel-input"
+                          className="col-sm-2 col-form-label text-right"
+                        >
+                          About Me
+                        </label>
+                        <div className="col-sm-10">
+                          <textarea
+                            disabled={disableForm}
+                            className="form-control"
+                            type="tel"
+                            rows="4"
                             name="provider_description"
                             value={profile.provider_description}
                             onChange={handleInputChange.bind(this)}
@@ -627,7 +570,7 @@ function ProfileEdit() {
                       </div>
                       <div className="form-group row">
                       <label
-                        for="example-tel-input"
+                        htmlFor="example-tel-input"
                         className="col-sm-2 col-form-label text-right"
                       >
                         Specialization
@@ -646,7 +589,7 @@ function ProfileEdit() {
                     </>):null}
                       <div className="form-group row">
                         <label
-                          for="example-tel-input"
+                          htmlFor="example-tel-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Contact Info
@@ -666,7 +609,7 @@ function ProfileEdit() {
                       {(auth.userType==='Patient')?(
                       <div className="form-group row">
                         <label
-                          for="example-text-input"
+                          htmlFor="example-text-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Address
@@ -731,7 +674,7 @@ function ProfileEdit() {
                      
                       <div className="form-group row">
                         <label
-                          for="example-date-input"
+                          htmlFor="example-date-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Local Timezone
@@ -752,7 +695,7 @@ function ProfileEdit() {
                       
                       <div className="form-group row">
                         <label
-                          for="example-date-input"
+                          htmlFor="example-date-input"
                           className="col-sm-2 col-form-label text-right"
                         >
                           Date of Birth
@@ -762,7 +705,7 @@ function ProfileEdit() {
                             disabled={disableForm}
                             className="form-control"
                             type="date"
-                            placeholder={'mm/dd/yyyy'}
+                            placeholder={'mm-dd-yyyy'}
                             name="date_of_birth"
                             // defaultValue={dateFormat(profile.date_of_birth)}
                             value={dateFormat(profile.date_of_birth)}

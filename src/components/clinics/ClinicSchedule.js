@@ -307,7 +307,7 @@ export default function ClinicSchedule() {
                             action={action}/>
                        
                         ))}
-                        {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1].path!="clinics/Default.png")))?(
+                        {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1]?.path!="clinics/Default.png")))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
                           minWidth="200px" height="150px"

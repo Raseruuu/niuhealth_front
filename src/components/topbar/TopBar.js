@@ -64,7 +64,7 @@ export function TopBar({ menuClick, homeAddress }) {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
-  const [profile, setProfile] = useState({})
+  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"")+"Default.jpg"})
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
@@ -105,8 +105,8 @@ export function TopBar({ menuClick, homeAddress }) {
     //   getProfile()
     // }
     // if (auth.userType==="Patient"){
-      
-    getProfile()
+      if (!profile.contact_info){
+        getProfile()}
     // }
     // else if (auth.userType==="Provider"){
     //   getProviderDetails()
