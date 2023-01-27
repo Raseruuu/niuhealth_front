@@ -93,17 +93,15 @@ export default function Booking() {
 
   const INITIAL_EVENTS = (appointments = []) => {
     const schedArray = []
-
     const startDate = moment().startOf('week')
     const endDate = moment().add(6, 'months')
-
     const startEndDateDiff = endDate.diff(startDate, 'days')
-
+    const timeNow=moment()
+    
     for (let index = 0; index < startEndDateDiff; index++) {
       const currentD = startDate
         .add(index === 0 ? 0 : 1, 'days')
         .format('YYYY-MM-DD')
-
       const _today = startDate.format('ddd')
       // console.log('weeklysched',weeklySched)
       for (
@@ -111,10 +109,10 @@ export default function Booking() {
         j <= weeklySched[_today].end;
         j++
       ) {
-        let doAppend = appointments.some(
+        let doAppend = (appointments.some(
           (item) =>
             item.trans_date_time === currentD && item.trans_start === String(j)
-        )
+        ))
 
         if (doAppend) {
           continue
@@ -124,17 +122,22 @@ export default function Booking() {
             timeStr = '0' + j
           }
           const startStr = `${currentD}T${timeStr}:00:00`
-
-          schedArray.push({
-            id: 'id_' + index + j,
-            title: 'Available',
-            start: startStr,
-            backgroundColor: '#1eca7b',
-            borderColor: 'transparent',
-          })
+          // console.log(startStr)
+      
+          // console.log('compare',moment(startStr).format('YYYY-MM-DD hh:mm'),"timenow", timeNow.format('YYYY-MM-DD hh:mm'))
+          // console.log('IsAfter'+moment(startStr).isAfter(timeNow))
+          // Condition compares looped time with current time, prevents booking on already past time
+          if (moment(startStr).isAfter(timeNow))
+            {schedArray.push({
+              id: 'id_' + index + j,
+              title: 'Available',
+              start: startStr,
+              backgroundColor: '#1eca7b',
+              borderColor: 'transparent',
+            })}
         }
       }
-      console.log(schedArray)
+     
     }
     setSlots(schedArray)
   }
@@ -196,6 +199,7 @@ export default function Booking() {
             //     Fri:{start:data.hours_fri_start,end:hours_fri_end},
             //     Sat:{start:data.hours_sat_start,end:hours_sat_end},
             //   })
+            getSched()
           } else {
             throw new Error(Message)
           }
@@ -205,19 +209,6 @@ export default function Booking() {
           setErrMsg(err.message)
         })
     }
-
-    getDoctorSchedule()
-
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
-  }, [])
-
-  useEffect(() => {
-    let isMounted = true
-    const controller = new AbortController()
-
     async function getSched() {
       await axiosPrivate
         .post(
@@ -229,7 +220,7 @@ export default function Booking() {
         )
         .then((res) => {
           const { Status, Data: data = [], Message } = res.data
-
+          console.log("provideroccupiedtimeslots",data)
           if (Status) {
             isMounted && INITIAL_EVENTS(data)
           } else {
@@ -240,15 +231,15 @@ export default function Booking() {
           console.error(err)
           setErrMsg(err.message)
         })
-    }
-
-    getSched()
-
+      }
+    getDoctorSchedule()
+    
     return () => {
       isMounted = false
       controller.abort()
     }
   }, [])
+
 
   return (
     <div className="page-wrapper">
