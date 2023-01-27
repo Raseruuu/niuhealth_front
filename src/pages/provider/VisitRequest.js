@@ -146,7 +146,7 @@ function VisitRequest() {
                 <Link 
                   to='#'
                   style={{textDecoration: 'none'}}
-                  onClick={showVisitRequest(
+                  onClick={()=>showVisitRequest(
                       patientPicture=item.picture,
                       patientName=item.full_name,
                       patientEmail=item.email,

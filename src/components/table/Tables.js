@@ -53,7 +53,7 @@ export default function TableCard({ headers, children }) {
                     ))}
                   </tr>
                 </thead>
-                <tbody>{children}</tbody>
+                <tbody style={{marginBottom:"10px"}}>{children}</tbody>
               </table>
             </div>
           </div>

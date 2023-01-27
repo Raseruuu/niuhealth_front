@@ -8,11 +8,32 @@ import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import moment from 'moment'
+import { TableTitle } from '../../../components/table/Tables'
 
+import { Rating } from 'react-simple-star-rating'
+import useAuth from '../../../hooks/useAuth'
+import CardItem from '../../../components/cards/Card'
+import "./calendar.css"
+
+
+// needed for the style wrapper
+import styled from "@emotion/styled"
+
+
+// add styles as css
+export const StyleWrapper = styled.div`
+  .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-timegrid-event, .fc-button.fc-button-primary{
+    background: green;
+    background-image: none;
+}
+`
 export default function Booking() {
   const { state: selectedProvider } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
+  const { auth, setAuth } = useAuth()
+  const [serviceDetails,setServiceDetails] = useState({})
+  const [serviceClinics,setServiceClinics] = useState([])
   const [providerSched, setProviderSched] = useState({
     hours_mon_start: '8',
     hours_mon_end: '17',
@@ -62,7 +83,6 @@ export default function Booking() {
     //   })
     // }
   }
-
   const handleEventClick = (clickInfo) => {
     const dateX = moment(clickInfo.event.startStr).format('MM/DD/YY')
     const timeX = moment(clickInfo.event.startStr).format('HH')
@@ -103,7 +123,6 @@ export default function Booking() {
         .add(index === 0 ? 0 : 1, 'days')
         .format('YYYY-MM-DD')
       const _today = startDate.format('ddd')
-      // console.log('weeklysched',weeklySched)
       for (
         let j = weeklySched[_today].start;
         j <= weeklySched[_today].end;
@@ -149,7 +168,7 @@ export default function Booking() {
     const _weeklySched = weeklySched
 
     const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-
+    
     for (const [key, value] of Object.entries(providerSched)) {
       // console.log("provsched",key,value)
       for (const day of weekdays) {
@@ -172,10 +191,48 @@ export default function Booking() {
     setWeeklySched(weeklySched)
   }, [providerSched])
 
+
+  useEffect(()=>{
+    let isMounted = true
+    
+    const controller = new AbortController()
+    async function getService() {
+      await axiosPrivate
+        .post(
+          'patientGetService',
+          { Email: auth.email,
+            ServiceID:selectedProvider.service_id },
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          const { Status, Data: data = [], Message } = res.data
+          
+          
+          if (!Status) {
+            isMounted && setServiceDetails(data.service_details)
+            console.log("serviceDetails", data.clinics)
+            setServiceClinics(data.clinics)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
+        })
+      }
+    getService()
+    return () => {
+      isMounted = false
+      controller.abort()
+    }
+  },[])
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
+    
     async function getDoctorSchedule() {
       await axiosPrivate
         .post(
@@ -189,17 +246,8 @@ export default function Booking() {
           if (Status) {
             // console.log("providerschedule",data)
             isMounted && setProviderSched(data)
-            // setWeeklySched(
-            //   {
-            //     Sun:{start:data.hours_sun_start,end:hours_sun_end},
-            //     Mon:{start:data.hours_mon_start,end:hours_mon_end},
-            //     Tue:{start:data.hours_tue_start,end:hours_tue_end},
-            //     Wed:{start:data.hours_wed_start,end:hours_wed_end},
-            //     Thu:{start:data.hours_thu_start,end:hours_thu_end},
-            //     Fri:{start:data.hours_fri_start,end:hours_fri_end},
-            //     Sat:{start:data.hours_sat_start,end:hours_sat_end},
-            //   })
             getSched()
+            
           } else {
             throw new Error(Message)
           }
@@ -232,8 +280,9 @@ export default function Booking() {
           setErrMsg(err.message)
         })
       }
-    getDoctorSchedule()
+      
     
+    getDoctorSchedule()
     return () => {
       isMounted = false
       controller.abort()
@@ -245,24 +294,28 @@ export default function Booking() {
     <div className="page-wrapper">
       <div className="page-content">
         <div className="container-fluid">
-          <div className="row">
+          {/* <div className="row">
             <div className="col-sm-12">
               <div className="page-title-box">
                 <div className="float-right">
-                  <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                      <Link to="..">Marketplace</Link>
-                    </li>
-                    <li className="breadcrumb-item active">
-                      {selectedProvider?.provider_name}
-                    </li>
-                  </ol>
+                 
                 </div>
                 <h4 className="page-title">Book Appointment</h4>
               </div>
             </div>
-          </div>
-
+          </div> */}
+          <TableTitle title = "Book Appointment">
+            <div className="float-right">    
+              <ol className="breadcrumb">
+                <li className="breadcrumb-item">
+                  <Link to="..">Marketplace</Link>
+                </li>
+                <li className="breadcrumb-item active">
+                  {serviceDetails?.provider_name}
+                </li>
+              </ol>
+            </div>
+          </TableTitle>
           <div className="row">
             <div className="col-12">
               <div className="card">
@@ -277,27 +330,39 @@ export default function Booking() {
                               alt=""
                               width={120}
                               height={120}
+                              style={{objectFit:'cover'}}
                               // className="rounded-circle"
                             />
                           </div>
                           <div className="met-profile_user-detail">
                             <Link href="providerprofile">
                               <h5 className="met-user-name">
-                                {selectedProvider?.provider_name}
+                                {serviceDetails?.service_name}
                               </h5>
                             </Link>
                             <p className="mb-0 met-user-name-post">
-                              {selectedProvider?.service_description}
+                              {serviceDetails?.service_description}
 
                             </p>
                             <p>
-                              <label htmlFor="checkbox3">
+                              {/* <label htmlFor="checkbox3">
                                 <i className="mdi mdi-star text-warning"></i>
                                 <i className="mdi mdi-star text-warning"></i>
                                 <i className="mdi mdi-star text-warning"></i>
                                 <i className="mdi mdi-star text-warning"></i>
                                 <i className="mdi mdi-star text-warning"></i>
-                              </label>
+                              </label> */}
+                              
+                              <Rating
+                                fillColor="#ffb822"
+                                emptyColor="white"
+                                SVGstrokeColor="#f1a545"
+                                SVGstorkeWidth={1}
+                                size={14}
+                                allowFraction={true}
+                                initialValue={selectedProvider?.rating}
+                                readonly={true}
+                              />
                             </p>
                             <h5>
                               <b>Service:</b>{' '}
@@ -310,7 +375,8 @@ export default function Booking() {
                         <ul className="list-unstyled personal-detail">
                           <li className="">
                             <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
-                            <b> Clinic </b> :
+                            <b> Clinics </b> :
+                            {serviceClinics[0]?.clinic_name}
                           </li>
                           <li className="mt-2">
                             <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
@@ -331,41 +397,67 @@ export default function Booking() {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+          {serviceClinics.map((item,index) => (
+                    <CardItem title="Clinic">
+                      <img
+                        className='card-img-top'
+                        style={{ 
+                          // width: 'unset', 
+                          width:'200px', height:'150px',objectFit: 'cover'}}
+                        // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
+                        src={AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
+                        // style={{}}
+                        alt=''
+                      />
+                    <h5 className='card-title'>{item.clinic_name}</h5>
+                    <p className='card-text mb-0'>{item.address}</p>
+                    <p className='text-muted mb-0'>
+                      {item.specialty}
+                    </p>
+                    <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
+                    </CardItem>
+                  ))}
+            
+
+
+            <div className="col-md-8">
               <h4>Choose Appointment Schedule</h4>
               <div className="card">
                 <div className="card-body">
                   <div id="calendar"></div>
-                  <FullCalendar
-                    plugins={[timeGridPlugin]}
-                    headerToolbar={{
-                      left: 'prev,next today',
-                      center: 'title',
-                      right: '',
-                    }}
-                    initialView="timeGridWeek"
-                    events={slots}
-                    slotMinTime={`${calendarStartEndTime.start - 1}:00:00`}
-                    slotMaxTime={`${Number(
-                      calendarStartEndTime.end + 1
-                    )}:59:00`}
-                    allDaySlot={false}
-                    editable={false}
-                    selectable={true}
-                    slotDuration={'00:20:00'}
-                    select={handleDateSelect}
-                    eventClick={handleEventClick}
-                    eventsSet={handleEvents}
-                    eventAdd={function ({ event }) {
-                      console.log('eventAdd', event)
-                    }}
-                    eventChange={function ({ event }) {
-                      console.log('eventChange', event)
-                    }}
-                    eventRemove={function (event) {
-                      console.log('eventRemove', event)
-                    }}
-                  />
+                  <StyleWrapper>
+                    <FullCalendar
+                      
+                      plugins={[timeGridPlugin]}
+                      headerToolbar={{
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: '',
+                      }}
+                      initialView="timeGridWeek"
+                      events={slots}
+                      slotMinTime={`${calendarStartEndTime.start - 1}:00:00`}
+                      slotMaxTime={`${Number(
+                        calendarStartEndTime.end + 1
+                      )}:59:00`}
+                      allDaySlot={false}
+                      editable={false}
+                      selectable={true}
+                      slotDuration={'00:20:00'}
+                      select={handleDateSelect}
+                      eventClick={handleEventClick}
+                      eventsSet={handleEvents}
+                      eventAdd={function ({ event }) {
+                        console.log('eventAdd', event)
+                      }}
+                      eventChange={function ({ event }) {
+                        console.log('eventChange', event)
+                      }}
+                      eventRemove={function (event) {
+                        console.log('eventRemove', event)
+                      }}
+                    />
+                    </StyleWrapper>
                   <div className="clearfix"></div>
                 </div>
               </div>
