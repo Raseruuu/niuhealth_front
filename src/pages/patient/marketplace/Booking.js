@@ -18,6 +18,7 @@ import "./calendar.css"
 
 // needed for the style wrapper
 import styled from "@emotion/styled"
+import Swal from 'sweetalert2'
 
 
 // add styles as css
@@ -94,17 +95,24 @@ export default function Booking() {
         timeX,
       },
     }
-    if (
-      window.confirm(
-        `Are you sure you want to book on this slot/time ${moment(
-          clickInfo.event.startStr
-        ).format('MM/DD/YYYY hA')}?`
-      )
-    ) {
+    
+    Swal.fire(
+      {
+        title: 'Start Booking',
+        text:`Are you sure you want to book on this slot/time ${moment(
+            clickInfo.event.startStr).format('MMM DD, YYYY, hA')}?`,
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }
+    )
+    .then(({isConfirmed}) => {
+    if (isConfirmed){
       navigate('../checkout', {
         state,
-      })
-    }
+      })}
+    })
   }
 
   const handleEvents = (events) => {
@@ -141,12 +149,11 @@ export default function Booking() {
             timeStr = '0' + j
           }
           const startStr = `${currentD}T${timeStr}:00:00`
-          // console.log(startStr)
       
           // console.log('compare',moment(startStr).format('YYYY-MM-DD hh:mm'),"timenow", timeNow.format('YYYY-MM-DD hh:mm'))
-          // console.log('IsAfter'+moment(startStr).isAfter(timeNow))
           // Condition compares looped time with current time, prevents booking on already past time
           if (moment(startStr).isAfter(timeNow))
+            // Adds appointment button
             {schedArray.push({
               id: 'id_' + index + j,
               title: 'Available',
@@ -156,6 +163,7 @@ export default function Booking() {
             })}
         }
       }
+
      
     }
     setSlots(schedArray)
@@ -212,7 +220,7 @@ export default function Booking() {
           
           if (!Status) {
             isMounted && setServiceDetails(data.service_details)
-            console.log("serviceDetails", data.clinics)
+            console.log("serviceDetails", data.service_details)
             setServiceClinics(data.clinics)
           } else {
             throw new Error(Message)
@@ -336,6 +344,7 @@ export default function Booking() {
                           </div>
                           <div className="met-profile_user-detail">
                             <Link href="providerprofile">
+                              
                               <h5 className="met-user-name">
                                 {serviceDetails?.service_name}
                               </h5>
@@ -371,7 +380,10 @@ export default function Booking() {
                           </div>
                         </div>
                       </div>
-                      <div className="col-lg-4 ml-auto">
+                      <div className="col-lg-4 ml-auto" style={{marginLeft:'10px'}}>
+                        <h5 className="met-user-name">
+                          {serviceDetails?.provider_name}
+                        </h5>
                         <ul className="list-unstyled personal-detail">
                           <li className="">
                             <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
@@ -397,30 +409,65 @@ export default function Booking() {
           </div>
 
           <div className="row">
-          {serviceClinics.map((item,index) => (
-                    <CardItem title="Clinic">
-                      <img
-                        className='card-img-top'
-                        style={{ 
-                          // width: 'unset', 
-                          width:'200px', height:'150px',objectFit: 'cover'}}
-                        // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
-                        src={AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
-                        // style={{}}
-                        alt=''
-                      />
-                    <h5 className='card-title'>{item.clinic_name}</h5>
-                    <p className='card-text mb-0'>{item.address}</p>
-                    <p className='text-muted mb-0'>
-                      {item.specialty}
-                    </p>
-                    <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
-                    </CardItem>
-                  ))}
-            
+            <div className="col-lg-5">
+              <h4>Clinic</h4>
+              <div className="card">
+                  <div className="card-body">
+                    {serviceClinics.map((item,index) => (
+                              // <CardItem title="Clinic">
+                      <div className="card" >
+                        <div className="card-body">
+                          <div className='row'>
+                            
+                          <div>
+                          <img
+                            className='card-img-top'
+                            style={{ 
+                              // width: 'unset', 
+                              width:'180px', height:'130px',objectFit: 'cover'}}
+                            // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
+                            src={AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
+                            // style={{}}
+                            alt=''
+                          />
+                          
+                              <h5 className='card-title'>{item.clinic_name}</h5>
+                              <p className='card-text mb-0'>{item.address}</p>
+                              <p className='text-muted mb-0'>
+                                {item.specialty}
+                              </p>
+                              
+                              <p className='mb-0'>{item.working_hours}</p>
+                              {/* </CardItem> */}
+                              </div>
+                              <div>
+                                <ul className="list-unstyled personal-detail">
+                                  <li className="">
+                                    <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
+                                    <b> Specialization </b> : 
+                                    {serviceClinics[0]?.specialty}
+                                  </li>
+                                  <li className="mt-2">
+                                    <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
+                                    <b>Location</b> :
+                                    {serviceClinics[0]?.address}
+                                  </li>
+                                  <li className="mt-2">
+                                    <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
+                                    <b>Service Rate </b> : $
+                                    {selectedProvider?.cost_price}
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                        </div> 
+                  </div>           
+                            ))}
+              </div>
+                  </div>
+            </div>
 
-
-            <div className="col-md-8">
+            <div className="col-lg-7">
               <h4>Choose Appointment Schedule</h4>
               <div className="card">
                 <div className="card-body">

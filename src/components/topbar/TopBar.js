@@ -105,9 +105,9 @@ export function TopBar({ menuClick, homeAddress }) {
     //   getProfile()
     // }
     // if (auth.userType==="Patient"){
-      // if (!profile.contact_info){
+      if (!auth.contact_info){
         getProfile()
-      // }
+      }
     // }
     // else if (auth.userType==="Provider"){
     //   getProviderDetails()

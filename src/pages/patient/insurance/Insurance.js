@@ -18,7 +18,7 @@ function Insurance() {
     async function getList() {
       await axiosPrivate
         .post(
-          'getInsurance',
+          'patientGetInsurances',
           { Email: auth.email },
           {
             signal: controller.signal,

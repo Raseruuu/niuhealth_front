@@ -50,20 +50,22 @@ function Calendar({ allowCall }) {
 
     const startStr = `${currentD}T${timeStr}:00:00`
     const dateX = moment(startStr).format('YYYY-MM-DD h:mm a')
-
+    const appointmentIsOver= (moment().isAfter(moment(startStr)))
     Swal.fire({
       titleText: 'Appointment Details:',
+      
       html: `<div class='text-left'>
       Date: <strong>${dateX}</strong><br/>
+      ${ appointmentIsOver?"The Appointment period is over.":null}<br/>
     Name: ${selected.full_name}<br/>
     Email: ${selected.email}<br/>
     Phone: ${selected.contact_info}<br/>
     </div>`,
-      confirmButtonText: allowCall ? 'Start Zoom meeting' : 'Ok',
+      confirmButtonText: allowCall ? (appointmentIsOver?"OK":'Start Zoom meeting') : 'Ok',
       showCancelButton: allowCall,
     }).then(async ({ isConfirmed }) => {
       
-      if (isConfirmed) {
+      if (isConfirmed&&!appointmentIsOver) {
         await axiosPrivate
           .post('providerStartAppointment',
             {

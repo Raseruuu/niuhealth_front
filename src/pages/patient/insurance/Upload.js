@@ -55,12 +55,18 @@ function Upload() {
     try {
       await axiosPrivate
         .post(
-          'uploadInsurance',
+          'newInsurance',
           {
             Image: data?.Image[0],
             Email: auth?.email,
+            Title: data.Title,
+            Front: data?.Image[0],
+            Back: data?.Image[0],
+            ID: data?.ID,
             Type: 'Health Insurance',
-            Provider: data.Provider,
+            Start: data.Start,
+            End: data.End,
+            // Provider: data.Provider,
             Coverage: data.Coverage
           },
           {
@@ -111,7 +117,16 @@ function Upload() {
                     <h4 className='header-title mt-0 mb-3'>
                       Upload your insurance document to enjoy free/discounted service
                     </h4>
-
+                    <label>
+                      Insurance Title
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="Title"
+                      {...register('Title', { required: true })}
+                      required
+                    />
                     <div>
                       <label>Insurance Provider</label>
                       <select
@@ -265,8 +280,42 @@ function Upload() {
                           </option>
                         </optgroup>
                       </select>
+                    <label>
+                      Start Date
+                    </label>
+                    <input
+                      className="form-control"
+                      type="date"
+                      placeholder={'mm-dd-yyyy'}
+                      name="Start"
+                            // defaultValue={dateFormat(profile.date_of_birth)}
+                            // value={dateFormat(profile.date_of_birth)}
+                      {...register('Start', { required: true })}
+                            // onChangeCapture={handleInputChange.bind(this)}
+                          />
+                    <label>
+                      End Date
+                    </label>
+                    <input
+                      className="form-control"
+                      type="date"
+                      placeholder={'mm-dd-yyyy'}
+                      name="End"
+                      {...register('End', { required: true })}
+                          />
                     </div>
+                    <label>
+                      Insurance ID
+                    </label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="ID"
+                      {...register('ID', { required: true })}
+                      required
+                    />
                     <label>Insurance Coverage</label>
+                    
                     <div>
                     <textarea
                       style={{ margin: '5px 0 0 0' }}
@@ -274,8 +323,9 @@ function Upload() {
                       rows="3"
                       id="message"
                       placeholder="List which services can be covered by your Insurance "
-                      value={insuranceCoverage}
+                      // value={insuranceCoverage}
                       onChange={handleTextarea}
+                      {...register('Coverage', { required: true })}
                       maxLength="150"
                     ></textarea>
                     </div>
@@ -300,6 +350,8 @@ function Upload() {
                       </button>
                     ))}
                   </div>
+                  
+                    
                     <div>
                       <input
                         type='file'

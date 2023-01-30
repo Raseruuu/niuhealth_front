@@ -10,26 +10,28 @@ export default function TellUsWhy() {
   const [symptom, setSymptom] = useState('')
   const [selectedSymptom, setSelectedSymptom] = useState([])
   const [isSubmitting, setIsSubmitting] = useState(false)
-
+  const [symptomCharCount,setSymptomCharCount]  = useState(0)
+  const maxLength=150
   function handleButtonClick(selected) {
     const currentSelected = new Set(selectedSymptom)
 
     if (currentSelected.has(selected)) return
-
-    currentSelected.add(selected)
-    setSelectedSymptom((prev) => [...prev, selected])
-
-    if (symptom.trim().length <= 0) {
-      setSymptom(selected)
-    } else {
-      setSymptom((prev) => `${prev}, ${selected}`)
-    }
+    setSymptomCharCount(symptom.length+selected.length)
+    if (maxLength-symptomCharCount>selected.length){
+      setSelectedSymptom((prev) => [...prev, selected])
+      currentSelected.add(selected)
+      if (symptom.trim().length <= 0) {
+        setSymptom(selected)
+      } else {
+        setSymptom((prev) => `${prev}, ${selected}`)
+      }}
+  
   }
 
   function handleTextarea(e) {
     const val = e.target.value
     setSymptom(val)
-
+    setSymptomCharCount(e.target.value.length)
     if (val.length <= 0) {
       setSelectedSymptom([])
     }
@@ -101,8 +103,9 @@ export default function TellUsWhy() {
                     placeholder="Add a reason for your virtual visit"
                     value={symptom}
                     onChange={handleTextarea}
-                    maxLength="150"
+                    maxLength={maxLength}
                   ></textarea>
+                  {maxLength-symptomCharCount} characters remaining
                   <div
                     className="d-flex  flex-row justify-content-start align-items-center overflow-auto"
                     style={{ height: '50px' }}

@@ -199,7 +199,12 @@ function RatingsChart({ratinglist}){
     </ul>
   )
 }
-function RatingsFilter(){
+
+function RatingsFilter({filters, setFilters}){
+
+  function handleFiltercheckbox(filtervalue){
+    setFilters([...filters,filtervalue])
+  }
   return(
       
     <div className='card'>
@@ -209,8 +214,8 @@ function RatingsFilter(){
           <div className='p-3'>
             <h6 className='mt-0 mb-4'>Filter</h6>
             <div className='checkbox checkbox-success'>
-              <input id='checkbox3' type='checkbox' />
-              <label for='checkbox3'>
+              <input id='checkbox3' type='checkbox' onChange={()=>{handleFiltercheckbox('5')}} />
+              <label htmlFor='checkbox3'>
                 {' '}
                 5<i className='mdi mdi-star text-warning'></i>
                 <i className='mdi mdi-star text-warning'></i>
@@ -221,7 +226,7 @@ function RatingsFilter(){
             </div>
             <div className='checkbox checkbox-success'>
               <input id='checkbox4' type='checkbox' />
-              <label for='checkbox4'>
+              <label htmlFor='checkbox4'>
                 {' '}
                 4<i className='mdi mdi-star text-warning'></i>
                 <i className='mdi mdi-star text-warning'></i>
@@ -232,7 +237,7 @@ function RatingsFilter(){
             </div>
             <div className='checkbox checkbox-success'>
               <input id='checkbox5' type='checkbox' />
-              <label for='checkbox5'>
+              <label htmlFor='checkbox5'>
                 {' '}
                 3<i className='mdi mdi-star text-warning'></i>
                 <i className='mdi mdi-star text-warning'></i>
@@ -243,7 +248,7 @@ function RatingsFilter(){
             </div>
             <div className='checkbox checkbox-success'>
               <input id='checkbox6' type='checkbox' />
-              <label for='checkbox6'>
+              <label htmlFor='checkbox6'>
                 {' '}
                 2<i className='mdi mdi-star text-warning'></i>
                 <i className='mdi mdi-star text-warning'></i>
@@ -254,7 +259,7 @@ function RatingsFilter(){
             </div>
             <div className='checkbox checkbox-success'>
               <input id='checkbox7' type='checkbox' />
-              <label for='checkbox7'>
+              <label htmlFor='checkbox7'>
                 {' '}
                 1<i className='mdi mdi-star text-warning'></i>
                 <i className='mdi mdi-star light-gray'></i>
@@ -272,13 +277,13 @@ function RatingsFilter(){
           <div className='p-3'>
             <div className='checkbox checkbox-success '>
               <input id='checkbox0' type='checkbox' checked />
-              <label for='checkbox0'>
+              <label htmlFor='checkbox0'>
                 <i className='dripicons-camcorder'></i> Virtual Visits
               </label>
             </div>
             <div className='checkbox checkbox-success '>
               <input id='checkbox1' type='checkbox' checked />
-              <label for='checkbox1'>
+              <label htmlFor='checkbox1'>
                 <i className=' dripicons-user'></i> In-Person Visits
               </label>
             </div>
@@ -301,15 +306,15 @@ function RatingsFilter(){
             <h6 className='mb-3 mt-0'>My Clinics</h6>
             <div className='checkbox checkbox-success '>
               <input id='checkbox0' type='checkbox' checked />
-              <label for='checkbox0'>BLK Hospital</label>
+              <label htmlFor='checkbox0'>BLK Hospital</label>
             </div>
             <div className='checkbox checkbox-success '>
               <input id='checkbox1' type='checkbox' checked />
-              <label for='checkbox1'>Linda's Clinic</label>
+              <label htmlFor='checkbox1'>Linda's Clinic</label>
             </div>
             <div className='checkbox checkbox-success '>
               <input id='checkbox2' type='checkbox' />
-              <label for='checkbox2'>Sony Center Clinic</label>
+              <label htmlFor='checkbox2'>Sony Center Clinic</label>
             </div>
           </div>
         </div>
@@ -325,7 +330,9 @@ function Ratings({}) {
   const [ratingList, setRatingList] = useState([])
   const [patientRatingList,setPatientRatingList]=useState([])
   const [errMsg, setErrMsg] = useState(null)
- 
+  
+  const [filters,setFilters]=useState([])
+
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -388,7 +395,7 @@ function Ratings({}) {
               </div>
             </div>
           </div>
-          <RatingsFilter/>
+          <RatingsFilter filters={filters} setFilters={setFilters}/>
         </div>
         <div className='col-lg-9'>
           <div className='card'>

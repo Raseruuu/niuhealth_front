@@ -311,8 +311,8 @@ export default function Marketplace() {
 
                 <div className="row">
                   {list.map((item, index) => (
-                    <div key={item?.service_id || index} className="col-lg-4">
-                      <div className="card e-co-product">
+                    <div key={index} className="col-lg-4">
+                      <div className="card e-co-product" >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to="booking" state={{ ...item }}>
                           <img
