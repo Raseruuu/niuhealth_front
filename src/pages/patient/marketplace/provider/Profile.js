@@ -50,6 +50,12 @@ function ProviderProfile() {
   })
   const [slots, setSlots] = useState([])
   const { auth } = useAuth()
+  function reviewFormat(string){
+  
+    if (string.length>150){
+      return string.substring(0,150)+"..."}
+    return string
+  }
   // let {
   //   state: { selectedUser },
   // } = useLocation()
@@ -103,6 +109,40 @@ function ProviderProfile() {
       navigate('../checkout', {
         state,
       })}
+    })
+  }
+  function showReview({patientPicture,patientName,patientEmail,rating,service_name,service_description,review}){
+    Swal.fire({
+      title: `Patient's Review`,
+      html: 
+        `
+        <div class='row'>
+            <div class='col-sm-2'>
+              <img 
+                class='rounded-circle'
+                height="100px"
+                src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
+                style={
+                  width: 60px;
+                  height: 60px;
+                  object-fit: cover;}
+                >  
+              </img>
+            </div>
+            <div class='col-sm-8'>
+              <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
+              <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
+              <div class='col'>
+                <i class='mdi mdi-star text-warning'></i>
+                ${rating} Stars
+              </div>  
+            </div>
+    
+        </div>
+        <b>${service_name}</b> <br>
+        <i>${service_description}</i> <br>
+        <p class='mb-0 font-18 text-dark responsive'>"${review}"</p> <br>
+        `
     })
   }
   const INITIAL_EVENTS = (appointments = []) => {
@@ -316,12 +356,19 @@ function ProviderProfile() {
                   <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
                     <div className='met-profile-main'>
                       <div className='met-profile-main-pic'>
+                        {(profile)?
                         <img
                           src={AWS_BUCKET_SERVICES+"providers/"+profile?.ProviderDetails?.image}
                           alt=''
                           className='rounded-circle'
                           style={{width:125,height:125,objectFit:'contain'}}
-                        />
+                        />:
+                        <img
+                          src={AWS_BUCKET_SERVICES+"profiles/pictures/Default.jpg"}
+                          alt=''
+                          className='rounded-circle'
+                          style={{width:125,height:125,objectFit:'contain'}}
+                        />}
                         
                         {/* <span className='fro-profile_main-pic-change'>
                           <i className='fas fa-camera'></i>
@@ -491,46 +538,47 @@ function ProviderProfile() {
                       >
                         <div className='carousel-inner' >
                           {reviews.map((review,index)=>{return(<>
-                            {/* <div className='carousel-item'>
-                            <div className='media'>
-                              <img
-                                src={`${AWS_BUCKET}/assets/images/users/user-1.jpg`}
-                                className='mr-2 thumb-lg rounded-circle'
-                                alt='...'
-                              />
-                              <div className='media-body align-self-center'>
-                                <h4 className='mt-0 mb-1 title-text text-dark'>
-                                  Dr. Myrtlle Sison
-                                </h4>
-                                <p className='text-muted mb-0'>Cardiologist</p>
-                              </div>
-                            </div>
-                          </div> */}
+                            
                             <div key={index} className={'carousel-item '+(active===index?'active':"")} >
                               <div className='media'>
-                                <img
-                                  src={`${AWS_BUCKET_PROFILES}${review.picture}`}
-                                  className='mr-2 thumb-lg rounded-circle'
-                                  alt='...'
-                                />
-                                <div className='media-body align-self-center'>
-                                  <h4 className='mt-0 mb-1 title-text text-dark'>
-                                    {review?.full_name}
-                                  </h4>
-                                  {review?.rating}
-                                    <Rating
-                                    fillColor="#ffb822"
-                                    emptyColor="white"
-                                    SVGstrokeColor="#f1a545"
-                                    SVGstorkeWidth={1}
-                                    size={14}
-                                    allowFraction={true}
-                                    initialValue={review?.rating}
-                                    readonly={true}
-                                    />
-                                  <p className='text-muted mb-0'>{review?.email}</p>
-                                  <p className='text-black mb-0'>{review?.review}</p>
-                                </div>
+                                <Link
+                                  to={''}
+                                  onClick={()=>
+                                    showReview(
+                                      patientPicture=review.picture,
+                                      patientName =review.patientName,
+                                      patientEmail=review.patientEmail,
+                                      rating =review.rating,
+                                      service_name =review.service_name,
+                                      service_description=review.service_description,
+                                      review =review.review
+                                    )
+                                  }>
+                                  <img
+                                    src={`${AWS_BUCKET_PROFILES}${review.picture}`}
+                                    className='mr-2 thumb-lg rounded-circle'
+                                    alt='...'
+                                    style={{objectFit:'cover'}}
+                                  />
+                                  <div className='media-body align-self-center'>
+                                    <h4 className='mt-0 mb-1 title-text text-dark'>
+                                      {review?.full_name}
+                                    </h4>
+                                    {review?.rating}
+                                      <Rating
+                                      fillColor="#ffb822"
+                                      emptyColor="white"
+                                      SVGstrokeColor="#f1a545"
+                                      SVGstorkeWidth={1}
+                                      size={14}
+                                      allowFraction={true}
+                                      initialValue={review?.rating}
+                                      readonly={true}
+                                      />
+                                    <p className='text-muted mb-0'>{review?.email}</p>
+                                    <p className='text-black mb-0'>{reviewFormat(review?.review)}</p>
+                                  </div>
+                                </Link>
                               </div>
                           </div>
                           </>

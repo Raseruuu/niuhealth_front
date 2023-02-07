@@ -56,7 +56,7 @@ function Calendar({ allowCall }) {
       
       html: `<div class='text-left'>
       Date: <strong>${dateX}</strong><br/>
-      ${ appointmentIsOver?"The Appointment period is over.":null}<br/>
+      ${ appointmentIsOver?"The Appointment period is over.":""}<br/>
     Name: ${selected.full_name}<br/>
     Email: ${selected.email}<br/>
     Phone: ${selected.contact_info}<br/>
@@ -104,9 +104,9 @@ function Calendar({ allowCall }) {
     // })
   }
 
-  const handleEvents = (events) => {
-    console.log(events)
-  }
+  // const handleEvents = (events) => {
+  //   console.log(events)
+  // }
 
   const INITIAL_EVENTS = (appointments = []) => {
     const schedArray = appointments.map((item) => {

@@ -142,7 +142,7 @@ export function TopBar({ menuClick, homeAddress }) {
             {(profile)?
 
             <img
-              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
+              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
               style={{objectFit:"cover", width:50, height:50}}

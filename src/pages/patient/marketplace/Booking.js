@@ -99,7 +99,7 @@ export default function Booking() {
     Swal.fire(
       {
         title: 'Start Booking',
-        text:`Are you sure you want to book on this slot/time ${moment(
+        html:`Are you sure you want to book on this slot/time?<br> ${moment(
             clickInfo.event.startStr).format('MMM DD, YYYY, hA')}?`,
         showCancelButton: true,
         confirmButtonColor: '#008000',
@@ -152,15 +152,17 @@ export default function Booking() {
       
           // console.log('compare',moment(startStr).format('YYYY-MM-DD hh:mm'),"timenow", timeNow.format('YYYY-MM-DD hh:mm'))
           // Condition compares looped time with current time, prevents booking on already past time
-          if (moment(startStr).isAfter(timeNow))
+          // if (moment(startStr).isAfter(timeNow)){ 
             // Adds appointment button
-            {schedArray.push({
+            
+              schedArray.push({
               id: 'id_' + index + j,
               title: 'Available',
               start: startStr,
               backgroundColor: '#1eca7b',
               borderColor: 'transparent',
-            })}
+            })
+          // }
         }
       }
 
@@ -200,9 +202,19 @@ export default function Booking() {
   }, [providerSched])
 
 
-  useEffect(()=>{
-    let isMounted = true
+  // useEffect(()=>{
+  //   let isMounted = true
     
+  //   const controller = new AbortController()
+   
+    
+  //   return () => {
+  //     isMounted = false
+  //     controller.abort()
+  //   }
+  // },[])
+  useEffect(() => {
+    let isMounted = true
     const controller = new AbortController()
     async function getService() {
       await axiosPrivate
@@ -231,16 +243,6 @@ export default function Booking() {
           setErrMsg(err.message)
         })
       }
-    getService()
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
-  },[])
-  useEffect(() => {
-    let isMounted = true
-    const controller = new AbortController()
-    
     async function getDoctorSchedule() {
       await axiosPrivate
         .post(
@@ -289,7 +291,7 @@ export default function Booking() {
         })
       }
       
-    
+    getService()
     getDoctorSchedule()
     return () => {
       isMounted = false

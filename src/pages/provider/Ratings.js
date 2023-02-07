@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 
 import { Link } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import CardItem from '../../components/cards/Card'
 function TitleBox({text}){
   return(
     <div className='row'>
@@ -16,6 +17,12 @@ function TitleBox({text}){
       </div>
     </div>
   )
+}
+function reviewFormat(string){
+
+  if (string.length>120){
+    return string.substring(0,120)+"..."}
+  return string
 }
 function showReview({patientPicture,patientName,patientEmail,rating,service_name,service_description,review}){
   Swal.fire({
@@ -28,7 +35,10 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
               class='rounded-circle'
               height="100px"
               src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
-              style={width: 60px; height: 60px; object-fit: cover;}
+              style={
+                width: 60px;
+                height: 60px;
+                object-fit: cover;}
               >  
             </img>
           </div>
@@ -50,7 +60,7 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
 }
 function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating,review="It was certainly one of the consultations of all time."}){
   return(
-    <div className='col-lg-4' style={{minWidth: '400px'}}>
+    <div className='col-lg-12'>
       <div className='card' >
         <div className='card-body'>
           <div className='media' >
@@ -105,7 +115,9 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                 {service_description+",  "+service_name  }
               </h6>
               
-              <p>"{review}"
+              <p>
+                "{(reviewFormat(review))}"
+
               </p>
             </div>
             </Link>
@@ -329,6 +341,8 @@ function Ratings({}) {
   const [list, setList] = useState([])
   const [ratingList, setRatingList] = useState([])
   const [patientRatingList,setPatientRatingList]=useState([])
+  
+  const [patientGeneralRatingList,setPatientGeneralRatingList]=useState([])
   const [errMsg, setErrMsg] = useState(null)
   
   const [filters,setFilters]=useState([])
@@ -355,6 +369,7 @@ function Ratings({}) {
             console.log(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setRatingList(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setPatientRatingList(res.data.Data.Ratings)
+            setPatientGeneralRatingList(res.data.Data.GeneralVisitRatings)
           } else {
             throw new Error(Message)
           }
@@ -377,7 +392,7 @@ function Ratings({}) {
     <div className='container-fluid'>
       <TitleBox text="Ratings"/>
       <div className='row'>
-        <div className='col-lg-3'>
+        <div>
           <div className='card'>
             <div className='card-body'>
               <RatingsBoxOverall score={list.Average} totalReviews={ratingList.length} size={24} />
@@ -397,18 +412,52 @@ function Ratings({}) {
           </div>
           <RatingsFilter filters={filters} setFilters={setFilters}/>
         </div>
-        <div className='col-lg-9'>
-          <div className='card'>
-            <div className='card-body'>
-              <div className='row'>
-              {patientRatingList.map((item,index)=>
-                  (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
-                
-                )}
-               </div> 
+        <div className='col'>
+          <div className='row'>
+            <div className='col-md-12'>
+                  <h4 className='header-title mt-0 mb-4'>
+                    Appointment Reviews
+                  </h4>
+                  {((patientRatingList.length===0) && patientGeneralRatingList.length==0)?
+                  (<CardItem length={12}><h4>There are no reviews to display.</h4></CardItem>):
+                  ([patientRatingList].length>0)?
+                  
+                    (<div className='col-sm-4'>
+                      <div className='card'>
+                        <div className='card-body'>
+                          <div className='row'>
+                          {patientRatingList.map((item,index)=>
+                              (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
+                            
+                            )}
+                          </div> 
+                        </div>
+                      </div>
+                    </div>)
+                  :null}
+                </div>
+            <div className='col-md-6'>
+              <h4 className='header-title mt-0 mb-4'>
+                  General Visit Reviews
+                </h4>
+                { (([].length===0) && patientGeneralRatingList.length==0)?
+                (<CardItem length={6}><h4>There are no reviews to display.</h4></CardItem>):
+                (patientGeneralRatingList.length>0)?
+                <div className='col-lg-12'>
+                  <div className='card'>
+                    <div className='card-body'>
+                      <div className='row'>
+                      {patientGeneralRatingList.map((item,index)=>
+                          (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
+                        
+                        )}
+                      </div> 
+                    </div>
+                  </div>
+              </div>:null}
+            </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   )

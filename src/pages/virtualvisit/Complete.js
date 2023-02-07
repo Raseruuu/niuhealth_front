@@ -29,6 +29,7 @@ export default function Complete() {
           Email: auth.email,
           ProviderEmail: meetingDetails.provider_email,
           MeetingID: meetingId,
+          VisitID: meetingDetails.visit_id,
           TransType:meetingDetails.trans_type,
           ServiceID:meetingDetails.service_id,
           Rating: rating,
@@ -38,7 +39,7 @@ export default function Complete() {
           console.log(res.data)
           const { Status, Message } = res.data
           if (Status) {
-            navigate('/patient')
+            // navigate('/patient')
           } else {
             alert(Message)
           }
@@ -126,7 +127,7 @@ export default function Complete() {
                       </div>
                     </div>
                     <h4 style={{ marginTop: '30px' }}>
-                      How do you rate your experince?
+                      How do you rate your experience?
                     </h4>
                     <div className='big_rating'>
                       <Rating
