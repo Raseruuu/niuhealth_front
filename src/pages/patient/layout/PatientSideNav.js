@@ -56,7 +56,7 @@ function PatientSideNav({ openSideNav }) {
           Start Your Virtual Visit
         </button>
       </div>
-      {location?.pathname === '/patient/virtualvisit' ? (
+      {/* {location?.pathname === '/patient/virtualvisit' ? (
         <div
           className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
           role='alert'
@@ -74,7 +74,7 @@ function PatientSideNav({ openSideNav }) {
           Sorry, we are unavailable for virtual visits from 12:00 Am to 8:00 Am.
           Please call 808-888-4800 and select option 4 to talk to a provider
         </div>
-      ) : null}
+      ) : null} */}
 
       <ul className='metismenu left-sidenav-menu'>
         <li>

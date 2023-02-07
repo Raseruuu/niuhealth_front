@@ -302,7 +302,7 @@ function ManageServices() {
                         multiple
                         required
 
-                        classNameName="select2 form-control mb-3 custom-select select2-hidden-accessible"
+                        className="select2 form-control mb-3 custom-select select2-hidden-accessible"
                         {...register("clinic", {
 
                           value: state?.selectedService?.clinic,

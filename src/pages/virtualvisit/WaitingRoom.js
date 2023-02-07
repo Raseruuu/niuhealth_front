@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import useAuth from '../../hooks/useAuth'
@@ -14,7 +14,7 @@ export default function WaitingRoom() {
   const [queueCount, setQueueCount] = useState('-')
   const [meetingID, setMeetingID] = useState({})
   const [password, setPassword] = useState({})
-
+  const myVideo = useRef('video1');
   const getQueueCount = async () => {
     const controller = new AbortController()
     await axiosPrivate
@@ -80,7 +80,7 @@ export default function WaitingRoom() {
 
             <div className="row ">
               <div className="col-lg-6">
-                <iframe
+                {/* <iframe
                   width="100%"
                   height="500"
                   src="https://www.youtube.com/embed/oVAJZMVpL_g"
@@ -88,7 +88,20 @@ export default function WaitingRoom() {
                   // frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                ></iframe>
+                >
+
+                </iframe> */}
+                <video width="560" name='media' autoPlay={true} height="240" 
+                controls 
+                ref={myVideo}
+                // muted
+                type="video/mp4"
+                src="https://r4---sn-npoe7nlz.googlevideo.com/videoplayback?expire=1675265856&ei=4DLaY57iM4_AgwPXh57IDw&ip=2607%3A5300%3A60%3A6123%3Aae9f%3Abcf4%3Ad00%3Af94a&id=o-AAdbSh1HSRj4C9vreb6jQU9E83qXAlmnP8FBkQ1eEHXh&itag=18&source=youtube&requiressl=yes&vprv=1&mime=video%2Fmp4&ns=QR8pQvgauGCd1sx2g1yAQF8L&cnr=14&ratebypass=yes&dur=5.758&lmt=1661790712975590&fexp=24007246&c=WEB&txp=5318224&n=8VWEKLmzWOE5pMsTzSv6G1&sparams=expire%2Cei%2Cip%2Cid%2Citag%2Csource%2Crequiressl%2Cvprv%2Cmime%2Cns%2Ccnr%2Cratebypass%2Cdur%2Clmt&sig=AOq0QJ8wRAIgZQbj4-hnDgFhMZ1d8p-bzxG_berQsanCjBAt8IveUP4CIBykFYvf5cmAfYyffJ-kLpeOUjBXbZ6yWPQAaDrOCzJl&rm=sn-2aqu-hoass7k,sn-2aqu-hoal67e&req_id=709efe2742cca3ee&redirect_counter=2&cms_redirect=yes&cmsv=e&ipbypass=yes&mh=WV&mip=58.69.182.185&mm=30&mn=sn-npoe7nlz&ms=nxu&mt=1675244204&mv=m&mvi=4&pl=20&lsparams=ipbypass,mh,mip,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRQIgDrkDxvYkzdc2BSbxTGjIsUfrZ41Zc-ss-ydIxyd94hQCIQCnX55vgZYCjSqdsAJh5x3sscI0Ng1kX-aXYCz_vDfcZQ%3D%3D" 
+                />
+                  {/* <source src="movie.mp4" type="video/mp4">
+                  <source src="movie.ogg" type="video/ogg"> */}
+                    {/* Your browser does not support the video tag. */}
+                {/* </video> */}
               </div>
 
               <div className="col-lg-6">

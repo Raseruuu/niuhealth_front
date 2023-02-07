@@ -28,7 +28,7 @@ return(
     </button>
   </div>
 )}
-const ViewVisitButton = () => {
+const ViewVisitButton = ({appointmentPeriod,image,provider_name, provider_description}) => {
   return(
     <div className="list-inline mb-0 align-self-center">
       <button
@@ -37,8 +37,18 @@ const ViewVisitButton = () => {
         className="btn btn-outline-success btn-round waves-effect waves-light"
         onClick={() => {
           Swal.fire({
-            // title: 'Profile Picture',
-            html: `<img width="200px" height="150px" src="${!imagepreview?AWS_BUCKET_SERVICES + clinicProfile.picture_file: (clinicProfile.picture)}"></img>`,
+            // title: 'Appointment',
+            html: `
+            <div class='col'>
+            <img 
+              height=100
+              src=${AWS_BUCKET_SERVICES}providers/${image}
+            ></img>
+            <b>Provider:</b> ${provider_name}<br>
+            ${provider_description}<br>
+              <b>Appointment Period:</b><br>  ${appointmentPeriod[0]}-${appointmentPeriod[1]}<br> 
+              </div>
+            `,
             // { AWS_BUCKET_SERVICES } + profile.picture,
           })
         }}
@@ -117,7 +127,7 @@ function HMFormat(minutes) {
   return days+" days, "+ hours+" hrs and "+dig+min+" mins"}
   // return hours+":"+dig+min+":"+sec
 }
-const AppointmentAction = ({ status , appointmentTime, appointment ,joinAppointment}) => {
+const AppointmentAction = ({ status , appointmentTime ,image,provider_name, provider_description, appointment ,joinAppointment}) => {
 
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
@@ -133,7 +143,7 @@ const AppointmentAction = ({ status , appointmentTime, appointment ,joinAppointm
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
         <><h6>Virtual visit period is over.</h6>
-        <ViewVisitButton appointmentPeriod={appointmentPeriod}/>
+        <ViewVisitButton appointmentPeriod={[moment(appointmentTime).format('MMM DD, yyyy hh:mm'),moment(appointmentTime).add(1, 'hours').format('hh:mm')]} image={image} provider_name={provider_name} provider_description={provider_description}  />
         {/* <StartButton appointment={appointment}/> */}
         </>
       )}
@@ -240,10 +250,8 @@ function AppointmentItem({
         </p>
       
         <div className="virtDesc d-flex justify-content-between">
-          <div className="br-wrapper br-theme-fontawesome-stars">
-            <strong>{provider_description}</strong> 
-          </div>
-          <AppointmentAction status={status} appointmentTime={dateTime} appointment={visit_id} joinAppointment={joinAppointment} />
+          
+          <AppointmentAction status={status} appointmentTime={dateTime} image={image} provider_name={provider_name} provider_description={provider_description} appointment={visit_id} joinAppointment={joinAppointment} />
           
         </div>
       </div>

@@ -31,7 +31,7 @@ import Clinics from './pages/provider/clinics/Clinics'
 import ClinicSchedule from './components/clinics/ClinicSchedule'
 import ProviderDashboard from './pages/provider/layout/ProviderDashboard'
 
-// import ProviderProfile from './pages/provider/Profile'
+import ProviderProfile from './pages/patient/marketplace/provider/Profile'
 import Patients from './pages/provider/patient/PatientList'
 import PatientProfile from './pages/provider/patient/Profile'
 import ProviderIndex from './pages/provider/ProviderIndex'
@@ -129,6 +129,7 @@ const router = createBrowserRouter(
               children: [
                 { index: true, element: <Marketplace /> },
                 { path: 'providers', element: <ProvidersList /> },
+                { path: 'provider/:id', element: <ProviderProfile /> },
                 { path: 'booking', element: <Booking /> },
                 { path: 'checkout', element: <Checkout /> },
                 { path: 'success', element: <Success /> },

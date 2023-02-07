@@ -47,7 +47,6 @@ function ProfileEdit() {
     last_name: "",
     local_time_zone: "",
     address:"",
-    first_name: "",
     country_city_id:"",
     country_id:"0",
     date_of_birth:"2000-01-01",

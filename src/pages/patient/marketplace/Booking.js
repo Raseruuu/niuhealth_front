@@ -13,7 +13,6 @@ import { TableTitle } from '../../../components/table/Tables'
 import { Rating } from 'react-simple-star-rating'
 import useAuth from '../../../hooks/useAuth'
 import CardItem from '../../../components/cards/Card'
-import "./calendar.css"
 
 
 // needed for the style wrapper
@@ -25,8 +24,9 @@ import Swal from 'sweetalert2'
 export const StyleWrapper = styled.div`
   .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-timegrid-event, .fc-button.fc-button-primary{
     background: green;
-    background-image: none;
-}
+    background-image: none
+    
+} .fc-event {cursor: pointer;waves-effect}
 `
 export default function Booking() {
   const { state: selectedProvider } = useLocation()
@@ -60,7 +60,7 @@ export default function Booking() {
     Sat: { start: 8, end: 17 },
     Sun: { start: 8, end: 17 },
   })
-  const [calendarStartEndTime, setCalendarSartEndTime] = useState({
+  const [calendarStartEndTime, setCalendarStartEndTime] = useState({
     start: 8,
     end: 17,
   })
@@ -102,7 +102,7 @@ export default function Booking() {
         text:`Are you sure you want to book on this slot/time ${moment(
             clickInfo.event.startStr).format('MMM DD, YYYY, hA')}?`,
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#008000',
         cancelButtonColor: '#d33',
         confirmButtonText: 'OK'
       }
@@ -195,7 +195,7 @@ export default function Booking() {
     const startTime = startTimeArr.reduce((a, b) => Math.min(a, b), [8])
     const endTime = endTimeArr.reduce((a, b) => Math.max(a, b), [17])
 
-    setCalendarSartEndTime({ start: startTime, end: endTime })
+    setCalendarStartEndTime({ start: startTime, end: endTime })
     setWeeklySched(weeklySched)
   }, [providerSched])
 
@@ -218,7 +218,7 @@ export default function Booking() {
           const { Status, Data: data = [], Message } = res.data
           
           
-          if (!Status) {
+          if (Status) {
             isMounted && setServiceDetails(data.service_details)
             console.log("serviceDetails", data.service_details)
             setServiceClinics(data.clinics)
@@ -325,25 +325,28 @@ export default function Booking() {
             </div>
           </TableTitle>
           <div className="row">
-            <div className="col-12">
+            <div className="col-lg-8">
               <div className="card">
                 <div className="card-body doctor">
                   <div className="met-profile">
-                    <div className="row">
-                      <div className="col-lg-4 align-self-center mb-3 mb-lg-0">
-                        <div className="met-profile-main">
-                          <div className="met-profile-main-pic">
+                    <div className="row ">
+                      {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
+                        <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}${selectedProvider?.images}`}
+                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
                               alt=""
-                              width={120}
-                              height={120}
+                              // width={30}
+                              height={300}
                               style={{objectFit:'cover'}}
                               // className="rounded-circle"
                             />
-                          </div>
+                        </div> 
+                        <div className="met-profile-main">
+                          {/* <div className="met-profile-main-pic"> */}
+                          
+                          {/* </div> */}
                           <div className="met-profile_user-detail">
-                            <Link href="providerprofile">
+                            <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>
                               
                               <h5 className="met-user-name">
                                 {serviceDetails?.service_name}
@@ -375,36 +378,67 @@ export default function Booking() {
                             </p>
                             <h5>
                               <b>Service:</b>{' '}
-                              {selectedProvider?.service_description}
+                              {serviceDetails?.service_description}
                             </h5>
                           </div>
-                        </div>
+                        
                       </div>
-                      <div className="col-lg-4 ml-auto" style={{marginLeft:'10px'}}>
-                        <h5 className="met-user-name">
-                          {serviceDetails?.provider_name}
-                        </h5>
-                        <ul className="list-unstyled personal-detail">
-                          <li className="">
-                            <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
-                            <b> Clinics </b> :
-                            {serviceClinics[0]?.clinic_name}
-                          </li>
-                          <li className="mt-2">
-                            <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
-                            <b>Location</b> :
-                          </li>
-                          <li className="mt-2">
-                            <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
-                            <b>Service Rate </b> : $
-                            {selectedProvider?.cost_price}
-                          </li>
-                        </ul>
-                      </div>
+                      
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+            <div className='col-lg-4'>
+              <div className='card'>
+                <div className='card-body'>
+                <div className="row-lg-4 ml-auto" style={{marginLeft:'10px'}}>
+                       <div className='row'>
+                          <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>    
+                          
+                            <img
+                              src={`${AWS_BUCKET_SERVICES}providers/${serviceDetails?.provider_photo}`}
+                              alt=""
+                              // width={120}
+                              height={120}
+                              style={{objectFit:'cover'}}
+                              // className="rounded-circle"
+                            />
+                            </Link>
+                          <div className='col'>
+                              <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>    
+                                <h3 className="met-user-name">
+                                  {serviceDetails?.provider_name}
+                                </h3>
+                              </Link>
+                              <ul className="list-unstyled personal-detail">
+                                  {/* <li className="">
+                                    <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
+                                    <b> Clinics </b> :
+                                    {serviceClinics[0]?.clinic_name}
+                                  </li> */}
+                                  <li className="mt-2">
+                                    <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
+                                    <b>Email </b> : {' '}
+                                    {serviceDetails?.email}
+                                  </li>
+                                  <li className="mt-2">
+                                    <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
+                                    <b>Contact</b> :{' '}
+                                    {serviceDetails?.provider_contact}
+                                  </li>
+                                  <li className="mt-2">
+                                    <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
+                                    <b>Specialization </b> : {' '}
+                                    {serviceDetails?.provider_practice}
+                                  </li>
+                              </ul>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+
             </div>
           </div>
 
@@ -445,12 +479,12 @@ export default function Booking() {
                                   <li className="">
                                     <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
                                     <b> Specialization </b> : 
-                                    {serviceClinics[0]?.specialty}
+                                    {serviceClinics[index]?.specialty}
                                   </li>
                                   <li className="mt-2">
                                     <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
                                     <b>Location</b> :
-                                    {serviceClinics[0]?.address}
+                                    {serviceClinics[index]?.address}
                                   </li>
                                   <li className="mt-2">
                                     <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
