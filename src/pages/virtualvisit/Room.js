@@ -150,8 +150,8 @@ function SymptomDisplay({symptom, z_index=99}){
           <div className="notification-message-wrap__txt-container"> 
             {`The patient's symptom is listed as: \n"`+(symptom)+`" `}
           </div>
-          <button onClick={()=>{z_index=0}}className='close-button zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} >OK</button>
-          <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>{symptom=false}}></i>
+          {/* <button onClick={()=>{z_index=0}}className='close-button zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} >OK</button>
+          <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>{symptom=false}}></i> */}
         </div>
       </div>
       </>

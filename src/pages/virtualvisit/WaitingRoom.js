@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Footer from '../../components/Footer'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
@@ -63,6 +64,7 @@ export default function WaitingRoom() {
   useEffect(() => {
     getStatus()
     getQueueCount()
+    Swal.fire({html:"Please stay until an available doctor picks you in waiting room.",}).then(()=>{myVideo.current.play()})
   }, [])
 
   return (
@@ -91,12 +93,15 @@ export default function WaitingRoom() {
                 >
 
                 </iframe> */}
-                <video width="100%" name='media' autoPlay={true} height="420" 
+                <video width="100%"
+                //  autoPlay={true}
+                  height="420" 
                 controls 
+                // name="video1"
                 ref={myVideo}
                 // muted
                 type="video/mp4"
-                src="https://youtu.be/Gy-2hE8zXEI" 
+                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" 
                 />
                   {/* <source src="movie.mp4" type="video/mp4">
                   <source src="movie.ogg" type="video/ogg"> */}
