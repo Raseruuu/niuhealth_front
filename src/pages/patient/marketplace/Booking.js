@@ -152,7 +152,7 @@ export default function Booking() {
       
           // console.log('compare',moment(startStr).format('YYYY-MM-DD hh:mm'),"timenow", timeNow.format('YYYY-MM-DD hh:mm'))
           // Condition compares looped time with current time, prevents booking on already past time
-          // if (moment(startStr).isAfter(timeNow)){ 
+          if (moment(startStr).isAfter(timeNow)){ 
             // Adds appointment button
             
               schedArray.push({
@@ -162,7 +162,7 @@ export default function Booking() {
               backgroundColor: '#1eca7b',
               borderColor: 'transparent',
             })
-          // }
+          }
         }
       }
 

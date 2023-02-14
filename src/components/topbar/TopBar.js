@@ -64,7 +64,7 @@ export function TopBar({ menuClick, homeAddress }) {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
-  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"")+"Default.jpg"})
+  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"profiles/pictures/")+"Default.jpg"})
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
@@ -72,31 +72,32 @@ export function TopBar({ menuClick, homeAddress }) {
   function handleLogout(e) {
     e.preventDefault()
     logout()
-    navigate('/')
+    navigate('/login')
   }
   useEffect(()=>{
     
     const controller = new AbortController()
     async function getProfile() {
-      await axiosPrivate
-        .post(
-          'get'+auth.userType+'Details',
-          { Email: auth.email},{signal: controller.signal}
-        )
-        .then((res) => {
-          // console.log("userdata",res.data.Data[0])
-          const { Status, Data: data = [], Message } = res.data
-          if (Status) {
-            setProfile(res.data.Data[0])
-            
-            
-          } else {
-            throw new Error(Message)
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-        })
+      if (auth.userType)
+        {await axiosPrivate
+          .post(
+            'get'+auth.userType+'Details',
+            { Email: auth.email},{signal: controller.signal}
+          )
+          .then((res) => {
+            // console.log("userdata",res.data.Data[0])
+            const { Status, Data: data = [], Message } = res.data
+            if (Status) {
+              setProfile(res.data.Data[0])
+              
+              
+            } else {
+              throw new Error(Message)
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+          })}
       }
      
       

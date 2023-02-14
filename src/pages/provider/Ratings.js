@@ -114,11 +114,11 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
               <h6 className='mb-0 font-14 responsive'>
                 {service_description+",  "+service_name  }
               </h6>
-              
-              <p>
+              {(review)?
+              (<p>
                 "{(reviewFormat(review))}"
 
-              </p>
+              </p>):null}
             </div>
             </Link>
           </div>

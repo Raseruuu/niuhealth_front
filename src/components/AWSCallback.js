@@ -11,7 +11,9 @@ export function loader({ request }) {
   const code = url.searchParams.get('code')
 
   if (!code || code === null) {
-    window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+    // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+    
+    window.location.replace('login')
   }
 
   return { code }
@@ -30,7 +32,7 @@ function AWSCallback() {
     async function auth() {
       await axios
         .post(
-          'exchange',
+          'exchangeNew',
           { Code: code },
           {
             signal: controller.signal,
@@ -44,6 +46,7 @@ function AWSCallback() {
             TransactionType,
             Tokens,
             UserType,
+            Email
           } = res.data
 
           return {
@@ -52,6 +55,8 @@ function AWSCallback() {
             statusCode: Status || StatusCode,
             msg: Message,
             userType: UserType,
+            email: Email,
+            name: Name
           }
         })
         .then(
@@ -64,6 +69,8 @@ function AWSCallback() {
             statusCode,
             msg,
             userType,
+            email,
+            name
           }) => {
             if (!statusCode) {
               sessionStorage.removeItem('access_token')
@@ -71,6 +78,8 @@ function AWSCallback() {
               sessionStorage.removeItem('refresh_token')
               sessionStorage.removeItem('token_type')
               sessionStorage.removeItem('userType')
+              sessionStorage.removeItem('email')
+              sessionStorage.removeItem('name')
               setAuth({})
 
               throw new Error(msg)
@@ -82,6 +91,9 @@ function AWSCallback() {
             sessionStorage.setItem('token_type', token_type)
             sessionStorage.setItem('transactionType', transactionType)
             sessionStorage.setItem('userType', userType)
+            sessionStorage.setItem('email', email)
+            sessionStorage.setItem('name', name)
+            
 
             isMounted &&
               setAuth({
@@ -91,6 +103,8 @@ function AWSCallback() {
                 token_type,
                 transactionType,
                 userType,
+                email,
+                name
               })
 
             navigate('/', { replace: true })

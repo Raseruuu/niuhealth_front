@@ -1,4 +1,84 @@
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link,useNavigate } from "react-router-dom";
+
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 function Login() {
+  
+  const axiosPrivate = useAxiosPrivate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+
+  } = useForm();
+  const navigate = useNavigate()
+  async function logoutCurrentUser(){
+    // var header := w.Header()
+    // header.Add("Access-Control-Allow-Origin", "*")
+    // header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
+    // header.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+    await axiosPrivate
+    .get(
+      "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
+      {headers:{
+        'Access-Control-Allow-Origin': '*',
+        "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
+    // .then((res) => {
+    //   console.log(res);
+    //   const { StatusCode, Data: data = [], Message } = res.data;
+    // })
+
+      // if (StatusCode===200) {
+      //   
+      //   navigate('/', { replace: true })
+      // } else {
+
+      //   throw new Error(Message);
+      // }
+    
+    // .catch((err) => {
+    //   alert(err.message || "Creating new services failed."); // TODO: change to SweetAlert
+    //   console.error(err);
+    // });
+  }
+
+  async function handleLogin(data){
+    await axiosPrivate
+    .post("cognitoSignIn", {...data}
+      
+    )
+    .then((res) => {
+      console.log(res);
+      const { StatusCode, Data: data = [], Message } = res.data;
+
+
+      if (StatusCode===200) {
+        sessionStorage.setItem('email', res.data.Email)
+        sessionStorage.setItem('name', res.data.Name)
+        sessionStorage.setItem('access_token', res.data.Tokens.access_token)
+        sessionStorage.setItem('id_token', res.data.Tokens.id_token)
+        sessionStorage.setItem('refresh_token',  res.data.Tokens.refresh_token)
+        sessionStorage.setItem('token_type',  res.data.Tokens.token_type)
+        sessionStorage.setItem('expires_in',  res.data.Tokens.expires_in)
+        sessionStorage.setItem('userType',  res.data.UserType)
+        navigate('/', { replace: true })
+      } else {
+
+        throw new Error(Message);
+      }
+    })
+    // .catch((err) => {
+    //   alert(err.message || "Creating new services failed."); // TODO: change to SweetAlert
+    //   console.error(err);
+    // });
+  }
+
+  useEffect(()=>{
+    logoutCurrentUser()
+
+  },[])
   return (
     <div
       className="account-body accountbg"
@@ -34,10 +114,11 @@ function Login() {
 
                     <form
                       className="form-horizontal auth-form my-4"
-                      action="index.html"
+                      onSubmit={handleSubmit(handleLogin)}
+                      // action="index.html"
                     >
                       <div className="form-group">
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="username">Email</label>
                         <div className="input-group mb-3">
                           <span className="auth-form-icon">
                             <i className="dripicons-user"></i>
@@ -46,13 +127,14 @@ function Login() {
                             type="text"
                             className="form-control"
                             id="username"
-                            placeholder="Enter username"
+                            placeholder="Enter Email"
+                            {...register("Username")}
                           />
                         </div>
                       </div>
 
                       <div className="form-group">
-                        <label htmlFor="userpassword">Password</label>
+                        <label htmlFor="password">Password</label>
                         <div className="input-group mb-3">
                           <span className="auth-form-icon">
                             <i className="dripicons-lock"></i>
@@ -60,8 +142,9 @@ function Login() {
                           <input
                             type="password"
                             className="form-control"
-                            id="userpassword"
+                            id="password"
                             placeholder="Enter password"
+                            {...register("Password")}
                           />
                         </div>
                       </div>
@@ -96,7 +179,7 @@ function Login() {
                         <div className="col-12 mt-2">
                           <button
                             className="btn btn-gradient-success btn-round btn-block waves-effect waves-light"
-                            type="button"
+                            type="submit"
                           >
                             Log In <i className="fas fa-sign-in-alt ml-1"></i>
                           </button>
@@ -108,12 +191,12 @@ function Login() {
                   <div className="m-3 text-center text-muted">
                     <p className="">
                       Don't have an account ?{" "}
-                      <a
-                        href="../authentication/auth-register.html"
+                      <Link
+                        to={"/register"}
                         className="text-primary ml-2"
                       >
                         Create an Account
-                      </a>
+                      </Link>
                     </p>
                   </div>
                 </div>
@@ -132,7 +215,8 @@ function Login() {
                     </a>
                   </li>
                   <li className="list-inline-item">
-                    <a href="" className="">
+                    <a href=      
+              "https://niuhealth.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=http://localhost/niuhealth/cburl&response_type=CODE&client_id=qr8mf1ainc3tjmcv9gc0ltehu&scope=email+openid" className="">
                       <i className="fab fa-google google"></i>
                     </a>
                   </li>
