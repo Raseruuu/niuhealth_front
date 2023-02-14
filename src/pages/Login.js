@@ -22,6 +22,7 @@ function Login() {
     .get(
       "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
       {headers:{
+        
         'Access-Control-Allow-Origin': '*',
         "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
@@ -88,7 +89,7 @@ function Login() {
         <div className="row vh-100 ">
           <div className="col-12 align-self-center">
             <div className="auth-page">
-              <div className="card auth-card shadow-lg">
+              <div className="card auth-card shadow-lg p-3">
                 <div className="card-body">
                   <div className="px-3">
                     <div style={{ textAlign: "center" }}>

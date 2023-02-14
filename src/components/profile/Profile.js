@@ -386,6 +386,9 @@ function ProfileEdit() {
                 <div className="card-body">
                   <div className="row">
                     <div className="col-md-2">
+                      {/* <div class="uploadPicContainer">
+                        <input type="file" id="input-file-now-custom-1" class="dropify" data-default-file="../assets/images/users/user-4.jpg"/>
+                    </div>    */}
                       <div className="d-flex flex-column justify-content-center align-items-center">
                         <input
                           hidden

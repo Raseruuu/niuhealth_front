@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
 
 function PatientRegistration() {
-
+    const navigate = useNavigate()
   return (
     <div className='page-wrapper'>
       <div className='page-content'>
@@ -69,8 +69,14 @@ Subscription may cost more for patients not residing in Hawaii. <a href="">Know 
   
   <div className="wizard_btn" style={{marginBottom: "50px"}}> 
     
-      <a href="welcome-step2.html"><button type="button" className="btn btn-success btn-round waves-effect waves-light figmaBigButton float-left postRegBtn">Continue</button>
-      </a>
+      <button 
+        onClick={()=>{
+            navigate('/', { replace: true })}} 
+        type="button" 
+        className="btn btn-success btn-round waves-effect waves-light figmaBigButton float-left postRegBtn">
+            Continue
+    </button>
+      
   </div>
 
                 </div>

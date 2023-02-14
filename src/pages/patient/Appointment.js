@@ -8,8 +8,9 @@ import moment from "moment"
 import TableCard from "../../components/table/Tables"
 import CardItem from "../../components/cards/Card"
 import useInterval from '../../hooks/useInterval'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+
 function dateTimeFormat(date) {
   return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
 }
@@ -17,12 +18,52 @@ const timenow=moment()
 
   
       
-const CancelButton = () => {
+const CancelButton = ({visit_id}) => {
+  
+  const { auth } = useAuth()
+const axiosPrivate = useAxiosPrivate()
 return(
   <div className="list-inline mb-0 align-self-center">
     <button
       type="button"
       className="btn btn-outline-danger btn-round waves-effect waves-light"
+      onClick={() => {
+        Swal.fire({
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+          // title: 'Appointment',
+          html: `
+          <div class='col'>
+          Are You sure you want to cancel this visit?
+            </div>
+          `,
+          // { AWS_BUCKET_SERVICES } + profile.picture,
+        }).then(async (cancel)=>{
+          console.log(cancel)
+          if (cancel){
+          await axiosPrivate
+            .post(
+              'patientCancelVisitRequest',
+              {
+                Email:auth.email,
+                AppointmentID:visit_id
+              }
+            ) .then((res) => {
+              if (res.data?.Status && cancel) {
+                Swal.fire('Appointment successfully cancelled.')
+              // } else if (res.data?.Status && !cancel) {
+              //   Swal.fire('Appointment  cancelled.')
+              } else {
+                Swal.fire(res.data?.Message)
+              }
+            })
+         }
+          
+        }
+          
+        )
+      }}
     >
       Cancel Visit
     </button>
@@ -41,11 +82,14 @@ const ViewVisitButton = ({appointmentPeriod,image,provider_name, provider_descri
             html: `
             <div class='col'>
             <img 
+              class='mb-10'
               height=100
               src=${AWS_BUCKET_SERVICES}providers/${image}
             ></img>
+
             <b>Provider:</b> ${provider_name}<br>
-            ${provider_description}<br>
+            <br>
+            ${provider_description}<br><br>
               <b>Appointment Period:</b><br>  ${appointmentPeriod[0]}-${appointmentPeriod[1]}<br> 
               </div>
             `,
@@ -127,7 +171,7 @@ function HMFormat(minutes) {
   return days+" days, "+ hours+" hrs and "+dig+min+" mins"}
   // return hours+":"+dig+min+":"+sec
 }
-const AppointmentAction = ({ status , appointmentTime ,image,provider_name, provider_description, appointment ,joinAppointment}) => {
+const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_name, provider_description, appointment ,joinAppointment}) => {
 
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
@@ -152,14 +196,14 @@ const AppointmentAction = ({ status , appointmentTime ,image,provider_name, prov
       <>
         <h6>Appointment ETA: {appointmentETA}
         </h6>
-        <CancelButton/>
+        <CancelButton visit_id={visit_id}/>
       </>
     )}
     
   else if (status==="0"){
     return (
-      
-      <CancelButton/>
+      <><h6>Awaiting doctor {provider_name}'s approval.</h6>
+      <CancelButton visit_id={visit_id}/></>
     )}
   else if (status==="1"){
     return (
@@ -230,28 +274,30 @@ function AppointmentItem({
           </span>
         </p>
         <div className="media">
-          <a className="" href="#">
+          <Link className="" href="#">
             <img
               src={AWS_BUCKET_SERVICES+"providers/"+image}
               alt="user"
               className="rounded-circle thumb-md"
             />
-          </a>
+          </Link>
           <div className="media-body align-self-center ml-3">
             <p className="font-14 font-weight-bold mb-0">
               {provider_name}
               <StatusText status={status}/>
             </p>
-            <p className="mb-0 font-12 text-muted">{service_description}</p>
+            <p className="mb-0 font-12 text-muted">Provider</p>
           </div>
         </div>
-        <p className="text-muted mb-1 virtDesc">
+        <p className="font-18 mb-1 virtDesc">
           <strong>{service_name}</strong> 
         </p>
-      
+        <p className="font-14 mb-1 virtDesc">
+          <strong>{service_description}</strong> 
+        </p>
         <div className="virtDesc d-flex justify-content-between">
           
-          <AppointmentAction status={status} appointmentTime={dateTime} image={image} provider_name={provider_name} provider_description={provider_description} appointment={visit_id} joinAppointment={joinAppointment} />
+          <AppointmentAction status={status} visit_id={visit_id} appointmentTime={dateTime} image={image} provider_name={provider_name} provider_description={provider_description} appointment={visit_id} joinAppointment={joinAppointment} />
           
         </div>
       </div>
@@ -281,7 +327,7 @@ function Appointment() {
       service_id: "16",
       service_name: "Service Name",
       status: "4",
-      trans_date_time: "2023-01-24",
+      trans_date_time: "2023-02-14",
       trans_end:null,
       trans_start:"18",
       visit_id: "378"}

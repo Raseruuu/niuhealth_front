@@ -45,6 +45,8 @@ import TellUsWhy from './pages/virtualvisit/TellUsWhy'
 import WaitingRoom from './pages/virtualvisit/WaitingRoom'
 import Login from './pages/Login'
 import Register from './pages/Register'
+
+const Verify = lazy(() => import('./pages/Verify'))
 const Registration = lazy(() => import('./pages/patient/PatientRegistration'))
 const Room = lazy(() => import('./pages/virtualvisit/Room'))
 const Complete = lazy(() => import('./pages/virtualvisit/Complete'))
@@ -93,9 +95,10 @@ const router = createBrowserRouter(
           path: 'register',
           element: <Register/>
         },
+        { path: 'registration', element: <Registration /> },
         {
-          path: 'register2',
-          element: <Register/>
+          path: 'verify',
+          element: <Verify/>
         },
         {
           path: 'admin',
@@ -121,7 +124,7 @@ const router = createBrowserRouter(
             { path: 'settings', element: <AdminSettings /> },
           ],
         },
-        { path: 'registration', element: <Registration /> },
+        
         {
           path: 'patient',
           element: <PatientDashboard />,

@@ -10,7 +10,7 @@ function WelcomeCard() {
         <div className='jumbotron mb-0 bg-light'>
           <h1 className='display-4'>
             {greeting}
-            {auth?.name ?? null}!
+            {auth?.name}!
           </h1>
           <p className='lead'>Have a nice day at work!</p>
           {/* <hr className="my-4" /> */}
