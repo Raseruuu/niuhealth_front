@@ -1,28 +1,25 @@
 import ReactCodeInput from 'react-verification-code-input';
 import { useForm } from "react-hook-form";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-import { Link,useNavigate } from "react-router-dom";
+import { Link,useLocation,useNavigate, useParams } from "react-router-dom";
 
-import useAuth from "../hooks/useAuth";
+// import useAuth from "../hooks/useAuth";
 import { useState } from 'react';
 export default function Verify (){
     
     const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate()
   const [verificationCode,setVerificationCode]=useState([])
-    const { auth } = useAuth();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
-    
-      } = useForm();
+    // const { auth } = useAuth();
+    const {email}  = useParams();
+    console.log("VER",email)
     async function cognitoConfirmSignUp(data){
-        console.log("VER",data)
+        console.log("VER",email)
         await axiosPrivate
         .post("cognitoConfirmSignUp", {
             // Email:auth.email,
-            Email:"teamkizunavisual@gmail.com",
+            // Email:"teamkizunavisual@gmail.com",
+            Email:email,
             ConfirmationCode:data
         }
           
@@ -30,8 +27,8 @@ export default function Verify (){
         .then((res) => {
           console.log(res);
           const { Status, Data: data = [], Message } = res.data;
-          if (Status) {
-            navigate('/registration', { replace: true })
+          if (res) {
+            navigate('/')
           } else {
             throw new Error(Message);
           }
@@ -58,12 +55,12 @@ export default function Verify (){
                             <div className="clsJspForm verify_mail_cont" style={{position:'relative', top:0, left:0, width:'100%'}}>
 
                             <div className="lodestarLoginLogo">
-                            <img alt="NU Health" src="assets/images/verify_mail.png"/>
+                            <img alt="NIU Health" src="assets/images/verify_mail.png"/>
                             </div>
 
                             <div style={{paddingTop: "20px"}}>
                                 <h3>Please verify your email</h3>
-                                <p>You're almost there! We sent a verification email to <span className="bold">amr@gmail.com</span></p>
+                                <p>You're almost there! We sent a verification email to <span className="bold">{email}</span></p>
                                 <p>if you dont see the email, you may need to check your spam folder</p>
                                 <h5>Please enter the 6 digit code we sent you</h5>
                                 <div style={{paddingTop: "20px"}}>

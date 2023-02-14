@@ -97,7 +97,7 @@ const router = createBrowserRouter(
         },
         { path: 'registration', element: <Registration /> },
         {
-          path: 'verify',
+          path: 'verify/:email',
           element: <Verify/>
         },
         {

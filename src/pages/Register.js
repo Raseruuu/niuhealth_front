@@ -49,12 +49,15 @@ function Register() {
             .then((res) => {
             console.log(res);
             const { Status, Data: data = [], Message } = res.data;
+            
         
         
             if (Status) {
                 Swal.fire({icon: 'success',html:`${Message}`})
                 .then(()=>{
-                    navigate('/verify', { replace: true })}
+                    
+                    sessionStorage.setItem('email', data.Email)
+                    navigate(`/verify/${data.Email}`,  { replace: true })}
                 )
             } else {
                 Swal.fire({icon: 'error',html:`${Message}`})
