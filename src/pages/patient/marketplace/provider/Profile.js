@@ -531,6 +531,32 @@ function ProviderProfile() {
                       <h4 className='mt-0 header-title mb-4'>
                         Reviews
                       </h4>
+                      <div className="">
+                      <a
+                          className='carousel-control-prev m-3'
+                          href='#carousel_1'
+                          role='button'
+                          data-slide='prev'
+                        >
+                          <span
+                            className='carousel-control-prev-icon'
+                            aria-hidden='true'
+                          ></span>
+                          <span className='sr-only'>Previous</span>
+                        </a>
+                        <a
+                          className='carousel-control-next m-3'
+                          href='#carousel_1'
+                          role='button'
+                          data-slide='next'
+                        >
+                          <span
+                            className='carousel-control-next-icon'
+                            aria-hidden='true'
+                          ></span>
+                          <span className='sr-only'>Next</span>
+                        </a>
+                      </div>
                       <div
                         id='carousel_1'
                         className='carousel slide'
@@ -541,7 +567,7 @@ function ProviderProfile() {
                             
                             <div key={index} className={'carousel-item '+(active===index?'active':"")} >
                               <div className='media'>
-                                <Link
+                                {/* <Link
                                   to={''}
                                   onClick={()=>
                                     showReview(
@@ -553,7 +579,7 @@ function ProviderProfile() {
                                       service_description=review.service_description,
                                       review =review.review
                                     )
-                                  }>
+                                  }> */}
                                   <img
                                     src={`${AWS_BUCKET_PROFILES}${review.picture}`}
                                     className='mr-2 thumb-lg rounded-circle'
@@ -578,37 +604,14 @@ function ProviderProfile() {
                                     <p className='text-muted mb-0'>{review?.email}</p>
                                     <p className='text-black mb-0'>{reviewFormat(review?.review)}</p>
                                   </div>
-                                </Link>
+                                {/* </Link> */}
                               </div>
                           </div>
                           </>
                           )})}
                         </div>
                         
-                        <a
-                          className='carousel-control-prev'
-                          href='#carousel_1'
-                          role='button'
-                          data-slide='prev'
-                        >
-                          <span
-                            className='carousel-control-prev-icon'
-                            aria-hidden='true'
-                          ></span>
-                          <span className='sr-only'>Previous</span>
-                        </a>
-                        <a
-                          className='carousel-control-next'
-                          href='#carousel_1'
-                          role='button'
-                          data-slide='next'
-                        >
-                          <span
-                            className='carousel-control-next-icon'
-                            aria-hidden='true'
-                          ></span>
-                          <span className='sr-only'>Next</span>
-                        </a>
+                        
                       </div>
                     </div>
                   </div>

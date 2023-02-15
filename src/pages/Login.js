@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link,useNavigate } from "react-router-dom";
 
@@ -12,7 +12,10 @@ function Login() {
     formState: { errors, isSubmitting, isSubmitSuccessful },
 
   } = useForm();
+  
+  const effectRun = useRef(false);
   const navigate = useNavigate()
+  
   async function logoutCurrentUser(){
     // var header := w.Header()
     // header.Add("Access-Control-Allow-Origin", "*")
@@ -77,8 +80,18 @@ function Login() {
   }
 
   useEffect(()=>{
-    logoutCurrentUser()
-
+    
+    let isMounted = true
+    const controller = new AbortController()
+    if (effectRun.current){
+      logoutCurrentUser()
+    }
+    return()=>{
+      
+      isMounted = false
+      controller.abort()
+      effectRun.current = true;
+    }
   },[])
   return (
     <div
@@ -89,7 +102,7 @@ function Login() {
         <div className="row vh-100 ">
           <div className="col-12 align-self-center">
             <div className="auth-page">
-              <div className="card auth-card shadow-lg p-3">
+              <div className="card auth-card shadow-lg ">
                 <div className="card-body">
                   <div className="px-3">
                     <div style={{ textAlign: "center" }}>
@@ -167,12 +180,12 @@ function Login() {
                           </div>
                         </div>
                         <div className="col-sm-6 text-right">
-                          <a
-                            href="auth-recover-pw.html"
+                          <Link
                             className="text-muted font-13"
+                            to={"/forgot-password"}
                           >
                             <i className="dripicons-lock"></i> Forgot password?
-                          </a>
+                          </Link>
                         </div>
                       </div>
 
@@ -182,7 +195,7 @@ function Login() {
                             className="btn btn-gradient-success btn-round btn-block waves-effect waves-light"
                             type="submit"
                           >
-                            Log In <i className="fas fa-sign-in-alt ml-1"></i>
+                            {isSubmitting?"Logging in...":"Log In"} <i className="fas fa-sign-in-alt ml-1"></i>
                           </button>
                         </div>
                       </div>
@@ -205,7 +218,7 @@ function Login() {
               <div className="account-social text-center mt-4">
                 <h6 className="my-4">Or Login With</h6>
                 <ul className="list-inline mb-4">
-                  <li className="list-inline-item">
+                  {/* <li className="list-inline-item">
                     <a href="" className="">
                       <i className="fab fa-facebook-f facebook"></i>
                     </a>
@@ -214,11 +227,12 @@ function Login() {
                     <a href="" className="">
                       <i className="fab fa-twitter twitter"></i>
                     </a>
-                  </li>
+                  </li> */}
                   <li className="list-inline-item">
                     <a href=      
               "https://niuhealth.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=http://localhost/niuhealth/cburl&response_type=CODE&client_id=qr8mf1ainc3tjmcv9gc0ltehu&scope=email+openid" className="">
-                      <i className="fab fa-google google"></i>
+                      <i className="fab fa-google google m-3"></i>
+                      Google
                     </a>
                   </li>
                 </ul>

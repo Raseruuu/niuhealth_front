@@ -46,6 +46,7 @@ import WaitingRoom from './pages/virtualvisit/WaitingRoom'
 import Login from './pages/Login'
 import Register from './pages/Register'
 
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 const Verify = lazy(() => import('./pages/Verify'))
 const Registration = lazy(() => import('./pages/patient/PatientRegistration'))
 const Room = lazy(() => import('./pages/virtualvisit/Room'))
@@ -99,6 +100,15 @@ const router = createBrowserRouter(
         {
           path: 'verify/:email',
           element: <Verify/>
+        },
+        
+        {
+          path: 'forgot-password/:action',
+          element: <ForgotPassword/>
+        },
+        {
+          path: 'forgot-password/:action/to/:email',
+          element: <ForgotPassword/>
         },
         {
           path: 'admin',

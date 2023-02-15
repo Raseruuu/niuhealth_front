@@ -1,5 +1,5 @@
 import FullCalendar from '@fullcalendar/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
 import { AWS_BUCKET_SERVICES } from '../../../constants'
@@ -33,6 +33,8 @@ export default function Booking() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const { auth, setAuth } = useAuth()
+  
+  const effectRun = useRef(false);
   const [serviceDetails,setServiceDetails] = useState({})
   const [serviceClinics,setServiceClinics] = useState([])
   const [providerSched, setProviderSched] = useState({
@@ -290,12 +292,14 @@ export default function Booking() {
           setErrMsg(err.message)
         })
       }
-      
-    getService()
-    getDoctorSchedule()
+    if (effectRun.current){
+      getService()
+      getDoctorSchedule()
+    }
     return () => {
       isMounted = false
       controller.abort()
+      effectRun.current = true;
     }
   }, [])
 
@@ -348,7 +352,7 @@ export default function Booking() {
                           
                           {/* </div> */}
                           <div className="met-profile_user-detail">
-                            <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>
+                            <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}>
                               
                               <h5 className="met-user-name">
                                 {serviceDetails?.service_name}
@@ -396,8 +400,8 @@ export default function Booking() {
                 <div className='card-body'>
                 <div className="row-lg-4 ml-auto" style={{marginLeft:'10px'}}>
                        <div className='row'>
-                          <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>    
-                          
+                          <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id)}>    
+                          {(serviceDetails)?(
                             <img
                               src={`${AWS_BUCKET_SERVICES}providers/${serviceDetails?.provider_photo}`}
                               alt=""
@@ -405,10 +409,11 @@ export default function Booking() {
                               height={120}
                               style={{objectFit:'cover'}}
                               // className="rounded-circle"
-                            />
+                            />):null
+                          }
                             </Link>
                           <div className='col'>
-                              <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id||'djahsjkda')}>    
+                              <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id)}>    
                                 <h3 className="met-user-name">
                                   {serviceDetails?.provider_name}
                                 </h3>
@@ -451,7 +456,7 @@ export default function Booking() {
                   <div className="card-body">
                     {serviceClinics.map((item,index) => (
                               // <CardItem title="Clinic">
-                      <div className="card" >
+                      <div key={index} className="card" >
                         <div className="card-body">
                           <div className='row'>
                             

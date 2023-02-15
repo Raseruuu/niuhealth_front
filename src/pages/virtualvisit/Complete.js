@@ -39,7 +39,7 @@ export default function Complete() {
           console.log(res.data)
           const { Status, Message } = res.data
           if (Status) {
-            // navigate('/patient')
+            navigate('/patient')
           } else {
             alert(Message)
           }

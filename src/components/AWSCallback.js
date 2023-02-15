@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import axios from '../api/axios'
 import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from '../constants'
@@ -24,7 +24,7 @@ function AWSCallback() {
   const navigate = useNavigate()
   const { code } = useLoaderData()
   const [errMsg, setErrMsg] = useState()
-
+  const effectRun = useRef(false);
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -46,7 +46,8 @@ function AWSCallback() {
             TransactionType,
             Tokens,
             UserType,
-            Email
+            Email,
+            Name
           } = res.data
 
           return {
@@ -115,12 +116,14 @@ function AWSCallback() {
           setErrMsg(err.message)
         })
     }
-
-    auth()
+    if (effectRun.current){
+      auth()
+    }
 
     return () => {
       isMounted = false
       controller.abort()
+      effectRun.current = true;
     }
   }, [])
 

@@ -14,13 +14,13 @@ function PatientSideNav({ openSideNav }) {
   function handleLogout(e) {
     e.preventDefault()
     logout()
-    navigate('/')
+    navigate('/login',{replace:true})
   }
 
   return (
     <div
       className='left-sidenav'
-      style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' }}
+      style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' ,marginTop:'70px'}}
     >
       {/* <div className='topbar-left'>
         <Link to='/patient' className='logo'>
@@ -101,7 +101,7 @@ function PatientSideNav({ openSideNav }) {
         <li>
           <NavLink to='subscription'>
             <i className='mdi mdi-credit-card'></i>
-            <span>Subscription and Payment</span>
+            <span>Subscription</span>
             <span className='menu-arrow'></span>
           </NavLink>
         </li>

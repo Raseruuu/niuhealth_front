@@ -21,6 +21,8 @@ import moment from 'moment'
 function ProfileEdit() {
   const { auth, setAuth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
+  
+  const effectRun = useRef(false);
   const [profile, setProfile] = useState({
     ...auth,
     hours_sun_end: "20",
@@ -231,6 +233,7 @@ function ProfileEdit() {
         const { result } = e.target;
         if (result && !isCancel) {
           // setFileDataURL(result)
+          
           setProfile({
             ...profile,
             picture:result 
@@ -359,13 +362,18 @@ function ProfileEdit() {
           console.error(err)
         })
     }
+   
     setAuth((prev) => ({ ...prev, profile,name:profile.first_name })) 
-    getProfileDetails()
-    if (auth.userType==='Patient'){
-      getCountries()}
+    if (effectRun.current){
+      getProfileDetails()
+   
+      if (auth.userType==='Patient'){
+        getCountries()}
+    }
     return () => {
       isMounted = false
       controller.abort()
+      effectRun.current = true;
     }
   }, [])
 
@@ -710,7 +718,7 @@ function ProfileEdit() {
                             placeholder={'mm-dd-yyyy'}
                             name="date_of_birth"
                             // defaultValue={dateFormat(profile.date_of_birth)}
-                            value={dateFormat(profile.date_of_birth)}
+                            value={dateFormat(profile?.date_of_birth)}
                             onChangeCapture={handleInputChange.bind(this)}
                           />
                         </div>

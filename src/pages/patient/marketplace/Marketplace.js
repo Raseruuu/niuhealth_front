@@ -10,6 +10,7 @@ export default function Marketplace() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const priceRangeRef = useRef()
+  const effectRun = useRef(false);
 
   useEffect(() => {
     let isMounted = true
@@ -28,12 +29,13 @@ export default function Marketplace() {
           setErrMsg(err.message)
         })
     }
-
-    getList()
-
+    if (effectRun.current){
+      getList()
+    }
     return () => {
       isMounted = false
       controller.abort()
+      effectRun.current = true;
     }
   }, [])
 
@@ -269,13 +271,13 @@ export default function Marketplace() {
                         <div className="p-3">
                           <h6 className="mt-0 mb-4">Ratings</h6>
                           {[5, 4, 3, 2, 1].map((val) => (
-                            <div className="checkbox checkbox-success">
+                            <div key={val} className="checkbox checkbox-success">
                               <input id={`checkboxa${val}`} type="checkbox" />
                               <label htmlFor={`checkboxa${val}`}>
                                 {val}
                                 {Array.apply(null, { length: val }).map(
                                   (e, i) => (
-                                    <i className="mdi mdi-star text-warning"></i>
+                                    <i key={i} className="mdi mdi-star text-warning"></i>
                                   )
                                 )}
                               </label>
