@@ -69,7 +69,7 @@ function Login() {
         sessionStorage.setItem('userType',  res.data.UserType)
         navigate('/', { replace: true })
       } else {
-
+        Swal.fire({ icon: 'error',html:`${Message}`})
         throw new Error(Message);
       }
     })

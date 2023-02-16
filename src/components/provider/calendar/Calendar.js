@@ -109,7 +109,7 @@ function Calendar({ allowCall }) {
   // }
 
   const INITIAL_EVENTS = (appointments = []) => {
-    const schedArray = appointments.map((item) => {
+    const schedArray = [appointments.map((item) => {
       const currentD = moment(item.trans_date_time).format('YYYY-MM-DD')
 
       let timeStr = Number(item.trans_start)
@@ -126,7 +126,7 @@ function Calendar({ allowCall }) {
         backgroundColor: '#1eca7b',
         borderColor: 'transparent',
       }
-    })
+    })]
 
     setSlots(schedArray)
   }

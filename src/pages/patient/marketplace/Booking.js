@@ -292,14 +292,14 @@ export default function Booking() {
           setErrMsg(err.message)
         })
       }
-    if (effectRun.current){
+    // if (effectRun.current){
       getService()
       getDoctorSchedule()
-    }
+    // }
     return () => {
       isMounted = false
       controller.abort()
-      effectRun.current = true;
+      // effectRun.current = true;
     }
   }, [])
 

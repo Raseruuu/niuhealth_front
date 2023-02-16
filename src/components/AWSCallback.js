@@ -24,7 +24,9 @@ function AWSCallback() {
   const navigate = useNavigate()
   const { code } = useLoaderData()
   const [errMsg, setErrMsg] = useState()
-  const effectRun = useRef(false);
+  // const effectRun = useRef(false);
+  // const [effectRun, setEffectRun] = useState()
+  
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -116,14 +118,13 @@ function AWSCallback() {
           setErrMsg(err.message)
         })
     }
-    if (effectRun.current){
       auth()
-    }
+    
 
     return () => {
       isMounted = false
+     
       controller.abort()
-      effectRun.current = true;
     }
   }, [])
 

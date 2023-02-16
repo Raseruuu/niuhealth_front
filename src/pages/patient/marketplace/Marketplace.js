@@ -9,6 +9,7 @@ export default function Marketplace() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
+   const [toggleFilter, setToggleFilter] = useState(true)
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
 
@@ -29,13 +30,13 @@ export default function Marketplace() {
           setErrMsg(err.message)
         })
     }
-    if (effectRun.current){
+    // if (effectRun.current){
       getList()
-    }
+    // }
     return () => {
       isMounted = false
       controller.abort()
-      effectRun.current = true;
+      // effectRun.current = true;
     }
   }, [])
 
@@ -72,8 +73,10 @@ export default function Marketplace() {
                   <div className="card-body">
                     <div className="row">
                       <div className="col-lg-12">
-                        <h5 className="mt-0 mb-4">Filter</h5>
-
+                        <h5 className="mt-0 mb-4">Filters</h5>
+                        <i onClick={()=>{setToggleFilter(!toggleFilter)}}  className='dripicons-arrow-down
+                        '></i>
+                        {(toggleFilter)?
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Service Categories</h6>
                           <div className="checkbox checkbox-success ">
@@ -251,9 +254,11 @@ export default function Marketplace() {
                             <label htmlFor="checkbox19">Urology</label>
                           </div>
                         </div>
+                        :null
+                        }
                       </div>
                     </div>
-
+                      {(toggleFilter)?  <>
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
@@ -285,7 +290,7 @@ export default function Marketplace() {
                           ))}
                         </div>
                       </div>
-                    </div>
+                    </div></>:null}
                   </div>
                 </div>
               </div>

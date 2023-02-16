@@ -39,9 +39,9 @@ return(
             </div>
           `,
           // { AWS_BUCKET_SERVICES } + profile.picture,
-        }).then(async (cancel)=>{
-          console.log(cancel)
-          if (cancel){
+        }).then(async ({isConfirmed})=>{
+          console.log("cancel",cancel)
+          if (isConfirmed){
           await axiosPrivate
             .post(
               'patientCancelVisitRequest',
@@ -50,7 +50,8 @@ return(
                 AppointmentID:visit_id
               }
             ) .then((res) => {
-              if (res.data?.Status && cancel) {
+              console.log()
+              if (res.data?.Status && isConfirmed) {
                 Swal.fire('Appointment successfully cancelled.')
               // } else if (res.data?.Status && !cancel) {
               //   Swal.fire('Appointment  cancelled.')
@@ -274,7 +275,7 @@ function AppointmentItem({
           </span>
         </p>
         <div className="media">
-          <Link className="" href="#">
+          <Link className="" to="#">
             <img
               src={AWS_BUCKET_SERVICES+"providers/"+image}
               alt="user"

@@ -22,7 +22,7 @@ function ProfileEdit() {
   const { auth, setAuth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   
-  const effectRun = useRef(false);
+  // const effectRun = useRef(false);
   const [profile, setProfile] = useState({
     ...auth,
     hours_sun_end: "20",
@@ -364,16 +364,16 @@ function ProfileEdit() {
     }
    
     setAuth((prev) => ({ ...prev, profile,name:profile.first_name })) 
-    if (effectRun.current){
-      getProfileDetails()
-   
-      if (auth.userType==='Patient'){
-        getCountries()}
-    }
+    // if (effectRun.current){
+    getProfileDetails()
+  
+    if (auth.userType==='Patient'){
+      getCountries()}
+    // }
     return () => {
       isMounted = false
       controller.abort()
-      effectRun.current = true;
+      // effectRun.current = true;
     }
   }, [])
 

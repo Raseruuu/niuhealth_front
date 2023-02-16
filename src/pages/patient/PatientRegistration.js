@@ -3,6 +3,30 @@ import Footer from '../../components/Footer'
 
 function PatientRegistration() {
     const navigate = useNavigate()
+    async function getCountries() {
+        await axiosPrivate
+          .post(
+            'getCountries',
+            { Email: auth.email },
+            {
+              signal: controller.signal,
+            }
+          )
+          .then((res) => {
+            // console.log(res)
+            const { Status, Data: data = [], Message } = res.data
+  
+            if (Status) {
+              isMounted && setCountries(data)
+              setCityActive(true)
+            } else {
+              throw new Error(Message)
+            }
+          })
+          .catch((err) => {
+            console.error(err)
+          })
+      }
 
   return (
     <div className='page-wrapper'>

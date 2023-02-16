@@ -1,7 +1,7 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'
 import React, { lazy, Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, Outlet, Router, RouterProvider } from 'react-router-dom'
 import AWSCallback, {
   loader as awsCallbackLoader,
 } from './components/AWSCallback'
@@ -45,6 +45,7 @@ import TellUsWhy from './pages/virtualvisit/TellUsWhy'
 import WaitingRoom from './pages/virtualvisit/WaitingRoom'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import useAuth from './hooks/useAuth'
 
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 const Verify = lazy(() => import('./pages/Verify'))
@@ -66,12 +67,14 @@ const App = () => (
     <Outlet />
   </Suspense>
 )
+// const {} = useAuth();  
+const email = sessionStorage.getItem('email')
 
-const router = createBrowserRouter(
+const router =createBrowserRouter(
   [
     {
       path: '/',
-      element: <App />, // TODO: should be auth
+      element: <Login />, // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },
@@ -248,13 +251,25 @@ const router = createBrowserRouter(
     { path: '*', element: <ErrorPage45 statusCode={404} /> },
   ],
   { basename: `${process.env.PUBLIC_URL}` }
-)
-
+);
+// const routes =[
+//   {
+//     path: '/',
+//     element: !isLoggedIn ? <MainLayout /> : <Navigate to="/app/dashboard" />,
+//     children: [
+//       { path: 'login', element: <Login /> },
+//       { path: '/', element: <Navigate to="/login" /> },
+//     ],
+//   }
+// ]
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      {(email===!null)?
+        <RouterProvider router={router}  />
+        :<Router><Navigate to="/login" /></Router>
+      }
     </AuthProvider>
-  </React.StrictMode>
+  // </React.StrictMode>
 )
