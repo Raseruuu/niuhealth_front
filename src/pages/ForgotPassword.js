@@ -15,14 +15,110 @@ function ForgotPassword() {
     const [oldPassword,setOldPassword]=useState('');
     const [confirmOldPassword,setConfirmOldPassword]=useState('');
     
-  const [verificationCode,setVerificationCode]=useState([])
-    // const [hasLowercase,setHasLowercase]=useState("✖");
-    // const [hasUppercase,setHasUppercase]=useState("✖");
-    // const [hasNumber,setHasNumber]=useState("✖");
-    // const [has8chars,setHas8chars]=useState("✖");
-    // const [hasSpecialCharacter,setHasSpecialCharacter]=useState("✖");
-    // const [hasSpaceOnEnd,setHasSpaceOnEnd]=useState("✖");
+    const [verificationCode,setVerificationCode]=useState([])
+    const [hasLowercase,setHasLowercase]=useState("✖");
+    const [hasUppercase,setHasUppercase]=useState("✖");
+    const [hasNumber,setHasNumber]=useState("✖");
+    const [has8chars,setHas8chars]=useState("✖");
+    const [hasSpecialCharacter,setHasSpecialCharacter]=useState("✖");
+    const [hasSpaceOnEnd,setHasSpaceOnEnd]=useState("✖");
+    const [cityActive, setCityActive] = useState(false)
+    function check(Condition){
+        if (Condition===true){
+            return ("✓")}
+        else if (Condition===false){ 
+            return ("✖")}
+        
+      }
+      const  [passwordCheck,setPasswordCheck]=useState(
+        (password?.match(/[a-z]/)?.length>0)||
+        (password?.match(/[A-Z]/)?.length>0)||
+        (password?.match(/[0-9]/)?.length>0)||
+        (password?.length>=8)||
+        (password?.match(/[^\x00-\x7F]/))||
+        (!(password?.charAt(0)===" "||password?.charAt(password?.length-1)===" "))
+      );
+    function PasswordChecker({}){
+        useEffect(()=>{
+            setHasLowercase(check(password?.match(/[a-z]/)?.length>0))
+            setHasUppercase(check(password?.match(/[A-Z]/)?.length>0))
+            setHasNumber(check(password?.match(/[0-9]/)?.length>0))
+            setHas8chars(check(password?.length>=8))
+            setHasSpecialCharacter(check(password?.match(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/)?.length>0))
+            setHasSpaceOnEnd(check(!(password?.charAt(0)===" "||password?.charAt(password?.length-1)===" ")))
+        },[password])
+        return(
+        <>
+            {(passwordCheck&&password.length>0)?(<>
+            <div className={hasLowercase==="✓"?"text-success":"text-danger"}>
+                {`${hasLowercase}  Password must contain a lower case letter`}<br/>
+            </div>
+            <div className={hasUppercase==="✓"?"text-success":"text-danger"}>
+            {`${hasUppercase} Password must contain an upper case letter`}<br/>
+            </div>
+            <div className={hasNumber==="✓"?"text-success":"text-danger"}>
+            {hasNumber} Password must contain a number<br/>
+            </div>
+            <div className={has8chars==="✓"?"text-success":"text-danger"}>
+            {has8chars} Password must contain at least 8 characters<br/>
+            </div>
+            <div className={hasSpecialCharacter==="✓"?"text-success":"text-danger"}>
+                {hasSpecialCharacter} Password must contain a special character or a space<br/>
+            </div>
+            <div className={hasSpaceOnEnd==="✓"?"text-success":"text-danger"}>
+                {hasSpaceOnEnd} Password must not contain a leading or trailing space<br/>
+            </div>
+            </>):null}
+        </>
+        )
+      }
+      async function handleRegisterForm(data){
+        setPasswordCheck(
+            (password?.match(/[a-z]/)?.length>0)||
+            (password?.match(/[A-Z]/)?.length>0)||
+            (password?.match(/[0-9]/)?.length>0)||
+            (password?.length>=8)||
+            (password?.match(/[^\x00-\x7F]/))||
+            (!(password?.charAt(0)===" "||password?.charAt(password?.length-1)===" "))
+          );
+        if (!passwordCheck){
+            Swal.fire({ icon: 'error',html:`Password not allowed.`})
+            console.log(passwordCheck)
+        }
+        else if (confirmPassword!==password){
+            Swal.fire({ icon: 'error',html:`Password fields do not match.`})
     
+        }
+        else(
+            await axiosPrivate
+            .post("cognitoSignUp", {...data,Password:password}
+            
+            )
+            .then((res) => {
+            console.log(res);
+            const { Status, Data: data = [], Message } = res.data;
+            
+        
+        
+            if (Status) {
+                Swal.fire({icon: 'success',html:`${Message}`})
+                .then(()=>{
+                    
+                    sessionStorage.setItem('email', data.Email)
+                    navigate(`/verify/${data.Email}`,  { replace: true })}
+                )
+            } else {
+                Swal.fire({icon: 'error',html:`${Message}`})
+                if (Message){
+    
+                }
+                throw new Error(Message);
+    
+            }
+            })
+        )
+        
+      }
     const {
         register,
         handleSubmit,
@@ -109,7 +205,15 @@ function ForgotPassword() {
                                                 <span class="auth-form-icon">
                                                     <i class="dripicons-lock"></i> 
                                                 </span>                                                                                                              
-                                                <input type="password" class="form-control" id="useremail" required placeholder="Enter New Password" {...register("password")}/>
+                                                <input
+                                                type="password"
+                                                class="form-control" 
+                                                id="useremail" 
+                                                required 
+                                                placeholder="Enter New Password" 
+                                                onChange={(e)=>{setPassword(e.target.value);console.log(password)}}
+                                                // {...register("password")}
+                                                />
                                             </div> 
                                             <label htmlFor="password">Confirm Password</label>
                                             <div class="input-group mb-3">
@@ -118,6 +222,8 @@ function ForgotPassword() {
                                                 </span>                                                                                                              
                                                 <input type="password" class="form-control" id="useremail" required placeholder="Enter Confirm Password" {...register("password")}/>
                                             </div> 
+
+                                            <PasswordChecker password={password} errors={errors}></PasswordChecker>
                                             <label htmlFor="verificationcode">Enter the 6 digit code sent to your email {email}</label>
                                             <div class="input-group mb-3">
                                                                                                                                                             

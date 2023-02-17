@@ -281,7 +281,7 @@ function Register() {
                                                 </div>
                                             </div>                                            
                                         </div>
-                                        <PasswordChecker password={password} errors={errors}></PasswordChecker>
+                                        <PasswordChecker password={password} errors={errors}></PasswordChecker><br/>
                                         <div className="form-group mb-0 row">
                                             <div className="col-12 mt-2">
                                                 {/* <Link to="../figma_virtual_visit/welcome-step1.html"/> */}

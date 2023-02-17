@@ -14,10 +14,10 @@ function PatientDashboard() {
   
   useEffect(() => {
     
-    console.log("UGUU",sessionStorage.getItem('userType'))
     if ((String(sessionStorage.getItem('userType')))!=='Patient'){
       navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
     }
+    
     
   }, [])
   useEffect(() => {

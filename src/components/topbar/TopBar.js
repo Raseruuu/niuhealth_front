@@ -70,15 +70,6 @@ export function TopBar({ menuClick, homeAddress }) {
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
   function handleLogout(e) {
-    
-    sessionStorage.removeItem('access_token')
-    sessionStorage.removeItem('id_token')
-    sessionStorage.removeItem('refresh_token')
-    sessionStorage.removeItem('token_type')
-    sessionStorage.removeItem('userType')
-    sessionStorage.removeItem('email')
-    sessionStorage.removeItem('name')
-    sessionStorage.removeItem('isLoggedIn',  false)
     e.preventDefault()
     logout()
     navigate('/login')

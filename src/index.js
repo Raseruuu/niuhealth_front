@@ -85,6 +85,24 @@ const router =createBrowserRouter(
       element: <Login text ={isLoggedIn()}/>
     },
     {
+      path: '/register',
+      element: <Register/>
+    },
+    { path: '/registration', element: <Registration /> },
+    {
+      path: '/verify/:email',
+      element: <Verify/>
+    },
+    
+    {
+      path: '/forgot-password/:action',
+      element: <ForgotPassword/>
+    },
+    {
+      path: '/forgot-password/:action/to/:email',
+      element: <ForgotPassword/>
+    },
+    {
       path: '/',
       element: (isLoggedIn()?<App/>:<Navigate to="/login" />), // TODO: should be auth
       errorElement: <ErrorPage />,
@@ -107,24 +125,7 @@ const router =createBrowserRouter(
           path: 'login',
           element: <Login/>
         },
-        {
-          path: 'register',
-          element: <Register/>
-        },
-        { path: 'registration', element: <Registration /> },
-        {
-          path: 'verify/:email',
-          element: <Verify/>
-        },
         
-        {
-          path: 'forgot-password/:action',
-          element: <ForgotPassword/>
-        },
-        {
-          path: 'forgot-password/:action/to/:email',
-          element: <ForgotPassword/>
-        },
         {
           path: 'admin',
           element: <AdminDashboard />,

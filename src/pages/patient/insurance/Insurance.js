@@ -52,7 +52,7 @@ function Insurance() {
     <div className='page-wrapper'>
       <div className='page-content'>
         <div className='container-fluid'>
-          {(list.length===0)?
+          {/* {(list.length===0)?
           <div className='row figmaFirstBox'>
             <div className='col-sm-12'>
               <div
@@ -69,13 +69,13 @@ function Insurance() {
                     <i className='mdi mdi-close'></i>
                   </span>
                 </button>
-                You currently have no active insurance documents submitted. Please upload a valid
+                You currently have no active insurance documents submitted. Please upload a 
                 document. If you don’t have insurance, please subscribe to
                 <a href=''>our monthly plan</a>
               </div>
             </div>
           </div>:null
-          }
+          } */}
           <div className='row'>
             <div className='col-sm-12'>
               <div className='page-title-box'>
