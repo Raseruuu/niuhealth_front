@@ -1,14 +1,28 @@
 import { useMediaQuery } from '@react-hook/media-query'
 import { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet ,useNavigate} from 'react-router-dom'
 import PatientSideNav from './PatientSideNav'
 import TopBar from '../../../components/topbar/TopBar'
+import useAuth from '../../../hooks/useAuth'
 
 function PatientDashboard() {
+  
+  const navigate = useNavigate()
+  const { auth } = useAuth()
   const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
-
+  
   useEffect(() => {
+    
+    console.log("UGUU",sessionStorage.getItem('userType'))
+    if ((String(sessionStorage.getItem('userType')))!=='Patient'){
+      navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+    }
+    
+  }, [])
+  useEffect(() => {
+    
+
     if (matches) {
       setOpenSideNav(false)
     }

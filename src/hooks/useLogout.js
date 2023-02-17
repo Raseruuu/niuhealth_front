@@ -16,6 +16,8 @@ const useLogout = () => {
     sessionStorage.removeItem('name')
     sessionStorage.removeItem('sub')
     sessionStorage.removeItem('username')
+    
+    sessionStorage.removeItem('isLoggedIn',  false)
     //   try {
     //     const response = await axios("/logout/user", { withCredentials: true })
     //   } catch (err) {

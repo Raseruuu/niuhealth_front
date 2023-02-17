@@ -83,6 +83,7 @@ function AWSCallback() {
               sessionStorage.removeItem('userType')
               sessionStorage.removeItem('email')
               sessionStorage.removeItem('name')
+              sessionStorage.removeItem('isLoggedIn',  false)
               setAuth({})
 
               throw new Error(msg)
@@ -96,6 +97,7 @@ function AWSCallback() {
             sessionStorage.setItem('userType', userType)
             sessionStorage.setItem('email', email)
             sessionStorage.setItem('name', name)
+            sessionStorage.setItem('isLoggedIn',  true)
             
 
             isMounted &&

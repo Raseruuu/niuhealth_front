@@ -1,15 +1,31 @@
 import { useMediaQuery } from '@react-hook/media-query'
 import { useEffect, useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
 import TopBar from '../../../components/topbar/TopBar'
+import useAuth from '../../../hooks/useAuth'
 import SideNav from './SideNav'
 
 function ProviderDashboard() {
+  
+  const navigate = useNavigate()
+  const { auth } = useAuth()
   const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
-
+  // const [protect_done,setProtectDone]=useState(false)
   useEffect(() => {
+    
+    console.log("UGUU",auth.userType)
+    if (auth.userType){
+      if (sessionStorage.getItem('userType')!="Provider"){
+        navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+      }
+    }
+    
+    
+  }, [])
+  useEffect(() => {
+    
     if (matches) {
       setOpenSideNav(false)
     }

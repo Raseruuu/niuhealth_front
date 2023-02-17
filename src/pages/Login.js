@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link,useNavigate } from "react-router-dom";
 
+import {USERTYPE} from '../constants'
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-function Login() {
+function Login( text=null ) {
   
   const axiosPrivate = useAxiosPrivate();
   const {
@@ -15,12 +16,13 @@ function Login() {
   
   const effectRun = useRef(false);
   const navigate = useNavigate()
-  
+  console.log(text)
   async function logoutCurrentUser(){
     // var header := w.Header()
     // header.Add("Access-Control-Allow-Origin", "*")
     // header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
     // header.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+    
     await axiosPrivate
     .get(
       "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
@@ -55,9 +57,8 @@ function Login() {
     )
     .then((res) => {
       console.log(res);
-      const { StatusCode, Data: data = [], Message } = res.data;
-
-
+      const { StatusCode, Data: data = {}, Message } = res.data;
+      
       if (StatusCode===200) {
         sessionStorage.setItem('email', res.data.Email)
         sessionStorage.setItem('name', res.data.Name)
@@ -67,30 +68,28 @@ function Login() {
         sessionStorage.setItem('token_type',  res.data.Tokens.token_type)
         sessionStorage.setItem('expires_in',  res.data.Tokens.expires_in)
         sessionStorage.setItem('userType',  res.data.UserType)
-        navigate('/', { replace: true })
+        sessionStorage.setItem('isLoggedIn',  true)
+        Swal.fire({ icon: 'success',html:`${Message}`}).then(()=>{
+          navigate((`/`), { replace: true })
+        })
       } else {
         Swal.fire({ icon: 'error',html:`${Message}`})
         throw new Error(Message);
       }
     })
-    // .catch((err) => {
-    //   alert(err.message || "Creating new services failed."); // TODO: change to SweetAlert
-    //   console.error(err);
-    // });
   }
 
   useEffect(()=>{
-    
+   
     let isMounted = true
     const controller = new AbortController()
-    if (effectRun.current){
-      logoutCurrentUser()
-    }
+   
+    // logoutCurrentUser()
     return()=>{
       
       isMounted = false
       controller.abort()
-      effectRun.current = true;
+      
     }
   },[])
   return (

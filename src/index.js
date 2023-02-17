@@ -67,14 +67,26 @@ const App = () => (
     <Outlet />
   </Suspense>
 )
-// const {} = useAuth();  
+// const { auth } = useAuth();  
 const email = sessionStorage.getItem('email')
 
+const userType = sessionStorage.getItem('userType')
+function isLoggedIn(){
+  return (sessionStorage.getItem('isLoggedIn'))==='true'
+}
+function user_type(){
+  return sessionStorage.getItem('userType')
+
+}
 const router =createBrowserRouter(
   [
     {
+      path: '/login',
+      element: <Login text ={isLoggedIn()}/>
+    },
+    {
       path: '/',
-      element: <Login />, // TODO: should be auth
+      element: (isLoggedIn()?<App/>:<Navigate to="/login" />), // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },
@@ -140,7 +152,7 @@ const router =createBrowserRouter(
         
         {
           path: 'patient',
-          element: <PatientDashboard />,
+          element: <PatientDashboard /> ,
           errorElement: <ErrorPage />,
           children: [
             { index: true, element: <PatientIndexPage /> },
@@ -186,7 +198,7 @@ const router =createBrowserRouter(
         },
         {
           path: 'provider',
-          element: <ProviderDashboard />,
+          element: <ProviderDashboard/>,
           errorElement: <ErrorPage />,
           children: [
             { index: true, element: <ProviderIndex /> },
@@ -266,10 +278,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   // <React.StrictMode>
     <AuthProvider>
-      {(email===!null)?
-        <RouterProvider router={router}  />
-        :<Router><Navigate to="/login" /></Router>
-      }
+      <RouterProvider router={router}  />
+        
     </AuthProvider>
   // </React.StrictMode>
 )
