@@ -174,16 +174,16 @@ function PatientRegistration() {
               <div className="form-group row">
                 <div className="col-md-12">
           <label htmlFor="contactno" className="col-form-label text-right">Phone Number</label>
-          <input className="form-control" type="text" value="" id="contactno"/>
+          <input className="form-control" type="text" id="contactno" {...register("Contact")}/>
         </div>
     </div>
   
     <form onSubmit={handleSubmit(handleRegisterForm)}>
     <div className="form-group row">
         <div className="col-md-12">
-            <label htmlFor="example-text-input" className="col-form-label text-right">Address</label></div>
+            <label htmlFor="example-text-input" className="col-form-label text-right" {...register("Address")}>Address</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" value="" id="example-text-input" />
+                    <input className="form-control" type="text" id="example-text-input" />
                 </div>
             </div>
         <div className="form-group row">

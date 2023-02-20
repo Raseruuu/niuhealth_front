@@ -165,49 +165,49 @@ function ForgotPassword() {
       
     return( 
     <div className="account-body accountbg" style={{ width: "100vw", height: "108vh" }}>
-        <div class="container">
-            <div class="row vh-100 ">
-                <div class="col-12 align-self-center">
-                    <div class="auth-page">
-                        <div class="card auth-card shadow-lg">
-                            <div class="card-body">
-                                <div class="px-3">
+        <div className="container">
+            <div className="row vh-100 ">
+                <div className="col-12 align-self-center">
+                    <div className="auth-page">
+                        <div className="card auth-card shadow-lg">
+                            <div className="card-body">
+                                <div className="px-3">
                                     <div style={{textAlign: "center"}}>
-                                        <a href="../dashboard/analytics-index.html" class="logo logo-admin"><img src="../assets/images/nu-health-logo.png" height="55" alt="logo" class="auth-logo"/></a>
+                                        <a href="../dashboard/analytics-index.html" className="logo logo-admin"><img src="../assets/images/nu-health-logo.png" height="55" alt="logo" className="auth-logo"/></a>
                                     </div>
                                     
-                                    <div class="text-center auth-logo-text">
-                                        <h4 class="mt-0 mb-3 mt-5">Reset Password</h4>
-                                        <p class="text-muted mb-0">{(action==="send-verif-email")?"Enter your Email and instructions will be sent to you!":"Please enter your old and new password."}</p>  
+                                    <div className="text-center auth-logo-text">
+                                        <h4 className="mt-0 mb-3 mt-5">Reset Password</h4>
+                                        <p className="text-muted mb-0">{(action==="send-verif-email")?"Enter your Email and instructions will be sent to you!":"Please enter your old and new password."}</p>  
                                     </div> 
     
                                     
-                                    <form class="form-horizontal auth-form my-4" onSubmit={handleSubmit(handleReset)}>
+                                    <form className="form-horizontal auth-form my-4" onSubmit={handleSubmit(handleReset)}>
                                        { (action==="send-verif-email")?(
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             {(errors.Email)?
                                                 <div className="text-danger">
 
                                                 </div>:null
                                             }
                                             <label htmlFor="useremail">Email</label>
-                                            <div class="input-group mb-3">
-                                                <span class="auth-form-icon">
-                                                    <i class="dripicons-mail"></i> 
+                                            <div className="input-group mb-3">
+                                                <span className="auth-form-icon">
+                                                    <i className="dripicons-mail"></i> 
                                                 </span>                                                                                                              
-                                                <input type="email" class="form-control" id="useremail" required placeholder="Enter Email" {...register("Email")}/>
+                                                <input type="email" className="form-control" id="useremail" required placeholder="Enter Email" {...register("Email")}/>
                                             </div>                                    
                                         </div>   )   
                                         :(action==="send-verif-code")?(
-                                        <div class="form-group">
+                                        <div className="form-group">
                                             <label htmlFor="password">New Password</label>
-                                            <div class="input-group mb-3">
-                                                <span class="auth-form-icon">
-                                                    <i class="dripicons-lock"></i> 
+                                            <div className="input-group mb-3">
+                                                <span className="auth-form-icon">
+                                                    <i className="dripicons-lock"></i> 
                                                 </span>                                                                                                              
                                                 <input
                                                 type="password"
-                                                class="form-control" 
+                                                className="form-control" 
                                                 id="useremail" 
                                                 required 
                                                 placeholder="Enter New Password" 
@@ -216,20 +216,20 @@ function ForgotPassword() {
                                                 />
                                             </div> 
                                             <label htmlFor="password">Confirm Password</label>
-                                            <div class="input-group mb-3">
-                                                <span class="auth-form-icon">
-                                                    <i class="dripicons-lock"></i> 
+                                            <div className="input-group mb-3">
+                                                <span className="auth-form-icon">
+                                                    <i className="dripicons-lock"></i> 
                                                 </span>                                                                                                              
-                                                <input type="password" class="form-control" id="useremail" required placeholder="Enter Confirm Password" {...register("password")}/>
+                                                <input type="password" className="form-control" id="useremail" required placeholder="Enter Confirm Password" {...register("password")}/>
                                             </div> 
 
                                             <PasswordChecker password={password} errors={errors}></PasswordChecker>
                                             <label htmlFor="verificationcode">Enter the 6 digit code sent to your email {email}</label>
-                                            <div class="input-group mb-3">
+                                            <div className="input-group mb-3">
                                                                                                                                                             
-                                                {/* <input type="email" class="form-control" id="useremail" required placeholder="Enter Email" {...register("Email")}/>
+                                                {/* <input type="email" className="form-control" id="useremail" required placeholder="Enter Email" {...register("Email")}/>
                                                  */}
-                                                 <ReactCodeInput onComplete={(e)=>handleReset(e)} values={verificationCode} onChange={(e)=>{setVerificationCode(e)}}/>
+                                                 <ReactCodeInput style={{height:'20px' ,fontFamily:"Roboto"}} onComplete={(e)=>handleReset(e)} values={verificationCode} onChange={(e)=>{setVerificationCode(e)}}/>
 
 
                                             </div>                                    
@@ -238,16 +238,16 @@ function ForgotPassword() {
                                         ):null
                                         }
                                         
-                                        <div class="form-group mb-0 row">
-                                            <div class="col-12 mt-2">
-                                                <button class="btn btn-gradient-success btn-round btn-block waves-effect waves-light" type="submit">Submit <i class="fas fa-sign-in-alt ml-1"></i></button>
+                                        <div className="form-group mb-0 row">
+                                            <div className="col-12 mt-2">
+                                                <button className="btn btn-gradient-success btn-round btn-block waves-effect waves-light" type="submit">Submit <i className="fas fa-sign-in-alt ml-1"></i></button>
                                             </div>
                                         </div>                         
                                     </form>
                                 </div>
                                 
-                                <div class="m-3 text-center text-muted">
-                                    <p class="">Remember It ?  <Link to="/login" class="text-primary ml-2">Sign in here</Link></p>
+                                <div className="m-3 text-center text-muted">
+                                    <p className="">Remember It ?  <Link to="/login" className="text-primary ml-2">Sign in here</Link></p>
                                 </div>
                             </div>
                         </div>

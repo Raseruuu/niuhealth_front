@@ -10,20 +10,21 @@ function ProviderDashboard() {
   
   const navigate = useNavigate()
   const { auth } = useAuth()
-  const matches = useMediaQuery('only screen and (max-width: 575.98px)')
+  const matches = useMediaQuery('only screen and (max-width: 700.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
   // const [protect_done,setProtectDone]=useState(false)
-  useEffect(() => {
+  // Comment in for Actual Route Protection
+  // useEffect(() => {
     
-    console.log("UGUU",auth.userType)
-    if (auth.userType){
-      if (sessionStorage.getItem('userType')!="Provider"){
-        navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
-      }
-    }
+  //   console.log("UGUU",auth.userType)
+  //   if (auth.userType){
+  //     if (sessionStorage.getItem('userType')!="Provider"){
+  //       navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+  //     }
+  //   }
     
     
-  }, [])
+  // }, [])
   useEffect(() => {
     
     if (matches) {

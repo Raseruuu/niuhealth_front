@@ -84,6 +84,7 @@ const router =createBrowserRouter(
       path: '/login',
       element: <Login text ={isLoggedIn()}/>
     },
+    { path: 'waitingroom', element: <WaitingRoom /> },
     {
       path: '/register',
       element: <Register/>
@@ -95,11 +96,11 @@ const router =createBrowserRouter(
     },
     
     {
-      path: '/forgot-password/:action',
+      path: 'forgot-password/:action',
       element: <ForgotPassword/>
     },
     {
-      path: '/forgot-password/:action/to/:email',
+      path: 'forgot-password/:action/to/:email',
       element: <ForgotPassword/>
     },
     {

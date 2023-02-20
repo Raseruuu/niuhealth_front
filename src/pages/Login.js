@@ -95,7 +95,11 @@ function Login( text=null ) {
   return (
     <div
       className="account-body accountbg"
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100vw", height: "100vh" ,
+      //  backgroundPosition: 'center',
+      // backgroundRepeat: 'no-repeat',
+      // backgroundSize: 'cover'
+    }}
     >
       <div className="container">
         <div className="row vh-100 ">
@@ -181,7 +185,7 @@ function Login( text=null ) {
                         <div className="col-sm-6 text-right">
                           <Link
                             className="text-muted font-13"
-                            to={"/forgot-password"}
+                            to={"/forgot-password/send-verif-email"}
                           >
                             <i className="dripicons-lock"></i> Forgot password?
                           </Link>

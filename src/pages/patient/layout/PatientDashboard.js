@@ -12,14 +12,14 @@ function PatientDashboard() {
   const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
   
-  useEffect(() => {
+  // useEffect(() => {
     
-    if ((String(sessionStorage.getItem('userType')))!=='Patient'){
-      navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
-    }
+  //   if ((String(sessionStorage.getItem('userType')))!=='Patient'){
+  //     navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+  //   }
     
     
-  }, [])
+  // }, [])
   useEffect(() => {
     
 

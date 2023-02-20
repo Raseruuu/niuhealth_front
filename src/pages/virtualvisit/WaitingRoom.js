@@ -95,7 +95,7 @@ export default function WaitingRoom() {
                 </iframe> */}
                 <video width="100%"
                 //  autoPlay={true}
-                  height="420" 
+                  height="442" 
                 controls 
                 // name="video1"
                 ref={myVideo}
