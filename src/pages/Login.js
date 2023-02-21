@@ -51,12 +51,18 @@ function Login( text=null ) {
   }
 
   async function handleLogin(data){
+    const controller = new AbortController()
+
+    console.log("data",data)
     await axiosPrivate
-    .post("cognitoSignIn", {...data}
+    .post("localLogin", {...data},
+    {
+      signal: controller.signal,
+    }
       
     )
     .then((res) => {
-      console.log(res);
+      console.log(res); 
       const { StatusCode, Data: data = {}, Message } = res.data;
       
       if (StatusCode===200) {
@@ -145,7 +151,7 @@ function Login( text=null ) {
                             className="form-control"
                             id="username"
                             placeholder="Enter Email"
-                            {...register("Username")}
+                            {...register("Email")}
                           />
                         </div>
                       </div>
@@ -221,7 +227,7 @@ function Login( text=null ) {
               <div className="account-social text-center mt-4">
                 <h6 className="my-4">Or Login With</h6>
                 <ul className="list-inline mb-4">
-                  {/* <li className="list-inline-item">
+                  <li className="list-inline-item">
                     <a href="" className="">
                       <i className="fab fa-facebook-f facebook"></i>
                     </a>
@@ -230,12 +236,13 @@ function Login( text=null ) {
                     <a href="" className="">
                       <i className="fab fa-twitter twitter"></i>
                     </a>
-                  </li> */}
+                  </li>
                   <li className="list-inline-item">
-                    <a href=      
-              "https://niuhealth.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=http://localhost/niuhealth/cburl&response_type=CODE&client_id=qr8mf1ainc3tjmcv9gc0ltehu&scope=email+openid" className="">
-                      <i className="fab fa-google google m-3"></i>
-                      Google
+                    <a 
+                      href= "https://niuhealth.auth.us-west-2.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=http://localhost/niuhealth/cburl&response_type=CODE&client_id=qr8mf1ainc3tjmcv9gc0ltehu&scope=email+openid"
+                      className="">
+                      <i className="fab fa-google google"></i>
+                      {/* Google */}
                     </a>
                   </li>
                 </ul>

@@ -105,7 +105,7 @@ const router =createBrowserRouter(
     },
     {
       path: '/',
-      element: (isLoggedIn()?<App/>:<Navigate to="/login" />), // TODO: should be auth
+      element: (<App/>), // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },

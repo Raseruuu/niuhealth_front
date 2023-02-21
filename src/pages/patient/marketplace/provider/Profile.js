@@ -52,7 +52,7 @@ function ProviderProfile() {
   const { auth } = useAuth()
   function reviewFormat(string){
   
-    if (string.length>150){
+    if (string?.length>150){
       return string.substring(0,150)+"..."}
     return string
   }
@@ -581,7 +581,7 @@ function ProviderProfile() {
                                     )
                                   }> */}
                                   <img
-                                    src={`${AWS_BUCKET_PROFILES}${review.picture}`}
+                                    src={`${AWS_BUCKET_PROFILES}${review?.picture}`}
                                     className='mr-2 thumb-lg rounded-circle'
                                     alt='...'
                                     style={{objectFit:'cover'}}

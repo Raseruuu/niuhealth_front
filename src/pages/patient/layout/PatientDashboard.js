@@ -11,15 +11,15 @@ function PatientDashboard() {
   const { auth } = useAuth()
   const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
-  
-  // useEffect(() => {
+  // Comment in for Actual Route Protection
+  useEffect(() => {
     
-  //   if ((String(sessionStorage.getItem('userType')))!=='Patient'){
-  //     navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
-  //   }
+    if ((String(sessionStorage.getItem('userType')))!=='Patient'){
+      navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+    }
     
     
-  // }, [])
+  }, [])
   useEffect(() => {
     
 

@@ -76,7 +76,6 @@ export default function Marketplace() {
                         <h5 className="mt-0 mb-4">Filters</h5>
                         <i onClick={()=>{setToggleFilter(!toggleFilter)}}  className='dripicons-arrow-down
                         '></i>
-                        {(toggleFilter)?
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Service Categories</h6>
                           <div className="checkbox checkbox-success ">
@@ -254,8 +253,6 @@ export default function Marketplace() {
                             <label htmlFor="checkbox19">Urology</label>
                           </div>
                         </div>
-                        :null
-                        }
                       </div>
                     </div>
                       {(toggleFilter)?  <>

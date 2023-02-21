@@ -40,7 +40,6 @@ return(
           `,
           // { AWS_BUCKET_SERVICES } + profile.picture,
         }).then(async ({isConfirmed})=>{
-          console.log("cancel",cancel)
           if (isConfirmed){
           await axiosPrivate
             .post(
@@ -53,6 +52,7 @@ return(
               console.log()
               if (res.data?.Status && isConfirmed) {
                 Swal.fire('Appointment successfully cancelled.')
+
               // } else if (res.data?.Status && !cancel) {
               //   Swal.fire('Appointment  cancelled.')
               } else {
@@ -340,10 +340,10 @@ function Appointment() {
   const axiosPrivate = useAxiosPrivate()
   let isMounted = true
   const controller = new AbortController()
-  
+  const [errMsg, setErrMsg] = useState(null)
   async function joinAppointment (appointment) {
     
-    // const [errMsg, setErrMsg] = useState(null)
+     
       let isMounted = true
       await axiosPrivate
         .post(

@@ -79,6 +79,7 @@ function LoginAuth() {
   const access_token = sessionStorage.getItem('access_token')
   
   const name = sessionStorage.getItem('name')
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn')
   const email_verified =true
   // const sub=true
   
@@ -115,6 +116,8 @@ function LoginAuth() {
     return <Navigate to={'/patient'} replace={true} />
   } else if (accessTokenValid && userType === USERTYPE.provider) {
     return <Navigate to={'/provider'} replace={true} />
+  // }else if (!isLoggedIn===true) {
+  //     return <Navigate to={'/login'} replace={true} />
   } else {
     // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
     return <div>Loading...</div>
