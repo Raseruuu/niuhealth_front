@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
-
+import useAxiosPrivate from '../../hooks/useAxiosPrivate';
+import useAuth from '../../hooks/useAuth'
 function PatientRegistration() {
     const navigate = useNavigate()
     
@@ -13,8 +14,12 @@ function PatientRegistration() {
     const [hasSpecialCharacter,setHasSpecialCharacter]=useState("✖");
     const [hasSpaceOnEnd,setHasSpaceOnEnd]=useState("✖");
     const [cityActive, setCityActive] = useState(false)
+    
+    const { auth } = useAuth()
+    const axiosPrivate = useAxiosPrivate()
     const [password,setPassword]=useState('');
     
+    const controller = new AbortController()
   const [countries, setCountries] = useState([])
   const {
     register,
@@ -70,6 +75,7 @@ function PatientRegistration() {
     
   }
     async function getCountries() {
+      
         await axiosPrivate
           .post(
             'getCountries',
@@ -94,11 +100,12 @@ function PatientRegistration() {
           })
       }
       getCountries()
+
       async function getCities() {
         const result = await axiosPrivate
           .post('getCities', {
             CountryID: profile.country_id,
-            Email: auth.email,
+            Email: sessionStorage.getItem("email"),
           })
           .then((res) => {
             const { Status, Data: data = [], Message } = res.data

@@ -16,12 +16,10 @@ function ProviderDashboard() {
   // Comment in for Actual Route Protection
   useEffect(() => {
     
-    console.log("UGUU",auth.userType)
-    if (auth.userType){
-      if (sessionStorage.getItem('userType')!="Provider"){
-        navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+      if ((String(sessionStorage.getItem('userType')))!=='Provider'){
+        navigate((`/`), { replace: true })
       }
-    }
+    
     
     
   }, [])

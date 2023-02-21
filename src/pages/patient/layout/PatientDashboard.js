@@ -15,7 +15,7 @@ function PatientDashboard() {
   useEffect(() => {
     
     if ((String(sessionStorage.getItem('userType')))!=='Patient'){
-      navigate((`/${String(auth.userType).toLowerCase()}`), { replace: true })
+      navigate((`/`), { replace: true })
     }
     
     
