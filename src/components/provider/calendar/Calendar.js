@@ -126,7 +126,11 @@ function Calendar({ allowCall }) {
         backgroundColor: '#1eca7b',
         borderColor: 'transparent',
       }
+
+
+      
     })]
+    console.log("SchedArr"+schedArray)
 
     setSlots(schedArray)
   }
@@ -148,8 +152,10 @@ function Calendar({ allowCall }) {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
+            console.log("Provider_appointments",data)
             isMounted && setAppointmentList(data)
             isMounted && INITIAL_EVENTS(data)
+            console.log("Slots",slots)
           } else {
             throw new Error(Message)
           }
@@ -177,7 +183,7 @@ function Calendar({ allowCall }) {
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       }}
       initialView="dayGridMonth"
-      events={slots}
+      events={slots[0]}
       // editable={true}
       selectable={true}
       selectMirror={true}

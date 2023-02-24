@@ -8,7 +8,7 @@ function SideNav({ openSideNav }) {
   function handleLogout(e) {
     e.preventDefault()
     logout()
-    navigate('/login')
+    navigate('/login',{replace:true})
   }
 
   return (

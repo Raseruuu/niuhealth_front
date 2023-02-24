@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import TableCard from '../../components/table/Tables'
+import CardLongItem from '../../components/cards/Card'
 
 function ProviderIndex() {
   const { auth } = useAuth()
@@ -56,7 +57,9 @@ function ProviderIndex() {
           <h4 className="header-title mt-0 mb-3">Virtual Visit Queue</h4>
           <div className="table-responsive">
             <table className="table">
-              <thead className="thead-light">
+
+              {(patientList,length>0)?<>
+                <thead className="thead-light">
                 <tr>
                   <th>Patient</th>
                   <th>Email</th>
@@ -67,10 +70,12 @@ function ProviderIndex() {
                   <th>Action</th>
                 </tr>
               </thead>
-
+              
+              
               <tbody>
                 <PatientQueue limit={6} />
-              </tbody>
+              </tbody></>
+              :<CardLongItem><h4>There are no Virtual Visits in the Queue.</h4></CardLongItem> }
             </table>
           </div>
         </div>
@@ -99,18 +104,21 @@ function ProviderIndex() {
           <div className="card">
             <div className="card-body">
               <h4 className="header-title mt-0 mb-3">Patient Details</h4>
-              <TableCard
-                headers={[
-                  'Patient',
-                  'Email',
-                  'Phone No.',
-                  'Status',
-                  'Insurance',
-                ]}
-              >
-                <PatientListData list={patientList} />
-              </TableCard>
-
+              {(patientList,length>0)?
+                <TableCard
+                  headers={[
+                    'Patient',
+                    'Email',
+                    'Phone No.',
+                    'Status',
+                    'Insurance',
+                  ]}
+                > 
+                
+                    <PatientListData list={patientList} />
+                </TableCard>:
+                <CardLongItem><h4>There are no Patients to display.</h4></CardLongItem> 
+              }
             </div>
           </div>
         </div>

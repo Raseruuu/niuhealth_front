@@ -22,19 +22,26 @@ function Login( text=null ) {
     // header.Add("Access-Control-Allow-Origin", "*")
     // header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
     // header.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
-    
     await axiosPrivate
     .get(
-      "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
+      "http://ebsdrcocophp01prod-env.eba-y6pjrhe2.us-west-1.elasticbeanstalk.com/niuhealth-api/api/getusers",
       {headers:{
         
         'Access-Control-Allow-Origin': '*',
         "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
-    // .then((res) => {
-    //   console.log(res);
-    //   const { StatusCode, Data: data = [], Message } = res.data;
-    // })
+    // await axiosPrivate
+    // .get(
+    //   "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
+    //   {headers:{
+        
+    //     'Access-Control-Allow-Origin': '*',
+    //     "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+    //     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
+    .then((res) => {
+      console.log(res);
+      // const { StatusCode, Data: data = [], Message } = res.data;
+    })
 
       // if (StatusCode===200) {
       //   
@@ -55,7 +62,7 @@ function Login( text=null ) {
 
     console.log("data",data)
     await axiosPrivate
-    .post("localLogin", {...data},
+    .post("cognitoSignIn", {...data},
     {
       signal: controller.signal,
     }
@@ -73,6 +80,7 @@ function Login( text=null ) {
         sessionStorage.setItem('refresh_token',  res.data.Tokens.refresh_token)
         sessionStorage.setItem('token_type',  res.data.Tokens.token_type)
         sessionStorage.setItem('expires_in',  res.data.Tokens.expires_in)
+        sessionStorage.setItem('transactionType',  res.data.TransactionType)
         sessionStorage.setItem('userType',  res.data.UserType)
         sessionStorage.setItem('isLoggedIn',  true)
         Swal.fire({ icon: 'success',html:`${Message}`}).then(()=>{
@@ -90,7 +98,7 @@ function Login( text=null ) {
     let isMounted = true
     const controller = new AbortController()
    
-    // logoutCurrentUser()
+    logoutCurrentUser()
     return()=>{
       
       isMounted = false
@@ -150,6 +158,7 @@ function Login( text=null ) {
                             type="text"
                             className="form-control"
                             id="username"
+                            required
                             placeholder="Enter Email"
                             {...register("Email")}
                           />
@@ -167,6 +176,7 @@ function Login( text=null ) {
                             className="form-control"
                             id="password"
                             placeholder="Enter password"
+                            required
                             {...register("Password")}
                           />
                         </div>

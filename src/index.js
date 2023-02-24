@@ -82,16 +82,16 @@ const router =createBrowserRouter(
   [
     {
       path: '/login',
-      element: <Login text ={isLoggedIn()}/>
+      element: <Login/>
     },
     { path: 'waitingroom', element: <WaitingRoom /> },
     {
       path: '/register',
       element: <Register/>
     },
-    { path: '/registration', element: <Registration /> },
+    { path: 'registration', element: <Registration /> },
     {
-      path: '/verify/:email',
+      path: 'verify/:email',
       element: <Verify/>
     },
     
@@ -105,7 +105,7 @@ const router =createBrowserRouter(
     },
     {
       path: '/',
-      element: (<App/>), // TODO: should be auth
+      element: <App/>, // TODO: should be auth
       errorElement: <ErrorPage />,
       children: [
         { index: true, element: <LoginAuth />, loader: loginAuthLoader },
@@ -122,10 +122,10 @@ const router =createBrowserRouter(
             },
           ],
         },
-        {
-          path: 'login',
-          element: <Login/>
-        },
+        // {
+        //   path: 'login',
+        //   element: <Login/>
+        // },
         
         {
           path: 'admin',

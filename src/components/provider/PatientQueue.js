@@ -113,7 +113,10 @@ function PatientQueue({ limit, search }) {
     }
   }, [debouncedSearch])
 
-  return list.map((item, index) => (
+  return (
+    // list.length===0?null:
+  <>
+  {list.map((item, index) => (
     <tr key={item?.recno || index}>
       <td>
         <Link
@@ -191,7 +194,7 @@ function PatientQueue({ limit, search }) {
               </button> */}
             </td>
     </tr>
-  ))
+  ))}</>)
 }
 function dateGenerator(date, time) {
   return moment(date).add(time, 'hours').format('DD MMM YYYY h:mm a')

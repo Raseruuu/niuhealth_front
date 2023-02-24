@@ -284,7 +284,7 @@ function RatingsFilter({filters, setFilters}){
         </div>
       </div>
 
-      <div className='row'>
+      {/* <div className='row'>
         <div className='col-lg-12'>
           <div className='p-3'>
             <div className='checkbox checkbox-success '>
@@ -301,7 +301,7 @@ function RatingsFilter({filters, setFilters}){
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* <div className='row'>
         <div className='col-lg-12'>
@@ -316,18 +316,15 @@ function RatingsFilter({filters, setFilters}){
         <div className='col-lg-12'>
           <div className='p-3'>
             <h6 className='mb-3 mt-0'>My Clinics</h6>
-            <div className='checkbox checkbox-success '>
-              <input id='checkbox0' type='checkbox' checked />
-              <label htmlFor='checkbox0'>BLK Hospital</label>
-            </div>
-            <div className='checkbox checkbox-success '>
-              <input id='checkbox1' type='checkbox' checked />
-              <label htmlFor='checkbox1'>Linda's Clinic</label>
-            </div>
-            <div className='checkbox checkbox-success '>
-              <input id='checkbox2' type='checkbox' />
-              <label htmlFor='checkbox2'>Sony Center Clinic</label>
-            </div>
+            {/* myClinics */}
+            {[{name:"PKMN Center"},{name:"Kuroda Family Clinic"}].map((item,index)=>(
+                <div key={index} className='checkbox checkbox-success '>
+                  <input id={'checkbox'+index} type='checkbox' checked />
+                  <label htmlFor={'checkbox'+index}>{item.name}</label>
+                </div>
+            ))}
+            
+            
           </div>
         </div>
       </div>
@@ -414,7 +411,7 @@ function Ratings({}) {
         </div>
         <div className='col'>
           <div className='row'>
-            <div className='col-md-12'>
+            <div className='col'>
                   <h4 className='header-title mt-0 mb-4'>
                     Appointment Reviews
                   </h4>
@@ -422,7 +419,7 @@ function Ratings({}) {
                   (<CardItem length={12}><h4>There are no reviews to display.</h4></CardItem>):
                   ([patientRatingList].length>0)?
                   
-                    (<div className='col-sm-4'>
+                    (<div className='col-lg-12' style={{minWidth:"450px"}}>
                       <div className='card'>
                         <div className='card-body'>
                           <div className='row'>
@@ -434,27 +431,28 @@ function Ratings({}) {
                         </div>
                       </div>
                     </div>)
-                  :null}
-                </div>
-            <div className='col-md-6'>
+              :null}
+            </div>
+            <div className='col'>
               <h4 className='header-title mt-0 mb-4'>
                   General Visit Reviews
                 </h4>
-                { (([].length===0) && patientGeneralRatingList.length==0)?
-                (<CardItem length={6}><h4>There are no reviews to display.</h4></CardItem>):
+                { (patientGeneralRatingList.length===0)?
+                (<CardItem length={12} style={{minWidth:"450px"}}><h4>There are no reviews to display.</h4></CardItem>):
                 (patientGeneralRatingList.length>0)?
-                <div className='col-lg-12'>
+                <div className='col-lg-12' style={{minWidth:"450px"}}>
                   <div className='card'>
                     <div className='card-body'>
+                {/* <CardItem length={12}> */}
                       <div className='row'>
                       {patientGeneralRatingList.map((item,index)=>
                           (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
                         
                         )}
                       </div> 
-                    </div>
-                  </div>
-              </div>:null}
+                      </div> </div> </div> 
+              
+              :null}
             </div>
             </div>
           </div>

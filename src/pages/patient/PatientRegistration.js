@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form';
+import { get, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate';
@@ -14,6 +14,7 @@ function PatientRegistration() {
     const [hasSpecialCharacter,setHasSpecialCharacter]=useState("✖");
     const [hasSpaceOnEnd,setHasSpaceOnEnd]=useState("✖");
     const [cityActive, setCityActive] = useState(false)
+    const [city, setCity] = useState('')
     
     const { auth } = useAuth()
     const axiosPrivate = useAxiosPrivate()
@@ -21,6 +22,8 @@ function PatientRegistration() {
     
     const controller = new AbortController()
   const [countries, setCountries] = useState([])
+  
+  const [cities, setCities] = useState([])
   const {
     register,
     handleSubmit,
@@ -74,38 +77,14 @@ function PatientRegistration() {
     )
     
   }
-    async function getCountries() {
+   
       
-        await axiosPrivate
-          .post(
-            'getCountries',
-            { Email: auth.email },
-            {
-              signal: controller.signal,
-            }
-          )
-          .then((res) => {
-            // console.log(res)
-            const { Status, Data: data = [], Message } = res.data
-  
-            if (Status) {
-              isMounted && setCountries(data)
-              setCityActive(true)
-            } else {
-              throw new Error(Message)
-            }
-          })
-          .catch((err) => {
-            console.error(err)
-          })
-      }
-      getCountries()
 
-      async function getCities() {
+      async function getCities(countryID) {
         const result = await axiosPrivate
           .post('getCities', {
-            CountryID: profile.country_id,
-            Email: sessionStorage.getItem("email"),
+            CountryID: countryID,
+            Email: 'patient1@gmail.com',
           })
           .then((res) => {
             const { Status, Data: data = [], Message } = res.data
@@ -133,6 +112,7 @@ function PatientRegistration() {
         (password?.match(/[^\x00-\x7F]/))||
         (!(password?.charAt(0)===" "||password?.charAt(password?.length-1)===" "))
       );
+
       function PasswordChecker({}){
         useEffect(()=>{
             setHasLowercase(check(password?.match(/[a-z]/)?.length>0))
@@ -141,7 +121,9 @@ function PatientRegistration() {
             setHas8chars(check(password?.length>=8))
             setHasSpecialCharacter(check(password?.match(/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/)?.length>0))
             setHasSpaceOnEnd(check(!(password?.charAt(0)===" "||password?.charAt(password?.length-1)===" ")))
-        },[password])
+        
+        
+          },[password])
         return(
         <>
             {(passwordCheck&&password.length>0)?(<>
@@ -166,7 +148,47 @@ function PatientRegistration() {
             </>):null}
         </>
         )
+        
       }
+      useEffect(()=>{
+        let isMounted = true
+        const controller = new AbortController()
+        async function getCountries() {
+      
+          await axiosPrivate
+            .post(
+              'getCountries',
+              { Email: 'patient1@gmail.com'},
+              {
+                signal: controller.signal,
+              }
+            )
+            .then((res) => {
+              // console.log(res)
+              const { Status, Data: data = [], Message } = res.data
+    
+              if (Status) {
+                setCountries(res.data.Data)
+                console.log(res.data.Data)
+                
+              } else {
+                throw new Error(Message)
+              }
+            })
+            .catch((err) => {
+              console.error(err)
+            })
+        }
+        getCountries()
+        
+       
+        return()=>{
+      
+          isMounted = false
+          controller.abort()
+          
+        }
+      },[])
   return (
     <div className='page-wrapper'>
       <div className='page-content'>
@@ -190,24 +212,34 @@ function PatientRegistration() {
         <div className="col-md-12">
             <label htmlFor="example-text-input" className="col-form-label text-right" {...register("Address")}>Address</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" id="example-text-input" />
+                    <input className="form-control" type="text" id="example-text-input" {...register("Contact")} />
                 </div>
             </div>
         <div className="form-group row">
             <div className="col-md-6">
                 <label htmlFor="example-text-input" className="col-form-label text-right">Country</label>
-            <select className="form-control">
+            <select 
+              className="form-control" 
+              value={city}
+              onChange={(e)=>{getCities(e.target.value);setCity(e.target.value)}}
+              >
                 <option>Choose Country...</option>
-                <option>USA</option>
-                <option>South Korea</option>
-                <option>Canada</option>
-                <option>Thailand</option>
+                {countries?.map((country,index)=>(
+                  <option value={country.country_id} key={index}>
+                    {country.description}
+                  </option>
+                ))}
             </select>
         </div>
         <div className="col-md-6">
             <label htmlFor="example-text-input" className="col-form-label text-right">City</label>
                 <select className="form-control">
                 <option>Choose City...</option>
+                {cities?.map((city,index)=>(
+                  <option value={city.country_id} key={index}>
+                    {city.description}
+                  </option>
+                ))}
             </select>
             </div>
         </div>
@@ -223,7 +255,7 @@ function PatientRegistration() {
           <div className="form-group row">
               <div className="col-md-6">
                   <label htmlFor="example-date-input" className="">Date of Birth</label>
-                  <input className="form-control" type="date" value="2011-08-19" id="example-date-input" />
+                  <input className="form-control" type="date" value="2011-08-19" id="example-date-input" {...register("Birth date")}/>
               </div>
           </div>		
           <PasswordChecker password={password} errors={errors}></PasswordChecker>

@@ -236,6 +236,8 @@ export default function Booking() {
             isMounted && setServiceDetails(data.service_details)
             console.log("serviceDetails", data.service_details)
             setServiceClinics(data.clinics)
+            getDoctorSchedule(data.service_details.provider_id)
+            getSched(data.service_details.email)
           } else {
             throw new Error(Message)
           }
@@ -245,11 +247,11 @@ export default function Booking() {
           setErrMsg(err.message)
         })
       }
-    async function getDoctorSchedule() {
+    async function getDoctorSchedule(providerID) {
       await axiosPrivate
         .post(
           'getDoctorSchedule',
-          { ProviderID: selectedProvider.provider_id },
+          { ProviderID: providerID },
           { signal: controller.signal }
         )
         .then((res) => {
@@ -258,22 +260,25 @@ export default function Booking() {
           if (Status) {
             // console.log("providerschedule",data)
             isMounted && setProviderSched(data)
-            getSched()
+            
             
           } else {
             throw new Error(Message)
           }
+
+
+          
         })
         .catch((err) => {
           console.error(err)
           setErrMsg(err.message)
         })
     }
-    async function getSched() {
+    async function getSched(providerEmail) {
       await axiosPrivate
         .post(
           'getProviderOccupiedTimeslots',
-          { Email: selectedProvider.email },
+          { Email: providerEmail },
           {
             signal: controller.signal,
           }
@@ -294,7 +299,7 @@ export default function Booking() {
       }
     // if (effectRun.current){
       getService()
-      getDoctorSchedule()
+      
     // }
     return () => {
       isMounted = false

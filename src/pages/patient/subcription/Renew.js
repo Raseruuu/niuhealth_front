@@ -62,7 +62,7 @@ function Renew() {
     <div className='page-wrapper'>
       <div className='page-content'>
         <div className='container-fluid'>
-          <div
+          {/* <div
             className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
             role='alert'
           >
@@ -79,7 +79,7 @@ function Renew() {
             Your insurance document has expired. Please upload a valid document.
             If you don’t have insurance, please subscribe to our{' '}
             <Link to=''>monthly plan</Link>
-          </div>
+          </div> */}
 
           <div className='row'>
             <div className='col-sm-12'>

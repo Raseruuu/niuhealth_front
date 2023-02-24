@@ -10,7 +10,7 @@ import CardItem from "../../components/cards/Card"
 import useInterval from '../../hooks/useInterval'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-
+import 'animate.css';
 function dateTimeFormat(date) {
   return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
 }
@@ -33,6 +33,12 @@ return(
           confirmButtonText: 'Yes',
           cancelButtonText: 'No',
           // title: 'Appointment',
+          showClass: {
+            popup: 'animate__animated animate__fadeIn animate__faster'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOut  animate__faster'
+          },
           html: `
           <div class='col'>
           Are You sure you want to cancel this visit?
@@ -80,6 +86,12 @@ const ViewVisitButton = ({appointmentPeriod,image,provider_name, provider_descri
         onClick={() => {
           Swal.fire({
             // title: 'Appointment',
+            showClass: {
+              popup: 'animate__animated animate__fadeIn animate__faster'
+            },
+            hideClass: {
+              popup: 'animate__animated animate__fadeOut  animate__faster'
+            },
             html: `
             <div class='col'>
             <img 
@@ -183,7 +195,10 @@ const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_n
   
   if (status==="4"&& withinAppointmentPeriod){
     return (
-      <StartButton appointment={appointment} joinAppointment={joinAppointment}/>
+      <>
+        <h6>Virtual visit period is now!</h6>
+        <StartButton appointment={appointment} joinAppointment={joinAppointment}/>
+      </>
     )}
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
@@ -243,6 +258,7 @@ function TimeCard(){
 function AppointmentItem({
     provider_description,
     provider_name,
+    provider_id,
     image,
     service_description,
     service_name,
@@ -275,7 +291,7 @@ function AppointmentItem({
           </span>
         </p>
         <div className="media">
-          <Link className="" to="#">
+          <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
             <img
               src={AWS_BUCKET_SERVICES+"providers/"+image}
               alt="user"
@@ -284,7 +300,9 @@ function AppointmentItem({
           </Link>
           <div className="media-body align-self-center ml-3">
             <p className="font-14 font-weight-bold mb-0">
-              {provider_name}
+                <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
+                  {provider_name}
+              </Link>
               <StatusText status={status}/>
             </p>
             <p className="mb-0 font-12 text-muted">Provider</p>
@@ -325,6 +343,7 @@ function Appointment() {
     {provider_description:"Hi! I`m Jane Doe",
       provider_name:"Jane Doe",
       service_description: "service desc",
+      provider_id:"323123",
       service_id: "16",
       service_name: "Service Name",
       status: "4",

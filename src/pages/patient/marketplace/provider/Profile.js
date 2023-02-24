@@ -7,7 +7,16 @@ import FullCalendar from '@fullcalendar/react'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import useAxiosPrivate from '../../../../hooks/useAxiosPrivate'
 import { Rating } from 'react-simple-star-rating'
+
+import styled from "@emotion/styled"
 // TODO: check other UI if it has same layout
+export const StyleWrapper = styled.div`
+  .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-timegrid-event, .fc-button.fc-button-primary{
+    background: green;
+    background-image: none
+    
+} .fc-event {cursor: pointer;waves-effect}
+`
 function ProviderProfile() {
   
   const [profile, setProfile] = useState({})
@@ -19,10 +28,12 @@ function ProviderProfile() {
   const axiosPrivate = useAxiosPrivate()
   let isMounted = true
   const controller = new AbortController()
+  const [clinicList, setClinicList] = useState([])
   const [calendarStartEndTime, setCalendarStartEndTime] = useState({
     start: 8,
     end: 17,
   })
+  
   const [providerSched, setProviderSched] = useState({
     hours_mon_start: '8',
     hours_mon_end: '17',
@@ -238,8 +249,7 @@ function ProviderProfile() {
           if (Status) {
             // console.log("providerschedule",data)
             isMounted && setProviderSched(data)
-            getSched()
-            
+           
           } else {
             throw new Error(Message)
           }
@@ -249,11 +259,11 @@ function ProviderProfile() {
           setErrMsg(err.message)
         })
     }
-    async function getSched() {
+    async function getSched(email) {
       await axiosPrivate
         .post(
           'getProviderOccupiedTimeslots',
-          { Email: profile?.ProviderDetails?.email },
+          { Email: email },
           {
             signal: controller.signal,
           }
@@ -289,21 +299,47 @@ function ProviderProfile() {
          
           if (Status) {
             setProfile(details)
-            console.log('deets',details.ProviderRatingsAndReviews[0])
+            console.log('deets',details)
             let somereviews=[]
             for (let x=0; x<10;x++){
             somereviews.push(details.ProviderRatingsAndReviews[x])}
             // console.log("somereviews",somereviews)
             setReviews(somereviews)
-
+            getClinicList(details.ProviderDetails.email)
             
-            // getDoctorSchedule()
+            getDoctorSchedule()
+            getSched(details.ProviderDetails?.email)
+
           } else {
             throw new Error(Message)
           }
         })
         .catch((err) => {
           console.error(err)
+        })
+    }
+    async function getClinicList(provider_email) {
+      await axiosPrivate
+        .post(
+          'getClinics',
+          { Email: provider_email},
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data = [], Message } = res.data
+
+          if (Status) {
+            setClinicList(data)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
         })
     }
     
@@ -458,14 +494,14 @@ function ProviderProfile() {
                 <li className='nav-item'>
                   <a
                     className='nav-link'
-                    id='settings_detail_tab'
+                    id='clinics_tab'
                     data-toggle='pill'
-                    href='#settings_detail'
+                    href='#clinics'
                   >
                     Clinics
                   </a>
                 </li>
-                <li className='nav-item'>
+                {/* <li className='nav-item'>
                   <a
                     className='nav-link'
                     id='settings_detail_tab'
@@ -474,7 +510,7 @@ function ProviderProfile() {
                   >
                     FAQ
                   </a>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
@@ -627,6 +663,7 @@ function ProviderProfile() {
                         className='drop-shadow w-100'
                         height='140'
                       > */}
+                      <StyleWrapper>
                         <FullCalendar
                           
                           plugins={[timeGridPlugin]}
@@ -658,6 +695,7 @@ function ProviderProfile() {
                             console.log('eventRemove', event)
                           }}
                     />
+                    </StyleWrapper>
                       {/* </canvas> */}
                     </div>
                   </div>
@@ -873,26 +911,108 @@ function ProviderProfile() {
             </div>
 
             <div className='tab-pane fade' id='activity_detail'>
-              <div className='row'></div>
+              <div className='row'>
+              {profile?.ProviderServices?.map((item, index) => (
+                    <div key={index} className="col-lg-4">
+                      <div className="card e-co-product" >
+                      {/* {AWS_BUCKET_SERVICES+ item.images} */}
+                        <Link to="/patient/marketplace/booking" state={{ ...item }}>
+                          <img
+                            src={(AWS_BUCKET_SERVICES+ item.picture)}
+                            alt=""
+                            style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                            className="img-fluid"
+                          />
+                        </Link>
+                        <div className="card-body product-info">
+                          <Link
+                            to="/patient/marketplace/booking"
+                            className="product-title"
+                            state={{ ...item ,
+                              images:item.picture,
+                              provider_name:profile.ProviderDetails.provider_name,
+                              provider_name:profile.ProviderDetails.provider_description,
+                              provider_id:profile.ProviderDetails.provider_id,
+                             
+                              
+
+                            }}
+                          >
+                            {item.service_description}
+                          </Link>
+                          <p>{item.provider_name}</p>
+                          <div className="d-flex justify-content-between my-2">
+                            <p className="product-price">${item.cost_price}</p>
+                            <p className="mb-0 product-review align-self-center">
+                              <Rating
+                                fillColor="#ffb822"
+                                emptyColor="white"
+                                SVGstrokeColor="#f1a545"
+                                SVGstorkeWidth={1}
+                                size={17}
+                                allowFraction={true}
+                                initialValue={item.average_ratings}
+                                readonly={true}
+                              />
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                      
+
+              </div>
             </div>
 
-            <div className='tab-pane fade' id='settings_detail'>
-              <div className='row'>
-                <div className='col-lg-12 col-xl-9 mx-auto'>
+            <div className='tab-pane row fade' id='clinics'>
+               <div className='row m-4'>
+               {/* <div className='col-xl-12 mx-auto'>
                   <div className='card'>
-                    <div className='card-body'>
-                      <form method='post' className='card-box'>
+                    <div className='card-body'> */}
+                    {clinicList.map((item,index) => (
+                      <div key={index} className='card col-md-5  m-2 flex-sm-col flex-md-row overflow-hidden'  >
+                        {/* <Link to={"profile/"+item.clinic_id}> */}
+                          {/* <div className=''> */}
+                            
+                            <img
+                              className='card-img-top '
+                              style={{ 
+                                // width: 'unset', 
+                                minwidth:'200px',
+                                width:'200px', height:'150px',objectFit: 'cover'}}
+                              // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
+                              src={AWS_BUCKET_SERVICES+item.picture_file}
+                              // style={{}}
+                              alt=''
+                            />
+                            <div className='card-body'>
+                              
+                              <h5 className='card-title'>{item.clinic_name}</h5>
+                              <p className='card-text mb-0'>{item.address}</p>
+                              <p className='text-muted mb-0'>
+                                {item.specialty}
+                              </p>
+                              <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
+                              
+                            </div>
+                            
+                          {/* </div> */}
+                        {/* </Link> */}
+                      </div>
+                    ))}
+                      {/* <form method='post' className='card-box'>
                         <input
                           type='file'
                           id='input-file-now-custom-1'
                           className='dropify'
                           data-default-file='../assets/images/users/user-4.jpg'
                         />
-                      </form>
+                      </form> */}
 
-                      <div className=''>
-                        <form className='form-horizontal form-material mb-0'>
-                          <div className='form-group'>
+                      {/* <div className=''>
+                        <form className='form-horizontal form-material mb-0'> */}
+                          {/* <div className='form-group'>
                             <input
                               type='text'
                               placeholder='Full Name'
@@ -952,13 +1072,13 @@ function ProviderProfile() {
                             <button className='btn btn-gradient-primary btn-sm px-4 mt-3 float-right mb-0'>
                               Update Profile
                             </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
+                          </div> */}
+                        {/* </form>
+                      </div> */}
+                    {/* </div>
                   </div>
-                </div>
-              </div>
+                </div>*/}
+              </div> 
             </div>
           </div>
         </div>
