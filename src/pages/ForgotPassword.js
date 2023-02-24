@@ -173,7 +173,7 @@ function ForgotPassword() {
                             <div className="card-body">
                                 <div className="px-3">
                                     <div style={{textAlign: "center"}}>
-                                        <a href="../dashboard/analytics-index.html" className="logo logo-admin"><img src="../assets/images/nu-health-logo.png" height="55" alt="logo" className="auth-logo"/></a>
+                                        <a href="../dashboard/analytics-index.html" className="logo logo-admin"><img  src="https://drcoco-bucket.s3.us-west-1.amazonaws.com/public/assets/images/nu-health-logo.png" height="55" alt="logo" className="auth-logo"/></a>
                                     </div>
                                     
                                     <div className="text-center auth-logo-text">

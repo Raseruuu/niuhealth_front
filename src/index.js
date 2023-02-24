@@ -84,7 +84,7 @@ const router =createBrowserRouter(
       path: '/login',
       element: <Login/>
     },
-    { path: 'waitingroom', element: <WaitingRoom /> },
+    { path: 'waitingroom', element: <Suspense><WaitingRoom /></Suspense> },
     {
       path: '/register',
       element: <Suspense><Register/></Suspense>
@@ -101,11 +101,11 @@ const router =createBrowserRouter(
     
     {
       path: 'forgot-password/:action',
-      element: <ForgotPassword/>
+      element: <Suspense><ForgotPassword/></Suspense>
     },
     {
       path: 'forgot-password/:action/to/:email',
-      element: <ForgotPassword/>
+      element:  <Suspense><ForgotPassword/></Suspense>
     },
     {
       path: '/',

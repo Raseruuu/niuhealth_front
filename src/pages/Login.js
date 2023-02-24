@@ -128,7 +128,7 @@ function Login( text=null ) {
                         className="logo logo-admin"
                       >
                         <img
-                          src="/assets/images/nu-health-logo.png"
+                          src="https://drcoco-bucket.s3.us-west-1.amazonaws.com/public/assets/images/nu-health-logo.png"
                           height="55"
                           alt="logo"
                           className="auth-logo"

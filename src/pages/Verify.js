@@ -63,7 +63,7 @@ export default function Verify (){
                             <div className="clsJspForm verify_mail_cont" style={{position:'relative', top:0, left:0, width:'100%'}}>
 
                             <div className="lodestarLoginLogo">
-                            <img alt="NIU Health" src="assets/images/verify_mail.png"/>
+                            <img alt="NIU Health" className='logo-sm' style={{width:'150px',height:'75px'}} src="https://drcoco-bucket.s3.us-west-1.amazonaws.com/public/assets/images/nu-health-logo.png"/>
                             </div>
 
                             <div style={{paddingTop: "20px"}}>
