@@ -18,6 +18,7 @@ function Insurance() {
     async function getList() {
       await axiosPrivate
         .post(
+          // getMyInsuranceBuckets
           'patientGetInsurances',
           { Email: auth.email },
           {

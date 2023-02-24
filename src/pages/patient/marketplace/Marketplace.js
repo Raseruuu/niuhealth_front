@@ -9,10 +9,12 @@ export default function Marketplace() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
+  const [listOriginal, setListOriginal] = useState([])
    const [toggleFilter, setToggleFilter] = useState(true)
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
   const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
+
   // const [starFilter1, setStarFilter1]=useState(true)
   // const [starFilter2, setStarFilter2]=useState(true)
   // const [starFilter3, setStarFilter3]=useState(true)
@@ -29,6 +31,7 @@ export default function Marketplace() {
         })
         .then((res) => {
           isMounted && setList(res.data.Data)
+          setListOriginal(res.data.Data)
         })
         .catch((err) => {
           console.error(err)
@@ -73,16 +76,17 @@ export default function Marketplace() {
             </div>
 
             <div className="row">
-              <div className="col-lg-3">
+              <div className={toggleFilter?"col-lg-3":"col-lg-1"}>
                 <div className="card">
                   <div className="card-body">
                   
                     <div className="row">
                       <div className="col-lg-12">
                         <h5 onClick={()=>{setToggleFilter(!toggleFilter)}} className="mt-0 mb-4">Filters</h5>
-                        <i onClick={()=>{setToggleFilter(!toggleFilter)}}  className='dripicons-arrow-down
-                        '></i>
-                        {(toggleFilter)?
+                        <button onClick={()=>{setToggleFilter(!toggleFilter)}} className='btn btn-success btn-round waves-effect waves-light'>
+                          <i   className='dripicons-arrow-down
+                        '></i></button>
+                        {/* {(toggleFilter)?
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Service Categories</h6>
                           <div className="checkbox checkbox-success ">
@@ -97,11 +101,11 @@ export default function Marketplace() {
                           </div>
                           
                         </div>
-                        :null}  
+                        :null}   */}
                       </div>
                     </div>
                       {(toggleFilter)?  <>
-                    <div className="row">
+                    {/* <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Price Range</h6>
@@ -113,7 +117,7 @@ export default function Marketplace() {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
@@ -123,24 +127,35 @@ export default function Marketplace() {
                               <input 
                                 id={`checkboxa${val}`}
                                 type="checkbox" 
-                                defaultChecked={starFilter[index]}
+                                defaultChecked={starFilter[index]===val}
                                 onChange={
                                   (e)=>{
                                      
                                       var newstarfilter=starFilter
+                                      var checked=false
                                       if (newstarfilter[index]===val){
                                         
                                         newstarfilter[index]=false
                                       }
                                       else {
-                                        newstarfilter[index]=val
+                                        newstarfilter[index]=parseInt(val)
+                                        checked=true
                                       }
                                       console.log(newstarfilter)
                                       setStarFilter(newstarfilter)
-                                    
-                                  
-                                  
-                                  }}/>
+                                      setList(listOriginal
+                                        .filter((item)=>{
+                                            return(newstarfilter.includes(parseInt(item.average_ratings))
+                                              // newstarfilter[0]===(parseInt(item.average_ratings))||
+                                              // newstarfilter[1]===(parseInt(item.average_ratings))||
+                                              // newstarfilter[2]===(parseInt(item.average_ratings))||
+                                              // newstarfilter[3]===(parseInt(item.average_ratings))||
+                                              // newstarfilter[4]===(parseInt(item.average_ratings))||
+                                              // newstarfilter[5]===(parseInt(item.average_ratings))
+                                              )
+                                          }))
+                                  }}
+                                  />
                               <label htmlFor={`checkboxa${val}`}>
                                 {val}
                                 {Array.apply(null, { length: val }).map(
@@ -184,19 +199,8 @@ export default function Marketplace() {
                 <div className="row">
                   {
                   list
-                  .filter((item)=>{
-                      console.log(parseInt(item.average_ratings))
-                      return(
-                        starFilter[0]===(parseInt(item.average_ratings))||
-                        starFilter[1]===(parseInt(item.average_ratings))||
-                        starFilter[2]===(parseInt(item.average_ratings))||
-                        starFilter[3]===(parseInt(item.average_ratings))||
-                        starFilter[4]===(parseInt(item.average_ratings))||
-                        starFilter[5]===(parseInt(item.average_ratings))
-                        )
-                    })
                   .map((item, index) => (
-                    <div key={index} className="col-lg-4">
+                    <div key={index} className="col-lg-4" style={{minWidth:'200px'}}>
                       <div className="card e-co-product" >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to="booking" state={{ ...item }}>
@@ -218,7 +222,8 @@ export default function Marketplace() {
                           <p>{item.provider_name}</p>
                           <div className="d-flex justify-content-between my-2">
                             <p className="product-price">${item.cost_price}</p>
-                            <p className="mb-0 product-review align-self-center">
+                            <p className="mb-0 row product-review align-self-center">
+                              
                               <Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
@@ -227,8 +232,10 @@ export default function Marketplace() {
                                 size={17}
                                 allowFraction={true}
                                 initialValue={item.average_ratings}
-                                readonly={true}
+                                readonly={true} 
                               />
+                              ({item.average_ratings})
+                              
                             </p>
                           </div>
                         </div>

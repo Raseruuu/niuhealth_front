@@ -212,12 +212,12 @@ function RatingsChart({ratinglist}){
   )
 }
 
-function RatingsFilter({filters, setFilters}){
-
-  function handleFiltercheckbox(filtervalue){
-    console.log(filtervalue)
-    setFilters([...filters,filtervalue])
-  }
+function RatingsFilter({starFilter,setStarFilter,setList, listOriginal, filters, setFilters}){
+ 
+  // function handleFiltercheckbox(filtervalue){
+  //   console.log(filtervalue)
+  //   setFilters([...filters,filtervalue])
+  // }
   return(
       
     <div className='card'>
@@ -226,61 +226,49 @@ function RatingsFilter({filters, setFilters}){
         <div className='col-lg-12'>
           <div className='p-3'>
             <h6 className='mt-0 mb-4'>Filter</h6>
-            <div className='checkbox checkbox-success'>
-              <input id='checkbox3' type='checkbox' onChange={(e)=>{console.log(e);handleFiltercheckbox('5')}} />
-              <label htmlFor='checkbox3'>
-                {' '}
-                5<i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-              </label>
-            </div>
-            <div className='checkbox checkbox-success'>
-              <input id='checkbox4' type='checkbox' />
-              <label htmlFor='checkbox4'>
-                {' '}
-                4<i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star light-gray'></i>
-              </label>
-            </div>
-            <div className='checkbox checkbox-success'>
-              <input id='checkbox5' type='checkbox' />
-              <label htmlFor='checkbox5'>
-                {' '}
-                3<i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-              </label>
-            </div>
-            <div className='checkbox checkbox-success'>
-              <input id='checkbox6' type='checkbox' />
-              <label htmlFor='checkbox6'>
-                {' '}
-                2<i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-              </label>
-            </div>
-            <div className='checkbox checkbox-success'>
-              <input id='checkbox7' type='checkbox' />
-              <label htmlFor='checkbox7'>
-                {' '}
-                1<i className='mdi mdi-star text-warning'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-                <i className='mdi mdi-star light-gray'></i>
-              </label>
-            </div>
+            {[5,4,3,2,1,0].map((val,index) => (
+                <div key={val} className="checkbox checkbox-success">
+                  <input 
+                    id={`checkboxa${val}`}
+                    type="checkbox" 
+                    defaultChecked={starFilter[index]===val}
+                    onChange={
+                      (e)=>{
+                          
+                          var newstarfilter=starFilter
+                          var checked=false
+                          if (newstarfilter[index]===val){
+                            
+                            newstarfilter[index]=false
+                          }
+                          else {
+                            newstarfilter[index]=parseInt(val)
+                            checked=true
+                          }
+                          console.log(newstarfilter)
+                          setStarFilter(newstarfilter)
+                          setPatientRatingList(ratingListOriginal
+                            .filter((item)=>{
+                                return(newstarfilter.includes(parseInt(item.rating))
+                                  )
+                              }))
+                          setGeneralPatientRatingList(generalRatingListOriginal
+                            .filter((item)=>{
+                                return(newstarfilter.includes(parseInt(item.rating))
+                                  )
+                              }))
+                      }}
+                      />
+                  <label htmlFor={`checkboxa${val}`}>
+                    {val}
+                    {Array.apply(null, { length: val }).map(
+                      (e, i) => (
+                        <i key={i} className="mdi mdi-star text-warning"></i>
+                      )
+                    )}
+                  </label>
+                </div>
+              ))}
           </div>
         </div>
       </div>
@@ -340,7 +328,10 @@ function Ratings({}) {
   const [list, setList] = useState([])
   const [ratingList, setRatingList] = useState([])
   const [patientRatingList,setPatientRatingList]=useState([])
+  const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
+  const [ratingListOriginal, setRatingListOriginal] = useState([])
   
+  const [generalRatingListOriginal, setGeneralRatingListOriginal] = useState([])
   const [patientGeneralRatingList,setPatientGeneralRatingList]=useState([])
   const [errMsg, setErrMsg] = useState(null)
   
@@ -365,10 +356,12 @@ function Ratings({}) {
           
           if (Status) {
             setList(res.data.Data)
-            console.log(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
+            setRatingListOriginal(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setRatingList(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setPatientRatingList(res.data.Data.Ratings)
+            setRatingListOriginal(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setPatientGeneralRatingList(res.data.Data.GeneralVisitRatings)
+            setGeneralRatingListOriginal(res.data.Data.GeneralVisitRatings)
           } else {
             throw new Error(Message)
           }
@@ -409,7 +402,16 @@ function Ratings({}) {
               </div>
             </div>
           </div>
-          <RatingsFilter filters={filters} setFilters={setFilters}/>
+          <RatingsFilter 
+          starFilter={starFilter} 
+          setList={setList} 
+          // listOriginal={listOriginal} 
+          
+          ratingListOriginal={ratingListOriginal} 
+          generalRatingListOriginal={generalRatingListOriginal} 
+          setStarFilter={setStarFilter} 
+          filters={filters} 
+          setFilters={setFilters}/>
         </div>
         <div className='col'>
           <div className='row'>
@@ -448,11 +450,13 @@ function Ratings({}) {
                 {/* <CardItem length={12}> */}
                       <div className='row'>
                       {patientGeneralRatingList.map((item,index)=>
-                          (<RatingsItem patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
+                          (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
                         
                         )}
                       </div> 
-                      </div> </div> </div> 
+                    </div>
+                  </div>
+                </div> 
               
               :null}
             </div>
