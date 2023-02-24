@@ -8,6 +8,7 @@ import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useDebounce from '../../../hooks/useDebounce'
 import Pagination from "react-js-pagination";
+import { CardLongItem } from '../../../components/cards/Card'
 // Provider list of patients
 
 function PatientList() {
@@ -371,6 +372,8 @@ function PatientList() {
           'Insurance',
         ]}
       >
+        {(list.length>0)?
+        <>
         <PatientListData limit={pageLimit} pagenum={pageNum} list={list} />
         <Pagination
           activePage={pageNum}
@@ -383,8 +386,9 @@ function PatientList() {
           onChange={(e)=>{
             console.log(e);
             setPageNum(e)}}
-          
-        />
+                  />
+        </>:<CardLongItem><h4>This is where the Patients you have interacted with will appear.</h4></CardLongItem>
+}
         {isLoading ? 'Loading please wait...' : null}
         {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {list.length <= 0 && searchText.length > 0

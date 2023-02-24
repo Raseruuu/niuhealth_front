@@ -132,7 +132,7 @@ function Calendar({ allowCall }) {
     })]
     console.log("SchedArr"+schedArray)
 
-    setSlots(schedArray)
+    setSlots(schedArray[0])
   }
 
   useEffect(() => {
@@ -183,7 +183,7 @@ function Calendar({ allowCall }) {
         right: 'dayGridMonth,timeGridWeek,timeGridDay',
       }}
       initialView="dayGridMonth"
-      events={slots[0]}
+      events={slots}
       // editable={true}
       selectable={true}
       selectMirror={true}
