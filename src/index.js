@@ -87,12 +87,16 @@ const router =createBrowserRouter(
     { path: 'waitingroom', element: <WaitingRoom /> },
     {
       path: '/register',
-      element: <Register/>
+      element: <Suspense><Register/></Suspense>
     },
-    { path: 'registration', element: <Registration /> },
+    { path: 'registration',
+      errorElement: <ErrorPage />,
+      element: <Suspense> <Registration /></Suspense> },
+      
     {
       path: 'verify/:email',
-      element: <Verify/>
+      errorElement: <ErrorPage />,
+      element: <Suspense><Verify/></Suspense>
     },
     
     {

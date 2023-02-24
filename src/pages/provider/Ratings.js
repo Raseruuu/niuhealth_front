@@ -215,6 +215,7 @@ function RatingsChart({ratinglist}){
 function RatingsFilter({filters, setFilters}){
 
   function handleFiltercheckbox(filtervalue){
+    console.log(filtervalue)
     setFilters([...filters,filtervalue])
   }
   return(
@@ -226,7 +227,7 @@ function RatingsFilter({filters, setFilters}){
           <div className='p-3'>
             <h6 className='mt-0 mb-4'>Filter</h6>
             <div className='checkbox checkbox-success'>
-              <input id='checkbox3' type='checkbox' onChange={()=>{handleFiltercheckbox('5')}} />
+              <input id='checkbox3' type='checkbox' onChange={(e)=>{console.log(e);handleFiltercheckbox('5')}} />
               <label htmlFor='checkbox3'>
                 {' '}
                 5<i className='mdi mdi-star text-warning'></i>
@@ -312,22 +313,23 @@ function RatingsFilter({filters, setFilters}){
         </div>
       </div> */}
 
-      <div className='row'>
+      {/* <div className='row'>
         <div className='col-lg-12'>
           <div className='p-3'>
-            <h6 className='mb-3 mt-0'>My Clinics</h6>
+            <h6 className='mb-3 mt-0'>My Clinics</h6> */}
             {/* myClinics */}
-            {[{name:"PKMN Center"},{name:"Kuroda Family Clinic"}].map((item,index)=>(
+            {/* {[{name:"PKMN Center"},{name:"Kuroda Family Clinic"}].map((item,index)=>(
                 <div key={index} className='checkbox checkbox-success '>
                   <input id={'checkbox'+index} type='checkbox' checked />
                   <label htmlFor={'checkbox'+index}>{item.name}</label>
                 </div>
-            ))}
+            ))} */}
             
             
-          </div>
-        </div>
-      </div>
+          {/* </div>
+        </div> */}
+      {/* </div> */}
+      
     </div>
   </div>
   )

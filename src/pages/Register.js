@@ -133,7 +133,7 @@ function Register() {
                                 <div className="px-3">
                                     <div style={{textAlign: 'center'}}>
                                         <Link to="../dashboard/analytics-index.html" className="logo logo-admin">
-                                            <img src="../assets/images/nu-health-logo.png" height="55" alt="logo" className="auth-logo"/>
+                                            <img src=".sassets/images/nu-health-logo.png" height="55" alt="logo" className="auth-logo"/>
                                         </Link>
                                     </div>
                                     

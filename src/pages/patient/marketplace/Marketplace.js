@@ -12,7 +12,12 @@ export default function Marketplace() {
    const [toggleFilter, setToggleFilter] = useState(true)
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
-
+  const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
+  // const [starFilter1, setStarFilter1]=useState(true)
+  // const [starFilter2, setStarFilter2]=useState(true)
+  // const [starFilter3, setStarFilter3]=useState(true)
+  // const [starFilter4, setStarFilter4]=useState(true)
+  // const [starFilter5, setStarFilter5]=useState(true)
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -71,11 +76,13 @@ export default function Marketplace() {
               <div className="col-lg-3">
                 <div className="card">
                   <div className="card-body">
+                  
                     <div className="row">
                       <div className="col-lg-12">
-                        <h5 className="mt-0 mb-4">Filters</h5>
+                        <h5 onClick={()=>{setToggleFilter(!toggleFilter)}} className="mt-0 mb-4">Filters</h5>
                         <i onClick={()=>{setToggleFilter(!toggleFilter)}}  className='dripicons-arrow-down
                         '></i>
+                        {(toggleFilter)?
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Service Categories</h6>
                           <div className="checkbox checkbox-success ">
@@ -88,171 +95,9 @@ export default function Marketplace() {
                               Allergy and immunology
                             </label>
                           </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox1"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox1">Anesthesiology</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox2"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox2">Dermatology</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox3"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox3">
-                              Diagnostic radiology
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox4"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox4">
-                              Emergency medicine
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox5"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox5">Family medicine</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox6"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox6">Internal medicine</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox7"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox7">Medical genetics</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox8"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox8">Neurology</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox9"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox9">Nuclear medicine</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox10"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox10">
-                              Obstetrics and gynecology
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox11"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox11">Ophthalmology</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox12"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox12">Pathology</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox13"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox13">Pediatrics</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox14"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox14">
-                              Physical medicine and rehabilitation
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox15"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox15">
-                              Preventive medicine
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox16"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox16">Psychiatry</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox17"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox17">
-                              Radiation oncology
-                            </label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox18"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox18">Surgery</label>
-                          </div>
-                          <div className="checkbox checkbox-success ">
-                            <input
-                              id="checkbox19"
-                              type="checkbox"
-                              defaultChecked
-                            />
-                            <label htmlFor="checkbox19">Urology</label>
-                          </div>
+                          
                         </div>
+                        :null}  
                       </div>
                     </div>
                       {(toggleFilter)?  <>
@@ -264,6 +109,7 @@ export default function Marketplace() {
                             ref={priceRangeRef}
                             type="text"
                             id="range_doctors_rate"
+                            onChange={(e)=>{console.log(priceRangeRef)}}
                           />
                         </div>
                       </div>
@@ -272,9 +118,29 @@ export default function Marketplace() {
                       <div className="col-lg-12">
                         <div className="p-3">
                           <h6 className="mt-0 mb-4">Ratings</h6>
-                          {[5, 4, 3, 2, 1].map((val) => (
+                          {[5,4,3,2,1,0].map((val,index) => (
                             <div key={val} className="checkbox checkbox-success">
-                              <input id={`checkboxa${val}`} type="checkbox" />
+                              <input 
+                                id={`checkboxa${val}`}
+                                type="checkbox" 
+                                defaultChecked={starFilter[index]}
+                                onChange={
+                                  (e)=>{
+                                     
+                                      var newstarfilter=starFilter
+                                      if (newstarfilter[index]===val){
+                                        
+                                        newstarfilter[index]=false
+                                      }
+                                      else {
+                                        newstarfilter[index]=val
+                                      }
+                                      console.log(newstarfilter)
+                                      setStarFilter(newstarfilter)
+                                    
+                                  
+                                  
+                                  }}/>
                               <label htmlFor={`checkboxa${val}`}>
                                 {val}
                                 {Array.apply(null, { length: val }).map(
@@ -285,6 +151,8 @@ export default function Marketplace() {
                               </label>
                             </div>
                           ))}
+            
+
                         </div>
                       </div>
                     </div></>:null}
@@ -314,7 +182,20 @@ export default function Marketplace() {
                 </div>
 
                 <div className="row">
-                  {list.map((item, index) => (
+                  {
+                  list
+                  .filter((item)=>{
+                      console.log(parseInt(item.average_ratings))
+                      return(
+                        starFilter[0]===(parseInt(item.average_ratings))||
+                        starFilter[1]===(parseInt(item.average_ratings))||
+                        starFilter[2]===(parseInt(item.average_ratings))||
+                        starFilter[3]===(parseInt(item.average_ratings))||
+                        starFilter[4]===(parseInt(item.average_ratings))||
+                        starFilter[5]===(parseInt(item.average_ratings))
+                        )
+                    })
+                  .map((item, index) => (
                     <div key={index} className="col-lg-4">
                       <div className="card e-co-product" >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}

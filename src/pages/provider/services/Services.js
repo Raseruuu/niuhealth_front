@@ -75,7 +75,7 @@ function Services({ limit }) {
         <div className='col-lg-3'>
           <div className='card'>
             <div className='card-body'>
-              <div className='row'>
+              {/* <div className='row'>
                 <div className='col-lg-12'>
                   <h5 className='mt-0 mb-4'>Filter</h5>
 
@@ -95,7 +95,7 @@ function Services({ limit }) {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className='row'>
                 <div className='col-lg-12'>

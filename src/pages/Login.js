@@ -124,11 +124,11 @@ function Login( text=null ) {
                   <div className="px-3">
                     <div style={{ textAlign: "center" }}>
                       <a
-                        href="../dashboard/analytics-index.html"
+                        href="/"
                         className="logo logo-admin"
                       >
                         <img
-                          src="../assets/images/nu-health-logo.png"
+                          src="/assets/images/nu-health-logo.png"
                           height="55"
                           alt="logo"
                           className="auth-logo"
