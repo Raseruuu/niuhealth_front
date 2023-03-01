@@ -14,12 +14,15 @@ export default function Marketplace() {
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
   const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
-
+  const [searchString,setSearchString]=useState("")
   // const [starFilter1, setStarFilter1]=useState(true)
   // const [starFilter2, setStarFilter2]=useState(true)
   // const [starFilter3, setStarFilter3]=useState(true)
   // const [starFilter4, setStarFilter4]=useState(true)
   // const [starFilter5, setStarFilter5]=useState(true)
+  function handleSearch(search){
+    setSearchString(search)
+  }
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -27,6 +30,7 @@ export default function Marketplace() {
     async function getList() {
       await axiosPrivate
         .get('getAllServices', {
+          Search:searchString,
           signal: controller.signal,
         })
         .then((res) => {
@@ -76,7 +80,7 @@ export default function Marketplace() {
             </div>
 
             <div className="row">
-              <div className={toggleFilter?"col-lg-3":"col-lg-1"}>
+              <div className={toggleFilter?"col-lg-3":"col-lg-2"}>
                 <div className="card">
                   <div className="card-body">
                   
@@ -105,19 +109,19 @@ export default function Marketplace() {
                       </div>
                     </div>
                       {(toggleFilter)?  <>
-                    {/* <div className="row">
+                    <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Price Range</h6>
                           <input
                             ref={priceRangeRef}
                             type="text"
-                            id="range_doctors_rate"
+                            id="range_doctors_ratex"
                             onChange={(e)=>{console.log(priceRangeRef)}}
                           />
                         </div>
                       </div>
-                    </div> */}
+                    </div>
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
@@ -141,7 +145,6 @@ export default function Marketplace() {
                                         newstarfilter[index]=parseInt(val)
                                         checked=true
                                       }
-                                      console.log(newstarfilter)
                                       setStarFilter(newstarfilter)
                                       setList(listOriginal
                                         .filter((item)=>{
@@ -185,6 +188,7 @@ export default function Marketplace() {
                           className="form-control"
                           placeholder="Search Service..."
                           aria-label="Search Service..."
+                          onSubmit={handleSearch}
                         />
                         <span className="input-group-append">
                           <button className="btn btn-success" type="button">

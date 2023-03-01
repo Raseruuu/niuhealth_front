@@ -7,6 +7,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 import useDebounce from '../../hooks/useDebounce'
 import { StatusTextInsurance } from '../../components/status/Status'
+import CardLongItem from '../../components/cards/Card'
 
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
@@ -115,7 +116,10 @@ function PatientQueue({ limit, search }) {
 
   return (
     // list.length===0?null:
+    
   <>
+  {(list.length===0)?<CardLongItem><h4>There are no Virtual Visits in the Queue.</h4></CardLongItem>:
+    <>
   {list.map((item, index) => (
     <tr key={item?.recno || index}>
       <td>
@@ -194,7 +198,7 @@ function PatientQueue({ limit, search }) {
               </button> */}
             </td>
     </tr>
-  ))}</>)
+  ))}</>}</>)
 }
 function dateGenerator(date, time) {
   return moment(date).add(time, 'hours').format('DD MMM YYYY h:mm a')

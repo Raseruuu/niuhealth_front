@@ -47,7 +47,6 @@ export default function Verify (){
         // });
       }
     return(
-        <body className="color_neutral_lightest">
             <div className="account-body accountbg "  style={{ width: "100vw", height: "100vh" }}>
         <div className=" clsLoginWrapper enableLodestarStyles enableLodestarLineHeight verifyEMail " style={{ margin:'auto',width: '50%',padding: '10px'}}>
 
@@ -111,6 +110,5 @@ export default function Verify (){
             </div></div></div>
             </div>
     </div>
-    </body>
     );
 }

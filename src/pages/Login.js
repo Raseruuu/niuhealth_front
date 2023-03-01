@@ -98,7 +98,7 @@ function Login( text=null ) {
     let isMounted = true
     const controller = new AbortController()
    
-    logoutCurrentUser()
+    // logoutCurrentUser()
     return()=>{
       
       isMounted = false

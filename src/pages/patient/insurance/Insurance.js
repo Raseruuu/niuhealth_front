@@ -19,7 +19,7 @@ function Insurance() {
       await axiosPrivate
         .post(
           // getMyInsuranceBuckets
-          'patientGetInsurances',
+          'getMyInsuranceBuckets',
           { Email: auth.email },
           {
             signal: controller.signal,
@@ -31,9 +31,11 @@ function Insurance() {
 
           if (Status) {
             setList(data)
-          } else {
+          } 
+          else {
             throw new Error(Message)
           }
+          
         })
         .catch((err) => {
           console.error(err)
@@ -132,7 +134,7 @@ function Insurance() {
                   <Link to='upload'>
                     <button
                       type='button'
-                      className='btn btn-success btn-round waves-effect waves-light mt-2'
+                      className='float-right btn btn-success btn-round waves-effect waves-light mt-2'
                     >
                       Upload New Documents
                     </button>

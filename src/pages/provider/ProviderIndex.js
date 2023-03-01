@@ -57,8 +57,7 @@ function ProviderIndex() {
           <h4 className="header-title mt-0 mb-3">Virtual Visit Queue</h4>
           <div className="table-responsive">
             <table className="table">
-
-              {(patientList,length>0)?<>
+              <>
                 <thead className="thead-light">
                 <tr>
                   <th>Patient</th>
@@ -71,11 +70,8 @@ function ProviderIndex() {
                 </tr>
               </thead>
               
-              
-              <tbody>
                 <PatientQueue limit={6} />
-              </tbody></>
-              :<CardLongItem><h4>There are no Virtual Visits in the Queue.</h4></CardLongItem> }
+              </>
             </table>
           </div>
         </div>

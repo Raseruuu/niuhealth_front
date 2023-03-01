@@ -212,7 +212,13 @@ function RatingsChart({ratinglist}){
   )
 }
 
-function RatingsFilter({starFilter,setStarFilter,setList, listOriginal, filters, setFilters}){
+function RatingsFilter({
+  starFilter,
+  setStarFilter,
+  ratingListOriginal, 
+  generalRatingListOriginal, 
+  setPatientRatingList, 
+  setGeneralPatientRatingList}){
  
   // function handleFiltercheckbox(filtervalue){
   //   console.log(filtervalue)
@@ -330,7 +336,7 @@ function Ratings({}) {
   const [patientRatingList,setPatientRatingList]=useState([])
   const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
   const [ratingListOriginal, setRatingListOriginal] = useState([])
-  
+
   const [generalRatingListOriginal, setGeneralRatingListOriginal] = useState([])
   const [patientGeneralRatingList,setPatientGeneralRatingList]=useState([])
   const [errMsg, setErrMsg] = useState(null)
@@ -406,6 +412,8 @@ function Ratings({}) {
           starFilter={starFilter} 
           setList={setList} 
           // listOriginal={listOriginal} 
+          setPatientRatingList={setPatientRatingList}
+          setGeneralPatientRatingList ={setPatientGeneralRatingList}
           
           ratingListOriginal={ratingListOriginal} 
           generalRatingListOriginal={generalRatingListOriginal} 
