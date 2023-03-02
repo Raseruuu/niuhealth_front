@@ -107,3 +107,4 @@ function($) {
     $.Components.init();
 }(window.jQuery);
 
+$('.dropify').dropify();

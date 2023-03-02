@@ -1,20 +1,106 @@
 import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import { useEffect, useRef, useState } from 'react'
-// import './imageup.css'
+import './imageup.css'
+
+export function UploadOneImage({image,setImage,previewImage}){
+  const [imagepreview, setImagePreview] = useState(false)
+  
+  // const [image, setImage] = useState({})
+  const imgRef = useRef()
+  function triggerFileInput() {
+    if (imgRef.current) {
+        imgRef.current.click()
+    }}
+  const handleImageInputChange = (e) => {
+    const [file] = e.target.files;
+    console.log("FILE HERE: ",file)
+    setImage({...image, file:file})
+    setImagePreview(true)
+  };
+  
+  useEffect(() => {
+        
+    // let isMounted = true
+    // const controller = new AbortController()
+    let fileReader, isCancel = false;
+    // for (var image in formData.images) {
+    if (image.file) {
+        fileReader = new FileReader();
+        fileReader.onload = (e) => {
+            const { result } = e.target;
+            if (result && !isCancel) {
+            const tempimage={path:result,file:image.file}
+            console.log(tempimage)
+            setImage(tempimage)
+            // setImages([...images, tempimage])
+            
+            }
+        }
+    fileReader.readAsDataURL(image.file);
+    }
+    // }
+    return () => {
+      isCancel = true;
+      if (fileReader && fileReader.readyState === 1) {
+        fileReader.abort();
+      }
+    }
+  }, [imagepreview])
+
+return (
+
+        <div className="upload-container d-flex flex-column justify-content-center align-items-center" style={{marginBottom:'10px',marginLeft:'10px',marginRight:'10px'}}>
+                <input
+                    hidden
+                    type="file"
+                    id="input-file-now-custom-1"
+                    accept="image/*"
+                    capture="user"
+                    name="Image"
+                    ref={imgRef}
+                    onChange={handleImageInputChange}
+                />
+                {(image.path!=="undefined")?(
+                  <>
+                  <img
+                      alt=""
+                      style={{objectFit: 'cover', margin: 'unset' ,width:180,height:150}}
+
+                      onClick={() => {
+                      Swal.fire({
+                          // title: 'Profile Picture',
+                          customClass: 'swal-wide',
+                          scroll:true,
+                          html: `<img height="600px" src="${!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}"></img>`,
+                          // { AWS_BUCKET_SERVICES } + profile.picture,
+                      })
+                      }}
+                      src={!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}
+                      className="ob waves-effect waves-light"
+                      
+                  />
+                  <div className='row' style ={{marginTop:'10px'}}>
+                        <button
+                          type="button"
+                          className="btn btn-gradient-success waves-effect waves-light"
+                          onClick={triggerFileInput}
+                          >
+                            Upload 
+                        </button>
+                        
+                    </div>
+                 
+                 </>
+                 ):null}
+                </div>
+           
+              )
+}
 export default function UploadImage({id,images,setImages, previewImage,formData,setFormData, action}) {
     const [imagepreview, setImagePreview] = useState(false)
     const [image, setImage] = useState({})
     const imgRef = useRef()
-    const handleRemoveItem = index => {
-        // assigning the list to temp variable
-        const temp = [...list];
-    
-        // removing the element using splice
-        temp.splice(index, 1);
-    
-        // updating the list
-        setClinicImages(temp);
-    }
+   
     const handleImageInputChange = (e) => {
         const [file] = e.target.files;
         console.log("FILE HERE: ",file);
@@ -59,11 +145,6 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
             fileReader.onload = (e) => {
                 const { result } = e.target;
                 if (result && !isCancel) {
-                // setClinicProfile({
-                //     ...formData,
-                //     picture:result 
-                // })
-                
                 const tempimage={path:result,file:image.file}
                 // console.log(tempimage)
                 updateImages(id,tempimage)

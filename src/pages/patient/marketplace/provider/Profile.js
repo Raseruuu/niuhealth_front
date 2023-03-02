@@ -770,143 +770,7 @@ function ProviderProfile() {
                   </div>
                 </div>
 
-                <div className='col-lg-4'>
-                  <div className='card'>
-                    <div className='card-body'>
-                      <h4 className='header-title mt-0 mb-4'>
-                        Latest Activity
-                      </h4>
-                      <div
-                        className='slimscroll profile-activity-height'
-                        style={{ overflowY: "scroll" }}
-                      >
-                        <div className='activity'>
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-checkbox-marked-circle-outline bg-soft-success'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Patient
-                                  </span>
-                                  updated the status of{" "}
-                                  <Link to='' className='text-dark'>
-                                    Invoice #1234
-                                  </Link>
-                                  to Paid
-                                </p>
-                                <span className='text-muted'>10 Min ago</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-timer-off bg-soft-pink'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Dr. Peterson
-                                  </span>
-                                  scheduled a virtual visit on{" "}
-                                  <Link to='' className='text-dark'>
-                                    Dec 2, 2022
-                                  </Link>
-                                </p>
-                                <span className='text-muted'>50 Min ago</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-alert-decagram bg-soft-purple'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Dr. Lim
-                                  </span>
-                                  completed a virtual meet.{" "}
-                                  <Link to='' className='text-dark'>
-                                    Checkup #112233
-                                  </Link>{" "}
-                                  was saved to archive.
-                                </p>
-                                <span className='text-muted'>10 hours ago</span>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-clipboard-alert bg-soft-warning'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Patient
-                                  </span>
-                                  completed a{" "}
-                                  <Link to='' className='text-dark'>
-                                    Bloodtest
-                                  </Link>{" "}
-                                  on Laboratory A.
-                                </p>
-                                <span className='text-muted'>Yesterday</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-clipboard-alert bg-soft-secondary'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Dr. Maricris Jowels
-                                  </span>
-                                  was added to the group, group name is{" "}
-                                  <Link to='' className='text-dark'>
-                                    Physicians
-                                  </Link>
-                                </p>
-                                <span className='text-muted'>14 Nov 2022</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className='activity-info'>
-                            <div className='icon-info-activity'>
-                              <i className='mdi mdi-clipboard-alert bg-soft-info'></i>
-                            </div>
-                            <div className='activity-info-text'>
-                              <div className='d-flex justify-content-between align-items-center'>
-                                <p className='text-muted mb-0 font-14 w-75'>
-                                  <span className='text-dark font-14'>
-                                    Patient
-                                  </span>
-                                  request a virtual visit to{" "}
-                                  <Link to='' className='text-dark'>
-                                    Dr. Nefario
-                                  </Link>{" "}
-                                  on Dec. 1, 2022.
-                                </p>
-                                <span className='text-muted'>15 Nov 2022</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
 
@@ -918,7 +782,7 @@ function ProviderProfile() {
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to="/patient/marketplace/booking" state={{ ...item }}>
                           <img
-                            src={(AWS_BUCKET_SERVICES+ item.picture)}
+                            src={(AWS_BUCKET_SERVICES+"services/"+ item.picture)}
                             alt=""
                             style={{width:'200px', height:'200px',objectFit: 'cover'}}
                             className="img-fluid"

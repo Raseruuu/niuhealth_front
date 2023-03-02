@@ -5,7 +5,7 @@ function PatientIndexPage() {
   const navigate = useNavigate()
   // TODO: get from CONTEXT
   const isEmailVerified = Boolean(sessionStorage.getItem('email_verified'))
-
+  const has_insurance=sessionStorage.getItem('has_insurance')
   return (
     <div className='page-wrapper'>
       <div className='page-content'>
@@ -53,14 +53,31 @@ function PatientIndexPage() {
                       healthcare provider will be with you shortly
                     </li>
                   </ol>
+                  
                   <p style={{ marginTop: '40px' }}>
-                    <button
-                      onClick={() => navigate('/virtualvisit')}
-                      type='button'
-                      className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
-                    >
-                      Start Your Virtual Visit
-                    </button>
+                  <button
+                    type='button'
+                    className={`btn ${(has_insurance==='true')?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
+                    onClick={
+                      () => {
+                        console.log(has_insurance)
+                        if (has_insurance==='true'){
+                          navigate('/virtualvisit')
+                        }
+                        else if (has_insurance==='false'){
+                          
+                          Swal.fire({
+                            html:
+                            `
+                            <a href='subscription/plans'><b>Subscribe Now! </b></a> to access virtual visits.<br>
+                            <a href='insurance'><b>Submit Insurance</b></a> 
+                             for more benefits.
+                            `})
+                          }
+                      }}
+                  >
+                    Start Your Virtual Visit
+                  </button>
                   </p>
                 </div>
               </div>

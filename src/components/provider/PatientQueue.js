@@ -11,6 +11,7 @@ import CardLongItem from '../../components/cards/Card'
 
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
+import useInterval from '../../hooks/useInterval'
 
 function PatientQueue({ limit, search }) {
   const { auth } = useAuth()
@@ -22,6 +23,8 @@ function PatientQueue({ limit, search }) {
   const [refreshList, setRefreshList] = useState(false)
   const navigate = useNavigate()
   const [meetingStatus, setMeetingStatus] = useState(false)
+  
+  const [delay, setDelay] = useState('3000')
   /*
   For Status:
   Confined -  badge-soft-purple
@@ -81,32 +84,31 @@ function PatientQueue({ limit, search }) {
       }
     })
   }
+  async function getProviderVirtualVisitQue() {
+      
+    await axiosPrivate
+      .post(
+        'getProviderVirtualVisitQue',
+        { Email: auth.email },
+        
+      )
+      .then((res) => {
+        const data = res.data || []
+        setList(data.Data.slice(0, limit))
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+        setErrMsg(err.message)
+      })
+}
+  useInterval(getProviderVirtualVisitQue, delay)
+
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
 
-    async function getList() {
-      
-        await axiosPrivate
-          .post(
-            'getProviderVirtualVisitQue',
-            { Email: auth.email },
-            {
-              signal: controller.signal,
-            }
-          )
-          .then((res) => {
-            const data = res.data || []
-            isMounted && setList(data.Data.slice(0, limit))
-            console.log(res.data)
-          })
-          .catch((err) => {
-            console.error(err)
-            setErrMsg(err.message)
-          })
-    }
-
-    getList()
+    
 
     return () => {
       isMounted = false

@@ -7,9 +7,10 @@ import useAuth from '../hooks/useAuth'
 export async function loader({ request }) {
   const access_token = sessionStorage.getItem('access_token')
   const token_type = sessionStorage.getItem('token_type')
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn')
 
-  if (!access_token || access_token === 'undefined') {
-    // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+  if (isLoggedIn==='false' || access_token === 'undefined') {
+  //   // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
     window.location.replace('login')
   }
   // else(
@@ -19,7 +20,8 @@ export async function loader({ request }) {
   
   // const result = await axios
   //   .post(
-  //     'checktokenNew',
+      
+  //     // 'checktokenNew',
   //     { AccessToken: access_token },
   //     { headers: { Authorization: `${token_type} ${access_token}` } }
   //   )
@@ -35,6 +37,7 @@ export async function loader({ request }) {
   //       sessionStorage.setItem('name', name)
   //       sessionStorage.setItem('sub', sub)
   //       sessionStorage.setItem('username', username)
+  //       sessionStorage.setItem('has_insurance')
   //       if (!email) {
   //         throw new Error('No email address.')
   //       }
@@ -77,6 +80,7 @@ function LoginAuth() {
   
   const token_type = sessionStorage.getItem('token_type')
   const access_token = sessionStorage.getItem('access_token')
+  const has_insurance = sessionStorage.getItem('has_insurance')
   
   const name = sessionStorage.getItem('name')
   const isLoggedIn = sessionStorage.getItem('isLoggedIn')
@@ -107,6 +111,7 @@ function LoginAuth() {
       token_type,
       id_token,
       refresh_token,
+      has_insurance,
       transactionType,
       userType,
     }))

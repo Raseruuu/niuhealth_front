@@ -64,7 +64,7 @@ export function TopBar({ menuClick, homeAddress }) {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
-  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"profiles/pictures/")+"Default.jpg"})
+  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"profiles/pictures/"  )+"Default.jpg"})
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
@@ -89,7 +89,9 @@ export function TopBar({ menuClick, homeAddress }) {
             const { Status, Data: data = [], Message } = res.data
             if (Status) {
               setProfile(res.data.Data[0])
+              // res.data.Data[0].hasInsurance
               
+              sessionStorage.setItem('has_insurance',  res.data.Data[0].has_insurance)
               
             } else {
               throw new Error(Message)

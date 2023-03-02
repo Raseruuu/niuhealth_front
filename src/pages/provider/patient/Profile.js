@@ -166,22 +166,13 @@ function PatientProfile() {
                     Patient Chart
                   </a>
                 </li>
+               
                 <li className='nav-item'>
                   <a
                     className='nav-link'
-                    id='settings_detail_tab'
+                    id='insurance'
                     data-toggle='pill'
-                    href='#settings_detail'
-                  >
-                    Settings
-                  </a>
-                </li>
-                <li className='nav-item'>
-                  <a
-                    className='nav-link'
-                    id='settings_detail_tab'
-                    data-toggle='pill'
-                    href='#settings_detail'
+                    href='#insurance'
                   >
                     Insurance
                   </a>
@@ -231,7 +222,7 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                  <div className='card'>
+                  {/* <div className='card'>
                     <div className='card-body dash-info-carousel'>
                       <h4 className='mt-0 header-title mb-4'>
                         Recent Checkups
@@ -314,7 +305,7 @@ function PatientProfile() {
                         </a>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div className='col-lg-8'>
                   <div className='card'>
@@ -348,7 +339,7 @@ function PatientProfile() {
                   </div>
                 </div>
               </div>
-              <div className='row'>
+              {/* <div className='row'>
                 <div className='col-lg-4'>
                   <div className='card'>
                     <div className='card-body'>
@@ -379,9 +370,9 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className='col-lg-4'>
+                {/* <div className='col-lg-4'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='mt-0 header-title'>Patient Diagnosis</h4>
@@ -415,9 +406,9 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className='col-lg-4'>
+                {/* <div className='col-lg-4'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='header-title mt-0 mb-4'>
@@ -553,98 +544,17 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
+                </div> */}
+              {/* </div> */}
             </div>
 
             <div className='tab-pane fade' id='activity_detail'>
               <div className='row'></div>
             </div>
-
-            <div className='tab-pane fade' id='settings_detail'>
-              <div className='row'>
-                <div className='col-lg-12 col-xl-9 mx-auto'>
-                  <div className='card'>
-                    <div className='card-body'>
-                      <form method='post' className='card-box'>
-                        <input
-                          type='file'
-                          id='input-file-now-custom-1'
-                          className='dropify'
-                          data-default-file='../assets/images/users/user-4.jpg'
-                        />
-                      </form>
-
-                      <div className=''>
-                        <form className='form-horizontal form-material mb-0'>
-                          <div className='form-group'>
-                            <input
-                              type='text'
-                              placeholder='Full Name'
-                              className='form-control'
-                            />
-                          </div>
-
-                          <div className='form-group row'>
-                            <div className='col-md-4'>
-                              <input
-                                type='email'
-                                placeholder='Email'
-                                className='form-control'
-                                name='example-email'
-                                id='example-email'
-                              />
-                            </div>
-                            <div className='col-md-4'>
-                              <input
-                                type='password'
-                                placeholder='password'
-                                className='form-control'
-                              />
-                            </div>
-                            <div className='col-md-4'>
-                              <input
-                                type='password'
-                                placeholder='Re-password'
-                                className='form-control'
-                              />
-                            </div>
-                          </div>
-                          <div className='form-group row'>
-                            <div className='col-md-6'>
-                              <input
-                                type='text'
-                                placeholder='Phone No'
-                                className='form-control'
-                              />
-                            </div>
-                            <div className='col-md-6'>
-                              <select className='form-control'>
-                                <option>London</option>
-                                <option>India</option>
-                                <option>Usa</option>
-                                <option>Canada</option>
-                                <option>Thailand</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div className='form-group'>
-                            <textarea
-                              rows='5'
-                              placeholder='Message'
-                              className='form-control'
-                            ></textarea>
-                            <button className='btn btn-gradient-primary btn-sm px-4 mt-3 float-right mb-0'>
-                              Update Profile
-                            </button>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className='tab-pane fade' id='insurance'>
+              <div className='row'></div>
             </div>
+            
           </div>
         </div>
       </div>

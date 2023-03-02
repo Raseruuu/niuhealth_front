@@ -18,11 +18,7 @@ function Login( text=null ) {
   const navigate = useNavigate()
   console.log(text)
   async function logoutCurrentUser(){
-    // var header := w.Header()
-    // header.Add("Access-Control-Allow-Origin", "*")
-    // header.Add("Access-Control-Allow-Methods", "DELETE, POST, GET, OPTIONS")
-    // header.Add("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
-    await axiosPrivate
+  await axiosPrivate
     .get(
       "http://ebsdrcocophp01prod-env.eba-y6pjrhe2.us-west-1.elasticbeanstalk.com/niuhealth-api/api/getusers",
       {headers:{
@@ -30,33 +26,13 @@ function Login( text=null ) {
         'Access-Control-Allow-Origin': '*',
         "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
-    // await axiosPrivate
-    // .get(
-    //   "https://niuhealth.auth.us-west-2.amazoncognito.com/login?client_id=qr8mf1ainc3tjmcv9gc0ltehu&response_type=code&scope=email+openid&redirect_uri=http://localhost/niuhealth/cburl",
-    //   {headers:{
-        
-    //     'Access-Control-Allow-Origin': '*',
-    //     "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-    //     "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
     .then((res) => {
       console.log(res);
       // const { StatusCode, Data: data = [], Message } = res.data;
     })
-
-      // if (StatusCode===200) {
-      //   
-      //   navigate('/', { replace: true })
-      // } else {
-
-      //   throw new Error(Message);
-      // }
     
-    // .catch((err) => {
-    //   alert(err.message || "Creating new services failed."); // TODO: change to SweetAlert
-    //   console.error(err);
-    // });
-  }
 
+  }
   async function handleLogin(data){
     const controller = new AbortController()
 
@@ -91,8 +67,9 @@ function Login( text=null ) {
         throw new Error(Message);
       }
     })
-  }
-
+    .catch((err) => {
+      Swal.fire({ icon: 'error',html:`Login Error. ${err}`})
+    })}
   useEffect(()=>{
    
     let isMounted = true
@@ -113,7 +90,7 @@ function Login( text=null ) {
       //  backgroundPosition: 'center',
       // backgroundRepeat: 'no-repeat',
       // backgroundSize: 'cover'
-    }}
+      }}
     >
       <div className="container">
         <div className="row vh-100 ">
@@ -264,5 +241,4 @@ function Login( text=null ) {
     </div>
   )
 }
-
 export default Login

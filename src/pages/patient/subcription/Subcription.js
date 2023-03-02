@@ -55,7 +55,7 @@ function Subscription() {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
-          if (!Status && Message === 'Patient not subscribed') {
+          if (Status && Message === 'Patient not subscribed') {
             navigate('plans')
           }
 
@@ -93,50 +93,50 @@ function Subscription() {
               </div>
             </div>
           </div>
-
-          <div className='row'>
-            <div className='col-lg-6'>
-              <div className='card'>
-                <div className='card-body'>
-                  <div className='total-payment'>
-                    <h5>Subscription</h5>
-                    <table className='table mb-0'>
-                      <tbody>
-                        <tr>
-                          <td className='payment-title'>Start date</td>
-                          <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
-                        </tr>
-                        <tr>
-                          <td className='payment-title'>End Date</td>
-                          <td>{moment(subs.subsEnd).format('MM/DD/YYYY')}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div className='d-flex flex-column flex-md-row '>
-                      <button
-                        type='button'
-                        className='btn btn-round btn-outline-info waves-effect waves-light'
-                        onClick={() => navigate('renew')}
-                      >
-                        Renew Your Subscription
-                      </button>{' '}
-                      <button
-                        disabled={true}
-                        type='button'
-                        className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
-                        onClick={() =>
-                          window?.cancelSubscription('6/20/2023') || false
-                        }
-                      >
-                        Cancel Subscription
-                      </button>
+          {(subs.subsStart!='-')?
+            <div className='row'>
+              <div className='col-lg-6'>
+                <div className='card'>
+                  <div className='card-body'>
+                    <div className='total-payment'>
+                      <h5>Subscription</h5>
+                      <table className='table mb-0'>
+                        <tbody>
+                          <tr>
+                            <td className='payment-title'>Start date</td>
+                            <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
+                          </tr>
+                          <tr>
+                            <td className='payment-title'>End Date</td>
+                            <td>{moment(subs.subsEnd).format('MM/DD/YYYY')}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div className='d-flex flex-column flex-md-row '>
+                        <button
+                          type='button'
+                          className='btn btn-round btn-outline-info waves-effect waves-light'
+                          onClick={() => navigate('renew')}
+                        >
+                          Renew Your Subscription
+                        </button>{' '}
+                        <button
+                          disabled={true}
+                          type='button'
+                          className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
+                          onClick={() =>
+                            window?.cancelSubscription('6/20/2023') || false
+                          }
+                        >
+                          Cancel Subscription
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
+          :<></>}
           {/* <div className='row'>
             <div className='col-lg-6'>
               <div className='card'>

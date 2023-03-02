@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { AWS_BUCKET } from '../../../constants'
+import Swal from 'sweetalert2'
+import CardItem from '../../../components/cards/Card'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
@@ -10,7 +12,7 @@ function Insurance() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-
+  const [patientID,setPatientID] = useState("")
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -27,10 +29,11 @@ function Insurance() {
         )
         .then((res) => {
           console.log(res)
-          const { Status, Data: data = [], Message } = res.data
+          const { Status, Data: data, Message } = res.data
 
           if (Status) {
-            setList(data)
+            setList(data.Buckets)
+            setPatientID(res.data.Data.PatientId)
           } 
           else {
             throw new Error(Message)
@@ -91,30 +94,41 @@ function Insurance() {
             <div className='col-lg-12'>
               <div className='card'>
                 <div className='card-body'>
-                  <h4 className='header-title mt-0 mb-3'>Insurance Document</h4>
+                  <h4 className='header-title mt-0 mb-3'>Insurance Folders</h4>
 
                   <div className='file-box-content'>
+                    {(list.length===0)?<><CardItem>You have no submitted Insurance Documents.</CardItem></>:<></>}
                     {list.map((item) => (
+                      <a
+                      // className="btn-success waves"
+                      style={{background:'none'}}
+                      href={`insurance/folders/${item.BucketId}`}
+                      // onClick={()=>Swal.fire(
+                      //   {html: 
+                      //     `
+                      //       Front Page<br>
+                      //       <img src='${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}'></img>
+                      //       `
+                      //   })}
+                      
+                    >
                       <div className='file-box'>
-                        <Link
-                          to={{
-                            pathname: `${AWS_BUCKET}/insurance/${item.image}`,
-                          }}
-                          target='_blank'
-                          className='download-icon-link'
-                        >
-                          <i className='dripicons-download file-download-icon'></i>
-                        </Link>
+                        
+                          {/* <i className='dripicons-download file-download-icon'></i> */}
+                        
                         <div className='text-center'>
-                          <i className='far fa-file-alt text-primary'></i>
+                        <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}`}></img>
+                          <i className='far fa-folder text-primary'></i>
                           <h6 className='text-truncate'>
-                            {item.provider} {item.type}
+                            {item.BucketName}
                           </h6>
                           <small className='text-muted'>
+                          {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
                             {/* 06 March 2022 / 5MB */}
                           </small>
                         </div>
                       </div>
+                        </a>
                     ))}
 
                     {/* <div className='file-box'>
@@ -130,15 +144,16 @@ function Insurance() {
                       </div>
                     </div> */}
                   </div>
-
+                 
                   <Link to='upload'>
                     <button
                       type='button'
-                      className='float-right btn btn-success btn-round waves-effect waves-light mt-2'
+                      className='float-right btn btn-success btn-round waves-effect waves-light mt-2 m-2'
                     >
-                      Upload New Documents
+                      New Insurance
                     </button>
                   </Link>
+                  
                 </div>
               </div>
             </div>

@@ -73,7 +73,9 @@ function AWSCallback() {
             msg,
             userType,
             email,
-            name
+            name,
+            has_insurance
+
           }) => {
             if (!statusCode) {
               sessionStorage.removeItem('access_token')
@@ -97,6 +99,8 @@ function AWSCallback() {
             sessionStorage.setItem('userType', userType)
             sessionStorage.setItem('email', email)
             sessionStorage.setItem('name', name)
+            
+            sessionStorage.setItem('has_insurance',has_insurance)
             sessionStorage.setItem('isLoggedIn',  true)
             
 

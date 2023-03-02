@@ -36,7 +36,7 @@ function PatientListData({ limit,pagenum, list = [] }) {
           <div className="row">
             <div className="col">
               <img
-                src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
+                src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.picture}
                 alt=""
                 className="thumb-sm rounded-circle mr-2"
                 style={{objectFit:'cover'}}

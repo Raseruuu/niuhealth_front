@@ -1,31 +1,4 @@
-/* Container needed to position the button. Adjust the width as needed */
-.upload-container {
-    position: relative;
-    width: 50%;
-  }
-  
-  /* Make the image responsive */
-  .upload-container img {
-    width: 100%;
-    height: auto;
-  }
-  
-  /* Style the button and place it in the middle of the container/image */
-  .upload-container .btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color: #555;
-    color: white;
-    font-size: 16px;
-    padding: 12px 24px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .upload-container .btn:hover {
-    background-color: black;
-  }
+
+  .swal-wide{
+    width:50% !important;
+}

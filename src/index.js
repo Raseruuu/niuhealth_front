@@ -14,6 +14,7 @@ import ErrorPage from './pages/ErrorPage'
 import About from './pages/About'
 import Appointment from './pages/patient/Appointment'
 import Insurance from './pages/patient/insurance/Insurance'
+import Bucket from './pages/patient/insurance/Bucket'
 import Upload from './pages/patient/insurance/Upload'
 import PatientDashboard from './pages/patient/layout/PatientDashboard'
 import Booking from './pages/patient/marketplace/Booking'
@@ -198,6 +199,8 @@ const router =createBrowserRouter(
               children: [
                 { index: true, element: <Insurance /> },
                 { path: 'upload', element: <Upload /> },
+                
+                { path: 'folders/:bucketid', element: <Bucket /> },
               ],
             },
           ],
@@ -227,6 +230,7 @@ const router =createBrowserRouter(
               path: 'visits',
               element: <Visits />,
             },
+            
             {
               path: 'visit-requests',
               

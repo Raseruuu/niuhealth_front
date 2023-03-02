@@ -149,12 +149,6 @@ export default function Marketplace() {
                                       setList(listOriginal
                                         .filter((item)=>{
                                             return(newstarfilter.includes(parseInt(item.average_ratings))
-                                              // newstarfilter[0]===(parseInt(item.average_ratings))||
-                                              // newstarfilter[1]===(parseInt(item.average_ratings))||
-                                              // newstarfilter[2]===(parseInt(item.average_ratings))||
-                                              // newstarfilter[3]===(parseInt(item.average_ratings))||
-                                              // newstarfilter[4]===(parseInt(item.average_ratings))||
-                                              // newstarfilter[5]===(parseInt(item.average_ratings))
                                               )
                                           }))
                                   }}

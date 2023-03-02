@@ -56,7 +56,11 @@
     border-color: #f14b4b;
     box-shadow: unset;
 }
-
+.btn-warning, .btn-gradient-warning {
+  background-color: #f1bc4b;
+    border-color: #f1bc4b;
+    box-shadow: unset;
+}
 a {
   color: #127e00;
 }

@@ -64,7 +64,13 @@ export default function WaitingRoom() {
   useEffect(() => {
     getStatus()
     getQueueCount()
-    Swal.fire({html:"Please stay until an available doctor picks you in waiting room.",}).then(()=>{myVideo.current.play()})
+    Swal.fire({
+      html:"Please stay until an available doctor picks you in waiting room.",
+      timer: 10,
+      timerProgressBar: true,
+      
+    })
+    .then(()=>{myVideo.current.play()})
   }, [])
 
   return (
@@ -96,7 +102,7 @@ export default function WaitingRoom() {
                 <video width="100%"
                 //  autoPlay={true}
                   height="442" 
-                controls 
+                controls={false}
                 // name="video1"
                 ref={myVideo}
                 // muted

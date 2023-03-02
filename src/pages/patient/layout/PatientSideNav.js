@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL, AWS_BUCKET } from '../../../constants'
 import SideNavLogo from '../../../components/SideNavLogo'
 import useLogout from '../../../hooks/useLogout'
+import Swal from 'sweetalert2'
 
 function PatientSideNav({ openSideNav }) {
   const location = useLocation()
@@ -10,6 +11,7 @@ function PatientSideNav({ openSideNav }) {
 
   const name = sessionStorage.getItem('name') || 'Welcome'
   const email = sessionStorage.getItem('email')
+  const has_insurance = (sessionStorage.getItem('has_insurance'))
   const sessionuser={name:name,email:email}
   function handleLogout(e) {
     e.preventDefault()
@@ -50,8 +52,23 @@ function PatientSideNav({ openSideNav }) {
       <div className='virtualTourSide'>
         <button
           type='button'
-          className='btn btn-success btn-round waves-effect waves-light figmaBigButton'
-          onClick={() => navigate('/virtualvisit')}
+          className={`btn ${(has_insurance==='true')?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
+          onClick={
+            () => {
+              console.log(has_insurance)
+              if (has_insurance==='true'){
+                navigate('/virtualvisit')
+              }
+              else if (has_insurance==='false'){
+                
+                Swal.fire({
+                  html:
+                  `
+                  Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or <a href='/patient/subscription/plans'>Subscribing.</a>
+                 
+                  `})
+                }
+            }}
         >
           Start Your Virtual Visit
         </button>
