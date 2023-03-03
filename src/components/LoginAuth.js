@@ -7,9 +7,9 @@ import useAuth from '../hooks/useAuth'
 export async function loader({ request }) {
   const access_token = sessionStorage.getItem('access_token')
   const token_type = sessionStorage.getItem('token_type')
-  const isLoggedIn = sessionStorage.getItem('isLoggedIn')
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn ')
 
-  if (isLoggedIn==='false' || access_token === 'undefined') {
+  if (isLoggedIn==='false' || !access_token || access_token === 'undefined') {
   //   // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
     window.location.replace('login')
   }

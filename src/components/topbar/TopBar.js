@@ -64,7 +64,7 @@ export function TopBar({ menuClick, homeAddress }) {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
-  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"profiles/pictures/":"profiles/pictures/"  )+"Default.jpg"})
+  const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"":""  )+"Default.jpg"})
   //notif badge number
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
@@ -145,7 +145,7 @@ export function TopBar({ menuClick, homeAddress }) {
             {(profile)?
 
             <img
-              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
+              src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}profiles/pictures/${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
               style={{objectFit:"cover", width:50, height:50}}

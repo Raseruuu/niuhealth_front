@@ -23,6 +23,7 @@ function PatientQueue({ limit, search }) {
   const [refreshList, setRefreshList] = useState(false)
   const navigate = useNavigate()
   const [meetingStatus, setMeetingStatus] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   
   const [delay, setDelay] = useState('3000')
   /*
@@ -93,6 +94,7 @@ function PatientQueue({ limit, search }) {
         
       )
       .then((res) => {
+        setIsLoading(false)
         const data = res.data || []
         setList(data.Data.slice(0, limit))
         console.log(res.data)
@@ -107,7 +109,7 @@ function PatientQueue({ limit, search }) {
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
+    setIsLoading(true)
     
 
     return () => {
@@ -120,87 +122,107 @@ function PatientQueue({ limit, search }) {
     // list.length===0?null:
     
   <>
-  {(list.length===0)?<CardLongItem><h4>There are no Virtual Visits in the Queue.</h4></CardLongItem>:
-    <>
-  {list.map((item, index) => (
-    <tr key={item?.recno || index}>
-      <td>
-        <Link
-          // to={'/provider/patient/profile'}
-          to={"/provider/patient/profile/"+item.patient_id}
-          state={{
-            selectedUser: item,
-          }}
-        >
-          {' '}
-          <div className='row'>
-          
-            <img
-              src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
-              alt=''
-              className='thumb-sm rounded-circle mr-2'
-              style={{width:100,height:100}}
-            />
-            <div className='col'>
-              <div>
-                {item.full_name}
-              </div>
-              {/* <div>
-                <StatusTextInsurance status={item.with_insurance || 0} />
-              </div> */}
-            </div>
-          </div>
-        </Link>
-      </td>
-      <td>
-        <a href={`mailto:${item.email}`}>
-          <MdOutlineEmail /> {item.email}
-        </a>
-      </td>
-      <td>
-        <a href={`tel:${item.contact_info}`}>
-          <MdPhone /> {item.contact_info}
-        </a>
-      </td>
-      <td>
-        {item.symptoms}
-        
-      </td>
-      <td>
-        {item.address}
-      </td>
-      {/* <td>
-        <span className='badge badge-md badge-soft-purple'>
-          {item.status ? 'Active' : 'Inactive'}
-        </span>
-      </td> */}
-      {/* //Action!! */}
-      <td>
-              <button
-                type='button'
-                className='btn btn-outline-success waves-effect waves-light'
-                onClick={handleActionClick.bind(
-                  this,
-                  actionX.meet,
-                  item
-                )}
+  <table className="table">
+  {(list.length===0)?<CardLongItem><h4>{(isLoading)?'...':'There are no Virtual Visits in the Queue.'}</h4></CardLongItem>:
+          <>
+              <>
+                <thead className="thead-light">
+                <tr>
+                  <th>Patient</th>
+                  <th>Email</th>
+                  <th>Contact Info</th>
+                  <th>Symptoms</th>
+                  <th>Address</th>
+
+                  <th>Action</th>
+                </tr>
+              </thead>
+              
+     
+        {list.map((item, index) => (
+          <tr key={item?.recno || index}>
+            <td>
+              <Link
+                // to={'/provider/patient/profile'}
+                to={"/provider/patient/profile/"+item.patient_id}
+                state={{
+                  selectedUser: item,
+                }}
               >
-                Meet
-              </button>{' '}
-              {/* <button
-                type='button'
-                className='btn btn-outline-danger waves-effect waves-light'
-                onClick={handleActionClick.bind(
-                  this,
-                  actionX.cancel,
-                  item
-                )}
-              >
-                Cancel
-              </button> */}
+                {' '}
+                <div className='row'>
+                
+                  <img
+                    src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
+                    alt=''
+                    className='thumb-sm rounded-circle mr-2'
+                    style={{width:100,height:100}}
+                  />
+                  <div className='col'>
+                    <div>
+                      {item.full_name}
+                    </div>
+                    {/* <div>
+                      <StatusTextInsurance status={item.with_insurance || 0} />
+                    </div> */}
+                  </div>
+                </div>
+              </Link>
             </td>
-    </tr>
-  ))}</>}</>)
+            <td>
+              <a href={`mailto:${item.email}`}>
+                <MdOutlineEmail /> {item.email}
+              </a>
+            </td>
+            <td>
+              <a href={`tel:${item.contact_info}`}>
+                <MdPhone /> {item.contact_info}
+              </a>
+            </td>
+            <td>
+              {item.symptoms}
+              
+            </td>
+            <td>
+              {item.address}
+            </td>
+            {/* <td>
+              <span className='badge badge-md badge-soft-purple'>
+                {item.status ? 'Active' : 'Inactive'}
+              </span>
+            </td> */}
+            {/* //Action!! */}
+            <td>
+                    <button
+                      type='button'
+                      className={`btn btn-outline-${item.status==="Waiting"?'warning':'success'} waves-effect waves-light`}
+                      onClick={handleActionClick.bind(
+                        this,
+                        actionX.meet,
+                        item
+                      )}
+                    >
+                      Meet
+                    </button>{' '}
+                    {/* <button
+                      type='button'
+                      className='btn btn-outline-danger waves-effect waves-light'
+                      onClick={handleActionClick.bind(
+                        this,
+                        actionX.cancel,
+                        item
+                      )}
+                    >
+                      Cancel
+                    </button> */}
+                  </td>
+          </tr>
+        ))}
+
+              </>
+              </>}
+            </table>
+  </>)
 }
 function dateGenerator(date, time) {
   return moment(date).add(time, 'hours').format('DD MMM YYYY h:mm a')

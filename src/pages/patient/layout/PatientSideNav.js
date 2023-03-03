@@ -64,7 +64,7 @@ function PatientSideNav({ openSideNav }) {
                 Swal.fire({
                   html:
                   `
-                  Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or <a href='/patient/subscription/plans'>Subscribing.</a>
+                  Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or by <a href='/patient/subscription/plans'>Subscribing.</a>
                  
                   `})
                 }

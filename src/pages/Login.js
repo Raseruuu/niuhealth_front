@@ -58,7 +58,8 @@ function Login( text=null ) {
         sessionStorage.setItem('expires_in',  res.data.Tokens.expires_in)
         sessionStorage.setItem('transactionType',  res.data.TransactionType)
         sessionStorage.setItem('userType',  res.data.UserType)
-        sessionStorage.setItem('isLoggedIn',  true)
+        sessionStorage.setItem('has_insurance', res.data.has_insurance)
+        sessionStorage.setItem('isLoggedIn', true)
         Swal.fire({ icon: 'success',html:`${Message}`}).then(()=>{
           navigate((`/`), { replace: true })
         })
@@ -191,7 +192,7 @@ function Login( text=null ) {
                             className="btn btn-gradient-success btn-round btn-block waves-effect waves-light"
                             type="submit"
                           >
-                            {isSubmitting?"Logging in...":"Log In"} <i className="fas fa-sign-in-alt ml-1"></i>
+                            {isSubmitting?"Logging in...":"Log In"} <i className="fas fa-loading ml-1"></i>
                           </button>
                         </div>
                       </div>

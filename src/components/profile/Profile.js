@@ -39,7 +39,7 @@ function ProfileEdit() {
     hours_fri_start: "8",
     hours_sat_end: "20",
     hours_sat_start: "8",
-    picture: (auth.userType==='Patient'?"profiles/pictures/":"")+"Default.jpg",
+    picture: (auth.userType==='Patient'?"":"")+"Default.jpg",
     contact_info: "",
     practice: "",
     provider_description: "",
@@ -415,11 +415,11 @@ function ProfileEdit() {
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${!imagepreview&&auth.userType==='Provider'?"providers/":""}${profile.picture}"></img>`,
+                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${!imagepreview&&auth.userType==='Provider'?"providers/":"profiles/pictures/"}${profile.picture}"></img>`,
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
-                          src={!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"")+profile.picture: (profile.picture)}
+                          src={!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile.picture: (profile.picture)}
                           className="rounded-circle profile-pic"
                           // style={{ margin: 'unset' }}
                         />

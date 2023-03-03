@@ -11,10 +11,10 @@ function PatientListData({ limit,pagenum, list = [] }) {
   var j=0
   var k=0
   for (var i in list){
-    console.log("list",list)
-    console.log(paginatedlist,limit, pagenum,(pagenum*limit)-limit,i,j,list[i])
+    // console.log("list",list)
+    // console.log(paginatedlist,limit, pagenum,(pagenum*limit)-limit,i,j,list[i])
     // console.log(parseInt(i)===((pagenum*limit)-limit),i,(pagenum*limit)-limit)
-    console.log("Page "+(pagenum))
+    // console.log("Page "+(pagenum))
     if((parseInt(i))===((pagenum*limit)-limit)){
       
       for (var k=0; k<limit;k++){

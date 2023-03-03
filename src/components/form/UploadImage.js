@@ -2,12 +2,13 @@ import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import { useEffect, useRef, useState } from 'react'
 import './imageup.css'
 
-export function UploadOneImage({image,setImage,previewImage}){
+export function UploadOneImage({image,setImage, disabled}){
   const [imagepreview, setImagePreview] = useState(false)
-  
+  const [previewImage, setPreviewImage] = useState({path:'', file:''})
   // const [image, setImage] = useState({})
   const imgRef = useRef()
   function triggerFileInput() {
+   
     if (imgRef.current) {
         imgRef.current.click()
     }}
@@ -15,6 +16,8 @@ export function UploadOneImage({image,setImage,previewImage}){
     const [file] = e.target.files;
     console.log("FILE HERE: ",file)
     setImage({...image, file:file})
+    
+    setPreviewImage({...image, file:file})
     setImagePreview(true)
   };
   
@@ -45,7 +48,7 @@ export function UploadOneImage({image,setImage,previewImage}){
         fileReader.abort();
       }
     }
-  }, [imagepreview])
+  }, [previewImage])
 
 return (
 
@@ -60,8 +63,9 @@ return (
                     ref={imgRef}
                     onChange={handleImageInputChange}
                 />
-                {(image.path!=="undefined")?(
+                {(image.path!=='undefined')?(
                   <>
+                  {(imagepreview)?(
                   <img
                       alt=""
                       style={{objectFit: 'cover', margin: 'unset' ,width:180,height:150}}
@@ -70,7 +74,6 @@ return (
                       Swal.fire({
                           // title: 'Profile Picture',
                           customClass: 'swal-wide',
-                          scroll:true,
                           html: `<img height="600px" src="${!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}"></img>`,
                           // { AWS_BUCKET_SERVICES } + profile.picture,
                       })
@@ -78,10 +81,11 @@ return (
                       src={!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}
                       className="ob waves-effect waves-light"
                       
-                  />
+                  />):null}
                   <div className='row' style ={{marginTop:'10px'}}>
                         <button
                           type="button"
+                          disabled={disabled}
                           className="btn btn-gradient-success waves-effect waves-light"
                           onClick={triggerFileInput}
                           >

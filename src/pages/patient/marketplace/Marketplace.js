@@ -10,7 +10,7 @@ export default function Marketplace() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [listOriginal, setListOriginal] = useState([])
-   const [toggleFilter, setToggleFilter] = useState(true)
+   const [toggleFilter, setToggleFilter] = useState(false)
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
   const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
@@ -109,7 +109,7 @@ export default function Marketplace() {
                       </div>
                     </div>
                       {(toggleFilter)?  <>
-                    <div className="row">
+                    {/* <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
                           <h6 className="mb-3 mt-0">Price Range</h6>
@@ -121,7 +121,7 @@ export default function Marketplace() {
                           />
                         </div>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="row">
                       <div className="col-lg-12">
                         <div className="p-3">
@@ -221,7 +221,7 @@ export default function Marketplace() {
                           <div className="d-flex justify-content-between my-2">
                             <p className="product-price">${item.cost_price}</p>
                             <p className="mb-0 row product-review align-self-center">
-                              
+                              <div className='col-md-10 m-3'>
                               <Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
@@ -233,7 +233,7 @@ export default function Marketplace() {
                                 readonly={true} 
                               />
                               ({item.average_ratings})
-                              
+                              </div>
                             </p>
                           </div>
                         </div>

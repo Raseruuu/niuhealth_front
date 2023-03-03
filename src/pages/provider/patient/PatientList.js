@@ -363,7 +363,9 @@ function PatientList() {
           </form>
         </div>
       </TableTitle>
-      <TableCard
+      
+      {(list.length>0)?<>
+        <TableCard
         headers={[
           'Patient',
           'Email',
@@ -372,9 +374,9 @@ function PatientList() {
           'Insurance',
         ]}
       >
-        {(list.length>0)?
-        <>
+        
         <PatientListData limit={pageLimit} pagenum={pageNum} list={list} />
+        
         <Pagination
           activePage={pageNum}
           itemsCountPerPage={pageLimit}
@@ -387,14 +389,16 @@ function PatientList() {
             console.log(e);
             setPageNum(e)}}
                   />
-        </>:<CardLongItem><h4>This is where the Patients you have interacted with will appear.</h4></CardLongItem>
-}
-        {isLoading ? 'Loading please wait...' : null}
+        {/* {isLoading ? 'Loading please wait...' : null} */}
         {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {list.length <= 0 && searchText.length > 0
           ? '0 record found.'
           : null}
       </TableCard>
+
+        </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"This is where the Patients you have interacted with will appear."}</h5></CardLongItem>
+        }
+      
       
     </ContainerFluid>
   )

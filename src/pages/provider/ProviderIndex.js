@@ -56,23 +56,8 @@ function ProviderIndex() {
         <div className="card-body">
           <h4 className="header-title mt-0 mb-3">Virtual Visit Queue</h4>
           <div className="table-responsive">
-            <table className="table">
-              <>
-                <thead className="thead-light">
-                <tr>
-                  <th>Patient</th>
-                  <th>Email</th>
-                  <th>Contact Info</th>
-                  <th>Symptoms</th>
-                  <th>Address</th>
-
-                  <th>Action</th>
-                </tr>
-              </thead>
-              
+            
                 <PatientQueue limit={6} />
-              </>
-            </table>
           </div>
         </div>
       </div>

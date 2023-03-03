@@ -69,9 +69,8 @@ function PatientIndexPage() {
                           Swal.fire({
                             html:
                             `
-                            <a href='subscription/plans'><b>Subscribe Now! </b></a> to access virtual visits.<br>
-                            <a href='insurance'><b>Submit Insurance</b></a> 
-                             for more benefits.
+                            Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or by <a href='/patient/subscription/plans'>Subscribing.</a>
+                           
                             `})
                           }
                       }}

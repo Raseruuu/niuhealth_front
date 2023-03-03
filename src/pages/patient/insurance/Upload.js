@@ -83,13 +83,19 @@ function Upload() {
 
           if (Status) {
             setIsSuccess(true)
-          } else {
+          } 
+          else {
             setIsSuccess(false)
+            Swal.fire({
+              icon:'warning',
+              html:`${Message}`
+            })
             throw new Error(Message)
           }
         })
         .catch((err) => {
           setErrMsg(err.Message)
+          
           throw err
         })
     } catch (error) {
@@ -118,7 +124,7 @@ function Upload() {
               <div className='col-lg-12'>
                 <div className='card'>
                   <div className='card-body'>
-                    <h4 className='header-title mt-0 mb-3'>
+                    <h4 className='header-title mt-0 mb-3'> 
                       Upload your insurance document to enjoy free/discounted service
                     </h4>
                     <label>
@@ -128,6 +134,7 @@ function Upload() {
                       className="form-control"
                       type="text"
                       name="Title"
+                      disabled={isSuccess}
                       {...register('Title', { required: true })}
                       required
                     />
@@ -206,14 +213,23 @@ function Upload() {
                           ))}
                     </div> */}
                   <div className='row'>
-                  <UploadOneImage 
-                            image={frontImage} 
-                            setImage={setFrontImage} 
-                            previewImage={frontImage} />
-                  <UploadOneImage 
+                    <div className='col lg-4'>
+                      <label>Front Image</label>
+                        <UploadOneImage 
+                          disabled={isSuccess}
+                          image={frontImage} 
+                          setImage={setFrontImage} 
+                          previewImage={frontImage} />
+                    </div>
+                    
+                    <div className='col lg-4'>
+                    <label>Back Image</label>
+                          <UploadOneImage
+                            disabled={isSuccess}
                             image={backImage} 
                             setImage={setBackImage} 
                             previewImage={backImage} />
+                            </div>
                     </div>
                     {/* <div>
                       <input
@@ -264,7 +280,7 @@ function Upload() {
                     {!isSuccess ? (<>
                       <button
                         type='submit'
-                        onClick={handleUpload}
+                        // onClick={handleUpload}
                         className='btn btn-success btn-round waves-effect waves-light'
                         disabled={isSubmitting}
                       >

@@ -278,7 +278,7 @@ function PatientRegistration() {
 
 <div className="col-lg-6">
 
-    <div className="card row-md-8 ">
+    <div className="card row-lg-8 ">
         <div className="card-body">
             <div className="media">
                 <div className="media-body align-self-center">
@@ -286,7 +286,7 @@ function PatientRegistration() {
                 </div>
             
 
-    <div className="pricingTable1 text-center row-lg">
+    <div className="pricingTable1 text-center row-lg-4">
         <ul className="list-unstyled pricing-content-2 text-left py-3 border-0 mb-0">
             <li>Unlimited access to Virtual and In-Person Visits</li>
             <li>Unlimited access to NIU Health In-Person Visits</li>

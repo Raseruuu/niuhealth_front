@@ -2,9 +2,96 @@ import { Link, useLocation, useParams } from "react-router-dom"
 import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from "../../../constants"
 import TableCard, { TableTitle } from "../../../components/table/Tables"
 import { useEffect, useState } from 'react'
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from "../../../hooks/useAxiosPrivate"
+import CardItem from "../../../components/cards/Card"
+import { useCallback } from "react"
+import ImageViewer from 'react-simple-image-viewer';
+
 // TODO: check other UI if it has same layout
+import styled from "@emotion/styled"
+
+export const StyleWrapper = styled.div`
+  .styles-module_image__2hdkJ{
+    height : 800px;
+    margin-bottom : 120px;
+    
+    }
+  .styles-module_wrapper__1I_qj{
+    margin-top : 70px;
+    background-color :rgba(0 0 0 / 50%);
+  }
+  img{
+    z-index : 50;
+    opacity: 1.0 !important;
+  }
+`
+
+const StatusText = ({ status }) => {
+  const statusColor = {
+    0: 'badge-soft-purple',
+    1: "badge-soft-success",
+    2: 'badge-soft-danger',
+    3: 'badge-soft-danger',
+    4: "badge-soft-success",
+  }
+  const statusText = {
+    0: 'For Approval',
+    1: "Completed",
+    2: 'Cancelled By You',
+    3: 'Cancelled By Doctor',
+    4: "Approved",
+  }
+  return (
+    <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
+      {statusText[status]}
+    </span>
+  )
+}
+const StatusIcon = ({ icontype }) => {
+  const StatusColor = {
+    0: 'text-purple',
+    2: 'text-danger',
+    3: 'text-danger',
+    1:"text-success",
+    4:"text-success",
+  }
+  return (
+    <div className="task-priority-icon">
+      <i className={`fas fa-circle ${StatusColor[icontype]}`}></i>
+    </div>
+  )
+}
+
 function PatientProfile() {
   const { action,id } = useParams()
+  const [profile,setProfile] = useState({})
+  const [insuranceList,setInsuranceList] = useState([])
+  const [profileDetails,setProfileDetails] = useState({})
+  const [paymentHistory,setPaymentHistory] = useState([ ])
+  
+  const [appointmentslist,setAppointmentsList] = useState([])
+  setAppointmentsList
+  const [isLoading, setIsLoading] = useState(true)
+  const [ins_view,setIns_view] = useState(false)
+  
+  const [ins_index,setIns_index] = useState(0)
+  // const [item,setItem]=useState({BucketName:"",BucketId:"",FrontImage:"",BackImage:""})
+  const openImageViewer = useCallback((index) => {
+    setCurrentImage(index);
+    setIsViewerOpen(true);
+  }, []);
+  
+  
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [images,setImages] = useState( []);
+  const closeImageViewer = () => {
+    setCurrentImage(0);
+    setIsViewerOpen(false);
+  };
+  const axiosPrivate = useAxiosPrivate()
+  const { auth } = useAuth()
   let {
     state: { selectedUser },
   } = useLocation()
@@ -17,7 +104,7 @@ function PatientProfile() {
     async function getProfileDetails() {
       await axiosPrivate
         .post(
-          'getPatientDetails',
+          'providerGetPatientDetails',
           { Email: auth.email ,PatientID:id},
           {
             signal: controller.signal
@@ -30,12 +117,22 @@ function PatientProfile() {
          
           if (Status) {
             setProfile(details)
-            console.log('deets',details)
+            setIsLoading(false)
+            console.log('deets',res.data.Data )
+            setInsuranceList(res.data.Data.InsuranceBuckets)
+
+            setProfileDetails(res.data.Data.Details) 
+            setPaymentHistory(res.data.Data.Payments)
+            setAppointmentsList(res.data.Data.Appointments)
+
+
+
           } else {
             throw new Error(Message)
           }
         })
         .catch((err) => {
+          setIsLoading(false)
           console.error(err)
         })
     }
@@ -68,12 +165,12 @@ function PatientProfile() {
         <div className='float-right'>
           <ol className='breadcrumb'>
             <li className='breadcrumb-item'>
-              <Link to='/provider'>NU Health</Link>
+              <Link to='/provider'>NIU Health</Link>
             </li>
             <li className='breadcrumb-item'>
-              <Link to='/provider/patient'>Patient</Link>
+              <Link to='/provider/patient'>Patients</Link>
             </li>
-            <li className='breadcrumb-item active'>{selectedUser.first_name} {selectedUser.middle_name} {selectedUser.last_name}</li>
+            <li className='breadcrumb-item active'>{profileDetails.first_name} {profileDetails.middle_name} {profileDetails.last_name}</li>
           </ol>
         </div>
       </TableTitle>
@@ -87,9 +184,9 @@ function PatientProfile() {
                   <div className='col-lg-4 align-self-center mb-3 mb-lg-0'>
                     <div className='met-profile-main'>
                       <div className='met-profile-main-pic'>
-                      {}
+                
                         <img
-                          src={AWS_BUCKET_SERVICES+"profiles/pictures/"+selectedUser.patient_id+"/"+selectedUser.picture}
+                          src={(profileDetails.picture)?(AWS_BUCKET_SERVICES+'profiles/pictures/'+profileDetails.picture):AWS_BUCKET_SERVICES+'profiles/pictures/Default.jpg'}
                           alt=''
                           className='rounded-circle'
                           style={{width:125,height:125,objectFit:'cover'}}
@@ -99,7 +196,7 @@ function PatientProfile() {
                         </span> */}
                       </div>
                       <div className='met-profile_user-detail'>
-                        <h5 className='met-user-name'>{selectedUser.first_name} {selectedUser.middle_name} {selectedUser.last_name}</h5>
+                        <h5 className='met-user-name'>{profileDetails.first_name} {profileDetails.middle_name} {profileDetails.last_name}</h5>
                         {/* <p className='mb-0 met-user-name-post'>
                           {selectedUser.status}
                         </p> */}
@@ -110,19 +207,19 @@ function PatientProfile() {
                     <ul className='list-unstyled personal-detail'>
                       <li className=''>
                         <i className='dripicons-phone mr-2 text-info font-18'></i>{" "}
-                        <b> phone </b> : {selectedUser.contact_info}
+                        <b> phone </b> : {profileDetails.contact_info}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-mail text-info font-18 mt-2 mr-2'></i>{" "}
-                        <b> Email </b> : {selectedUser.email}
+                        <b> Email </b> : {profileDetails.email}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-location text-info font-18 mt-2 mr-2'></i>{" "}
-                        <b>Location</b> : {selectedUser.address}
+                        <b>Location</b> : {profileDetails.address}
                       </li>
                     </ul>
                     <div className='button-list btn-social-icon'>
-                      <button type='button' className='btn btn-blue btn-circle'>
+                      {/* <button type='button' className='btn btn-blue btn-circle'>
                         <i className='fab fa-facebook-f'></i>
                       </button>
 
@@ -138,7 +235,7 @@ function PatientProfile() {
                         className='btn btn-pink btn-circle  ml-2'
                       >
                         <i className='fab fa-dribbble'></i>
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
@@ -159,18 +256,28 @@ function PatientProfile() {
                 <li className='nav-item'>
                   <a
                     className='nav-link'
-                    id='activity_detail_tab'
+                    id='appointments_list_detail_tab'
                     data-toggle='pill'
-                    href='#activity_detail'
+                    href='#appointments_list'
                   >
-                    Patient Chart
+                    Appointments
+                  </a>
+                </li>
+                <li className='nav-item'>
+                  <a
+                    className='nav-link'
+                    id='payment_history_detail_tab'
+                    data-toggle='pill'
+                    href='#payment_history'
+                  >
+                    Payment History
                   </a>
                 </li>
                
                 <li className='nav-item'>
                   <a
                     className='nav-link'
-                    id='insurance'
+                    id='insurance_detail_tab'
                     data-toggle='pill'
                     href='#insurance'
                   >
@@ -188,7 +295,7 @@ function PatientProfile() {
             <div className='tab-pane fade show active' id='general_detail'>
               <div className='row'>
                 <div className='col-xl-4'>
-                  <div className='card'>
+                  {/* <div className='card'>
                     <div className='card-body'>
                       <div className=' d-flex justify-content-between'>
                         <img
@@ -221,7 +328,7 @@ function PatientProfile() {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   {/* <div className='card'>
                     <div className='card-body dash-info-carousel'>
                       <h4 className='mt-0 header-title mb-4'>
@@ -307,7 +414,7 @@ function PatientProfile() {
                     </div>
                   </div> */}
                 </div>
-                <div className='col-lg-8'>
+                {/* <div className='col-lg-8'>
                   <div className='card'>
                     <div className='card-body'>
                       <div className='float-lg-right float-none eco-revene-history justify-content-end'>
@@ -337,10 +444,10 @@ function PatientProfile() {
                       ></canvas>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
-              {/* <div className='row'>
-                <div className='col-lg-4'>
+              <div className='row'>
+                {/* <div className='col-lg-4'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='mt-0 header-title'>Patient Schedule</h4>
@@ -372,7 +479,7 @@ function PatientProfile() {
                   </div>
                 </div> */}
 
-                {/* <div className='col-lg-4'>
+                <div className='col-lg-4'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='mt-0 header-title'>Patient Diagnosis</h4>
@@ -384,12 +491,12 @@ function PatientProfile() {
                         className='form-control'
                         rows='3'
                         id='clipboardTextarea'
-                        defaultValue={`X-ray completed. Diagnosed with severe pneumonia.\nUrinary tract infection with yeast infection.`}
+                        defaultValue={` `}
                       ></textarea>
                       <div className='mt-3'>
                         <button
                           type='button'
-                          className='btn btn-gradient-secondary btn-clipboard'
+                          className='btn btn-gradient-secondary btn-clipboard m-2'
                           data-clipboard-action='copy'
                           data-clipboard-target='#clipboardTextarea'
                         >
@@ -397,7 +504,7 @@ function PatientProfile() {
                         </button>{" "}
                         <button
                           type='button'
-                          className='btn btn-gradient-primary btn-clipboard'
+                          className='btn btn-gradient-primary btn-clipboard m-2'
                           data-clipboard-action='cut'
                           data-clipboard-target='#clipboardTextarea'
                         >
@@ -406,9 +513,9 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
 
-                {/* <div className='col-lg-4'>
+                <div className='col-lg-8'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='header-title mt-0 mb-4'>
@@ -544,20 +651,178 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div> */}
-              {/* </div> */}
+                </div>
+              </div>
             </div>
+            <div className='tab-pane fade' id='appointments_list'>
+              <div className='row-lg-12'>
+                    {(appointmentslist.length!==0)?
+                      <TableCard headers={["Description","Service Description","Appointment Time", "Status"]}>
+                      {appointmentslist.map((item,index)=>(
+                        <tr key={index}>
+                        <td>
+                          <Link
+                            to={"profile/"+item.patient_id}
+                            state={{
+                              selectedUser: item,
+                            }}
+                          >
+                            <div className="row">
+                              <div className="col">
+                                <img
+                                  src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.image}
+                                  alt=""
+                                  className="thumb-sm rounded-circle mr-2"
+                                  style={{objectFit:'cover'}}
+                                />
+                                {item.provider_name} 
+                              </div>
+                            </div>
+                          </Link>
+                        </td>
 
-            <div className='tab-pane fade' id='activity_detail'>
-              <div className='row'></div>
+                        <td>
+                        {item.service_description}
+                        </td>
+                        <td>
+                        {moment(item.trans_date_time).format('hh:mm a MM/DD/YY')}
+                        </td>
+                       
+                        <td>
+                        <StatusText status={item.status}/>
+                        </td>
+                        </tr>
+
+                      ))}
+                      
+                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoading)?"Loading...":"No Appointments."}</CardItem></>}
+                  
+                </div>
+            </div>
+            <div className='tab-pane fade' id='payment_history'>
+              <div className='row-lg-12'>
+                    {(paymentHistory.length!==0)?
+                      <TableCard headers={["Description","Payment Time", "Receipt", "Amount"]}>
+                      {paymentHistory.map((item,index)=>(
+                        <tr key={index}>
+                        <td>
+                        {item.description} 
+                        </td>
+                        <td>
+                        {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
+                        </td>
+                        <td>
+                        <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
+                        </td>
+                        <td>
+                        {item.amount}
+                        </td>
+                        </tr>
+
+                      ))}
+                      
+                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoading)?"Loading...":"No Payment History results."}</CardItem></>}
+                  
+                </div>
             </div>
             <div className='tab-pane fade' id='insurance'>
-              <div className='row'></div>
+              
+              <div className='row m-2'>
+              <div className='card col-lg-12'>
+                <div className='card-body m-2'>
+                {(!ins_view)?<>
+                <div className='file-box-content'>
+                    {(insuranceList.length===0)?
+                      <>
+                        <CardItem>{(isLoading)?`Loading...`:(`${profileDetails.first_name} has no submitted Insurance Documents.`)}</CardItem>
+                      </>:<></>}
+                    {insuranceList.map((item,index) => (
+                      <a
+                      // className="btn-success waves"
+                        key={index}
+                          style={{background:'none', marginLeft:'2px' }}
+                          onClick={()=>{
+                                setIns_view(true);setIns_index(index);
+                                setImages([
+                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[index].FrontImage}`,
+                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[index].BackImage}`
+                                ])
+                              }
+                            }
+                        
+                        >
+                          <div className='file-box'>
+                            
+                              {/* <i className='dripicons-download file-download-icon'></i> */}
+                            
+                            <div className='text-center'>
+                            <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${item.BucketName}/${item.FrontImage}`}></img>
+                              <i className='far fa-folder text-primary ml-3'></i>
+                              <h6 className='text-truncate'>
+                                {item.BucketName}
+                              </h6>
+                              <small className='text-muted'>
+                              {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
+                                {/* 06 March 2022 / 5MB */}
+                              </small>
+                            </div>
+                          </div>
+                        </a>
+                    ))}
+
+                  </div>
+
+                </>:<>
+                  <h4 className='header-title mt-0 mb-3'> {insuranceList[ins_index].BucketName}</h4>
+                      Created: {moment(insuranceList[ins_index].DateUploaded).format('hh:mm a MM/DD/YY')}
+                      <br/>
+                      <div className='row m-5'>
+                        
+                        <CardItem className={"m-2 col lg-4"}  >
+                          <div className='' onClick= {() => openImageViewer(0)}>
+                            Front Image<br/><br/>
+                            <img style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].FrontImage}`}></img>
+                            </div>
+                        </CardItem>
+                        <CardItem className={"m-2 col lg-4"} >
+                        <div className='m-2 col lg-4'  onClick= {() => openImageViewer(1)}>
+                        Back Image<br/><br/>
+                            <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].BackImage}`}></img>
+                            </div>
+                        </CardItem>
+                      </div>
+                      
+                        <button
+                          type='button'
+                          onClick={()=>{
+                            setIns_view(false)
+                          }}
+                          className='float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
+                        >
+                          Back
+                        </button>
+                      </>}
+                 </div>
+              </div>
+            </div>
             </div>
             
           </div>
         </div>
       </div>
+      {isViewerOpen && (
+        <div style={{marginTop:'100px'}}>
+          <StyleWrapper>
+        <ImageViewer
+          src={ images }
+          currentIndex={ currentImage }
+          disableScroll={ true   }
+          closeOnClickOutside={ true }
+          onClose={ closeImageViewer }
+        />
+        </StyleWrapper>
+        </div>
+      )}
     </div>
   )
 }

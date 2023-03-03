@@ -13,10 +13,12 @@ function Insurance() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [patientID,setPatientID] = useState("")
+  
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
-
+    setIsLoading(true)
     async function getList() {
       await axiosPrivate
         .post(
@@ -32,6 +34,8 @@ function Insurance() {
           const { Status, Data: data, Message } = res.data
 
           if (Status) {
+            
+            setIsLoading(false)
             setList(data.Buckets)
             setPatientID(res.data.Data.PatientId)
           } 
@@ -41,6 +45,8 @@ function Insurance() {
           
         })
         .catch((err) => {
+          
+          setIsLoading(false)
           console.error(err)
           setErrMsg(err.message)
         })
@@ -97,12 +103,15 @@ function Insurance() {
                   <h4 className='header-title mt-0 mb-3'>Insurance Folders</h4>
 
                   <div className='file-box-content'>
-                    {(list.length===0)?<><CardItem>You have no submitted Insurance Documents.</CardItem></>:<></>}
+                    {(list.length===0)?
+                      <>
+                        <CardItem>{(isLoading)?`Loading...`:(`You have no submitted Insurance Documents.`)}</CardItem>
+                      </>:<></>}
                     {list.map((item) => (
                       <a
                       // className="btn-success waves"
-                      style={{background:'none'}}
-                      href={`insurance/folders/${item.BucketId}`}
+                      style={{background:'none', marginLeft:'2px'}}
+                      href={`/patient/insurance/folders/${item.BucketId}`}
                       // onClick={()=>Swal.fire(
                       //   {html: 
                       //     `
@@ -118,7 +127,7 @@ function Insurance() {
                         
                         <div className='text-center'>
                         <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}`}></img>
-                          <i className='far fa-folder text-primary'></i>
+                          <i className='far fa-folder text-primary ml-3'></i>
                           <h6 className='text-truncate'>
                             {item.BucketName}
                           </h6>
