@@ -1,11 +1,46 @@
+import { useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
+import useAuth from '../../hooks/useAuth'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
 function PatientIndexPage() {
   const navigate = useNavigate()
   // TODO: get from CONTEXT
   const isEmailVerified = Boolean(sessionStorage.getItem('email_verified'))
+  const [subscribed,setSubscribed] = useState()
+  const { auth } = useAuth();
+  
+  const axiosPrivate = useAxiosPrivate()
+  const [isLoading,setIsLoading]=useState(true)
   const has_insurance=sessionStorage.getItem('has_insurance')
+  useEffect(()=>{
+    
+    const controller = new AbortController()
+    function getPatientDetails() {
+      axiosPrivate
+        .post(
+          'getPatientDetails',
+          {
+            Email:auth.email||sessionStorage.getItem('email')
+          },
+          {signal: controller.signal}
+        )
+        .then((res) => {
+          
+          setIsLoading(false)
+          console.log('res',res)
+          setSubscribed(res.data.Data[0].subscription_plan==='1')
+
+          sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  getPatientDetails()
+  },[])
   return (
     <div className='page-wrapper'>
       <div className='page-content'>
@@ -55,27 +90,29 @@ function PatientIndexPage() {
                   </ol>
                   
                   <p style={{ marginTop: '40px' }}>
+                 
                   <button
+                    disabled={isLoading}
                     type='button'
-                    className={`btn ${(has_insurance==='true')?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
+                    className={`btn ${(has_insurance==='true'||subscribed)?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
                     onClick={
                       () => {
                         console.log(has_insurance)
-                        if (has_insurance==='true'){
+                        if (has_insurance==='true'||subscribed){
                           navigate('/virtualvisit')
                         }
-                        else if (has_insurance==='false'){
+                        else{
                           
                           Swal.fire({
                             html:
                             `
                             Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or by <a href='/patient/subscription/plans'>Subscribing.</a>
-                           
+                          
                             `})
                           }
                       }}
                   >
-                    Start Your Virtual Visit
+                    {(isLoading)?"Loading...":"Start Your Virtual Visit"}
                   </button>
                   </p>
                 </div>

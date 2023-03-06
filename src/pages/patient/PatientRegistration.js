@@ -208,13 +208,20 @@ function PatientRegistration() {
     </div>
   
     <form onSubmit={handleSubmit(handleRegisterForm)}>
-    <div className="form-group row">
-        <div className="col-md-12">
+        <div className="form-group row">
+          <div className="col-md-12">
             <label htmlFor="example-text-input" className="col-form-label text-right" {...register("Address")}>Address</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" id="example-text-input" {...register("Contact")} />
-                </div>
+                    <input className="form-control" type="text" id="example-text-input" {...register("Address")} />
             </div>
+        </div>
+        <div className="form-group row">
+          <div className="col-md-12">
+            <label htmlFor="example-text-input" className="col-form-label text-right" {...register("ZipCode")}>Zip Code</label></div>
+                <div className="col-md-12">
+                    <input className="form-control" type="text" id="example-text-input" {...register("ZipCode")} />
+            </div>
+        </div>
         <div className="form-group row">
             <div className="col-md-6">
                 <label htmlFor="example-text-input" className="col-form-label text-right">Country</label>

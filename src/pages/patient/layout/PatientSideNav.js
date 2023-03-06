@@ -3,6 +3,9 @@ import { APP_URL, AWS_BUCKET } from '../../../constants'
 import SideNavLogo from '../../../components/SideNavLogo'
 import useLogout from '../../../hooks/useLogout'
 import Swal from 'sweetalert2'
+import { useEffect, useState } from 'react'
+import useAuth from '../../../hooks/useAuth'
+import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 function PatientSideNav({ openSideNav }) {
   const location = useLocation()
@@ -12,13 +15,59 @@ function PatientSideNav({ openSideNav }) {
   const name = sessionStorage.getItem('name') || 'Welcome'
   const email = sessionStorage.getItem('email')
   const has_insurance = (sessionStorage.getItem('has_insurance'))
+  const [subscribed,setSubscribed] = useState()
   const sessionuser={name:name,email:email}
+  const {auth} = useAuth();
+  const [isLoading,setIsLoading]=useState(true)
+  const axiosPrivate = useAxiosPrivate()
   function handleLogout(e) {
     e.preventDefault()
-    logout()
-    navigate('/login',{replace:true})
+    Swal.fire(
+      {
+        icon:'question',
+        html:`Are you sure you want to Logout?`,
+        showConfirmButton:true,
+        showCancelButton:true
+      }
+      )
+      .then((result)=>{
+        if(result.isConfirmed)
+          { 
+            logout()
+            navigate('/login',{replace:true})
+          }
+        else{
+          return
+        }
+      })
+   
+    
   }
-
+  useEffect(()=>{
+    
+    const controller = new AbortController()
+    function getPatientDetails() {
+      axiosPrivate
+        .post(
+          'getPatientDetails',
+          {
+            Email:auth.email||sessionStorage.getItem('email')
+          },
+          {signal: controller.signal}
+        )
+        .then((res) => {
+          
+          setIsLoading(false)
+          console.log('res',res)
+          setSubscribed(res.data.Data[0].subscription_plan==='1')
+          sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
+        })
+        .catch((error) => {
+          console.error(error)
+        })
+    }
+  getPatientDetails()
+  },[])
   return (
     <div
       className='left-sidenav'
@@ -50,13 +99,15 @@ function PatientSideNav({ openSideNav }) {
       </div> */}
 
       <div className='virtualTourSide'>
+        
         <button
+          disabled={isLoading}
           type='button'
-          className={`btn ${(has_insurance==='true')?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
+          className={`btn ${(has_insurance==='true'||subscribed)?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
           onClick={
             () => {
               console.log(has_insurance)
-              if (has_insurance==='true'){
+              if (has_insurance==='true'||subscribed){
                 navigate('/virtualvisit')
               }
               else if (has_insurance==='false'){
@@ -70,7 +121,7 @@ function PatientSideNav({ openSideNav }) {
                 }
             }}
         >
-          Start Your Virtual Visit
+          {(isLoading)?"Loading...":"Start Your Virtual Visit"}
         </button>
       </div>
       {/* {location?.pathname === '/patient/virtualvisit' ? (
@@ -142,7 +193,11 @@ function PatientSideNav({ openSideNav }) {
         </li>
       </ul>
       <div className='logoutDiv'>
-        <Link onClick={handleLogout.bind(this)}>Logout</Link>
+        <NavLink
+          onClick={handleLogout.bind(this)}
+          >
+            Logout
+        </NavLink>
       </div>
     </div>
   )

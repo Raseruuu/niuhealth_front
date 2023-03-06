@@ -49,6 +49,7 @@ function ProfileEdit() {
     last_name: "",
     local_time_zone: "",
     address:"",
+    zipcode:"",
     country_city_id:"",
     country_id:"0",
     date_of_birth:"2000-01-01",
@@ -112,6 +113,7 @@ function ProfileEdit() {
       formData.append('LastName', profile.last_name)
       formData.append('ContactInfo', profile.contact_info)
       formData.append('Address', profile.address)
+      formData.append('ZipCode', profile.zipcode)
       formData.append('CountryID', profile.country_id)
       formData.append('CityID', profile.country_city_id)
       formData.append('DateOfBirth', profile.date_of_birth)
@@ -617,24 +619,46 @@ function ProfileEdit() {
                       </div>
                      
                       {(auth.userType==='Patient')?(
-                      <div className="form-group row">
-                        <label
-                          htmlFor="example-text-input"
-                          className="col-sm-2 col-form-label text-right"
-                        >
-                          Address
-                        </label>
-                        <div className="col-sm-10">
-                          <input
-                            disabled={disableForm}
-                            className="form-control"
-                            type="text"
-                            name="address"
-                            value={profile.address}
-                            onChange={handleInputChange.bind(this)}
-                          />
+                      <>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-sm-2 col-form-label text-right"
+                          >
+                            Address
+                          </label>
+                          <div className="col-sm-10">
+                            <input
+                              disabled={disableForm}
+                              className="form-control"
+                              type="text"
+                              name="address"
+                              value={profile.address}
+                              onChange={handleInputChange.bind(this)}
+                            />
+                          </div>
                         </div>
-                      </div>):null}
+                        <div className="form-group row">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-sm-2 col-form-label text-right"
+                          >
+                            Zip Code
+                          </label>
+                          <div className="col-sm-10">
+                            <input
+                              disabled={disableForm}
+                              className="form-control"
+                              type="text"
+                              name="zipcode"
+                              value={profile.zipcode}
+                              onChange={handleInputChange.bind(this)}
+                            />
+                          </div>
+                        </div>
+                        
+                      </>
+                      ):null}
                       {(auth.userType==='Patient')?(
                         <>
                       <div

@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Footer from '../../../components/Footer'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -37,7 +38,19 @@ function Subscription() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
-
+  async function handleCancelSub(){
+    axiosPrivate
+      .post(
+        "cancelSubscription",
+        {Email:auth.email})
+      .then((res) => {
+        setIsLoading(false)
+        console.log('res',res)
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -121,11 +134,21 @@ function Subscription() {
                           Renew Your Subscription
                         </button>{' '}
                         <button
-                          disabled={true}
                           type='button'
                           className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
                           onClick={() =>
-                            window?.cancelSubscription('6/20/2023') || false
+                            Swal.fire({
+                              icon:'question',
+                              html:`Are you sure you want to cancel your subscription?`,
+                              showConfirmButton:true,
+                              showCancelButton:true
+                            }
+                            ).then((result)=>{
+                              if (result.isConfirmed){
+                                handleCancelSub();
+                              }
+                            })
+                            
                           }
                         >
                           Cancel Subscription

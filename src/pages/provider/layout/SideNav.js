@@ -1,4 +1,5 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import useLogout from '../../../hooks/useLogout'
 
 function SideNav({ openSideNav }) {
@@ -7,8 +8,24 @@ function SideNav({ openSideNav }) {
 
   function handleLogout(e) {
     e.preventDefault()
-    logout()
-    navigate('/login',{replace:true})
+    Swal.fire(
+      {
+        icon:'question',
+        html:`Are you sure you want to Logout?`,
+        showConfirmButton:true,
+        showCancelButton:true
+      }
+      )
+      .then((result)=>{
+        if(result.isConfirmed)
+          { 
+            logout()
+            navigate('/login',{replace:true})
+          }
+        else{
+          return
+        }
+      })
   }
 
   return (

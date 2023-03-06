@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
+import CardItem from '../../../components/cards/Card'
 import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -11,44 +12,56 @@ function Services({ limit }) {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
-
-  useEffect(() => {
-    let isMounted = true
+  const [search,setSearch]=useState('')
+  const [isLoading, setIsLoading] = useState(true)
+  async function getList() {
     const controller = new AbortController()
+    await axiosPrivate
+      .post(
+        ((search)?'providerSearchService':'getServices'),
+        { 
+          Email: auth.email || sessionStorage.getItem('email'),
+          Search: search
+        },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        const { Status, Data: data = [], Message } = res.data
 
-    async function getList() {
-      await axiosPrivate
-        .post(
-          'getServices',
-          { Email: auth.email || sessionStorage.getItem('email') },
-          {
-            signal: controller.signal,
-          }
-        )
-        .then((res) => {
-          console.log(res)
-          const { Status, Data: data = [], Message } = res.data
+        if (Status) {
+          setIsLoading(false)
+          setList(data.slice(0, limit))
+        } else {
+          throw new Error(Message)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+        setErrMsg(err.message)
+      })
+  }
 
-          if (Status) {
-            setList(data.slice(0, limit))
-          } else {
-            throw new Error(Message)
-          }
-        })
-        .catch((err) => {
-          console.error(err)
-          setErrMsg(err.message)
-        })
+ 
+  
+  async function handleSubmit(event) {
+    event.preventDefault()
+
+    if (search.length < 3) {
+      return
     }
 
-    isMounted && getList()
-
-    return () => {
-      isMounted = false
-      controller.abort()
-    }
+    getList()
+  }
+  useEffect(() => {
+    
+      getList()
+    
+    
   }, [])
-
+ 
   return (
     <div className='container-fluid'>
       <div className='row'>
@@ -83,15 +96,15 @@ function Services({ limit }) {
                     <h6 className='mb-3 mt-0'>My Clinics</h6>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox0' type='checkbox' defaultChecked />
-                      <label for='checkbox0'>BLK Hospital</label>
+                      <label htmlFor='checkbox0'>BLK Hospital</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox1' type='checkbox' defaultChecked />
-                      <label for='checkbox1'>Linda's Clinic</label>
+                      <label htmlFor='checkbox1'>Linda's Clinic</label>
                     </div>
                     <div className='checkbox checkbox-success '>
                       <input id='checkbox2' type='checkbox' />
-                      <label for='checkbox2'>Sony Center Clinic</label>
+                      <label htmlFor='checkbox2'>Sony Center Clinic</label>
                     </div>
                   </div>
                 </div>
@@ -103,7 +116,7 @@ function Services({ limit }) {
                     <h6 className='mt-0 mb-4'>Ratings</h6>
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox3' type='checkbox' />
-                      <label for='checkbox3'>
+                      <label htmlFor='checkbox3'>
                         {' '}
                         5<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -114,7 +127,7 @@ function Services({ limit }) {
                     </div>
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox4' type='checkbox' />
-                      <label for='checkbox4'>
+                      <label htmlFor='checkbox4'>
                         {' '}
                         4<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -125,7 +138,7 @@ function Services({ limit }) {
                     </div>
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox5' type='checkbox' />
-                      <label for='checkbox5'>
+                      <label htmlFor='checkbox5'>
                         {' '}
                         3<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -136,7 +149,7 @@ function Services({ limit }) {
                     </div>
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox6' type='checkbox' />
-                      <label for='checkbox6'>
+                      <label htmlFor='checkbox6'>
                         {' '}
                         2<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star text-warning'></i>
@@ -147,7 +160,7 @@ function Services({ limit }) {
                     </div>
                     <div className='checkbox checkbox-success'>
                       <input id='checkbox7' type='checkbox' />
-                      <label for='checkbox7'>
+                      <label htmlFor='checkbox7'>
                         {' '}
                         1<i className='mdi mdi-star text-warning'></i>
                         <i className='mdi mdi-star light-gray'></i>
@@ -166,25 +179,32 @@ function Services({ limit }) {
         <div className='col-lg-9'>
           <div className='row'>
             <div className='col-lg-6'>
-              <div className='form-group'>
-                <div className='input-group'>
-                  <input
-                    type='text'
-                    className='form-control'
-                    placeholder='Search Service...'
-                    aria-label='Search Service...'
-                  />
-                  <span className='input-group-append'>
-                    <button className='btn btn-success' type='button'>
-                      Go!
-                    </button>
-                  </span>
+              <form onSubmit={handleSubmit}>
+                <div className='form-group'>
+                  <div className='input-group'>
+                    <input
+                      type='text'
+                      className='form-control'
+                      placeholder='Search Service...'
+                      aria-label='Search Service...'
+                      // value={search}
+                      onChange={(e)=>setSearch(e.target.value)}
+                    />
+                    <span className='input-group-append'>
+                      <button
+                        className='btn btn-success' 
+                        type='submit'>
+                        Go!
+                      </button>
+                    </span>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
 
           <div className='row'>
+            {(isLoading)?<CardItem>Loading</CardItem>:<>
             {list.map((item, index) => (
               <div key={item?.recno || index} className='col-lg-4'>
                 <div className='card e-co-product'>
@@ -233,7 +253,7 @@ function Services({ limit }) {
                   </div>
                 </div>
               </div>
-            ))}
+            ))}</>}
           </div>
         </div>
       </div>

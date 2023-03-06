@@ -146,10 +146,13 @@ function SymptomDisplay({symptom, z_index=99}){
   {return(
     <>
     <div style={{ position: 'absolute', zIndex:z_index, marginTop:'60px' }}>
-        <div className='notification-message-wrap__layer column'>
+        <div className='notification-message-wrap__layer column alert alert-dismissible fade show'>
           <div className="notification-message-wrap__txt-container"> 
             {`The patient's symptom is listed as: \n"`+(symptom)+`" `}
           </div>
+          <span aria-hidden='true'>
+              <i className='mdi mdi-close'></i>
+            </span>
           {/* <button onClick={()=>{z_index=0}}className='close-button zmu-btn ax-outline zmu-btn--primary zmu-btn__outline--blue ' style={{marginLeft:10}} >OK</button>
           <i role="button" tabindex="0" className='notification-message-wrap__close close-jd ax-outline' onclick={()=>{symptom=false}}></i> */}
         </div>

@@ -400,7 +400,7 @@ function ProviderProfile() {
                           style={{width:125,height:125,objectFit:'contain'}}
                         />:
                         <img
-                          src={AWS_BUCKET_SERVICES+"profiles/pictures/Default.jpg"}
+                          src={AWS_BUCKET_SERVICES+"providers/Default.jpg"}
                           alt=''
                           className='rounded-circle'
                           style={{width:125,height:125,objectFit:'contain'}}

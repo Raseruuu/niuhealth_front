@@ -670,7 +670,7 @@ function PatientProfile() {
                             <div className="row">
                               <div className="col">
                                 <img
-                                  src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.image}
+                                  src={AWS_BUCKET_SERVICES+"providers/"+item.image}
                                   alt=""
                                   className="thumb-sm rounded-circle mr-2"
                                   style={{objectFit:'cover'}}

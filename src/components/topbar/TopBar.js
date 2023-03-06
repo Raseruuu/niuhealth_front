@@ -1,5 +1,5 @@
 import { useState,useEffect, } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import SideNavLogo from '../../components/SideNavLogo'
 import {AWS_BUCKET, AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
 import useAuth from '../../hooks/useAuth'
@@ -7,6 +7,7 @@ import SAMPLENOTIF from '../../mocks/topbarNotifs'
 
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import useLogout from '../../hooks/useLogout'
+import Swal from 'sweetalert2'
 
 const NotifIconSwitch = ({ icontype }) => {
   const iconsGen = {
@@ -64,6 +65,8 @@ export function TopBar({ menuClick, homeAddress }) {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const { auth,setAuth } = useAuth()
+  
+  const [subscribed,setSubscribed] = useState()
   const [profile, setProfile] = useState({picture:(auth.userType==='Patient'?"":""  )+"Default.jpg"})
   //notif badge number
   const ntfBadgeNum = notifs.length
@@ -71,8 +74,24 @@ export function TopBar({ menuClick, homeAddress }) {
   // console.log(notifs[0].type)
   function handleLogout(e) {
     e.preventDefault()
-    logout()
-    navigate('/login')
+    Swal.fire(
+      {
+        icon:'question',
+        html:`Are you sure you want to Logout?`,
+        showConfirmButton:true,
+        showCancelButton:true
+      }
+      )
+      .then((result)=>{
+        if(result.isConfirmed)
+          { 
+            logout()
+            navigate('/login',{replace:true})
+          }
+        else{
+          return
+        }
+      })
   }
   useEffect(()=>{
     
@@ -92,6 +111,7 @@ export function TopBar({ menuClick, homeAddress }) {
               // res.data.Data[0].hasInsurance
               
               sessionStorage.setItem('has_insurance',  res.data.Data[0].has_insurance)
+              sessionStorage.setItem('has_subscribed',  res.data.Data[0].subscription_plan==='1')
               
             } else {
               throw new Error(Message)
@@ -168,9 +188,9 @@ export function TopBar({ menuClick, homeAddress }) {
             </Link> */}
 
             <div className='dropdown-divider mb-0'></div>
-            <Link className='dropdown-item' to='/' onClick={handleLogout.bind(this)}>
+            <NavLink onClick={handleLogout.bind(this)} className='dropdown-item' >
               <i className='ti-power-off text-muted mr-2'></i> Logout
-            </Link>
+            </NavLink>
             {/* <div className='logoutDiv'> */}
               {/* <Link className='ti-power-off text-muted mr-2' onClick={handleLogout.bind(this)}>Logout</Link> */}
             {/* </div> */}

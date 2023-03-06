@@ -89,6 +89,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
             <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
               <ul className='list-inline mb-2 product-review ratingsPage'>
                 {/* <RatingsStars score={rating} size={14}/> */}
+                
                 <Rating
                   fillColor="#ffb822"
                   emptyColor="white"
