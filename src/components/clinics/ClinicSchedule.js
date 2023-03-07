@@ -191,11 +191,11 @@ export default function ClinicSchedule() {
             setLocalCurrency(res.data.Data.local_currency)
             setTimeZone(res.data.Data.local_time_zone)
             var tempImgList=[]
-            if (res.data.Data.image1){tempImgList.push({path:res.data.Data.image1,file:null})}
-            if (res.data.Data.image2){tempImgList.push({path:res.data.Data.image2,file:null})}
-            if (res.data.Data.image3){tempImgList.push({path:res.data.Data.image3,file:null})}
-            if (res.data.Data.image4){tempImgList.push({path:res.data.Data.image4,file:null})}
-            if (res.data.Data.image5){tempImgList.push({path:res.data.Data.image5,file:null})}
+            if (res.data.Data.image1||res.data.Data.image1!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image1,file:null})}
+            if (res.data.Data.image2||res.data.Data.image2!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image2,file:null})}
+            if (res.data.Data.image3||res.data.Data.image3!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image3,file:null})}
+            if (res.data.Data.image4||res.data.Data.image4!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image4,file:null})}
+            if (res.data.Data.image5||res.data.Data.image5!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image5,file:null})}
             
             setClinicImages(tempImgList)
             setImagePreview(true)

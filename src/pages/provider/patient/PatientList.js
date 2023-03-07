@@ -396,7 +396,7 @@ function PatientList() {
           : null}
       </TableCard>
 
-        </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"This is where the Patients you have interacted with will appear."}</h5></CardLongItem>
+        </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"No Results."}</h5></CardLongItem>
         }
       
       

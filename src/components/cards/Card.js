@@ -1,7 +1,7 @@
 
 export default function CardItem({image,length=4,className,children}){
     return(
-        <div className={className+'col-md-'+length}>
+        // <div className={className+'col-md-'+length}>
             <div className='card flex-sm-col flex-md-row overflow-hidden'>
                 {image?(
                     <img
@@ -15,7 +15,7 @@ export default function CardItem({image,length=4,className,children}){
                     {children}
                 </div>
             </div>
-        </div>
+        // </div>
     )
 }
 

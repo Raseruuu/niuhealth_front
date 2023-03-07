@@ -1,7 +1,9 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
+import { Card } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import CardItem from '../../../components/cards/Card'
 import Footer from '../../../components/Footer'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -37,15 +39,17 @@ function Subscription() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
+  const [isLoading,setIsLoading]=useState(true)
   const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
   async function handleCancelSub(){
-    axiosPrivate
+    await axiosPrivate
       .post(
         "cancelSubscription",
         {Email:auth.email})
       .then((res) => {
-        setIsLoading(false)
         console.log('res',res)
+        Swal.fire({icon:'info',html:`Subscription has been cancelled.`})
+        navigate('/patient/subscription/plans')
     })
     .catch((error) => {
       console.error(error)
@@ -69,10 +73,14 @@ function Subscription() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status && Message === 'Patient not subscribed') {
+            
+            setIsLoading(false)
             navigate('plans')
           }
 
           if (Status && isMounted) {
+            
+            setIsLoading(false)
             setSubs({
               subsStart: data.subscription_start,
               subsEnd: data.subscription_end,
@@ -159,7 +167,7 @@ function Subscription() {
                 </div>
               </div>
             </div>
-          :<></>}
+          :<CardItem className={'col-lg-6'}>Loading...</CardItem>}
           {/* <div className='row'>
             <div className='col-lg-6'>
               <div className='card'>

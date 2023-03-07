@@ -51,6 +51,7 @@ export default function PaymentForm() {
           const { Status, Message } = res.data
           if (Status) {
             alert(Message)
+            sessionStorage.setItem('has_subscribed',true)
             navigate('/patient/subscription', { replace: true })
           } else {
             alert(Message)

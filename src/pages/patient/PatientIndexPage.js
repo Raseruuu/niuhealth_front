@@ -31,7 +31,7 @@ function PatientIndexPage() {
           
           setIsLoading(false)
           console.log('res',res)
-          setSubscribed(res.data.Data[0].subscription_plan==='1')
+          setSubscribed(parseInt(res.data.Data[0].subscription_plan)>0)
 
           sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
         })

@@ -4,9 +4,11 @@ import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import Swal from 'sweetalert2'
 
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
 import CardItem from '../../components/cards/Card'
+
+
 function TitleBox({text}){
   return(
     <div className='row'>
@@ -58,15 +60,44 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
       `
   })
 }
-function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating,review="It was certainly one of the consultations of all time."}){
+
+function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating_id,rating,review="It was certainly one of the consultations of all time."}){
+  const { auth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
+  const navigate = useNavigate()
+  async function handleDeleteReview(ratingID){
+    await axiosPrivate
+      .post(
+        "providerDeleteRating",
+        {Email:auth.email, RatingID:ratingID})
+      .then((res) => {
+        console.log('res',res.data)
+        const {Status,Message}=res.data
+        if (Status){
+          Swal.fire({icon:'info',html:`This Review has been deleted.`})
+          
+          return
+        }
+        else {
+          Swal.fire({ icon: 'error',html:`${Message}`})
+          throw new Error(Message);
+        }
+
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+  }
+  
   return(
     <div className='col-lg-12'>
       <div className='card' >
-        <div className='card-body'>
-          <div className='media' >
-            
-            <Link className=''
+        <div className='card-body col'>
+        <div className='media col' >
+            <div className="row-md-4">
+            {/* <Link className=''
               to='#'
+              
               style={{textDecoration: 'none'}}
               onClick={()=>
                 showReview(
@@ -78,7 +109,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                   service_description,
                   review})
               }
-              >
+              > */}
               <img
                 // src='../assets/images/users/user-1.jpg'
                 src={(AWS_BUCKET_PROFILES)+(patientPicture)}
@@ -86,6 +117,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                 className='rounded-circle thumb-md'
                 style={{width:60,height:60, objectFit:'cover'}}
               />
+             
             <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
               <ul className='list-inline mb-2 product-review ratingsPage'>
                 {/* <RatingsStars score={rating} size={14}/> */}
@@ -101,6 +133,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                   readonly={true}
                 />
               </ul>
+              
               <div className='row'>
                 <div className='col'>
                   <p className='font-14 font-weight-bold mb-0 responsive'>
@@ -121,9 +154,43 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
 
               </p>):null}
             </div>
-            </Link>
+            </div>
+            {/* </Link> */}
+            
+            </div>
+            <div className='row-lg-4 float-right'>
+                <button 
+                  onClick={()=>
+                    showReview(
+                      {patientPicture,
+                      patientName,
+                      patientEmail,
+                      rating,
+                      service_name,
+                      service_description,
+                      review})
+                  }
+                  className='btn btn-outline-success waves btn-round m-1' style={{zIndex:3,fontSize:12}}>Open Review
+                </button>
+                <button 
+                  onClick={()=>{
+                    Swal.fire({
+                      html:`Are you sure you want to Delete this Review?`,
+                      showCancelButton:true
+                    }).then((response)=>{
+                      if (response.isConfirmed){
+                        handleDeleteReview(rating_id);
+                      }
+                      else{
+                        return
+                      }
+                    }) 
+                  }}
+                  className='btn btn-outline-danger waves btn-round m-1' style={{zIndex:3,fontSize:12}}>Delete Review
+                  
+                </button>
+            </div>
           </div>
-        </div>
       </div>
     </div>
   )
@@ -219,7 +286,7 @@ function RatingsFilter({
   ratingListOriginal, 
   generalRatingListOriginal, 
   setPatientRatingList, 
-  setGeneralPatientRatingList}){
+  setPatientGeneralRatingList}){
  
   // function handleFiltercheckbox(filtervalue){
   //   console.log(filtervalue)
@@ -244,7 +311,7 @@ function RatingsFilter({
                           
                           var newstarfilter=starFilter
                           var checked=false
-                          if (newstarfilter[index]===val){
+                          if (newstarfilter[index]===parseInt(val)){
                             
                             newstarfilter[index]=false
                           }
@@ -256,18 +323,23 @@ function RatingsFilter({
                           setStarFilter(newstarfilter)
                           setPatientRatingList(ratingListOriginal
                             .filter((item)=>{
-                                return(newstarfilter.includes(parseInt(item.rating))
+                                console.log("bru",ratingListOriginal)
+                                console.log(item)
+                                return(
+                                  newstarfilter.includes(parseInt(item.rating))
                                   )
                               }))
-                          setGeneralPatientRatingList(generalRatingListOriginal
+                          setPatientGeneralRatingList(generalRatingListOriginal
                             .filter((item)=>{
-                                return(newstarfilter.includes(parseInt(item.rating))
+                                console.log("bruh",generalRatingListOriginal)
+                                return(
+                                  newstarfilter.includes(parseInt(item.rating))
                                   )
                               }))
                       }}
                       />
                   <label htmlFor={`checkboxa${val}`}>
-                    {val}
+                    {(val===0)?"Unrated":val}
                     {Array.apply(null, { length: val }).map(
                       (e, i) => (
                         <i key={i} className="mdi mdi-star text-warning"></i>
@@ -280,50 +352,6 @@ function RatingsFilter({
         </div>
       </div>
 
-      {/* <div className='row'>
-        <div className='col-lg-12'>
-          <div className='p-3'>
-            <div className='checkbox checkbox-success '>
-              <input id='checkbox0' type='checkbox' checked />
-              <label htmlFor='checkbox0'>
-                <i className='dripicons-camcorder'></i> Virtual Visits
-              </label>
-            </div>
-            <div className='checkbox checkbox-success '>
-              <input id='checkbox1' type='checkbox' checked />
-              <label htmlFor='checkbox1'>
-                <i className=' dripicons-user'></i> In-Person Visits
-              </label>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <div className='row'>
-        <div className='col-lg-12'>
-          <div className='p-3'>
-            <h6 className='mb-3 mt-0'>Age Range</h6>
-            <input type='text' id='range_04' />
-          </div>
-        </div>
-      </div> */}
-
-      {/* <div className='row'>
-        <div className='col-lg-12'>
-          <div className='p-3'>
-            <h6 className='mb-3 mt-0'>My Clinics</h6> */}
-            {/* myClinics */}
-            {/* {[{name:"PKMN Center"},{name:"Kuroda Family Clinic"}].map((item,index)=>(
-                <div key={index} className='checkbox checkbox-success '>
-                  <input id={'checkbox'+index} type='checkbox' checked />
-                  <label htmlFor={'checkbox'+index}>{item.name}</label>
-                </div>
-            ))} */}
-            
-            
-          {/* </div>
-        </div> */}
-      {/* </div> */}
       
     </div>
   </div>
@@ -343,7 +371,6 @@ function Ratings({}) {
   const [errMsg, setErrMsg] = useState(null)
   
   const [filters,setFilters]=useState([])
-
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
@@ -363,10 +390,9 @@ function Ratings({}) {
           
           if (Status) {
             setList(res.data.Data)
-            setRatingListOriginal(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
-            setRatingList(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
+            setRatingListOriginal(res.data.Data.Ratings)
+            setRatingList(res.data.Data.Ratings)
             setPatientRatingList(res.data.Data.Ratings)
-            setRatingListOriginal(res.data.Data.Ratings.map(({ rating }) => (parseFloat(rating))))
             setPatientGeneralRatingList(res.data.Data.GeneralVisitRatings)
             setGeneralRatingListOriginal(res.data.Data.GeneralVisitRatings)
           } else {
@@ -394,7 +420,7 @@ function Ratings({}) {
         <div>
           <div className='card'>
             <div className='card-body'>
-              <RatingsBoxOverall score={list.Average} totalReviews={ratingList.length} size={24} />
+              <RatingsBoxOverall score={list?.Average} totalReviews={ratingList.length} size={24} />
               <RatingsChart ratinglist={ratingList}/>
               <div className=''>
                 {/* <span className='text-right ml-auto d-inline-block'>
@@ -410,17 +436,17 @@ function Ratings({}) {
             </div>
           </div>
           <RatingsFilter 
-          starFilter={starFilter} 
-          setList={setList} 
-          // listOriginal={listOriginal} 
-          setPatientRatingList={setPatientRatingList}
-          setGeneralPatientRatingList ={setPatientGeneralRatingList}
-          
-          ratingListOriginal={ratingListOriginal} 
-          generalRatingListOriginal={generalRatingListOriginal} 
-          setStarFilter={setStarFilter} 
-          filters={filters} 
-          setFilters={setFilters}/>
+            starFilter={starFilter} 
+            setList={setList} 
+            // listOriginal={listOriginal} 
+            setPatientRatingList={setPatientRatingList}
+            setPatientGeneralRatingList ={setPatientGeneralRatingList}
+            
+            ratingListOriginal={ratingListOriginal} 
+            generalRatingListOriginal={generalRatingListOriginal} 
+            setStarFilter={setStarFilter} 
+            filters={filters} 
+            setFilters={setFilters}/>
         </div>
         <div className='col'>
           <div className='row'>
@@ -428,7 +454,7 @@ function Ratings({}) {
                   <h4 className='header-title mt-0 mb-4'>
                     Appointment Reviews
                   </h4>
-                  {((patientRatingList.length===0) && patientGeneralRatingList.length==0)?
+                  {((patientRatingList?.length===0) && patientGeneralRatingList.length==0)?
                   (<CardItem length={12}><h4>There are no reviews to display.</h4></CardItem>):
                   ([patientRatingList].length>0)?
                   
@@ -437,7 +463,7 @@ function Ratings({}) {
                         <div className='card-body'>
                           <div className='row'>
                           {patientRatingList.map((item,index)=>
-                              (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
+                              (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating_id={item.rating_id} rating={item.rating} review={item.review}/>)
                             
                             )}
                           </div> 
@@ -450,7 +476,7 @@ function Ratings({}) {
               <h4 className='header-title mt-0 mb-4'>
                   General Visit Reviews
                 </h4>
-                { (patientGeneralRatingList.length===0)?
+                { (patientGeneralRatingList?.length===0)?
                 (<CardItem length={12} style={{minWidth:"450px"}}><h4>There are no reviews to display.</h4></CardItem>):
                 (patientGeneralRatingList.length>0)?
                 <div className='col-lg-12' style={{minWidth:"450px"}}>
@@ -459,7 +485,7 @@ function Ratings({}) {
                 {/* <CardItem length={12}> */}
                       <div className='row'>
                       {patientGeneralRatingList.map((item,index)=>
-                          (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating={item.rating} review={item.review}/>)
+                          (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating_id={item.rating_id} rating={item.rating} review={item.review}/>)
                         
                         )}
                       </div> 

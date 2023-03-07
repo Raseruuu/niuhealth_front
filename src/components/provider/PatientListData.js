@@ -58,7 +58,7 @@ function PatientListData({ limit,pagenum, list = [] }) {
       </td>
       <td>
         <span className='badge badge-md badge-soft-purple'>
-          {item.status ? 'Subscribed' : 'Not Subscribed'}
+          {parseInt(item.subscription_plan)>0 ? 'Subscribed' : 'Not Subscribed'}
 
         </span>
       </td>

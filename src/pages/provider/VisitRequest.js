@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 
 import {StatusTextInsurance} from "../../components/status/Status"
 import { AWS_BUCKET_PROFILES } from "../../constants";
+import CardItem from '../../components/cards/Card'
 function VisitRequest() {
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
 
@@ -17,6 +18,8 @@ function VisitRequest() {
   const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const [refreshList, setRefreshList] = useState(false)
+  
+  const [isLoading, setIsLoading] = useState(true)
   function showVisitRequest({patientPicture,patientName,patientEmail,service_name,service_description}){
     Swal.fire({
       title: 'Appointment Request',
@@ -80,6 +83,8 @@ function VisitRequest() {
             }
           )
           .then((res) => {
+            
+            setIsLoading(false)
             if (res.data?.Status && action === actionX.approve) {
               Swal.fire('Appointment successfully approved.')
             } else if (res.data?.Status && action === actionX.cancel) {
@@ -89,6 +94,8 @@ function VisitRequest() {
             }
           })
           .catch((err) => {
+            
+            setIsLoading(false)
             console.error(err)
             Swal.fire('Action failed.')
           })
@@ -115,6 +122,8 @@ function VisitRequest() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
+            
+            setIsLoading(false)
             isMounted && setList(data)
           } else {
             throw new Error(Message)
@@ -137,6 +146,7 @@ function VisitRequest() {
   return (
     <div className='container-fluid'>
       <TableTitle title = "Visit Requests"/>
+      {(list.length===0)?<CardItem>{(isLoading)?"Loading...":"No Results."}</CardItem>:
       <TableCard headers = {["ID", "Patient", "Request Date", "Action"]}>
         {list.map((item, index) => (
           <tr key={item?.appointment_id || index}>
@@ -219,7 +229,7 @@ function VisitRequest() {
             </td>
           </tr>
       ))}
-      </TableCard>
+      </TableCard>}
       
     </div>
   )

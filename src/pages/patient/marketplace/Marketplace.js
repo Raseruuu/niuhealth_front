@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
 import CardItem from '../../../components/cards/Card'
 import Footer from '../../../components/Footer'
@@ -7,6 +7,18 @@ import { AWS_BUCKET,AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import Multiselect from 'multiselect-react-dropdown';
+import { Card } from 'react-bootstrap'
+
+import styled from "@emotion/styled"
+
+
+
+export const StyleWrapper = styled.div`
+.optionListContainer {
+  position: sticky;
+} 
+
+`
 export default function Marketplace() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
@@ -16,10 +28,17 @@ export default function Marketplace() {
   const priceRangeRef = useRef()
   const effectRun = useRef(false);
   const { auth } = useAuth();
+  const navigate = useNavigate();
   const [isLoading,setIsLoading]=useState(true)
-  const [starFilter, setStarFilter]=useState([])
+  const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
   const [filterlist,setFilterList] = useState([])
+  const [priceRangeMin,setPriceRangeMin]=useState(0)
+  const [priceRangeMax,setPriceRangeMax]=useState(2000)
+  const [showFilterWindow,setShowFilterWindow]=useState(false)
   const [searchString,setSearchString]=useState("")
+  const [categoryOptions,setCategoryOptions]=useState([])
+  const [activeFilter,setActiveFilter]=useState('')
+  const [dropPosition,setDropPosition]=useState({x:0,y:0})
   // const [starFilter1, setStarFilter1]=useState(true)
   // const [starFilter2, setStarFilter2]=useState(true)
   // const [starFilter3, setStarFilter3]=useState(true)
@@ -27,7 +46,7 @@ export default function Marketplace() {
   // const [starFilter5, setStarFilter5]=useState(true)
   
   const controller = new AbortController()
-
+ 
   async function getList() {
     if (searchString.length>=3||searchString!==""){
       await axiosPrivate
@@ -54,8 +73,12 @@ export default function Marketplace() {
         })
         .then((res) => {
           setIsLoading(false)
-          setList(res.data.Data)
-          setListOriginal(res.data.Data)
+          
+          const serviceList=res.data.Data
+          setList(serviceList)
+          setListOriginal(serviceList)
+          const serviceCategories=serviceList.map((item,index)=>{return item.category})
+          setCategoryOptions(serviceCategories )
         })
         .catch((err) => {
           setIsLoading(false)
@@ -64,6 +87,7 @@ export default function Marketplace() {
         })
     }
   }
+  
   useEffect(() => {
     if (priceRangeRef.current) {
       window.$('#range_doctors_rate').ionRangeSlider({
@@ -76,6 +100,7 @@ export default function Marketplace() {
         to: 200,
       })
     }
+    
     getList()
     return () => {
       controller.abort()
@@ -102,143 +127,285 @@ export default function Marketplace() {
             </div>
 
             <div className="row-lg-12">
-                <div className="card">
+              <div className="card">
                   <div className="card-body">
-                    <div className="row">
                       <div className="col-lg-12">
-                        <h5 className="mt-0 mb-4">Filters</h5>
-                       
+                        <h5 className="mt-1 ">Filters</h5>
                         
-                        <div className="p-3">
-                          <h6 className="mb-1 mt-0">Service Categories</h6>
-                          <div className="checkbox checkbox-success ">
-                           
-                            <Multiselect
-                              options={[
-                                        "Allergy and immunology",
-                                        "Anesthesiology",
-                                        "Anticoagulation",
-                                        "Blood (Hematology)",
-                                        "Breast Care"]} // Options to display in the dropdown
-                              selectedValues={filterlist} // Preselected value to persist in dropdown
-                              onSelect={(selectedList,selectedItem)=>{setFilterList([...filterlist,value])}} // Function will trigger on select event
-                              onRemove={(selectedList,selectedItem)=>{setFilterList(selectedList)}} // Function will trigger on remove event
-                              isObject={false}
-                              showCheckbox={true}
-                              displayValue="name" // Property name to display in the dropdown options
-                            />
-                            
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-lg-3">
-                        <div className="p-3">
-                          <h6 className="mb-3 mt-0">Price Range</h6>
-                          <input
-                            ref={priceRangeRef}
-                            type="text"
-                            id="range_doctors_ratex"
-                            onChange={(e)=>{console.log(priceRangeRef)}}
-                          />
-                        </div>
-                      </div>
-                        <div className="row-lg-9">
-                            <div className="p-3">
-                              <h6 className="mt-0 mb-2">Ratings</h6>
-                              <Multiselect
-                              options={[
-                                        {name:"5 Stars",id: 5},
-                                        {name:"4 Stars",id: 4},
-                                        {name:"3 Stars",id: 3},
-                                        {name:"2 Stars",id: 2},
-                                        {name:"1 Stars",id: 1}]} // Options to display in the dropdown
-                              selectedValues={starFilter} // Preselected value to persist in dropdown
-                              onSelect={(selectedList,selectedItem)=>{setStarFilter([...filterlist,value])}} // Function will trigger on select event
-                              onRemove={(selectedList,selectedItem)=>{setStarFilter(selectedList)}} // Function will trigger on remove event
-                              // isObject={false}
-                              // showCheckbox={true}
-                              displayValue="name" // Property name to display in the dropdown options
-                            />
-                              {/* {[5,4,3,2,1,0].map((val,index) => (
-                                <div key={val} className="checkbox checkbox-success">
-                                  <input 
-                                    id={`checkboxa${val}`}
-                                    type="checkbox" 
-                                    defaultChecked={starFilter[index]===val}
-                                    onChange={
-                                      (e)=>{
-                                        
-                                          var newstarfilter=starFilter
-                                          var checked=false
-                                          if (newstarfilter[index]===val){
-                                            
-                                            newstarfilter[index]=false
-                                          }
-                                          else {
-                                            newstarfilter[index]=parseInt(val)
-                                            checked=true
-                                          }
-                                          setStarFilter(newstarfilter)
-                                          setList(listOriginal
-                                            .filter((item)=>{
-                                                return(newstarfilter.includes(parseInt(item.average_ratings))
-                                                  )
-                                              }))
-                                      }}
+                        <ul className='nav nav-pills m-2' id='pills-tab' role='tablist'>
+                          <li className='nav-item col-xl-5 m-2' >
+                            <div className="row-xl-12">
+                                  <form onSubmit={handleSubmit} >
+                                  <div className="form-group">
+                                    <div className="input-group">
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search Service..."
+                                        aria-label="Search Service..."
+                                        onChange={(e)=>setSearchString(e.target.value)}
                                       />
-                                  <label htmlFor={`checkboxa${val}`}>
-                                    {val}
-                                    {Array.apply(null, { length: val }).map(
-                                      (e, i) => (
-                                        <i key={i} className="mdi mdi-star text-warning"></i>
-                                      )
-                                    )}
-                                  </label>
-                                </div>
-                              ))} */}
-                
-
-                            </div>
+                                      <span className="input-group-append">
+                                        <button className="btn btn-success" style={{zIndex:0}} type="button">
+                                          {(isLoading&&searchString>=3)?"Going...":'Go!'}
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  </form>
+                              </div>
+                              </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='service_category_tab'
+                                data-toggle='pill'
+                                href='#service_category'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  
+                                  setActiveFilter("service_category")
+                                  if (activeFilter==='service_category'){
+                                    setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='service_category'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Service Category
+                              </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute' style={{zIndex:4 }}  id='service_category'>
+                                {showFilterWindow&&activeFilter==='service_category'?
+                                <CardItem> 
+                      
+                                  <div className="p-3" minWidth={400}>
+                                    <h6 className=" mt-0" >Service Categories</h6>
+                                    <div className="checkbox checkbox-success " >
+                                    <StyleWrapper>
+                                      <Multiselect
+                                        style={{zIndex:3}}
+                                        options={categoryOptions} // Options to display in the dropdown
+                                        selectedValues={filterlist} // Preselected value to persist in dropdown
+                                        onSelect={
+                                          (selectedList,selectedItem)=>{
+                                              setFilterList(selectedList)
+                                              if (selectedList.length>0)
+                                                {setList(listOriginal
+                                                  .filter((item)=>{
+                                                      return(selectedList.includes((item.category))
+                                                        )
+                                                    }))}
+                                              else{
+                                                setList(listOriginal)
+                                              }
+                                            }} // Function will trigger on select event
+                                        onRemove={
+                                          (selectedList,selectedItem)=>{
+                                              console.log("selectedList",selectedList)
+                                              setFilterList(selectedList)
+                                              if (selectedList.length>0)
+                                                {setList(listOriginal
+                                                  .filter((item)=>{
+                                                      return(selectedList.includes((item.category))
+                                                        )
+                                                    }))}
+                                              else{
+                                                setList(listOriginal)
+                                              }
+                                            }} // Function will trigger on remove event
+                                        isObject={false}
+                                        showCheckbox={true}
+                                        
+                                        displayValue="name" // Property name to display in the dropdown options
+                                      />
+                                      
+                                    </StyleWrapper>
+                                    </div>
+                                    
+                                  </div>
+                                
+                          </CardItem>:<></>
+                        }
                         </div>
+                        </div>
+                            </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='price_range_tab'
+                                data-toggle='pill'
+                                href='#price_range'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  setActiveFilter("price_range")
+                                  if (activeFilter==='price_range'){
+                                  setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='price_range'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Price Range
+                              </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute' style={{zIndex:3 }} id='price_range'>
+                                {(showFilterWindow&&activeFilter==='price_range')?
+                                <CardItem> 
+                                    <div className="p-3">
+                                      {/* <h6 className=" mt-0">Price Range</h6> */}
+                                      <div className='m-1'> 
+                                      <h6 className=" mb-0">Minimum</h6>
+                                      <input
+                                        ref={priceRangeRef}
+                                        type="number"
+                                        step={10}
+                                        value={priceRangeMin}
+                                        // id="range_doctors_rate"
+                                        onChange={(e)=>{
+                                          console.log('price',e.target.value)
+                                          setPriceRangeMin(e.target.value)
+                                          if ((priceRangeMax-e.target.value)>=0)
+                                            {setList(listOriginal
+                                              .filter((item)=>{
+                                                const price=parseFloat(item.cost_price)
+                                                  return( 
+
+                                                    e.target.value<=price&&priceRangeMax>=price
+                                                    )
+                                                }))
+                                              }
+
+                                        }}
+                                      />
+                                      </div>
+                                      <div className='m-1'> 
+                                      <h6 className=" mb-0">Maximum</h6>
+                                      
+                                      <input
+                                        ref={priceRangeRef}
+                                        type="number"
+                                        step={10}
+                                        // id="range_doctors_rate"
+                                        value={priceRangeMax}
+                                        onChange={(e)=>{
+                                          console.log('price',e.target.value)
+                                          setPriceRangeMax(e.target.value)
+                                          if ((e.target.value-priceRangeMin)>=0)
+                                            {setList(listOriginal
+                                              .filter((item)=>{
+                                                
+                                                  const price=parseFloat(item.cost_price)
+                                                  return( 
+                                                    (priceRangeMin<=price)&&(e.target.value>=price)
+                                                    )
+                                                }))
+                                            }
+                                        }}
+                                      />
+                                      </div>
+                                    </div>
+                                          
+                                  </CardItem> :<></>}
+                                </div></div>
+                            </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='payment_history_detail_tab'
+                                data-toggle='pill'
+                                href='#ratings'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  setActiveFilter("ratings")
+                                  if (activeFilter==='ratings'){
+                                  setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='ratings'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Ratings
+                              </a>
+                              <div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute ' style={{zIndex:3}} id='ratings'>
+                              {(showFilterWindow&&activeFilter==='ratings')?
+                              <CardItem>
+                                <div className="p-3">
+                                  <h6 className="mt-0 ">Ratings</h6>
+                                  
+                                
+                                {[5,4,3,2,1,0].map((val,index) => (
+                                    <div key={val} className="checkbox checkbox-success" style={{width:140}}>
+                                      <input 
+                                        id={`checkboxa${val}`}
+                                        type="checkbox" 
+                                        defaultChecked={starFilter[index]===val}
+                                        onChange={
+                                          (e)=>{
+                                            
+                                              var newstarfilter=starFilter
+                                              var checked=false
+                                              if (newstarfilter[index]===val){
+                                                
+                                                newstarfilter[index]=false
+                                              }
+                                              else {
+                                                newstarfilter[index]=parseInt(val)
+                                                checked=true
+                                              }
+                                              setStarFilter(newstarfilter)
+                                              setList(listOriginal
+                                                .filter((item)=>{
+                                                    return(newstarfilter.includes(parseInt(item.average_ratings))
+                                                      )
+                                                  }))
+                                          }}
+                                          />
+                                      <label htmlFor={`checkboxa${val}`}>
+                                        {(val===0)?'Unrated':val}
+                                        {Array.apply(null, { length: val }).map(
+                                          (e, i) => (
+                                            <i key={i} className="mdi mdi-star text-warning"></i>
+                                          )
+                                        )}
+                                      </label>
+                        </div>
+                      ))}
+                     
+        
+
                     </div>
+                </CardItem>:<></>}
+                </div></div>
+                            </li>
+                            
+                          
+                          </ul>
+                  
+                    </div>
+                    
                   </div>
               </div>
-
+              
               <div className="col-lg-12">
-                <div className="row">
-                  <div className="col-lg-6">
-                    <form onSubmit={handleSubmit} >
-                    <div className="form-group">
-                      <div className="input-group">
-                        <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Search Service..."
-                          aria-label="Search Service..."
-                          onChange={(e)=>setSearchString(e.target.value)}
-                        />
-                        <span className="input-group-append">
-                          <button className="btn btn-success" style={{zIndex:0}} type="button">
-                            {(isLoading&&searchString>=3)?"Going...":'Go!'}
-                          </button>
-                        </span>
-                      </div>
-                    </div>
-                    </form>
-                  </div>
-                </div>
-
+                
                 <div className="row">
                 {(isLoading)?<CardItem>Loading...</CardItem>:
-                (searchString.length>0 &&list.length===0)?<CardItem>No Results...</CardItem>:
+                (searchString.length>0 &&list.length===0)?<CardItem>No Results.</CardItem>:
                 <>
                   {
-                  list
-                  .map((item, index) => (
+                  list.map((item, index) => (
                     <div key={index} className="col-lg-3" style={{minWidth:'200px'}}>
                       <div className="card e-co-product" >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
@@ -258,13 +425,17 @@ export default function Marketplace() {
                           >
                             {item.service_description}
                           </Link>
-                          <p>
-                            {item.provider_name}<br/> 
-                            <div className='text-muted'>Provider</div>
-                            </p>
+                          <br/>
+                          <div className='row-lg-3'>
+                          <b>Category :</b><br/> {item.category}<br/>
+                          </div>
+                          <br/> 
+                          <h4 className='met-user-name'>{item.provider_name}</h4><br/> 
+                          <div className='text-muted' style={{marginTop:-20}}>Provider</div>
+                          
                           <div className="d-flex justify-content-between my-2 row">
-                            <p className="product-price">${item.cost_price}</p>
-                            <div className="mb-0 row product-review align-self-center">
+                            <p className="product-price m-2">${item.cost_price}</p>
+                            <div className="row product-review align-self-center">
                               <div className='col-md-10 m-3'>
                               {(item.average_ratings===0)?<>Unrated</>:
                               <Rating
@@ -281,6 +452,14 @@ export default function Marketplace() {
                               </div>
                             </div>
                           </div>
+                          <div className="d-flex justify-content-between my-2 row">
+                            <button 
+                              onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
+                              className='btn btn-success'>Book Appointment</button>
+                            <button 
+                              onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}
+                              className='btn btn-outline-success'>View Profile</button>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -296,5 +475,3 @@ export default function Marketplace() {
     </div>
   )
 }
-
-const Filter = () => {}
