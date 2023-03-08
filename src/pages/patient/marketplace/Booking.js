@@ -144,7 +144,14 @@ export default function Booking() {
         ))
 
         if (doAppend) {
-          continue
+          // continue
+            schedArray.push({
+              id: 'id_' + index + j,
+              title: 'Unavailable',
+              start: startStr,
+              backgroundColor: 'gray',
+              borderColor: 'transparent',
+            })
         } else {
           let timeStr = j
           if (j < 10) {
@@ -165,6 +172,7 @@ export default function Booking() {
               borderColor: 'transparent',
             })
           }
+          
         }
       }
 
@@ -344,7 +352,7 @@ export default function Booking() {
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
+                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image}`}
                               alt=""
                               // width={30}
                               height={300}

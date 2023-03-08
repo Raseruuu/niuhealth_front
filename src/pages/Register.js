@@ -24,7 +24,8 @@ function Register() {
         formState: { errors, isSubmitting, isSubmitSuccessful },
     
       } = useForm();
-      async function handleRegisterForm(data){
+    
+    async function handleRegisterForm(data){
         setPasswordCheck(
             (password?.match(/[a-z]/)?.length>0)||
             (password?.match(/[A-Z]/)?.length>0)||
@@ -44,20 +45,16 @@ function Register() {
         else(
             await axiosPrivate
             .post("cognitoSignUp", {...data,Password:password}
-            
             )
             .then((res) => {
             console.log(res);
             const { Status, Data: data = [], Message } = res.data;
-            
-        
-        
             if (Status) {
                 Swal.fire({icon: 'success',html:`${Message}`})
                 .then(()=>{
                     
                     sessionStorage.setItem('email', data.Email)
-                    navigate(`/verify/${data.Email}`,  { replace: true })}
+                    navigate(`/verify/${data.Email}`,  { state:{Password:password},replace: true })}
                 )
             } else {
                 Swal.fire({icon: 'error',html:`${Message}`})

@@ -90,7 +90,7 @@ const router =createBrowserRouter(
       path: '/register',
       element: <Suspense><Register/></Suspense>
     },
-    { path: 'registration',
+    { path: 'register_2/:email',
       errorElement: <ErrorPage />,
       element: <Suspense> <Registration /></Suspense> },
       

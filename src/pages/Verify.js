@@ -15,7 +15,46 @@ export default function Verify (){
     const [verificationCode,setVerificationCode]=useState([])
     // const { auth } = useAuth();
     const {email}  = useParams();
-    console.log("VER",email)
+
+    const { state: password } = useLocation()
+    console.log("VPASS",password.Password)
+    async function handleLogin(data){
+        const controller = new AbortController()
+
+        console.log("data",data)
+        await axiosPrivate
+        .post("cognitoSignIn", {...data},
+        {
+            signal: controller.signal,
+        }
+            
+        )
+        .then((res) => {
+            console.log(res); 
+            const { StatusCode, Data: data = {}, Message } = res.data;
+            
+            if (StatusCode===200) {
+            sessionStorage.setItem('email', res.data.Email)
+            sessionStorage.setItem('name', res.data.Name)
+            sessionStorage.setItem('access_token', res.data.Tokens.access_token)
+            sessionStorage.setItem('id_token', res.data.Tokens.id_token)
+            sessionStorage.setItem('refresh_token',  res.data.Tokens.refresh_token)
+            sessionStorage.setItem('token_type',  res.data.Tokens.token_type)
+            sessionStorage.setItem('expires_in',  res.data.Tokens.expires_in)
+            sessionStorage.setItem('transactionType',  res.data.TransactionType)
+            sessionStorage.setItem('userType',  res.data.UserType)
+            sessionStorage.setItem('has_insurance', res.data.has_insurance)
+            sessionStorage.setItem('isLoggedIn', true)
+            
+            } else {
+            Swal.fire({ icon: 'error',html:`${Message}`})
+            throw new Error(Message);
+            }
+        })
+        .catch((err) => {
+            Swal.fire({ icon: 'error',html:`${err}`})
+        })}
+      
     async function cognitoConfirmSignUp(data){
         console.log("VER",email)
         await axiosPrivate
@@ -33,7 +72,10 @@ export default function Verify (){
           if (Status) {
             console.log(res)
             Swal.fire({icon:'success',text:Message})
-            navigate('/registration')
+                .then(()=>{
+                    handleLogin({Email:email,Password:password.Password})
+                })
+            navigate('/register_2/'+email)
           } else {
             setError(res.Message)
             Swal.fire({icon:'error',text:Message})
@@ -47,7 +89,7 @@ export default function Verify (){
         // });
       }
     return(
-            <div className="account-body accountbg "  style={{ width: "100vw", height: "100vh" }}>
+        <div className="account-body accountbg "  style={{ width: "100vw", height: "100vh" }}>
         <div className=" clsLoginWrapper enableLodestarStyles enableLodestarLineHeight verifyEMail " style={{ margin:'auto',width: '50%',padding: '10px'}}>
 
         <div className="align-self-center m-3"   >

@@ -9,7 +9,7 @@ function PatientDashboard() {
   
   const navigate = useNavigate()
   const { auth } = useAuth()
-  const matches = useMediaQuery('only screen and (max-width: 575.98px)')
+  const matches = useMediaQuery('only screen and (max-width: 800px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
   // Comment in for Actual Route Protection
   useEffect(() => {

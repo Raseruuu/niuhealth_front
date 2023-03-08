@@ -69,7 +69,7 @@ function Login( text=null ) {
       }
     })
     .catch((err) => {
-      Swal.fire({ icon: 'error',html:`Login Error. ${err}`})
+      Swal.fire({ icon: 'error',html:`${err}`})
     })}
   useEffect(()=>{
    
@@ -192,7 +192,7 @@ function Login( text=null ) {
                             className="btn btn-gradient-success btn-round btn-block waves-effect waves-light"
                             type="submit"
                           >
-                            {isSubmitting?"Logging in...":"Log In"} <i className="fas fa-loading ml-1"></i>
+                            {isSubmitting?"Logging in...":"Log In"} <i className="fas fa-loading-alt ml-1"></i>
                           </button>
                         </div>
                       </div>

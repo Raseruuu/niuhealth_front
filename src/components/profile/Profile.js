@@ -48,9 +48,13 @@ function ProfileEdit() {
     middle_name: "",
     last_name: "",
     local_time_zone: "",
-    address:"",
-    zipcode:"",
+    address_line_1:"",
+    address_line_2:"",
+    zip_code:"",
     country_city_id:"",
+    city:"",
+    province:"",
+    has_insurance:"",
     country_id:"0",
     date_of_birth:"2000-01-01",
     picturefile:"",
@@ -108,16 +112,18 @@ function ProfileEdit() {
     const formData = new FormData()
     if (auth.userType==="Patient"){
       formData.append('Email', auth.email)
-      formData.append('FirstName', profile.first_name)
-      formData.append('MiddleName', profile.middle_name)
-      formData.append('LastName', profile.last_name)
-      formData.append('ContactInfo', profile.contact_info)
-      formData.append('Address', profile.address)
-      formData.append('ZipCode', profile.zipcode)
-      formData.append('CountryID', profile.country_id)
-      formData.append('CityID', profile.country_city_id)
-      formData.append('DateOfBirth', profile.date_of_birth)
-      formData.append('LocalTimeZone', profile.local_time_zone)
+      formData.append('FirstName', profile.first_name||"")
+      formData.append('MiddleName', profile.middle_name||"")
+      formData.append('LastName', profile.last_name||"")
+      formData.append('ContactInfo', profile.contact_info||"")
+      formData.append('Address1', profile.address_line_1||"")
+      formData.append('Address2', profile.address_line_2||"")
+      formData.append('ZIPCode', profile.zip_code||"")
+      formData.append('Province', profile.province||"")
+      formData.append('CountryID', profile.country_id||"")
+      formData.append('City', profile.city||"")
+      formData.append('DateOfBirth', profile.date_of_birth||"")
+      formData.append('LocalTimeZone', profile.local_time_zone||"")
     }
     if (auth.userType==="Provider"){
       formData.append('Email', auth.email)
@@ -255,22 +261,22 @@ function ProfileEdit() {
     
 
   }, [profile])
-  async function getCities() {
-    const result = await axiosPrivate
-      .post('getCities', {
-        CountryID: profile.country_id,
-        Email: auth.email,
-      })
-      .then((res) => {
-        const { Status, Data: data = [], Message } = res.data
+  // async function getCities() {
+  //   const result = await axiosPrivate
+  //     .post('getCities', {
+  //       CountryID: profile.country_id,
+  //       Email: auth.email,
+  //     })
+  //     .then((res) => {
+  //       const { Status, Data: data = [], Message } = res.data
 
-        if (Status) {
-          setCities(res.data.Data)
-        }
-      })
+  //       if (Status) {
+  //         setCities(res.data.Data)
+  //       }
+  //     })
 
-    return result || []
-  }
+  //   return result || []
+  // }
   // Get Profile details
   // use our useAuth hooks to update user information, it should be centralized to this context hook
   useEffect(() => {
@@ -379,11 +385,11 @@ function ProfileEdit() {
     }
   }, [])
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    if (!profile?.country_id || profile?.country_id === 'undefined'|| profile?.country_id === '') return
-    getCities()
-  }, [profile.country_id])
+  //   if (!profile?.country_id || profile?.country_id === 'undefined'|| profile?.country_id === '') return
+  //   // getCities()
+  // }, [profile.country_id])
 
   return (
     <form >
@@ -625,15 +631,33 @@ function ProfileEdit() {
                             htmlFor="example-text-input"
                             className="col-sm-2 col-form-label text-right"
                           >
-                            Address
+                            Address Line 1
                           </label>
                           <div className="col-sm-10">
                             <input
                               disabled={disableForm}
                               className="form-control"
                               type="text"
-                              name="address"
-                              value={profile.address}
+                              name="address_line_1"
+                              value={profile.address_line_1}
+                              onChange={handleInputChange.bind(this)}
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-sm-2 col-form-label text-right"
+                          >
+                            Address Line 2
+                          </label>
+                          <div className="col-sm-10">
+                            <input
+                              disabled={disableForm}
+                              className="form-control"
+                              type="text"
+                              name="address_line_2"
+                              value={profile.address_line_2}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -650,8 +674,27 @@ function ProfileEdit() {
                               disabled={disableForm}
                               className="form-control"
                               type="text"
-                              name="zipcode"
-                              value={profile.zipcode}
+                              pattern={"[0-9]{5}"}
+                              name="zip_code"
+                              value={profile.zip_code}
+                              onChange={handleInputChange.bind(this)}
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="example-text-input"
+                            className="col-sm-2 col-form-label text-right"
+                          >
+                            Province
+                          </label>
+                          <div className="col-sm-10">
+                            <input
+                              disabled={disableForm}
+                              className="form-control"
+                              type="text"
+                              name="province"
+                              value={profile.province}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -689,6 +732,16 @@ function ProfileEdit() {
                           City
                         </label>
                         <div className="col-sm-4">
+                            <input
+                              disabled={disableForm}
+                              className="form-control"
+                              type="text"
+                              name="city"
+                              value={profile.city}
+                              onChange={handleInputChange.bind(this)}
+                            />
+                          </div>
+                        {/* <div className="col-sm-4">
                           <select
                             className="form-control"
                             disabled={disableForm}
@@ -703,7 +756,7 @@ function ProfileEdit() {
                               </option>
                             ))}
                           </select>
-                        </div>
+                        </div> */}
                       </div>
                      
                       <div className="form-group row">

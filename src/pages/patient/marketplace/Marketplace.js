@@ -53,8 +53,8 @@ export default function Marketplace() {
       .post(('patientSearchService'), {
         Email:auth.email,
         Search:searchString,
-        signal: controller.signal,
-      })
+      },
+        {signal: controller.signal})
       .then((res) => {
         setIsLoading(false)
         setList(res.data.Data)
@@ -146,7 +146,7 @@ export default function Marketplace() {
                                         onChange={(e)=>setSearchString(e.target.value)}
                                       />
                                       <span className="input-group-append">
-                                        <button className="btn btn-success" style={{zIndex:0}} type="button">
+                                        <button className="btn btn-success" style={{zIndex:0}} type="submit">
                                           {(isLoading&&searchString>=3)?"Going...":'Go!'}
                                         </button>
                                       </span>

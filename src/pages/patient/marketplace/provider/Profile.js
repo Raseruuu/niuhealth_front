@@ -546,20 +546,7 @@ function ProviderProfile() {
                         {profile?.ProviderDetails?.provider_description}</h6>
                         </div>
                       </div>
-                      <div className='d-flex justify-content-between bg-purple p-3 mt-3 rounded'>
-                        <div>
-                          <h4 className='mb-1 font-weight-semibold text-white'>
-                            Big Text
-                          </h4>
-                          <p className='text-white mb-0'>Small Text</p>
-                        </div>
-                        <div>
-                          <h4 className=' mb-1 font-weight-semibold text-white'>
-                            Big Text <small>Small Text</small>
-                          </h4>
-                          <p className='text-white mb-0'>Smaller Text</p>
-                        </div>
-                      </div>
+                      
                     </div>
                   </div>
                   <div className='card' style={{height:'auto'}}>
