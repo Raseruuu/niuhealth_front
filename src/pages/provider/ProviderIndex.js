@@ -12,8 +12,6 @@ import CardLongItem from '../../components/cards/Card'
 import { CardImg } from 'react-bootstrap'
 import CardItem from '../../components/cards/Card'
 import Swal from 'sweetalert2'
-
-import SweetAlert from 'sweetalert-react';
 import { useForm } from 'react-hook-form'
 import { useRef } from 'react'
 import moment from 'moment'
@@ -39,6 +37,8 @@ function ProviderIndex() {
   
   const [clinicList, setClinicList] = useState([])
   const myModal=useRef();
+  const [updateVisit,setUpdateVisit]=useState(true)
+  
   const [showModal,setShowModal]=useState(false)
   const {
     register,
@@ -70,6 +70,7 @@ function ProviderIndex() {
             icon: 'info'
             
           })
+          setUpdateVisit(!updateVisit)
           $('#myModal').hide();
           $('.modal-backdrop').hide();
          
@@ -109,11 +110,7 @@ function ProviderIndex() {
   //       }
   //     })
   useEffect(() => {
-      $(document).ready(function(){
-        $("#myBtn").click(function(){
-          $("#myModal").modal();
-        });
-      });
+     
     async function getClinicList() {
       const controller = new AbortController()
 
@@ -163,7 +160,7 @@ function ProviderIndex() {
 
     getPatientList()
     getClinicList()
-  }, [])
+  }, [updateVisit])
   let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
   return (
     <div className="container-fluid">
@@ -195,7 +192,7 @@ function ProviderIndex() {
                 data-target="#myModal"
                 
                 >
-                Start A New Appointment
+                New Visit
               </button>
             </div>
           </CardItem>
