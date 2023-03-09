@@ -16,6 +16,8 @@ export default function WaitingRoom() {
   const [meetingID, setMeetingID] = useState({})
   const [password, setPassword] = useState({})
   const myVideo = useRef('video1');
+  const [videoLinks,setVideoLinks]=useState([])
+
   const getQueueCount = async () => {
     const controller = new AbortController()
     await axiosPrivate

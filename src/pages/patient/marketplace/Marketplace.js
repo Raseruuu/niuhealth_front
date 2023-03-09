@@ -78,7 +78,7 @@ export default function Marketplace() {
           setList(serviceList)
           setListOriginal(serviceList)
           const serviceCategories=serviceList.map((item,index)=>{return item.category})
-          setCategoryOptions(serviceCategories )
+          setCategoryOptions(serviceCategories)
         })
         .catch((err) => {
           setIsLoading(false)
@@ -406,7 +406,7 @@ export default function Marketplace() {
                 <>
                   {
                   list.map((item, index) => (
-                    <div key={index} className="col-lg-3" style={{minWidth:'200px'}}>
+                    <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
                       <div className="card e-co-product" >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to="booking" state={{ ...item }}>
@@ -423,10 +423,12 @@ export default function Marketplace() {
                             className="product-title"
                             state={{ ...item }}
                           >
-                            {item.service_description}
+                            <div className='text-title' style={{marginBottom:0}}><h4>{item.service_name}</h4>
+                            </div>
                           </Link>
                           <br/>
                           <div className='row-lg-3'>
+                          <b>Description : </b><br/>{item.service_description}<br/>
                           <b>Category :</b><br/> {item.category}<br/>
                           </div>
                           <br/> 

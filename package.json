@@ -36,6 +36,7 @@
     "react-simple-star-rating": "^5.1.7",
     "react-verification-code-input": "^1.2.9",
     "source-map-explorer": "^2.5.3",
+    "sweetalert-react": "^0.4.11",
     "sweetalert2": "^11.6.16",
     "sweetalert2-react-content": "^5.0.7",
     "web-vitals": "^2.1.4"

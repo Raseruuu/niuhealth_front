@@ -296,7 +296,6 @@ function Services({ limit }) {
                                                           (priceRangeMin<=price)&&(e.target.value>=price)
                                                           )
                                                       }))
-                                                  
                                                   }
                                               }}
                                             />
@@ -410,13 +409,15 @@ function Services({ limit }) {
                   <Link to='' className='product-title'>
                     {/* <div className='col'> */}
                       
-                     {item.service_name}<br/>{item.service_description}
+                     {item.service_name}<br/>
+                    
                         
                       
                     {/* </div> */}
                     </Link>
                     <br/>
                     <div className='row-lg-3'>
+                    <b>Description: </b><br/>{item.service_description}<br/>
                     <b>Category :</b><br/> {item.category}<br/>
                     </div>
                     <br/> 

@@ -163,18 +163,19 @@ export function TopBar({ menuClick, homeAddress }) {
             aria-expanded='false'
           > 
             {(profile)?
-
+             <>
+             <span className='ml-1 nav-user-name hidden-sm m-4'>
+              
+             {(auth.userType==='Patient')?(profile.first_name):(auth.userType==='Provider')?profile.provider_name:null}
+             {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
+           </span>
             <img
               src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}profiles/pictures/${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
               style={{objectFit:"cover", width:50, height:50}}
-            />:null}
-            <span className='ml-1 nav-user-name hidden-sm'>
-              
-              {(auth.userType==='Patient')?(profile.first_name):(auth.userType==='Provider')?profile.provider_name:null}
-              {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
-            </span>
+            /></>:null}
+           
           </Link>
           <div className='dropdown-menu dropdown-menu-right'>
             <Link className='dropdown-item' to='profile'>

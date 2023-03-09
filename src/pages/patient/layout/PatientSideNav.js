@@ -169,7 +169,7 @@ function PatientSideNav({ openSideNav }) {
         <li>
           <NavLink to='subscription'>
             <i className='mdi mdi-credit-card'></i>
-            <span>Subscription</span>
+            <span>Subscription & Payment</span>
             <span className='menu-arrow'></span>
           </NavLink>
         </li>

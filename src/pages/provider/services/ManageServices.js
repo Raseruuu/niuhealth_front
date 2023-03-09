@@ -5,6 +5,7 @@ import { AWS_BUCKET } from "../../../constants";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import UploadImage from '../../../components/form/UploadImage'
+import Multiselect from "multiselect-react-dropdown";
 function ManageServices() {
 
   const { auth } = useAuth();
@@ -16,8 +17,10 @@ function ManageServices() {
   const [images, setImages] = useState([{path:'services/Default.png',file:{}}]);
   const [service, setService] = useState({});
   const [imagepreview, setImagePreview] = useState(true);
-
+  const [isLoading,setIsLoading]=useState(true);
+  const [categoryOptions,setCategoryOptions]=useState([])
   const [isSuccess, setIsSuccess] = useState(false);
+  const [category,setCategory]=useState("");
   // const placeholderimage = `${AWS_BUCKET}/assets/images/users/user-4.jpg`;
   const {
     register,
@@ -36,7 +39,9 @@ function ManageServices() {
     // }
     console.log("images",images)
     console.log("service",service)
-    if (images.length > 0) {
+    
+    
+    if ((images.length > 0 )&& images[0].path!=='services/Default.png'){
       for (let index = 0; index < images.length; index++) {
         formData.append("Image"+parseInt(index+1), images[index].file);
       }
@@ -45,6 +50,8 @@ function ManageServices() {
     formData.append("Email", auth.email);
     // formData.append("ServiceType", data.type);
     formData.append("ServiceDescription", data.description);
+    console.log(category)
+    formData.append("CategoryID", category[0].id);
     formData.append("CostPrice", data.rate);
     formData.append("Status", Number(data.active));
     formData.append("ClinicIDs", data.clinic);
@@ -80,6 +87,28 @@ function ManageServices() {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
+    async function getServiceCategories() {
+    await axiosPrivate
+      .post(('getServiceCategories'),{Email:auth.email}, {
+        signal: controller.signal,
+      })
+      .then((res)=>{
+        console.log('res',res.data.Status)
+        const {Status,Data, Message}=res.data
+        if (Status){
+          setCategoryOptions(Data.map((item)=>{
+            console.log(item)
+            return {id:item.category_id,name:item.category_name}}))
+          
+        }
+      
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        console.error(err)
+        setErrMsg(err.message)
+      })
+    }
     async function getList() {
       await axiosPrivate
         .post(
@@ -108,7 +137,7 @@ function ManageServices() {
     }
 
     getList();
-
+    getServiceCategories();
     return () => {
       isMounted = false;
       controller.abort();
@@ -128,10 +157,10 @@ function ManageServices() {
                 <li className="breadcrumb-item">
                   <Link to="/provider/services">Services</Link>
                 </li>
-                <li className="breadcrumb-item active">Manage Service</li>
+                <li className="breadcrumb-item active">{action==='new'?"Create":action==="update"?"Update":"Manage"} Service</li>
               </ol>
             </div>
-            <h4 className="page-title">Manage Service</h4>
+            <h4 className="page-title">Services</h4>
           </div>
         </div>
       </div>
@@ -236,7 +265,31 @@ function ManageServices() {
                       </optgroup>
                     </select>
                   </div>
-*/}
+*/}               
+                  <div className="col-md-6">
+                    <label
+                      for="example-text-input"
+                      className="col-form-label text-right"
+                    >
+                      Category
+                    </label>
+                    
+                    <Multiselect
+                        style={{zIndex:3}}
+                        options={categoryOptions} // Options to display in the dropdown
+                        // selectedValues={} // Preselected value to persist in dropdown
+                        {...register("category", {
+                          value: state?.selectedService?.category,
+                        })}
+                        onSelect={(selectedItem)=>{setCategory(selectedItem)}} // Function will trigger on select event
+                        onRemove={(selectedItem)=>{setCategory(selectedItem)}} // Function will trigger on remove event
+                        isObject={true}
+                        singleSelect={true}
+                        showCheckbox={true}
+                        
+                        displayValue="name" // Property name to display in the dropdown options
+                      />
+                  </div>
                   <div className="col-md-6">
                     <label
                       for="example-text-input"
@@ -256,7 +309,7 @@ function ManageServices() {
                     />
                   </div>
                 </div> 
-
+                
                 <div className="row">
                   <div className="col-lg-6">
                     <div className="row">
@@ -275,8 +328,9 @@ function ManageServices() {
                         </div>
                       </div>
                     </div>
-
+                    <div className="form-group"><label for="message">Activity</label>
                     <div className="custom-control custom-switch switch-success">
+                    
                       <input
                         id="customSwitchSuccess"
                         type="checkbox"
@@ -289,6 +343,7 @@ function ManageServices() {
                       >
                         Active
                       </label>
+                    </div>
                     </div>
                   </div>
 

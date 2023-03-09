@@ -144,14 +144,8 @@ export default function Booking() {
         ))
 
         if (doAppend) {
-          // continue
-            schedArray.push({
-              id: 'id_' + index + j,
-              title: 'Unavailable',
-              start: startStr,
-              backgroundColor: 'gray',
-              borderColor: 'transparent',
-            })
+          continue
+          
         } else {
           let timeStr = j
           if (j < 10) {
@@ -352,7 +346,7 @@ export default function Booking() {
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image}`}
+                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.default_image}`}
                               alt=""
                               // width={30}
                               height={300}
@@ -396,8 +390,8 @@ export default function Booking() {
                               />
                             </p>
                             <h5>
-                              <b>Service:</b>{' '}
-                              {serviceDetails?.service_description}
+                              <b>Price:</b>{' '}
+                              $ {serviceDetails?.cost_price}
                             </h5>
                           </div>
                         
@@ -480,7 +474,8 @@ export default function Booking() {
                               // width: 'unset', 
                               width:'180px', height:'130px',objectFit: 'cover'}}
                             // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
-                            src={AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
+                            // src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
+                            src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+item.clinic_id+"/"+item.default_image}
                             // style={{}}
                             alt=''
                           />
@@ -506,11 +501,7 @@ export default function Booking() {
                                     <b>Location</b> :
                                     {serviceClinics[index]?.address}
                                   </li>
-                                  <li className="mt-2">
-                                    <i className="far fa-money-bill-alt text-info font-18 mt-2 mr-2"></i>
-                                    <b>Service Rate </b> : $
-                                    {selectedProvider?.cost_price}
-                                  </li>
+                                 
                                 </ul>
                               </div>
                             </div>

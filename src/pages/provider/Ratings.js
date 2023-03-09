@@ -29,34 +29,40 @@ function reviewFormat(string){
 function showReview({patientPicture,patientName,patientEmail,rating,service_name,service_description,review}){
   Swal.fire({
     title: `Patient's Review`,
+    customClass: 'swal-wide',
     html: 
       `
-      <div class='row'>
-          <div class='col-sm-2'>
-            <img 
-              class='rounded-circle'
-              height="100px"
-              src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
-              style={
-                width: 60px;
-                height: 60px;
-                object-fit: cover;}
-              >  
-            </img>
-          </div>
-          <div class='col-sm-8'>
-            <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
-            <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
-            <div class='col'>
-              <i class='mdi mdi-star text-warning'></i>
-              ${rating} Stars
-            </div>  
-          </div>
-  
+      <div class='col'>
+        <div class='row'>
+            <div class='col-sm-2'>
+              <img 
+                class='rounded-circle'
+                height="100px"
+                src="${(AWS_BUCKET_PROFILES)+(patientPicture)}"
+                style={
+                  width: 60px;
+                  height: 60px;
+                  object-fit: cover;}
+                >  
+              </img>
+            </div>
+            <div class='col-sm-8'>
+              <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
+              <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
+              <b>${service_name}</b>
+              <i>${service_description}</i>
+            </div>
+    
+        </div>
+        <div class='col-xl-12 bg-light'>
+          
+          <div class='col'>
+                <i class='mdi mdi-star text-warning'></i>
+                ${rating} Stars
+              </div> 
+          <p class='mb-0 font-18 text-dark'>"${review}"</p> <br>
+        </div>
       </div>
-      <b>${service_name}</b> <br>
-      <i>${service_description}</i> <br>
-      <p class='mb-0 font-18 text-dark responsive'>"${review}"</p> <br>
       `
   })
 }
@@ -95,21 +101,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
         <div className='card-body col'>
         <div className='media col' >
             <div className="row-md-4">
-            {/* <Link className=''
-              to='#'
-              
-              style={{textDecoration: 'none'}}
-              onClick={()=>
-                showReview(
-                  {patientPicture,
-                  patientName,
-                  patientEmail,
-                  rating,
-                  service_name,
-                  service_description,
-                  review})
-              }
-              > */}
+            <div className='row'>
               <img
                 // src='../assets/images/users/user-1.jpg'
                 src={(AWS_BUCKET_PROFILES)+(patientPicture)}
@@ -117,24 +109,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                 className='rounded-circle thumb-md'
                 style={{width:60,height:60, objectFit:'cover'}}
               />
-             
-            <div className='media-body align-self-center ml-3'  style={{marginLeft: '20px'}}>
-              <ul className='list-inline mb-2 product-review ratingsPage'>
-                {/* <RatingsStars score={rating} size={14}/> */}
-                
-                <Rating
-                  fillColor="#ffb822"
-                  emptyColor="white"
-                  SVGstrokeColor="#f1a545"
-                  SVGstorkeWidth={1}
-                  size={14}
-                  allowFraction={true}
-                  initialValue={rating}
-                  readonly={true}
-                />
-              </ul>
-              
-              <div className='row'>
+             <div className='row m-2'>
                 <div className='col'>
                   <p className='font-14 font-weight-bold mb-0 responsive'>
                     {patientName}
@@ -145,17 +120,41 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                 </div>
               
               </div>
-              <h6 className='mb-0 font-14 responsive'>
-                {service_description+",  "+service_name  }
-              </h6>
-              {(review)?
-              (<p>
-                "{(reviewFormat(review))}"
+              </div>
+            <div className='media-body align-self-center ml-3 mw-100' style={{marginLeft: '20px'}}>
 
-              </p>):null}
+              
+              <div className='p-1 ml-8 '>
+                <h6 className='mb-0 font-14 responsive'>
+                  {service_description} <br/>
+                  { service_name  }<br/>  
+                </h6>
+                
+                <ul className='list-inline m-2 p-1 col-xl-12 product-review ratingsPage'>
+                  {/* <RatingsStars score={rating} size={14}/> */}
+                  <div className='row bg-light'>
+                  <div className='m-1 mr-4'><b>{rating} Stars</b> </div>
+                  <Rating
+                    fillColor="#ffb822"
+                    emptyColor="white"
+                    SVGstrokeColor="#f1a545"
+                    SVGstorkeWidth={1}
+                    size={18}
+                    allowFraction={true}
+                    initialValue={rating}
+                    readonly={true}
+                  />
+                  </div>
+                  {(review)?
+                (<p size={14}>
+                  "{(reviewFormat(review))}"
+
+                </p>):null}
+                </ul>
+              
+                </div>
+              </div>
             </div>
-            </div>
-            {/* </Link> */}
             
             </div>
             <div className='row-lg-4 float-right'>

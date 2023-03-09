@@ -17,20 +17,96 @@ export default function About() {
       className='account-body visitsuccess vw-100'
       style={{
         backgroundImage: `url(${AWS_BUCKET}/assets/images/11b-05.jpg)`,
+        backgroundRepeat: 'no-repeat',
+        position:'absolute',
+        backgroundSize: '100%'
       }}
     >
       <div className='container'>
-        <div className='row vh-100 '>
-          <div className='col-12 align-self-center'>
-            <div className='visitCompleteCont'>
-                <h1>About</h1>
+        <div className='col vh-100 '>
+          <h1>About</h1>
+          <div className='col' >
+            {/* <div className='visitCompleteCont'> */}
                 
-                <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h4>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                
+                <div className="row">
+                  <div className="card p-2 m-2 col-md-3">
+                  <b>NiuHealth DrCoco Platform</b><br/>
+                    <div className='align-self-center'>
+                    <b>Version 1.0.0.0 (drcoco-lives)</b> <br/>
+                        [1.0.0.0] - 2023-09-10<br/>
+                        <b>Added</b><br/>
+                        - Everything<br/>
+                        <b>Fixed</b><br/>
+                        - Nothing yet<br/>
+                        <b>Changed</b><br/>
+                        - Upgraded nothing yet<br/>
+                        <b>Removed</b><br/>
+                        - Nothing yet<br/>
+                        <br/>
+                        </div>
+                  </div>
+                 <div className="card p-2 m-2 col-md-3">
+                 <b>Provider & Telehealth Platform</b><br/>
+                 <div className='align-self-center'>
+                  <b> Version 1.0.0 (health-lives)</b><br/>
+                          [1.0.0] - 2023-09-10<br/>
+                          <b>Added</b>  <br/>
+                          - Everything<br/>
+                          <b>Fixed</b> <br/>
+                          - Nothing yet<br/>
+                          <b>Changed</b><br/>
+                          - Upgraded nothing yet<br/>
+                          <b>Removed</b> <br/>
+                          - Nothing yet<br/>
+                          </div>
+                  </div> 
+                 
+                  <div className="card p-2 m-2 col-md-3">
+                  <b>Marketplace Platform</b><br/>
+                  <div className='align-self-center'>
+                  <b>Version 1.0.0 (shopping-lives)</b><br/>
+                          [1.0.0.0] - 2023-09-10<br/>
+                        <b>Added</b><br/>
+                        - Everything<br/>
+                        <b>Fixed</b><br/>
+                        - Nothing yet<br/>
+                        <b>Changed</b><br/>
+                        - Upgraded nothing yet<br/>
+                        <b>Removed</b><br/>
+                        - Nothing yet<br/>
+                        <br/>
+                        </div>
+                  </div>
+                  <div className="card p-2 m-2 col-md-3">
+                    <b>Niu Social Platform</b><br/>
+                    <div className='align-self-center'>
+                    <b>Version 0.0.5 (buzz-alpha)</b><br/>
+                        [0.0.5] - 2023-09-10<br/>
+                        <b>Added</b><br/>
+                        - TBD<br/>
+                        <b>Fixed</b><br/>
+                        - TBD<br/>
+                        <b>Changed</b><br/>
+                        - TBD<br/>
+                        <b>Removed</b><br/>
+                        - TBD<br/>
+                        </div>
+                  </div>
+                  <div className="card p-2 m-2 col-md-3">
+                    <b>Niu Coin Platform</b><br/>
+                          Version 0.0.0 (coin-poc) <br/>
+                      </div>
+                  <div className="card p-2 m-2 col-md-3">
+                  <b>Personal Health Platform</b><br/>
+                        Version 0.0.0 (phr-poc)<br/>
+                  </div>
+       </div>
+       
             </div>
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   )
 }

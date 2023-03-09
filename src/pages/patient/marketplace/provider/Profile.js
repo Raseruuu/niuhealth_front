@@ -97,30 +97,14 @@ function ProviderProfile() {
     const timeX = moment(clickInfo.event.startStr).format('HH')
 
     const state = {
-      selectedProvider,
+      profile,
       timeSlot: {
         dateX,
         timeX,
       },
     }
     
-    Swal.fire(
-      {
-        title: 'Start Booking',
-        text:`Are you sure you want to book on this slot/time ${moment(
-            clickInfo.event.startStr).format('MMM DD, YYYY, hA')}?`,
-        showCancelButton: true,
-        confirmButtonColor: '#008000',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      }
-    )
-    .then(({isConfirmed}) => {
-    if (isConfirmed){
-      navigate('../checkout', {
-        state,
-      })}
-    })
+    
   }
   function showReview({patientPicture,patientName,patientEmail,rating,service_name,service_description,review}){
     Swal.fire({
@@ -193,8 +177,8 @@ function ProviderProfile() {
               id: 'id_' + index + j,
               title: 'Available',
               start: startStr,
-              backgroundColor: '#1eca7b',
-              borderColor: 'transparent',
+              backgroundColor: '#516856',
+              borderColor: '#1eca7b',
             })
         }
       }
@@ -764,52 +748,65 @@ function ProviderProfile() {
             <div className='tab-pane fade' id='activity_detail'>
               <div className='row'>
               {profile?.ProviderServices?.map((item, index) => (
-                    <div key={index} className="col-lg-4">
-                      <div className="card e-co-product" >
-                      {/* {AWS_BUCKET_SERVICES+ item.images} */}
-                        <Link to="/patient/marketplace/booking" state={{ ...item }}>
-                          <img
-                            src={(AWS_BUCKET_SERVICES+"services/"+ item.picture)}
-                            alt=""
-                            style={{width:'200px', height:'200px',objectFit: 'cover'}}
-                            className="img-fluid"
-                          />
-                        </Link>
-                        <div className="card-body product-info">
-                          <Link
-                            to="/patient/marketplace/booking"
-                            className="product-title"
-                            state={{ ...item ,
-                              images:item.picture,
-                              provider_name:profile.ProviderDetails.provider_name,
-                              provider_name:profile.ProviderDetails.provider_description,
-                              provider_id:profile.ProviderDetails.provider_id,
-                             
-                              
-
-                            }}
-                          >
-                            {item.service_description}
-                          </Link>
-                          <p>{item.provider_name}</p>
-                          <div className="d-flex justify-content-between my-2">
-                            <p className="product-price">${item.cost_price}</p>
-                            <p className="mb-0 product-review align-self-center">
-                              <Rating
-                                fillColor="#ffb822"
-                                emptyColor="white"
-                                SVGstrokeColor="#f1a545"
-                                SVGstorkeWidth={1}
-                                size={17}
-                                allowFraction={true}
-                                initialValue={item.average_ratings}
-                                readonly={true}
-                              />
-                            </p>
+                    <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
+                    <div className="card e-co-product" >
+                    {/* {AWS_BUCKET_SERVICES+ item.images} */}
+                      <Link to="/patient/marketplace/booking" state={{ ...item }}>
+                        <img
+                          src={(AWS_BUCKET_SERVICES+"services/"+item.picture)}
+                          alt=""
+                          style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                          className="img-fluid"
+                        />
+                      </Link>
+                      <div className="card-body product-info">
+                        <Link
+                          to="/booking"
+                          className="product-title"
+                          state={{ ...item }}
+                        >
+                          <div className='text-title' style={{marginBottom:0}}><h4>{item.service_name}</h4>
                           </div>
+                        </Link>
+                        <br/>
+                        <div className='row-lg-3'>
+                        <b>Description : </b><br/>{item.service_description}<br/>
+                        <b>Category :</b><br/> {item.category}<br/>
+                        </div>
+                        <br/> 
+                        <h4 className='met-user-name'>{item.provider_name}</h4><br/> 
+                        <div className='text-muted' style={{marginTop:-20}}>Provider</div>
+                        
+                        <div className="d-flex justify-content-between my-2 row">
+                          <p className="product-price m-2">${item.cost_price}</p>
+                          <div className="row product-review align-self-center">
+                            <div className='col-md-10 m-3'>
+                            {(item.average_ratings===0)?<>Unrated</>:
+                            <Rating
+                              fillColor="#ffb822"
+                              emptyColor="white"
+                              SVGstrokeColor="#f1a545"
+                              SVGstorkeWidth={1}
+                              size={17}
+                              allowFraction={true}
+                              initialValue={item.average_ratings}
+                              readonly={true} 
+                            />}
+                             {/* ({item.average_ratings}) */}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex justify-content-between my-2 row">
+                          <button 
+                            onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
+                            className='btn btn-success'>Book Appointment</button>
+                          <button 
+                            onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}
+                            className='btn btn-outline-success'>View Profile</button>
                         </div>
                       </div>
                     </div>
+                  </div>
                   ))}
                       
 

@@ -9,14 +9,139 @@ import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import TableCard from '../../components/table/Tables'
 import CardLongItem from '../../components/cards/Card'
+import { CardImg } from 'react-bootstrap'
+import CardItem from '../../components/cards/Card'
+import Swal from 'sweetalert2'
 
+import SweetAlert from 'sweetalert-react';
+import { useForm } from 'react-hook-form'
+import { useRef } from 'react'
+import moment from 'moment'
+
+function hourformat(hour){
+  if (hour>12){
+    return ((hour-12<10)?"0":"")+(hour-12)+":00 PM"
+  }
+  else if (hour===12){
+    return (12)+":00 PM"
+  }
+  else if (hour===0){
+    return (12)+":00 AM"
+  }
+  else{
+    return ((hour<10)?"0":"")+hour+":00 AM"
+  }
+}
 function ProviderIndex() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [patientList, setPatientList] = useState([])
+  
+  const [clinicList, setClinicList] = useState([])
+  const myModal=useRef();
+  const [showModal,setShowModal]=useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
 
+  } = useForm();
+  async function createInPersonVisit(data) {
+    const controller = new AbortController()
+
+    await axiosPrivate
+      .post(
+        'createInPersonVisit',
+        { ...data,Email: auth?.email || sessionStorage.getItem('email'),
+
+      },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        const { Status, Message } = res.data
+        if (Status){
+          document.getElementById("create-appointment").reset();
+          
+          Swal.fire({
+            title: "In-Person Appointment Created.",
+            html: ``,
+            icon: 'info'
+            
+          })
+          $('#myModal').hide();
+          $('.modal-backdrop').hide();
+         
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  // Swal.fire({
+                    
+  //   title: `In-Person Visit`,
+  //       customClass: 'swal-wide',
+  //       html:`
+  //         <div class='col-lg-12 p-1'>
+  //           <i class='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <i class='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <i class='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <div class='col'>
+  //             <label>o</label>
+              
+  //             <label>Choose A Patient</label>
+  //             <select>
+  //               ${patientList.map((item)=>{
+  //                 console.log(item.first_name)
+  //                 return(
+  //                 <option value={item.patient_id}>{item.first_name} {item.last_name}</option>)
+  //               })}
+  //             </select>
+  //           </div>
+  //         </div>
+  //       `
+  //     }).then((isConfirmed)=>{
+  //       if (isConfirmed){
+  //         createInPersonVisit()
+  //       }
+  //     })
   useEffect(() => {
-    async function getList() {
+      $(document).ready(function(){
+        $("#myBtn").click(function(){
+          $("#myModal").modal();
+        });
+      });
+    async function getClinicList() {
+      const controller = new AbortController()
+
+      await axiosPrivate
+        .post(
+          'getClinics',
+          { Email: auth.email},
+          {
+            signal: controller.signal,
+          }
+        )
+        .then((res) => {
+          console.log(res)
+          const { Status, Data: data = [], Message } = res.data
+
+          if (Status) {
+            console.log("Clinics",data)
+            setClinicList(data)
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          console.error(err)
+          setErrMsg(err.message)
+        })
+    }
+    async function getPatientList() {
       const controller = new AbortController()
 
       await axiosPrivate
@@ -36,9 +161,10 @@ function ProviderIndex() {
         })
     }
 
-    getList()
+    getPatientList()
+    getClinicList()
   }, [])
-
+  let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
   return (
     <div className="container-fluid">
       <div className="row">
@@ -48,8 +174,31 @@ function ProviderIndex() {
       </div>
 
       <div className="row">
-        <div className="col-12">
+        <div className="col-8">
           <WelcomeCard />
+        </div>
+        <div className="col-4">
+          <CardItem>
+            <i className='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
+            <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
+            <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
+            
+            <h4>You can start an In-Person Visit with a Patient here.</h4>
+            <h6> small text</h6>
+            <div className='align-item-center'>
+              <button
+                className='btn btn-outline-success btn-round' 
+                onClick={()=>{
+                  setShowModal(true)
+                }}
+                data-toggle="modal"
+                data-target="#myModal"
+                
+                >
+                Start A New Appointment
+              </button>
+            </div>
+          </CardItem>
         </div>
       </div>
       <div className="card">
@@ -57,7 +206,7 @@ function ProviderIndex() {
           <h4 className="header-title mt-0 mb-3">Virtual Visit Queue</h4>
           <div className="table-responsive">
             
-                <PatientQueue limit={6} />
+                <PatientQueue limit={6} stopPolling={showModal} />
           </div>
         </div>
       </div>
@@ -77,15 +226,15 @@ function ProviderIndex() {
       </div>
 
       <div className="row">
-        <div className="col-lg-4">
+        {/* <div className="col-lg-4">
           <Activity />
-        </div>
+        </div> */}
 
         <div className="col-lg-8">
           <div className="card">
             <div className="card-body">
               <h4 className="header-title mt-0 mb-3">Patient Details</h4>
-              {(patientList,length>0)?
+              {(patientList.length>0)?
                 <TableCard
                   headers={[
                     'Patient',
@@ -485,6 +634,85 @@ function ProviderIndex() {
               </div>
             </div>
           </div> */}
+          {showModal===false?null:
+          <div id="myModal" className={showModal?"modal fade":"modal fade show"} role="form" ref={myModal}>
+            <div className="modal-dialog" style={{maxWidth: '500px', margin: '1.75rem auto'}}>
+
+              {/* <!-- Modal content--> */}
+              <div className="modal-content">
+
+                <div className="modal-header">
+                  
+                  <h4 className="modal-title">In-Person Visit</h4>
+                </div>
+                <form id="create-appointment" onSubmit={handleSubmit(createInPersonVisit)}>
+                <div className="modal-body">
+                  
+                <div className="nuModalCont visitRequestModal">
+                
+                <div className="" >
+                  
+                  <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
+                  <input className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
+                  <label  className="col-form-label">Patient</label>
+                  <select className="form-control" {...register("PatientID")}>
+                      <option>Select Patient...</option>
+                        {patientList.map((item,index)=>{
+                                return(
+                                <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
+                              })}
+                  </select>
+                  
+                  <label  className="col-form-label">Clinic</label>
+                  <select className="form-control" {...register("ClinicID")}>
+                              <option>Select Clinic...</option>
+                              {clinicList.map((item)=>{
+                                return(
+                                <option value={item.clinic_id}>{item.clinic_name} </option>)
+                              })}
+                          </select>
+                  <label htmlFor="date" className="col-form-label">Visit Date</label>
+                  <input className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
+                  
+                  <label htmlFor="time" className="col-form-label">Time</label>
+                  {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
+                  <select
+                    {...register("Time")}
+                    className="form-control">   
+                    {morning_options.map((option, index)=>(
+                      <option key={index} value={option}>{hourformat(option)}</option>
+                      ))}
+                      
+                    <option value={null}>--:--</option>
+                  </select>
+                  <label  className="col-form-label">Internal Notes</label>
+                  <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea>
+                  
+                </div>
+              </div>
+              
+
+                </div>
+                <div className="modal-footer">
+                <div className="nuBtnContMod">
+                  <button type="submit" className="btn btn-success waves-effect waves-light" id="create-visit">Save Visit</button>
+                  </div>
+                  <button type="button" className="btn btn-outline-danger"
+                  data-target="#myModal" data-dismiss="modal"
+                  onClick={(e)=>{
+                    setShowModal(false);
+                    $('#myModal').hide();
+                    $('.modal-backdrop').hide();
+                  }
+                  }
+                  >Close</button>
+                </div>
+                </form>
+              </div>
+
+            </div>
+           
+          </div>}
     </div>
   )
 }

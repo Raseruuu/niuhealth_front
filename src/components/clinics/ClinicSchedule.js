@@ -82,6 +82,53 @@ export default function ClinicSchedule() {
       const value = e.target.value
       setClinicProfile((prev) => ({ ...prev, [name]: value }))
     }
+  // async function onChangeImage(data){
+    
+  //   const formData = new FormData();
+  //   for (var index in clinicImages){
+      
+  //     formData.append('Image'+(parseInt(index)+1), data[index].file)
+  //   }
+
+  //   await axiosPrivate
+  //       .post('providerUploadClinicImage', 
+  //         { 
+  //           ...formData,
+  //           Email:auth.email,
+  //           ClinicID:profile.clinicID
+  //         },
+          
+  //         {
+  //           headers: { "Content-Type": "multipart/form-data" },
+  //           onUploadProgress: function (ProgressEvent) {
+  //             console.log(
+  //               "uploadprogress: " +
+  //                 (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+  //                 "%"
+  //             );
+  //           },
+  //         }
+  //       )
+  //       .then((res) => {
+  //         return res.data
+  //       })
+  //       .then((data) => {
+  //         const { Status, Message } = data || {}
+  //         // setFeedbackMsg(Message)
+  //         if (Status) {
+  //           setIsSuccess(true)
+            
+
+  //         } else {
+  //           setIsSuccess(false)
+  //         }
+  //       })
+  //       .catch((err) => {
+  //         console.log(err)
+  //       })
+
+  // }
+
   const onSubmit = async (data) => {
     
     const formData = new FormData();
@@ -233,6 +280,7 @@ export default function ClinicSchedule() {
       ...clinicProfile,
       picturefile:file
     })
+    
   };
 
   useEffect(() => {
@@ -251,6 +299,9 @@ export default function ClinicSchedule() {
             picture:result 
           })
           setImagePreview(true)
+          onChangeImage({
+            ...clinicImages
+          })
         }
       }
       fileReader.readAsDataURL(clinicProfile.picturefile);
@@ -339,7 +390,7 @@ export default function ClinicSchedule() {
                             // value={clinicProfile.Image}
                             onChange={handleImageInputChange}
                           />
-        
+                          
                           <img
                             alt=""
                             style={{objectFit: 'cover', margin: 'unset' ,width:200,height:150}}

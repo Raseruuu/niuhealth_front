@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import CardItem from '../../../components/cards/Card'
 import Footer from '../../../components/Footer'
+import TableCard from '../../../components/table/Tables'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
@@ -40,6 +41,10 @@ function Subscription() {
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [isLoading,setIsLoading]=useState(true)
+  
+  const [isLoadingPayments,setIsLoadingPayments]=useState(true)
+  
+  const [paymentHistory,setPaymentHistory] = useState([])
   const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
   async function handleCancelSub(){
     await axiosPrivate
@@ -58,7 +63,38 @@ function Subscription() {
   useEffect(() => {
     let isMounted = true
     const controller = new AbortController()
+    async function getPatientPayments() {
+      await axiosPrivate
+        .post(
+          'getPatientPayments',
+          { Email: auth.email},
+          {
+            signal: controller.signal
+          }
+        )
+        .then((res) => {
+          
+          const { Status, Data: data = [], Message } = res.data
+          const details = data[0]
+         
+          if (Status) {
+            setIsLoadingPayments(false)
+            console.log('deets',res.data.Data )
+            setPaymentHistory(res.data.Data)
 
+            
+
+
+
+          } else {
+            throw new Error(Message)
+          }
+        })
+        .catch((err) => {
+          setIsLoadingPayments(false)
+          console.error(err)
+        })
+    }
     async function getRecord() {
       await axiosPrivate
         .post(
@@ -96,7 +132,7 @@ function Subscription() {
     }
 
     isMounted && getRecord()
-
+    getPatientPayments()
     return () => {
       isMounted = false
       controller.abort()
@@ -114,9 +150,9 @@ function Subscription() {
               </div>
             </div>
           </div>
-          {(subs.subsStart!='-')?
+          {(subs.subsStart!='-'||isLoading)?
             <div className='row'>
-              <div className='col-lg-6'>
+              <div className='col-lg-12'>
                 <div className='card'>
                   <div className='card-body'>
                     <div className='total-payment'>
@@ -133,7 +169,7 @@ function Subscription() {
                           </tr>
                         </tbody>
                       </table>
-                      <div className='d-flex flex-column flex-md-row '>
+                      <div className='d-flex flex-column flex-md-row float-right'>
                         <button
                           type='button'
                           className='btn btn-round btn-outline-info waves-effect waves-light'
@@ -237,6 +273,30 @@ function Subscription() {
               </div>
             </div>
           </div> */}
+          <div className='row-lg-12'>
+                    {(paymentHistory.length!==0)?
+                      <TableCard headers={["Description","Payment Time", "Receipt", "Amount"]}>
+                      {paymentHistory.map((item,index)=>(
+                        <tr key={index}>
+                        <td>
+                        {item.description} 
+                        </td>
+                        <td>
+                        {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
+                        </td>
+                        <td>
+                        <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
+                        </td>
+                        <td>
+                        {item.amount}
+                        </td>
+                        </tr>
+
+                      ))}
+                      
+                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?"Loading...":"No Payment History results."}</CardItem></>}
+                  
+                </div>
         </div>
 
         <Footer />
