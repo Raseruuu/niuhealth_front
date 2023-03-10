@@ -346,7 +346,7 @@ export default function Booking() {
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.default_image}`}
+                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails.provider_id}/${serviceDetails?.image1}`}
                               alt=""
                               // width={30}
                               height={300}

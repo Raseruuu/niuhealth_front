@@ -9,13 +9,13 @@ import moment from 'moment'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
-function Calendar({ allowCall }) {
+function Calendar({ allowCall,dateList }) {
   const { auth } = useAuth()
   const navigate = useNavigate()
   const [slots, setSlots] = useState([])
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
-  const [appointmentList, setAppointmentList] = useState([])
+  const [appointmentList, setAppointmentList] = useState(dateList)
 
   const handleDateSelect = (selectInfo) => {
     console.log(selectInfo)
@@ -153,8 +153,16 @@ function Calendar({ allowCall }) {
 
           if (Status) {
             console.log("Provider_appointments",data)
-            isMounted && setAppointmentList(data)
-            isMounted && INITIAL_EVENTS(data)
+            if (dateList){
+              
+              setAppointmentList(dateList)
+              INITIAL_EVENTS(dateList)
+            }
+            else{
+              isMounted && setAppointmentList(data)
+              isMounted && INITIAL_EVENTS(data)
+            }
+            
             console.log("Slots",slots)
           } else {
             throw new Error(Message)
@@ -172,7 +180,7 @@ function Calendar({ allowCall }) {
       isMounted = false
       controller.abort()
     }
-  }, [])
+  }, [dateList])
 
   return (
     <FullCalendar

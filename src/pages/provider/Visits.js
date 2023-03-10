@@ -12,6 +12,17 @@ import { useForm } from 'react-hook-form'
 import { useRef } from 'react'
 
 import moment from 'moment'
+import styled from "@emotion/styled"
+import Multiselect from 'multiselect-react-dropdown'
+
+
+
+export const StyleWrapper = styled.div`
+.optionListContainer {
+  position: sticky;
+} 
+
+`
 const StatusText = ({ status }) => {
   const statusColor = {
     0: 'badge-soft-purple',
@@ -23,8 +34,8 @@ const StatusText = ({ status }) => {
   const statusText = {
     0: 'For Approval',
     1: "Completed",
-    2: 'Cancelled By You',
-    3: 'Cancelled By Doctor',
+    2: 'Cancelled By Patient',
+    3: 'Cancelled By Provider',
     4: "Approved",
   }
   return (
@@ -55,10 +66,26 @@ function Visits() {
   const [appointmentList, setAppointmentList] = useState([])
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
-  
+  const [errMsg,setErrMsg]=useState('')
   const [patientList, setPatientList] = useState([])
   const [clinicList, setClinicList] = useState([])
-  
+  const [clinicIDList, setClinicIDList] = useState([])
+  const [statusFilter, setStatusFilter] = useState( [true,true,true,true,true,true])
+  const statusdict=
+      [
+        "For Approval",
+        "Completed",
+        "Cancelled by Patient",
+        "Cancelled by Provider",
+        "Approved",
+        "Started"
+      ]
+  const [showFilterWindow,setShowFilterWindow]=useState(false)
+  const [activeFilter,setActiveFilter]=useState('')
+  const [searchString,setSearchString]=useState('')
+  const [filterList,setFilterList]=useState([])
+  const [transFilter,setTransFilter]=useState([true,true]);
+  const [listOriginal,setListOriginal] = useState([])
   const myModal=useRef();
   const [updateVisit,setUpdateVisit]=useState(true)
   const [showModal,setShowModal]=useState(false)
@@ -119,8 +146,10 @@ function Visits() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
-            console.log("Provider_appointments",data)
-            isMounted && setAppointmentList(data)
+            // console.log("Provider_appointments",data)
+            const sorted_data=(data.sort((itemA,itemB)=>{return moment(itemA.trans_date_time).diff(itemB.trans_date_time)})).reverse()
+            isMounted && setAppointmentList(sorted_data)
+            setListOriginal(sorted_data)
             setIsLoading(false) 
           } else {
             throw new Error(Message)
@@ -166,8 +195,10 @@ function Visits() {
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
-            console.log("Clinics",data)
+            // console.log("Clinics",data)
             setClinicList(data)
+            setClinicIDList(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+            
           } else {
             throw new Error(Message)
           }
@@ -215,12 +246,292 @@ function Visits() {
         </div>
       </div>
 
-      {/* <!-- Calendar --> */}
 
-      
-      <div className='col position-absolute'>
-        <div className='col-12 mr-2'>
+      <div className="card">
+                  <div className="card-body">
+                      <div className="col-lg-12">
+                        <h5 className="mt-1 ">Filters</h5>
+                        
+                        <ul className='nav nav-pills m-2' id='pills-tab' role='tablist'>
+                          <li className='nav-item col-xl-5 m-2' >
+                            <div className="row-xl-12">
+                                  <form onSubmit={handleSubmit} >
+                                  <div className="form-group">
+                                    <div className="input-group">
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Search Visits..."
+                                        aria-label="Search Visits..."
+                                        onChange={(e)=>setSearchString(e.target.value)}
+                                      />
+                                      <span className="input-group-append">
+                                        <button className="btn btn-success" style={{zIndex:0}} type="submit">
+                                          {(isLoading&&searchString>=3)?"Going...":'Go!'}
+                                        </button>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  </form>
+                              </div>
+                              </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='service_category_tab'
+                                data-toggle='pill'
+                                href='#service_category'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  
+                                  setActiveFilter("service_category")
+                                  if (activeFilter==='service_category'){
+                                    setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='service_category'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Clinic
+                              </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute' style={{zIndex:4 }}  id='service_category'>
+                                {showFilterWindow&&activeFilter==='service_category'?
+                                <CardItem> 
+                      
+                                  <div className="p-3" style={{minWidth:'340px'}}>
+                                    <h6 className=" mt-0" >Clinics</h6>
+                                    <div className='header-title'>
+                                      {filterList.length>0?appointmentList.length+" result( s )":""}
+                                    </div>
+                                    {/* <div className="checkbox checkbox-success " > */}
+                                    <StyleWrapper>
+                                      <Multiselect
+                                        style={{zIndex:3 ,minWidth:'500px'}}
+                                        options={clinicIDList} // Options to display in the dropdown
+                                        selectedValues={filterList} // Preselected value to persist in dropdown
+                                        onSelect={
+                                          (selectedList,selectedItem)=>{
+                                              
+                                              setFilterList(selectedList)
+                                              const clinic_filter=selectedList.map((clinic)=>{return clinic.id})
+                                              if (selectedList.length>0)
+                                                {setAppointmentList(listOriginal
+                                                  .filter((item)=>{
+                                                      return(clinic_filter.includes(item.clinic_id)
+                                                        )
+                                                    }))}
+                                              else{
+                                                setAppointmentList(listOriginal)
+                                              }
+                                            }} // Function will trigger on select event
+                                        onRemove={
+                                          (selectedList,selectedItem)=>{
+                                            
+                                            
+                                              // console.log("selectedList",selectedList)
+                                              setFilterList(selectedList)
+                                              const clinic_filter=selectedList.map((clinic)=>{return clinic.id})
+                                              if (selectedList.length>0)
+                                                {setAppointmentList(listOriginal
+                                                  .filter((item)=>{
+                                                      return(clinic_filter.includes(item.clinic_id)
+                                                        )
+                                                    }))}
+                                              else{
+                                                setAppointmentList(listOriginal)
+                                              }
+                                            }} // Function will trigger on remove event
+                                        isObject={true}
+                                        showCheckbox={true}
+                                        displayValue="name"
+                                        // Property name to display in the dropdown options
+                                      />
+                                      
+                                    </StyleWrapper>
+                                    {/* </div> */}
+                                   
+                                  </div>
+                                
+                          </CardItem>:<></>
+                        }
+                        </div>
+                        </div>
+                            </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='price_range_tab'
+                                data-toggle='pill'
+                                href='#price_range'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  setActiveFilter("price_range")
+                                  if (activeFilter==='price_range'){
+                                  setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='price_range'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Status
+                              </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute' style={{zIndex:3 }} id='price_range'>
+                                {(showFilterWindow&&activeFilter==='price_range')?
+                                <CardItem> 
+                                    <div className="p-3">
+                                      {/* <h6 className=" mt-0">Price Range</h6> */}
+                                      <div className='m-1'> 
+                                        <h6 className=" mb-0">Status</h6>
+                                        {statusdict.map((val,index) => (
+                                          <div key={index} className="checkbox checkbox-success" style={{width:240}}>
+                                            
+                                            <input 
+                                              id={`checkboxa${index}`}
+                                              type="checkbox" 
+                                              defaultChecked={statusFilter[index]}
+                                              // checked={}
+                                              value={statusFilter[index]}
+                                              onChange={
+                                                (e)=>{
+                                                  
+                                                    var newstatusfilter=statusFilter
+                                                    if (newstatusfilter[index]===true){
+                                                      newstatusfilter[index]=false
+                                                    }
+                                                    else if (newstatusfilter[index]===false){
+                                                      newstatusfilter[index]=true
+                                                    }
+                                                    setStatusFilter(newstatusfilter)
+                                                    console.log('filter',newstatusfilter)
+
+                                                    
+                                                }}
+                                                />
+                                            <label htmlFor={`checkboxa${index}`}>
+                                              {val}
+                                              
+                                            </label>
+                                          </div>
+                                        ))}
+                                      </div>
+                                      <div className='m-1'> 
+                                          <button className='m-1 btn btn-round btn-success' onClick={()=>{
+                                            const filter =statusFilter.map((filt,index)=>{if (filt===true){return index}else{return(false)}})
+                                            
+                                            setAppointmentList(listOriginal
+                                              .filter((item)=>{
+                                                return(filter.includes(parseInt(item.status))
+                                                  )
+                                                }))
+                                          }}>Apply</button>
+                                          {/* <button className='m-1 btn btn-round btn-outline-info' onClick={()=>{
+                                            const filter =statusFilter.map((filt,index)=>{if (filt===true){return index}})
+                                            setStatusFilter([true,true,true,true,true,true])
+                                            setAppointmentList(listOriginal)
+                                          }}>Reset</button> */}
+                                      </div>
+                                    </div>
+                                          
+                                  </CardItem> :<></>}
+                                </div></div>
+                            </li>
+                            <li className='nav-item m-2'>
+                              <a
+                                className='nav-link'
+                                id='payment_history_detail_tab'
+                                data-toggle='pill'
+                                href='#ratings'
+                                onClick={(e)=>{
+                                  // setShowFilterWindow(!showFilterWindow)
+                                  setActiveFilter("ratings")
+                                  if (activeFilter==='ratings'){
+                                  setShowFilterWindow(!showFilterWindow)}
+                                  else if (activeFilter!=='ratings'){
+                                    setShowFilterWindow(true)
+                                  }
+                                  // else {
+                                  //   setShowFilterWindow(false)
+                                    
+                                  // }
+                                }}
+                              >
+                                Transaction Type
+                              </a>
+                              <div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              <div className='tab-pane position-absolute ' style={{zIndex:3}} id='ratings'>
+                              {(showFilterWindow&&activeFilter==='ratings')?
+                              <CardItem>
+                                <div className="p-3">
+                                  <h6 className="mt-0 ">Transaction Type</h6>
+                                  {["Virtual Visit","In-Person Visit"].map((val,index) => (
+                                    <div key={index} className="checkbox checkbox-success" style={{width:240}}>
+                                      
+                                      <input 
+                                        id={`checkboxa${index}`}
+                                        type="checkbox" 
+                                        defaultChecked={transFilter[index]}
+                                        // checked={}
+                                        value={transFilter[index]}
+                                        onChange={
+                                          (e)=>{
+                                            
+                                              var newstatusfilter=transFilter
+                                              if (newstatusfilter[index]===true){
+                                                newstatusfilter[index]=false
+                                              }
+                                              else if (newstatusfilter[index]===false){
+                                                newstatusfilter[index]=true
+                                              }
+                                              setTransFilter(newstatusfilter)
+                                              console.log('filter',newstatusfilter)
+
+                                              
+                                          }}
+                                          />
+                                      <label htmlFor={`checkboxa${index}`}>
+                                        {val}
+                                        
+                                      </label>
+                                    </div>
+                                  ))}
+                                    
+                                </div>
+                                <div className='m-1'> 
+                                    <button className='m-1 btn btn-round btn-success' onClick={()=>{
+                                      const filter =transFilter.map((filt,index)=>{if (filt===true){return index+1}else{return(false)}})
+                                      console.log('filterrrr',filter)
+                                      setAppointmentList(listOriginal
+                                        .filter((item)=>{
+                                          return(filter.includes(parseInt(item.trans_type))
+                                            )
+                                          }))
+                                    }}>Apply</button>
+                                          
+                                      </div>
+                            </CardItem>:<></>}
+                    </div></div>
+                            </li>
+                            
+                          
+                          </ul>
+                    </div>
+                  </div>
+              </div>
+
+      {/* <!-- Calendar --> */}      
+      <div className='col position-absolute '>
+        <div className='col-12 mr-2 '  style={{marginLeft:-25}}>
           <CardItem>
+          <h5 className="mt-1 ">View</h5>
+                        
             <ul className='nav nav-pills mb-0' id='pills-tab' role='tablist'>
               <li className='nav-item'>
                 <a
@@ -246,40 +557,40 @@ function Visits() {
               </ul>
           </CardItem>
         </div>
-        <div className='tab-content detail-list' id='pills-tabContent'>
+        <div className='tab-content detail-list' style={{marginLeft:-25}} id='pills-tabContent'>
           
         <div className='tab-pane fade show active' id='calendar_view'>
-          <div className='col-lg-9'>
+          <div className='col-lg-10'>
             <div className='card'>
               <div className='card-body'>
-                <Calendar allowCall={true} />
+                <Calendar allowCall={true} dateList={appointmentList} />
                 <div style={{ clear: 'both' }}></div>
               </div>
             </div>
           </div>
         </div>
       
-        <div className='tab-pane fade' id='list_view'>
-          <div className='col-lg-9  position-absolute'>
+        <div className='tab-pane fade position-absolute' id='list_view'>
+          <div className='col-lg-10'>
           {(appointmentList.length!==0)?
-              <TableCard headers={["Patient","Service Description","Appointment Time", "Status"]}>
+              <TableCard headers={["Patient","Service Description","Category","Clinic","Appointment Time","Transaction Type", "Status"]}>
               {appointmentList.map((item,index)=>(
                 <tr key={index}>
                 <td>
                   <Link
-                    to={"/patients/profile/"+item.patient_id}
+                    to={"/provider/patient/profile/"+item.patient_id}
                     state={{
                       selectedUser: item,
                     }}
                   >
                     <div className="row">
                       <div className="col">
-                        <img
+                        {/* <img
                           src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.picture}
                           alt=""
                           className="thumb-sm rounded-circle mr-2"
                           style={{objectFit:'cover'}}
-                        />
+                        /> */}
                         {item.full_name} 
                       </div>
                     </div>
@@ -290,9 +601,17 @@ function Visits() {
                 {item.service_description}
                 </td>
                 <td>
+                {item.category}
+                </td>
+                <td>
+                {item.clinic_name}
+                </td>
+                <td>
                 {moment(item.trans_date_time).format('hh:mm a MM/DD/YY')}
                 </td>
-                
+                <td>
+                {item.trans_type==="1"?"Virtual Visit":(item.trans_type==="2")?"In-Person Visit":""}
+                </td>
                 <td>
                 <StatusText status={item.status}/>
                 </td>
@@ -324,9 +643,9 @@ function Visits() {
                 <div className="" >
                   
                   <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
-                  <input className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
+                  <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
                   <label  className="col-form-label">Patient</label>
-                  <select className="form-control" {...register("PatientID")}>
+                  <select required className="form-control" {...register("PatientID")}>
                       <option>Select Patient...</option>
                         {patientList.map((item,index)=>{
                                 return(
@@ -335,7 +654,7 @@ function Visits() {
                   </select>
                   
                   <label  className="col-form-label">Clinic</label>
-                  <select className="form-control" {...register("ClinicID")}>
+                  <select required className="form-control" {...register("ClinicID")}>
                               <option>Select Clinic...</option>
                               {clinicList.map((item)=>{
                                 return(
@@ -343,11 +662,12 @@ function Visits() {
                               })}
                           </select>
                   <label htmlFor="date" className="col-form-label">Visit Date</label>
-                  <input className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
+                  <input required className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
                   
                   <label htmlFor="time" className="col-form-label">Time</label>
                   {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
                   <select
+                    required 
                     {...register("Time")}
                     className="form-control">   
                     {morning_options.map((option, index)=>(

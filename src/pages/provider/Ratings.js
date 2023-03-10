@@ -126,8 +126,11 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
               
               <div className='p-1 ml-8 '>
                 <h6 className='mb-0 font-14 responsive'>
-                  {service_description} <br/>
-                  { service_name  }<br/>  
+                  
+                  Review For:
+                 <div className='m-2'> { service_name  }<br/>  
+                  {service_description==='For'?"":service_description} <br/>
+                  </div>
                 </h6>
                 
                 <ul className='list-inline m-2 p-1 col-xl-12 product-review ratingsPage'>

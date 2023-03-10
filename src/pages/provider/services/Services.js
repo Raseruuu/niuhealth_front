@@ -440,7 +440,7 @@ function Services({ limit }) {
                         </div>
                       </div>
                     </div>
-                    <Link to='manage/update' state={{ selectedService: item }}>
+                    <Link to={'manage/update/'+item.service_id} state={{ selectedService: item }}>
                       <button
                         type='button'
                         className='btn btn-gradient-success waves-effect waves-light'

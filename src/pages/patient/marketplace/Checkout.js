@@ -41,7 +41,7 @@ export default function Checkout() {
         Email: auth?.email,
         ServiceID: selectedService.selectedProvider.service_id,
         PaymentType: 3,
-        ClinicID:"1",
+        ClinicID:selectedService.selectedProvider.service_id,
         ProviderID: selectedService.selectedProvider.provider_id,
         Date: selectedService.timeSlot.dateX,
         Time: selectedService.timeSlot.timeX,

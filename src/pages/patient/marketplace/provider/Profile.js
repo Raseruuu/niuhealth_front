@@ -753,7 +753,7 @@ function ProviderProfile() {
                     {/* {AWS_BUCKET_SERVICES+ item.images} */}
                       <Link to="/patient/marketplace/booking" state={{ ...item }}>
                         <img
-                          src={(AWS_BUCKET_SERVICES+"services/"+item.picture)}
+                          src={(AWS_BUCKET_SERVICES+item.image)}
                           alt=""
                           style={{width:'200px', height:'200px',objectFit: 'cover'}}
                           className="img-fluid"
@@ -761,7 +761,7 @@ function ProviderProfile() {
                       </Link>
                       <div className="card-body product-info">
                         <Link
-                          to="/booking"
+                          to="/patient/marketplace/booking"
                           className="product-title"
                           state={{ ...item }}
                         >

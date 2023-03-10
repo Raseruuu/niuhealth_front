@@ -62,12 +62,12 @@
     box-shadow: unset;
 }
 a {
-  color: #127e00;
+  color:#516856 #127e00;
 }
 
-/* .nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active {
-  background: linear-gradient(14deg, #007e26 0%, rgba(9, 104, 22, 0.6));
+.nav-pills .nav-item.show .nav-link, .nav-pills .nav-link.active {
+  background: linear-gradient(14deg, #007e26 0%, rgba(18, 126, 0, 0.6));
   color: #fff;
   -webkit-box-shadow: 0 7px 14px 0 rgba(65, 231, 31, 0.5);
   box-shadow: 0 7px 14px 0 rgba(18, 155, 14, 0.5);
-} */
+}

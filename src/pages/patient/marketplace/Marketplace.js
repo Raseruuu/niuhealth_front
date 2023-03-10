@@ -182,9 +182,8 @@ export default function Marketplace() {
                                 {showFilterWindow&&activeFilter==='service_category'?
                                 <CardItem> 
                       
-                                  <div className="p-3" minWidth={400}>
+                                  <div className="p-3" style={{width:400}}>
                                     <h6 className=" mt-0" >Service Categories</h6>
-                                    <div className="checkbox checkbox-success " >
                                     <StyleWrapper>
                                       <Multiselect
                                         style={{zIndex:3}}
@@ -224,8 +223,6 @@ export default function Marketplace() {
                                       />
                                       
                                     </StyleWrapper>
-                                    </div>
-                                    
                                   </div>
                                 
                           </CardItem>:<></>
@@ -380,7 +377,7 @@ export default function Marketplace() {
                                           )
                                         )}
                                       </label>
-                        </div>
+                    </div>
                       ))}
                      
         

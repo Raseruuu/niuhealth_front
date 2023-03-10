@@ -47,7 +47,7 @@ function ProviderDashboard() {
         <div className='page-wrapper'>
           <div className='page-content'>
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </div>
       </div>

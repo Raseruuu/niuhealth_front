@@ -13,15 +13,10 @@ export default function About() {
  
 
   return (
-    <div
-      className='account-body visitsuccess vw-100'
-      style={{
-        backgroundImage: `url(${AWS_BUCKET}/assets/images/11b-05.jpg)`,
-        backgroundRepeat: 'no-repeat',
-        position:'absolute',
-        backgroundSize: '100%'
-      }}
-    >
+    // <div
+    //   className='account-body vw-100'
+      
+    // >
       <div className='container'>
         <div className='col vh-100 '>
           <h1>About</h1>
@@ -106,7 +101,7 @@ export default function About() {
             </div>
           </div>
         </div>
-      </div>
+      // </div>
     // </div>
   )
 }

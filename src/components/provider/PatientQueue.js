@@ -15,7 +15,8 @@ import useInterval from '../../hooks/useInterval'
 import Pagination from 'react-js-pagination'
 export function PaginatedList( {limit,pagenum, list = [] }){
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
-  
+  const axiosPrivate = useAxiosPrivate()
+  const { auth } = useAuth()
   function handleActionClick(action, selectedItem) {
     Swal.fire({
       title:
@@ -232,7 +233,6 @@ function PatientQueue({ limit, search, stopPolling=false }) {
                   <th>Contact Info</th>
                   <th>Symptoms</th>
                   <th>Address</th>
-
                   <th>Action</th>
                 </tr>
               </thead>
@@ -243,6 +243,8 @@ function PatientQueue({ limit, search, stopPolling=false }) {
 
               </>}
             </table>
+            {(list.length>limit)?
+            <div className='justify-content-center d-flex'>
             <Pagination
               activePage={pageNum}
               itemsCountPerPage={limit}
@@ -254,6 +256,7 @@ function PatientQueue({ limit, search, stopPolling=false }) {
               onChange={(e)=>{
                 setPageNum(e)}}
                   />
+                </div>:<></>}
   </>)
 }
 function dateGenerator(date, time) {

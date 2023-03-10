@@ -11,11 +11,15 @@ function ManageServices() {
   const { auth } = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
-  const { action } = useParams();
+  const { action,id } = useParams();
   const { state } = useLocation();
   const [clinicList, setClinicList] = useState([]);
   const [images, setImages] = useState([{path:'services/Default.png',file:{}}]);
-  const [service, setService] = useState({});
+  const [service, setService] = useState({
+    service_name:"",service_description:"",
+    image1:"",image2:"",image3:"",image4:"",image5:"",
+    service_description:"",service_name:""
+  });
   const [imagepreview, setImagePreview] = useState(true);
   const [isLoading,setIsLoading]=useState(true);
   const [categoryOptions,setCategoryOptions]=useState([])
@@ -49,15 +53,25 @@ function ManageServices() {
     formData.append("ServiceName", data.name);
     formData.append("Email", auth.email);
     // formData.append("ServiceType", data.type);
+    if (action==='update'){
+      formData.append("ServiceID", id);
+      formData.append("Price", service.rate);
+      formData.append("Status", service.status);
+      
+      formData.append("Name", service.service_name);
+      formData.append("Description", service.description);
+      formData.append("Category", service.category_id);
+    }
     formData.append("ServiceDescription", data.description);
     console.log(category)
-    formData.append("CategoryID", category[0].id);
+    formData.append("CategoryID", category.category_id);
     formData.append("CostPrice", data.rate);
     formData.append("Status", Number(data.active));
     formData.append("ClinicIDs", data.clinic);
     // formData.append("ClinicIDs",(JSON.stringify(data.clinic)));
+    
     await axiosPrivate
-      .post("createService", formData, {
+      .post((action==='create')?"createService":(action==='update')?"updateService":"", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: function (ProgressEvent) {
           console.log(
@@ -99,7 +113,10 @@ function ManageServices() {
           setCategoryOptions(Data.map((item)=>{
             console.log(item)
             return {id:item.category_id,name:item.category_name}}))
-          
+            if (action==='update'){
+              console.log("OI")
+              getServiceDetails();
+            }
         }
       
       })
@@ -109,7 +126,7 @@ function ManageServices() {
         setErrMsg(err.message)
       })
     }
-    async function getList() {
+    async function getClinicList() {
       await axiosPrivate
         .post(
           "getClinics",
@@ -135,9 +152,36 @@ function ManageServices() {
           console.error(err);
         });
     }
+    async function getServiceDetails() {
+      await axiosPrivate
+        .post(
+          "providerGetService",
+          { Email: auth.email,ServiceID:id },
+          {
+            signal: controller.signal,
+            onUploadProgress:ProgressEvent=>
+              {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
+          }
+        )
+        .then((res) => {
+          const { Status, Data: data = [], Message } = res.data;
 
-    getList();
+          if (Status) {
+            isMounted && setService(data);
+
+            console.log("ServiceDetails",data)
+          } else {
+            throw new Error(Message);
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+    
+    getClinicList();
     getServiceCategories();
+    
     return () => {
       isMounted = false;
       controller.abort();
@@ -173,20 +217,31 @@ function ManageServices() {
                   {action === "new" ? "Create New" : "Update"} Service
                 </h4>
                 <p className="text-muted mb-3">
-                  Lorem ipsum dolor sit amet consucetetur.
+                  Service Info will tell Patient users all about your work.
                 </p>
                 
                 <div className="row" style={{ marginBottom: "30px" }}>
                   <div className="col-md-12">
                     <label className="mb-3">Service Name</label>
-                    <input
-                      required
-                      className="form-control"
-                      type="text"
-                      {...register("name", {
-                        value: state?.selectedService?.name,
-                      })}
-                    />
+                    {action==='update'?<>
+                        <input
+                          required
+                          className="form-control"
+                          type="text"
+                          value={service.service_name}
+                          onChange={((e)=>{setService({...service,service_name:e.target.value})})}
+                        />
+                    </>:
+                      <input
+                        required
+                        className="form-control"
+                        type="text"
+                        {...register("name", {
+                          value: state?.selectedService?.name,
+                        })}
+                      />
+                    }
+                   
                   </div>
                 </div>
                 <div className="row" style={{ marginBottom: "30px" }}>
@@ -268,7 +323,7 @@ function ManageServices() {
 */}               
                   <div className="col-md-6">
                     <label
-                      for="example-text-input"
+                      htmlFor="example-text-input"
                       className="col-form-label text-right"
                     >
                       Category
@@ -277,29 +332,37 @@ function ManageServices() {
                     <Multiselect
                         style={{zIndex:3}}
                         options={categoryOptions} // Options to display in the dropdown
-                        // selectedValues={} // Preselected value to persist in dropdown
+                        selectedValues={1} // Preselected value to persist in dropdown
                         {...register("category", {
-                          value: state?.selectedService?.category,
+                          value: service.category,
                         })}
-                        onSelect={(selectedItem)=>{setCategory(selectedItem)}} // Function will trigger on select event
-                        onRemove={(selectedItem)=>{setCategory(selectedItem)}} // Function will trigger on remove event
+                        onSelect={(selectedItem)=>{setService({...profile,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on select event
+                        onRemove={(selectedItem)=>{setService({...profile,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
                         isObject={true}
                         singleSelect={true}
-                        showCheckbox={true}
                         
                         displayValue="name" // Property name to display in the dropdown options
                       />
                   </div>
                   <div className="col-md-6">
                     <label
-                      for="example-text-input"
+                      htmlFor="example-text-input"
                       className="col-form-label text-right"
                     >
                       Price / Rate
                     </label>
+                     {action==="update"?
+                     <input
+                      required
+                      value={service.cost_price}
+                      className="form-control"
+                      type="number"
+                      step={"0.01"}
+                      onChange={((e)=>{setService({...service,cost_price:e.target.value})})}
+                    />:
                     <input
                       required
-
+                      value={service.cost_price}
                       className="form-control"
                       type="number"
                       step={"0.01"}
@@ -307,6 +370,7 @@ function ManageServices() {
                         value: state?.selectedService?.rate,
                       })}
                     />
+                  }
                   </div>
                 </div> 
                 
@@ -315,20 +379,31 @@ function ManageServices() {
                     <div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <label for="message">Description</label>
+                          <label htmlFor="message">Description</label>
+                          {action==="update"?<>
                           <textarea
                             required
-
                             className="form-control"
                             rows="5"
+                            
+                            value={service.service_description}
+                            onChange={((e)=>{setService({...service,service_description:e.target.value})})}
+                          ></textarea>
+                          </>:
+                            <textarea
+                            required
+                            className="form-control"
+                            rows="5"
+                            
                             {...register("description", {
-                              value: state?.selectedService?.description,
+                              value: service.service_description,
                             })}
                           ></textarea>
+                          }
                         </div>
                       </div>
                     </div>
-                    <div className="form-group"><label for="message">Activity</label>
+                    <div className="form-group"><label htmlFor="message">Activity {service.status==='1'}</label>
                     <div className="custom-control custom-switch switch-success">
                     
                       <input
@@ -336,10 +411,11 @@ function ManageServices() {
                         type="checkbox"
                         className="custom-control-input"
                         {...register("active")}
+                        value={service.status==="1"}
                       />
                       <label
                         className="custom-control-label"
-                        for="customSwitchSuccess"
+                        htmlFor="customSwitchSuccess"
                       >
                         Active
                       </label>
@@ -350,7 +426,7 @@ function ManageServices() {
                   <div className="col-lg-6">
                   <div className="col-md-12">
                     <div className="form-group row">
-                      <label for="exampleFormControlSelect2">
+                      <label htmlFor="exampleFormControlSelect2">
                         Clinic Availability (choose all that applies)
                       </label>
                       <select
@@ -377,7 +453,7 @@ function ManageServices() {
 
                 <div className="row" style={{ marginTop: "40px" }}>
                   <div className="col-lg-12">
-                    <label for="exampleFormControlSelect2">
+                    <label htmlFor="exampleFormControlSelect2">
                      Service Image
                     </label>
                     {/* <form method='post' className='card-box'> */}
@@ -399,7 +475,7 @@ function ManageServices() {
                         {(images.length<=5&&(images[images.length-1]?.path!="services/Default.png"))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
-                          minWidth="200px" height="150px"
+                          height="150px"
                           onClick={(e)=>{
                             e.preventDefault();
                             if (images.length<=4)
