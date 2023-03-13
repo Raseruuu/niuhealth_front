@@ -15,7 +15,11 @@ import useInterval from '../../hooks/useInterval'
 import Pagination from 'react-js-pagination'
 export function PaginatedList( {limit,pagenum, list = [] }){
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
+  const [refreshList, setRefreshList] = useState(false)
   const axiosPrivate = useAxiosPrivate()
+  
+  const [meetingStatus, setMeetingStatus] = useState(false)
+  const navigate = useNavigate()
   const { auth } = useAuth()
   function handleActionClick(action, selectedItem) {
     Swal.fire({
@@ -155,12 +159,11 @@ export function PaginatedList( {limit,pagenum, list = [] }){
 function PatientQueue({ limit, search, stopPolling=false }) {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
-  const [errMsg, setErrMsg] = useState(null)
   const [list, setList] = useState([])
   const debouncedSearch = useDebounce(search, 100)
- const [refreshList, setRefreshList] = useState(false)
-  const navigate = useNavigate()
-  const [meetingStatus, setMeetingStatus] = useState(false)
+ 
+  const [errMsg, setErrMsg] = useState(null)
+  
   const [isLoading, setIsLoading] = useState(true)
   
   const [pageNum,setPageNum]=useState(1)
@@ -223,9 +226,9 @@ function PatientQueue({ limit, search, stopPolling=false }) {
     // list.length===0?null:
     
   <>
-  <table className="table">
+  
   {(list?.length===0)?<CardLongItem><h4>{(isLoading)?'...':'There are no Virtual Visits in the Queue.'}</h4></CardLongItem>:
-          <>
+          <table className="table">
                 <thead className="thead-light">
                 <tr>
                   <th>Patient</th>
@@ -241,8 +244,8 @@ function PatientQueue({ limit, search, stopPolling=false }) {
         <PaginatedList list={list} limit={limit} pagenum={pageNum}></PaginatedList>
         </thead>
 
-              </>}
-            </table>
+        </table>}
+           
             {(list.length>limit)?
             <div className='justify-content-center d-flex'>
             <Pagination
