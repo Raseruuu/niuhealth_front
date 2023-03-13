@@ -197,6 +197,14 @@ function PatientProfile() {
                       </div>
                       <div className='met-profile_user-detail'>
                         <h5 className='met-user-name'>{profileDetails.first_name} {profileDetails.middle_name} {profileDetails.last_name}</h5>
+                        <div class="row col-md-12">
+                          <div class="m-1">
+                            <span class={ (profileDetails.subscription_plan == 0) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.subscription_plan == false) ? "Not subscribed" : "Subscribed" }</span></div>
+                          <div>
+                          <div class="m-1">
+                            <span class={ (profileDetails.has_insurance == false) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.has_insurance == false) ? "Not insured" : "Insured" }</span></div>
+                          </div>
+                        </div>
                         {/* <p className='mb-0 met-user-name-post'>
                           {selectedUser.status}
                         </p> */}
@@ -757,7 +765,7 @@ function PatientProfile() {
                             
                             <div className='text-center'>
                             <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${item.BucketName}/${item.FrontImage}`}></img>
-                              <i className='far fa-folder text-primary ml-3'></i>
+                              <i className={(item.Archive == 1) ? 'far fa-folder text-gray ml-3' : 'far fa-folder text-success ml-3'}></i>
                               <h6 className='text-truncate'>
                                 {item.BucketName}
                               </h6>
