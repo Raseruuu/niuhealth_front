@@ -139,6 +139,10 @@ export function PaginatedList( {limit,pagenum, list = [] }){
       <td>
         {item.address}
       </td>
+      
+      <td>
+        {item.waited}
+      </td>
       <td>
               <button
                 type='button'
@@ -236,6 +240,7 @@ function PatientQueue({ limit, search, stopPolling=false }) {
                   <th>Contact Info</th>
                   <th>Symptoms</th>
                   <th>Address</th>
+                  <th>Wait Time</th>
                   <th>Action</th>
                 </tr>
               </thead>

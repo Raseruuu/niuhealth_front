@@ -171,29 +171,31 @@ function ProviderIndex() {
       </div>
 
       <div className="row">
-        <div className="col-8">
+        <div className="col-lg-8">
           <WelcomeCard />
         </div>
-        <div className="col-4">
-          <CardItem>
-            <i className='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
-            <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
-            <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
-            
-            <h4>You can start an In-Person Visit with a Patient here.</h4>
-            <h6> small text</h6>
-            <div className='align-item-center'>
-              <button
-                className='btn btn-outline-success btn-round' 
-                onClick={()=>{
-                  setShowModal(true)
-                }}
-                data-toggle="modal"
-                data-target="#myModal"
-                
-                >
-                New Visit
-              </button>
+        <div className="col-lg-4">
+          <CardItem style={{height:300, display:'flex',alignItems: 'center'}}>
+            <div style={{top: '50%'}}>
+              <i className='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
+              <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
+              <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
+              
+              <h4>Start an In-Person Visit with a Patient here.</h4>
+              <h6 className='text-muted'> Make sure to input appropriate info.</h6>
+              <div className='align-item-center float-right'>
+                <button
+                  className='btn btn-outline-success btn-round ' 
+                  onClick={()=>{
+                    setShowModal(true)
+                  }}
+                  data-toggle="modal"
+                  data-target="#myModal"
+                  
+                  >
+                  New Visit
+                </button>
+              </div>
             </div>
           </CardItem>
         </div>

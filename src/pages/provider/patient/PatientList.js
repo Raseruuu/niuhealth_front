@@ -377,25 +377,32 @@ function PatientList() {
         
         <PatientListData limit={pageLimit} pagenum={pageNum} list={list} />
         
-        <Pagination
-          activePage={pageNum}
-          itemsCountPerPage={pageLimit}
-          totalItemsCount={list.length}
-          pageRangeDisplayed={5}
-          // onPageChange={}
-          itemclassName="page-item "
-          linkClass="page-link float-center"
-          onChange={(e)=>{
-            console.log(e);
-            setPageNum(e)}}
-                  />
+      </TableCard>
+      <CardLongItem>
+      {(list.length>pageLimit)?
+      
+            <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
+              
+              <Pagination
+                activePage={pageNum}
+                itemsCountPerPage={pageLimit}
+                totalItemsCount={list.length||[]}
+                pageRangeDisplayed={5}
+                // onPageChange={}
+                itemclassName="page-item "
+                linkClass="page-link float-center"
+                onChange={(e)=>{
+                  console.log(e);
+                  setPageNum(e)}}
+                        />
+              <div className='row-lg-12 '>Page {pageNum}</div> 
+                  </div>:<></>}
         {/* {isLoading ? 'Loading please wait...' : null} */}
         {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {list.length <= 0 && searchText.length > 0
           ? '0 record found.'
           : null}
-      </TableCard>
-
+          </CardLongItem>
         </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"No Results."}</h5></CardLongItem>
         }
       

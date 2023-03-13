@@ -6,6 +6,7 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import UploadImage from '../../../components/form/UploadImage'
 import Multiselect from "multiselect-react-dropdown";
+import Swal from "sweetalert2";
 function ManageServices() {
 
   const { auth } = useAuth();
@@ -50,28 +51,35 @@ function ManageServices() {
         formData.append("Image"+parseInt(index+1), images[index].file);
       }
     }
-    formData.append("ServiceName", data.name);
+    // formData.append("ServiceName", data.name);
     formData.append("Email", auth.email);
     // formData.append("ServiceType", data.type);
     if (action==='update'){
+      console.log('formdaataaa',service)
       formData.append("ServiceID", id);
-      formData.append("Price", service.rate);
+      formData.append("Price", service.cost_price);
       formData.append("Status", service.status);
       
       formData.append("Name", service.service_name);
-      formData.append("Description", service.description);
-      formData.append("Category", service.category_id);
+      formData.append("ServiceName", service.service_name);
+      formData.append("Description", service.service_description);
+      formData.append("Category", service.category);
+      formData.append("ClinicIDs", [clinicList[0].clinic_id]);
     }
-    formData.append("ServiceDescription", data.description);
-    console.log(category)
-    formData.append("CategoryID", category.category_id);
-    formData.append("CostPrice", data.rate);
-    formData.append("Status", Number(data.active));
-    formData.append("ClinicIDs", data.clinic);
+    else if (action==='new'){
+      console.log('formdaataaa',data)
+      formData.append("ServiceDescription", data.description);
+      console.log('category',category)
+      formData.append("CategoryID", category[0].id);
+      formData.append("CostPrice", data.rate);
+
+      formData.append("Status", (Boolean(data.active)*1));
+      formData.append("ClinicIDs", data.clinic);
+    }
     // formData.append("ClinicIDs",(JSON.stringify(data.clinic)));
     
     await axiosPrivate
-      .post((action==='create')?"createService":(action==='update')?"updateService":"", formData, {
+      .post((action==='new')?"createService":(action==='update')?"updateService":"", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: function (ProgressEvent) {
           console.log(
@@ -86,8 +94,8 @@ function ManageServices() {
         const { Status, Data: data = [], Message } = res.data;
 
         if (Status) {
-          setClinicList(data);
-          // navigate(-1);
+          Swal.fire(Message)
+          navigate('/provider/services');
         } else {
           throw new Error(Message);
         }
@@ -336,8 +344,8 @@ function ManageServices() {
                         {...register("category", {
                           value: service.category,
                         })}
-                        onSelect={(selectedItem)=>{setService({...profile,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on select event
-                        onRemove={(selectedItem)=>{setService({...profile,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
+                        onSelect={(selectedItem)=>{console.log(selectedItem);setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on select event
+                        onRemove={(selectedItem)=>{setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
                         isObject={true}
                         singleSelect={true}
                         
@@ -405,14 +413,22 @@ function ManageServices() {
                     </div>
                     <div className="form-group"><label htmlFor="message">Activity {service.status==='1'}</label>
                     <div className="custom-control custom-switch switch-success">
-                    
-                      <input
-                        id="customSwitchSuccess"
-                        type="checkbox"
-                        className="custom-control-input"
-                        {...register("active")}
-                        value={service.status==="1"}
-                      />
+                      {(action==='new')?
+                        <input
+                          id="customSwitchSuccess"
+                          type="checkbox"
+                          className="custom-control-input"
+                          {...register("active")}
+                        />:
+                        <input
+                          id="customSwitchSuccess"
+                          type="checkbox"
+                          className="custom-control-input"
+                          value={service.status==="1"}
+                          onChange={((e)=>{setService({...service,status:e.target.value})})}
+                        />
+                        }
+                      
                       <label
                         className="custom-control-label"
                         htmlFor="customSwitchSuccess"
@@ -433,7 +449,7 @@ function ManageServices() {
                         multiple
                         required
 
-                        className="select2 form-control mb-3 custom-select select2-hidden-accessible"
+                        className="select2 form-control mb-3 custom-select select2-hidden-accessible" style={{height:140}}
                         {...register("clinic", {
 
                           value: state?.selectedService?.clinic,
@@ -469,7 +485,7 @@ function ManageServices() {
                             setFormData={setService} 
                             imagepreview={imagepreview} 
                             setImagePreview={setImagePreview}
-                            action={"create"}/>
+                            action={"new"}/>
                        
                         ))}
                         {(images.length<=5&&(images[images.length-1]?.path!="services/Default.png"))?(

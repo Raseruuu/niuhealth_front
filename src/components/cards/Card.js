@@ -1,8 +1,8 @@
 
-export default function CardItem({image,length=4,className,children}){
+export default function CardItem({image,style,length=4,className,children}){
     return(
         // <div className={className+'col-md-'+length}>
-            <div className='card flex-sm-col flex-md-row overflow-hidden'>
+            <div className='card flex-sm-col flex-md-row overflow-hidden' style={style}>
                 {image?(
                     <img
                         className='card-img-top'

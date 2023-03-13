@@ -168,13 +168,13 @@ function Services({ limit }) {
                               >
                                 Service Category
                               </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
-                              <div className='tab-pane position-absolute' style={{zIndex:4 }}  id='service_category'>
+                              <div className='tab-pane position-absolute' style={{ width: 420,zIndex:4 }}  id='service_category'>
                                 {showFilterWindow&&activeFilter==='service_category'?
                                 <CardItem> 
                       
                                   <div className="p-3">
                                     <h6 className=" mt-0" >Service Categories</h6>
-                                    <div className="checkbox checkbox-success " >
+                                    <div className="" >
                                     <StyleWrapper>
                                       <Multiselect
                                         style={{zIndex:3}}

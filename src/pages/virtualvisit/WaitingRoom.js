@@ -16,8 +16,54 @@ export default function WaitingRoom() {
   const [meetingID, setMeetingID] = useState({})
   const [password, setPassword] = useState({})
   const myVideo = useRef('video1');
-  const [videoLinks,setVideoLinks]=useState([])
+  
+  const [videoLinks,setVideoLinks]=useState([
+    
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/PSA_Exercise_01.mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/Ruby_Tuesday_April_2022_EMAIL_VERSION.mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/Braddah_2_Braddah___Diabetes.mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/braddah_2_braddah___gout+(720p).mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/braddah_2_braddah___hypertension+(720p).mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/Ask_The_Doctor___Eps.1.mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/Ask_the_Doctor___Eps._2.mp4",
+    "https://drcoco-bucket.s3.us-west-1.amazonaws.com/videos/default/Ask_the_Doctor___Eps._3.mp4",
+    
+  ])
+  const randomindex = Math.floor(Math.random() * videoLinks.length)
+  const [currentVideo, setCurrentVideo] = useState(videoLinks[randomindex])
+  const [videoIndex, setVideoIndex] = useState(0)
+  
+  function playNextVideo(){
+    var next_src=""
+    if (videoIndex===videoLinks.length-1){
+      setVideoIndex(0)
+      next_src=videoLinks[0]
+    }
+    else{
+      setVideoIndex(videoIndex+1)
+      next_src=videoLinks[videoIndex+1]
+    }
+    
+    setCurrentVideo(next_src)
+    myVideo.current.src=next_src
+    myVideo.current.play()
 
+  }
+  function playPreviousVideo(){
+    var next_src=""
+    if (videoIndex===0){
+      setVideoIndex(videoLinks.length-1)
+      next_src=videoLinks[videoLinks.length-1]
+    }
+    else{
+      setVideoIndex(videoIndex-1)
+      next_src=videoLinks[videoIndex-1]
+    }
+    setCurrentVideo(next_src)
+    myVideo.current.src=next_src
+    myVideo.current.play()
+
+  }
   const getQueueCount = async () => {
     const controller = new AbortController()
     await axiosPrivate
@@ -45,7 +91,6 @@ export default function WaitingRoom() {
       .then((res) => {
         const { Data } = res.data
 
-        console.log(Data)
         setMeetingID(Data.MeetingID)
         setPassword(Data.Passcode)
 
@@ -64,12 +109,13 @@ export default function WaitingRoom() {
   useInterval(getQueueCount, delay)
 
   useEffect(() => {
+    
     getStatus()
     getQueueCount()
     Swal.fire({
       html:"Please stay until an available doctor picks you in waiting room.",
-      timer: 10,
-      timerProgressBar: true,
+      // timer: 1,
+      // timerProgressBar: true,
       
     })
     .then(()=>{myVideo.current.play()})
@@ -101,16 +147,34 @@ export default function WaitingRoom() {
                 >
 
                 </iframe> */}
-                <video width="100%"
-                //  autoPlay={true}
-                  height="442" 
-                controls={false}
-                // name="video1"
-                ref={myVideo}
-                // muted
-                type="video/mp4"
-                src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" 
-                />
+                
+                  
+                  <>
+
+                    <video
+                      width="100%"
+                      height="442" 
+                      controls={true}
+                      name={"video1"}
+                      ref={myVideo}
+                      // muted
+                      type="video/mp4"
+                      onEnded={()=>{playNextVideo()}}
+                      // playsinline={true}
+                      >
+                        {/* <source type="video/webm" src="http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"></source> */}
+                        
+                          <source type="video/mp4" src={currentVideo}></source> 
+                          
+                         
+                      </video>
+                      <div className='d-flex' style={{justifyContent: "space-around"}}>
+                        <button className='btn btn-outline-success' onClick={()=>{playPreviousVideo()}}>Previous Video</button>
+                        <button className='btn btn-outline-success' onClick={()=>{playNextVideo()}}>Next Video</button>
+                      </div>
+                    </>
+               
+                
                   {/* <source src="movie.mp4" type="video/mp4">
                   <source src="movie.ogg" type="video/ogg"> */}
                     {/* Your browser does not support the video tag. */}

@@ -254,6 +254,7 @@ const router =createBrowserRouter(
               element: <Outlet />,
               children: [
                 { index: true, element: <Services /> },
+                { path: 'manage/:action/', element: <ManageServices /> },
                 { path: 'manage/:action/:id', element: <ManageServices /> },
               ],
             },

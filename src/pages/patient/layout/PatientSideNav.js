@@ -11,7 +11,7 @@ function PatientSideNav({ openSideNav }) {
   const location = useLocation()
   const navigate = useNavigate()
   const logout = useLogout()
-
+  const [openSideNav_delayed,setOpenSideNav_delayed]=useState(openSideNav)
   const name = sessionStorage.getItem('name') || 'Welcome'
   const email = sessionStorage.getItem('email')
   const has_insurance = (sessionStorage.getItem('has_insurance'))
@@ -44,6 +44,22 @@ function PatientSideNav({ openSideNav }) {
     
   }
   useEffect(()=>{
+    const delay = ms => new Promise(
+      resolve => setTimeout(resolve, ms)
+    );
+    const handleClick = async event => {
+  
+      console.log(openSideNav)
+      if (openSideNav===true){
+        
+        await delay(400);
+        setOpenSideNav_delayed(openSideNav)
+      }
+      else{setOpenSideNav_delayed(openSideNav)}
+    };
+    handleClick()
+  },[openSideNav])
+  useEffect(()=>{
     
     const controller = new AbortController()
     function getPatientDetails() {
@@ -71,7 +87,9 @@ function PatientSideNav({ openSideNav }) {
   return (
     <div
       className='left-sidenav'
-      style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' ,marginTop:'70px'}}
+      // style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' ,}}
+      style={{ display: 'block' , marginTop: '70px' ,padding:'0px',marginTop:'70px' ,minWidth:'80px', pxmarginLeft:'-26zpx',width:(openSideNav?'320px':'78px'),position:'unset'}}
+
     >
       {/* <div className='topbar-left'>
         <Link to='/patient' className='logo'>
@@ -97,8 +115,89 @@ function PatientSideNav({ openSideNav }) {
           <p className='mb-0 font-12 text-muted'>{email}</p>
         </div>
       </div> */}
+      {(openSideNav)?
+      <ul className='metismenu left-sidenav-menu'>
+      <li>
+        <NavLink to='virtualvisit'>
+          <i className='mdi mdi-video'></i>
+          {(openSideNav_delayed)?
+          <span>Virtual Visit</span>:<></>}
+          {/* <span className='menu-arrow'>
+            <i className='mdi mdi-chevron-right'></i>
+          </span> */}
+        </NavLink>
+      </li>
 
-      <div className='virtualTourSide'>
+      <li>
+        <NavLink to='appointments'>
+          <i className='mdi mdi-calendar-text'></i>
+          {(openSideNav_delayed)?
+          <span>Appointments</span>:<></>}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='marketplace'>
+          <i className='dripicons-medical'></i>
+          {(openSideNav_delayed)?
+          <span>Marketplace</span>:<></>}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='subscription'>
+          <i className='mdi mdi-credit-card'></i>
+          {(openSideNav_delayed)?
+          <span>Subscription & Payment</span>:<></>}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='insurance'>
+          <i className='mdi mdi-home-plus'></i>
+          {(openSideNav_delayed)?
+          <span>Insurance</span>:<></>}
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to='profile'>
+          <i className='dripicons-user'></i>
+          {(openSideNav_delayed)?
+          <span>Profile</span>:<></>}
+        </NavLink>
+      </li>
+    </ul>:
+     <ul className='metismenu left-sidenav-menu'>
+     <li>
+       <NavLink to='virtualvisit'>
+        <i className='mdi mdi-video'></i>
+       </NavLink>
+     </li>
+
+     <li>
+       <NavLink to='appointments'>
+       <i className='mdi mdi-calendar-text'></i>
+       </NavLink>
+     </li>
+     <li>
+       <NavLink to='marketplace'>
+       <i className='dripicons-medical'></i>
+       </NavLink>
+     </li>
+     <li>
+       <NavLink to='subscription'>
+        <i className='mdi mdi-credit-card'></i>
+       </NavLink>
+     </li>
+     <li>
+       <NavLink to='insurance'>
+       <i className='mdi mdi-home-plus'></i>
+       </NavLink>
+     </li>
+     <li>
+       <NavLink to='profile'>
+       <i className='dripicons-user'></i>
+       </NavLink>
+     </li>
+   </ul>}
+      {/* <div className='virtualTourSide'>
         
         <button
           disabled={isLoading}
@@ -123,7 +222,7 @@ function PatientSideNav({ openSideNav }) {
         >
           {(isLoading)?"Loading...":"Start Your Virtual Visit"}
         </button>
-      </div>
+      </div> */}
       {/* {location?.pathname === '/patient/virtualvisit' ? (
         <div
           className='spacetop alert alert-warning alert-warning-shadow mb-0 alert-dismissible fade show'
@@ -143,61 +242,21 @@ function PatientSideNav({ openSideNav }) {
           Please call 808-888-4800 and select option 4 to talk to a provider
         </div>
       ) : null} */}
-
+      <div className='logoutDiv row' style={{marginLeft:-18}}>
       <ul className='metismenu left-sidenav-menu'>
         <li>
-          <NavLink to='virtualvisit'>
-            <i className='mdi mdi-video'></i>
-            <span>Virtual Visit</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to='appointments'>
-            <i className='mdi mdi-calendar-text'></i>
-            <span>Appointments</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to='marketplace'>
-            <i className='dripicons-medical'></i>
-            <span>Marketplace</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to='subscription'>
-            <i className='mdi mdi-credit-card'></i>
-            <span>Subscription & Payment</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to='insurance'>
-            <i className='mdi mdi-home-plus'></i>
-            <span>Insurance</span>
-            <span className='menu-arrow'></span>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to='profile' state={{
-            selectedUser: sessionuser,
-          }}>
-            <i className='dripicons-user'></i>
-            <span>Profile</span>
-            <span className='menu-arrow'></span>
-            {/* <Link
-        ></Link> */}
-          </NavLink>
-        </li>
-      </ul>
-      <div className='logoutDiv'>
-        <NavLink
-          onClick={handleLogout.bind(this)}
-          >
-            Logout
-        </NavLink>
+          <NavLink onClick={handleLogout.bind(this)}
+            >
+              <i class="fas fa-sign-out-alt"></i>
+              {(openSideNav_delayed)?
+              <span>Logout</span>:<></>}
+              {/* <span className='menu-arrow'>
+                <i className='mdi mdi-chevron-right'></i>
+              </span> */}
+            </NavLink>
+            
+          </li>
+        </ul>
       </div>
     </div>
   )
