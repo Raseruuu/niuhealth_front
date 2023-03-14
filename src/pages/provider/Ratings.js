@@ -364,6 +364,7 @@ function Ratings({}) {
   const axiosPrivate = useAxiosPrivate()
   const [list, setList] = useState([])
   const [ratingList, setRatingList] = useState([])
+  const [totalRatings, setTotalRatings] = useState([])
   const [patientRatingList,setPatientRatingList]=useState([])
   const [starFilter, setStarFilter]=useState([5,4,3,2,1,0])
   const [ratingListOriginal, setRatingListOriginal] = useState([])
@@ -394,6 +395,8 @@ function Ratings({}) {
             setList(res.data.Data)
             setRatingListOriginal(res.data.Data.Ratings)
             setRatingList(res.data.Data.Ratings)
+            setTotalRatings([...res.data.Data.Ratings,res.data.Data.GeneralVisitRatings].map((item)=>{return item.rating}))
+            // console.log([...res.data.Data.Ratings,res.data.Data.GeneralVisitRatings].map((item)=>{return item.rating}))
             setPatientRatingList(res.data.Data.Ratings)
             setPatientGeneralRatingList(res.data.Data.GeneralVisitRatings)
             setGeneralRatingListOriginal(res.data.Data.GeneralVisitRatings)
@@ -423,7 +426,7 @@ function Ratings({}) {
           <div className='card'>
             <div className='card-body'>
               <RatingsBoxOverall score={list?.Average} totalReviews={ratingList.length} size={24} />
-              <RatingsChart ratinglist={ratingList}/>
+              <RatingsChart ratinglist={totalRatings}/>
               <div className=''>
                 {/* <span className='text-right ml-auto d-inline-block'>
                   <i className='far fa-smile font-24 text-warning'></i>

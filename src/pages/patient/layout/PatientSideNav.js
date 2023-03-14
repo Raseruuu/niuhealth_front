@@ -245,16 +245,17 @@ function PatientSideNav({ openSideNav }) {
       <div className='logoutDiv row' style={{marginLeft:-18}}>
       <ul className='metismenu left-sidenav-menu'>
         <li>
+        {(openSideNav)?
           <NavLink onClick={handleLogout.bind(this)}
             >
               <i class="fas fa-sign-out-alt"></i>
               {(openSideNav_delayed)?
               <span>Logout</span>:<></>}
-              {/* <span className='menu-arrow'>
-                <i className='mdi mdi-chevron-right'></i>
-              </span> */}
+            </NavLink>:
+          <NavLink onClick={handleLogout.bind(this)}>
+              <i class="fas fa-sign-out-alt"></i>
             </NavLink>
-            
+            }
           </li>
         </ul>
       </div>

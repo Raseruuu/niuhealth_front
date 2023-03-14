@@ -197,7 +197,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                       className="ob waves-effect waves-light"
                       
                   />
-                  {action==='edit' ||action==='create'? (
+                  {action==='edit' ||action==='create'||action==='new' ||action==='update'? (
                       <div className='row' style ={{marginTop:'10px'}}>
                         <button
                           type="button"

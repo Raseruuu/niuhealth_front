@@ -2,11 +2,29 @@ import { memo } from 'react'
 import { MdOutlineEmail, MdPhone } from 'react-icons/md'
 import Pagination from 'react-js-pagination'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import { StatusTextInsurance } from '../../components/status/Status'
 import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 
-function PatientListData({ limit,pagenum, list = [] }) {
+function PatientListData({ limit,pagenum, list = [],showModal,hideModal }) {
   // var paginatedlist = new List('users', options);
+  function handleNewVisit(patient){
+    // Swal.fire({
+    //   html:`Would you like to meet with ${patient.first_name}?`,
+    //   confirmButtonText:"Yeah.",
+    //   showConfirmButton:true,
+    //   showCancelButton:true,
+    //   cancelButtonText:"Nah."
+    
+    // })
+    // .then((isConfirmed)=>{
+        // if (isConfirmed){
+    showModal(patient)
+    if (success){
+      hideModal()}
+        // }})
+    // $('.modal-backdrop').hide();
+  }
   let paginatedlist=[]
   var j=0
   var k=0
@@ -64,6 +82,9 @@ function PatientListData({ limit,pagenum, list = [] }) {
       </td>
       <td>
         <StatusTextInsurance status={item.with_insurance || 0} />
+      </td>
+      <td>
+        <button className='btn btn-outline-purple btn-round' onClick={()=>{handleNewVisit(item)}}>Schedule Appointment</button >
       </td>
       {/* //Action!!
        <td>

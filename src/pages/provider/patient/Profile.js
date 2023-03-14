@@ -215,7 +215,7 @@ function PatientProfile() {
                     <ul className='list-unstyled personal-detail'>
                       <li className=''>
                         <i className='dripicons-phone mr-2 text-info font-18'></i>{" "}
-                        <b> phone </b> : {profileDetails.contact_info}
+                        <b> Phone </b> : {profileDetails.contact_info}
                       </li>
                       <li className='mt-2'>
                         <i className='dripicons-mail text-info font-18 mt-2 mr-2'></i>{" "}

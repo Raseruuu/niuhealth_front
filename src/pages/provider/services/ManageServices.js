@@ -7,6 +7,16 @@ import useAxiosPrivate from "../../../hooks/useAxiosPrivate";
 import UploadImage from '../../../components/form/UploadImage'
 import Multiselect from "multiselect-react-dropdown";
 import Swal from "sweetalert2";
+import styled from "@emotion/styled"
+
+
+
+export const StyleWrapper = styled.div`
+.optionListContainer {
+  position: sticky;
+} 
+
+`
 function ManageServices() {
 
   const { auth } = useAuth();
@@ -15,6 +25,8 @@ function ManageServices() {
   const { action,id } = useParams();
   const { state } = useLocation();
   const [clinicList, setClinicList] = useState([]);
+  const [clinicIDList, setClinicIDList] = useState([])
+  const [serviceClinicList,setServiceClinicList]=useState([])
   const [images, setImages] = useState([{path:'services/Default.png',file:{}}]);
   const [service, setService] = useState({
     service_name:"",service_description:"",
@@ -23,7 +35,7 @@ function ManageServices() {
   });
   const [imagepreview, setImagePreview] = useState(true);
   const [isLoading,setIsLoading]=useState(true);
-  const [categoryOptions,setCategoryOptions]=useState([])
+  const [categoryOptions,setCategoryOptions]=useState([{id:"",name:""}])
   const [isSuccess, setIsSuccess] = useState(false);
   const [category,setCategory]=useState("");
   // const placeholderimage = `${AWS_BUCKET}/assets/images/users/user-4.jpg`;
@@ -48,7 +60,10 @@ function ManageServices() {
     
     if ((images.length > 0 )&& images[0].path!=='services/Default.png'){
       for (let index = 0; index < images.length; index++) {
-        formData.append("Image"+parseInt(index+1), images[index].file);
+        if (images[index].file){
+          formData.append("Image"+parseInt(index+1), images[index].file);
+
+        }
       }
     }
     // formData.append("ServiceName", data.name);
@@ -64,13 +79,15 @@ function ManageServices() {
       formData.append("ServiceName", service.service_name);
       formData.append("Description", service.service_description);
       formData.append("Category", service.category);
-      formData.append("ClinicIDs", [clinicList[0].clinic_id]);
+      formData.append("ClinicIDs", [...service.clinic_ids]);
     }
     else if (action==='new'){
       console.log('formdaataaa',data)
+      
+      formData.append("ServiceName", data.name);
       formData.append("ServiceDescription", data.description);
       console.log('category',category)
-      formData.append("CategoryID", category[0].id);
+      formData.append("CategoryID", category);
       formData.append("CostPrice", data.rate);
 
       formData.append("Status", (Boolean(data.active)*1));
@@ -118,18 +135,23 @@ function ManageServices() {
         console.log('res',res.data.Status)
         const {Status,Data, Message}=res.data
         if (Status){
+          
           setCategoryOptions(Data.map((item)=>{
-            console.log(item)
-            return {id:item.category_id,name:item.category_name}}))
-            if (action==='update'){
-              console.log("OI")
-              getServiceDetails();
-            }
+            
+            return {id:item.id,name:item.name}
+          }))
+          
+          console.log("categoryOptions",Data.map((item)=>{
+            return {
+              id:   item.id,
+              name: item.name}
+          }))
+          
+            
         }
       
       })
       .catch((err) => {
-        setIsLoading(false)
         console.error(err)
         setErrMsg(err.message)
       })
@@ -142,9 +164,7 @@ function ManageServices() {
           {
             Accept: 'application/json',
             headers: { 'Content-Type': 'multipart/form-data' },
-            signal: controller.signal,
-            onUploadProgress:ProgressEvent=>
-              {console.log("uploadprogress: "+ProgressEvent.loaded/ProgressEvent.total*100+"%" )}
+            signal: controller.signal
           }
         )
         .then((res) => {
@@ -152,6 +172,13 @@ function ManageServices() {
 
           if (Status) {
             isMounted && setClinicList(data);
+            const clinicidlist=data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}})
+            setClinicIDList(clinicidlist)
+            console.log(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+            if (action==='update'){
+              getServiceDetails(clinicidlist);
+            }
+           
           } else {
             throw new Error(Message);
           }
@@ -160,7 +187,7 @@ function ManageServices() {
           console.error(err);
         });
     }
-    async function getServiceDetails() {
+    async function getServiceDetails(clinicIDList) {
       await axiosPrivate
         .post(
           "providerGetService",
@@ -175,9 +202,32 @@ function ManageServices() {
           const { Status, Data: data = [], Message } = res.data;
 
           if (Status) {
-            isMounted && setService(data);
+            
+            setService(data);
+            setIsLoading(false)
+            const clinic_list_temp=data.clinic_ids.split(",").map((clinicID,index)=>{if (clinicIDList[index].id===clinicID){return {id:clinicIDList[index].id,name:clinicIDList[index].name}}})
+            setServiceClinicList(clinic_list_temp)
+            console.log("temp",clinic_list_temp)
+            console.log("ServiceDetails",)
 
-            console.log("ServiceDetails",data)
+            var imagetemp=[]
+            if (data.image1!=="Default.png"){
+              imagetemp.push({path:"services/"+data.image1})
+            }
+            if (data.image2!=="Default.png"){
+              imagetemp.push({path:"services/"+data.image2})
+            }
+            if (data.image3!=="Default.png"){
+              imagetemp.push({path:"services/"+data.image3})
+            }
+            if (data.image4!=="Default.png"){
+              imagetemp.push({path:"services/"+data.image4})
+            }
+            if (data.image5!=="Default.png"){
+              imagetemp.push({path:"services/"+data.image5})
+            }
+            setImages(imagetemp)
+
           } else {
             throw new Error(Message);
           }
@@ -204,7 +254,7 @@ function ManageServices() {
             <div className="float-right">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link to="/">NU Health</Link>
+                  <Link to="/">NIU Health</Link>
                 </li>
                 <li className="breadcrumb-item">
                   <Link to="/provider/services">Services</Link>
@@ -336,21 +386,40 @@ function ManageServices() {
                     >
                       Category
                     </label>
-                    
+                    {action==='new'?
                     <Multiselect
+
+                    style={{zIndex:3}}
+                    options={categoryOptions} // Options to display in the dropdown
+                    selectedValues={[categoryOptions[0]]} // Preselected value to persist in dropdown
+                    // {...register("category", {
+                    //   value: service.category,
+                    // })}
+                    onSelect={(selectedItem)=>{console.log(selectedItem,"newservice",{...service,category:selectedItem[0].id});setService({...service,category:selectedItem[0].id});setCategory(selectedItem[0].id)}} // Function will trigger on select event
+                    onRemove={(selectedItem)=>{setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
+                    isObject={true}
+                    singleSelect={true}
+                    
+                    displayValue="name" // Property name to display in the dropdown options
+                  />:<> 
+                  {(isLoading)?<></>:
+                    <Multiselect
+
                         style={{zIndex:3}}
                         options={categoryOptions} // Options to display in the dropdown
-                        selectedValues={1} // Preselected value to persist in dropdown
-                        {...register("category", {
-                          value: service.category,
-                        })}
-                        onSelect={(selectedItem)=>{console.log(selectedItem);setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on select event
+                        selectedValues={[categoryOptions[parseInt(service.category)-1]]} // Preselected value to persist in dropdown
+                        // {...register("category", {
+                        //   value: service.category,
+                        // })}
+                        onSelect={(selectedItem)=>{console.log(selectedItem,"newservice",{...service,category:selectedItem[0].id});setService({...service,category:selectedItem[0].id});setCategory(selectedItem[0].id)}} // Function will trigger on select event
                         onRemove={(selectedItem)=>{setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
                         isObject={true}
                         singleSelect={true}
                         
                         displayValue="name" // Property name to display in the dropdown options
                       />
+                    }</>
+                      }
                   </div>
                   <div className="col-md-6">
                     <label
@@ -439,31 +508,73 @@ function ManageServices() {
                     </div>
                   </div>
 
-                  <div className="col-lg-6">
-                  <div className="col-md-12">
-                    <div className="form-group row">
+                  <div className="form-group col-lg-6">
+                    {/* <div className=" col"> */}
                       <label htmlFor="exampleFormControlSelect2">
-                        Clinic Availability (choose all that applies)
+                        Clinic Availability (Choose all that applies)
                       </label>
-                      <select
+                      {/* {(action==='new')?<select
                         multiple
                         required
-
                         className="select2 form-control mb-3 custom-select select2-hidden-accessible" style={{height:140}}
-                        {...register("clinic", {
-
-                          value: state?.selectedService?.clinic,
-                        })}
+                        {...register("clinic")}
                       >
-                        {clinicList.map((clinic) => (
-
-                          <option value={clinic.clinic_id}>
+                        {clinicList.map((clinic) => {
+                          // console.log("uguu",clinic)
+                          return(
+                          <option 
+                            value={clinic.clinic_id}>
                             {clinic.clinic_name}
                           </option>
-                        ))}
-                      </select>
-                    </div>
-                    </div>
+                              )})}
+                            </select>:
+
+                            <>{isLoading?<></>:<select
+                            multiple
+                            required
+                            className="select2 form-control mb-3 custom-select select2-hidden-accessible" style={{height:140}}
+                            value = {service.clinic_id}
+                            
+                          >
+                            {clinicList.map((clinic) => {
+                              // console.log("uguu",clinic)
+                              return(
+                              <option 
+                                value={clinic.clinic_id}>
+                                {clinic.clinic_name}
+                              </option>
+                      )})}
+                    </select>}
+                      </>} */}<br/>
+                      <StyleWrapper>
+                        <Multiselect
+                          style={{zIndex:3 ,width:'100%'}}
+                          options={clinicIDList} // Options to display in the dropdown
+                          selectedValues={serviceClinicList} // Preselected value to persist in dropdown
+                          onSelect={
+                            (selectedList,selectedItem)=>{
+                                var selected_ID_List= selectedList.map((clinic)=>{return clinic.id})
+                               
+                                setService({...service,clinic_ids:selected_ID_List})
+                               
+                              }} // Function will trigger on select event
+                          onRemove={
+                            (selectedList,selectedItem)=>{
+                                var selected_ID_List= selectedList.map((clinic)=>{return clinic.id})
+                               
+                                setService({...service,clinic_ids:selected_ID_List})
+                               
+                              }}// Function will trigger on remove event
+                          isObject={true}
+                          showCheckbox={true}
+                          displayValue="name"
+                          // Property name to display in the dropdown options
+                        />
+                        
+                      </StyleWrapper>
+
+
+                    {/* </div> */}
                   </div>
                 </div>
 
@@ -485,7 +596,7 @@ function ManageServices() {
                             setFormData={setService} 
                             imagepreview={imagepreview} 
                             setImagePreview={setImagePreview}
-                            action={"new"}/>
+                            action={action}/>
                        
                         ))}
                         {(images.length<=5&&(images[images.length-1]?.path!="services/Default.png"))?(

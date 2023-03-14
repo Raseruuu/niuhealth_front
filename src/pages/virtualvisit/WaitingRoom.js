@@ -154,7 +154,7 @@ export default function WaitingRoom() {
                     <video
                       width="100%"
                       height="442" 
-                      controls={true}
+                      // controls={true}
                       name={"video1"}
                       ref={myVideo}
                       // muted
@@ -168,10 +168,10 @@ export default function WaitingRoom() {
                           
                          
                       </video>
-                      <div className='d-flex' style={{justifyContent: "space-around"}}>
+                      {/* <div className='d-flex' style={{justifyContent: "space-around"}}>
                         <button className='btn btn-outline-success' onClick={()=>{playPreviousVideo()}}>Previous Video</button>
                         <button className='btn btn-outline-success' onClick={()=>{playNextVideo()}}>Next Video</button>
-                      </div>
+                      </div> */}
                     </>
                
                 

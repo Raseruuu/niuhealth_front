@@ -250,8 +250,26 @@ function PatientQueue({ limit, search, stopPolling=false }) {
         </thead>
 
         </table>}
-           
-            {(list.length>limit)?
+        {(list.length>limit)?
+      
+      <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
+        
+        <Pagination
+          activePage={pageNum}
+          itemsCountPerPage={limit}
+          totalItemsCount={list.length||[]}
+          pageRangeDisplayed={5}
+          // onPageChange={}
+          itemclassName="page-item "
+          linkClass="page-link float-center"
+          onChange={(e)=>{
+            console.log(e);
+            setPageNum(e)}}
+                  />
+        <div className='row-lg-12 '>Page {pageNum}</div> 
+            </div>:<></>}
+
+            {/* {(list.length>limit)?
             <div className='justify-content-center d-flex'>
             <Pagination
               activePage={pageNum}
@@ -264,7 +282,7 @@ function PatientQueue({ limit, search, stopPolling=false }) {
               onChange={(e)=>{
                 setPageNum(e)}}
                   />
-                </div>:<></>}
+                </div>:<></>} */}
   </>)
 }
 function dateGenerator(date, time) {

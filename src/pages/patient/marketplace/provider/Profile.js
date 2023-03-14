@@ -672,77 +672,7 @@ function ProviderProfile() {
                   </div>
                 </div>
               </div>
-              <div className='row'>
-                <div className='col-lg-4'>
-                  <div className='card'>
-                    <div className='card-body'>
-                      <h4 className='mt-0 header-title'>Patient Schedule</h4>
-                      <div className='dash-datepick'>
-                        <input type='hidden' id='light_datepick' />
-                      </div>
-                      <div className='d-flex justify-content-between p-3 bg-light'>
-                        <div className='media'>
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-2.jpg`}
-                            className='mr-3 thumb-md rounded-circle'
-                            alt='...'
-                          />
-                          <div className='media-body align-self-center'>
-                            <h5 className='mt-0 text-dark mb-1'>
-                              Harry McCall
-                            </h5>
-                            <p className='mb-0'>
-                              Urologist
-                              <span className='text-muted'>
-                                {" "}
-                                Virtual Visit, follow up checkup @10:00AM
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className='col-lg-4'>
-                  <div className='card'>
-                    <div className='card-body'>
-                      <h4 className='mt-0 header-title'>Patient Diagnosis</h4>
-                      <p className='text-muted mb-4'>
-                        High blood pressure, diabetic, under monitored
-                        medication
-                      </p>
-                      <textarea
-                        className='form-control'
-                        rows='3'
-                        id='clipboardTextarea'
-                        defaultValue={`X-ray completed. Diagnosed with severe pneumonia.\nUrinary tract infection with yeast infection.`}
-                      ></textarea>
-                      <div className='mt-3'>
-                        <button
-                          type='button'
-                          className='btn btn-gradient-secondary btn-clipboard'
-                          data-clipboard-action='copy'
-                          data-clipboard-target='#clipboardTextarea'
-                        >
-                          <i className='fas fa-video'></i> Start Virtual Call
-                        </button>{" "}
-                        <button
-                          type='button'
-                          className='btn btn-gradient-primary btn-clipboard'
-                          data-clipboard-action='cut'
-                          data-clipboard-target='#clipboardTextarea'
-                        >
-                          <i className='fab fa-rocketchat'></i> Send Message
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                
-              </div>
+             
             </div>
 
             <div className='tab-pane fade' id='activity_detail'>

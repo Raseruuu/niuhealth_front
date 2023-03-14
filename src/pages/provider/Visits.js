@@ -253,7 +253,7 @@ function Visits() {
                         <h5 className="mt-1 ">Filters</h5>
                         
                         <ul className='nav nav-pills m-2' id='pills-tab' role='tablist'>
-                          <li className='nav-item col-xl-5 m-2' >
+                          {/* <li className='nav-item col-xl-5 m-2' >
                             <div className="row-xl-12">
                                   <form onSubmit={handleSubmit} >
                                   <div className="form-group">
@@ -274,7 +274,7 @@ function Visits() {
                                   </div>
                                   </form>
                               </div>
-                              </li>
+                              </li> */}
                             <li className='nav-item m-2'>
                               <a
                                 className='nav-link'
@@ -557,10 +557,10 @@ function Visits() {
               </ul>
           </CardItem>
         </div>
-        <div className='tab-content detail-list' style={{marginLeft:-25}} id='pills-tabContent'>
+        <div className='tab-content detail-list' style={{ marginTop:-20 ,marginLeft:-25, width: '100%'}} id='pills-tabContent'>
           
         <div className='tab-pane fade show active' id='calendar_view'>
-          <div className='col-lg-10'>
+          <div className='col-lg-12'>
             <div className='card'>
               <div className='card-body'>
                 <Calendar allowCall={true} dateList={appointmentList} />
@@ -570,8 +570,8 @@ function Visits() {
           </div>
         </div>
       
-        <div className='tab-pane fade position-absolute' id='list_view'>
-          <div className='col-lg-10'>
+        <div className='tab-pane fade position-absolute p-3' id='list_view'>
+          {/* <div className='col-lg-12'> */}
           {(appointmentList.length!==0)?
               <TableCard headers={["Patient","Service Description","Category","Clinic","Appointment Time","Transaction Type", "Status"]}>
               {appointmentList.map((item,index)=>(
@@ -620,7 +620,7 @@ function Visits() {
               ))}
                       
               </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoading)?"Loading...":"No Appointments."}</CardItem></>}
-            </div>
+            {/* </div> */}
           </div>
         </div>
       </div>

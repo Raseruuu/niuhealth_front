@@ -3,25 +3,30 @@ import { Link, useNavigate } from 'react-router-dom'
 import PatientListData from '../../../components/provider/PatientListData'
 import TableCard, { ContainerFluid, TableTitle } from '../../../components/table/Tables'
 // import   from "../../../components/table/Tables"
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import useDebounce from '../../../hooks/useDebounce'
 import Pagination from "react-js-pagination";
 import { CardLongItem } from '../../../components/cards/Card'
+import { useForm } from 'react-hook-form'
 // Provider list of patients
 
 function PatientList() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
-  const [list, setList] = useState([])
+  const [patientList, setPatientList] = useState([])
+  
+  const [clinicList, setClinicList] = useState([])
+  const [visitTarget, setVisitTarget] = useState({})
   const [search, setSearch] = useState('')
   const [searchText, setSearchText] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [pageNum,setPageNum]=useState(1)
   const [pageLimit,setPageLimit]=useState(10)
 
+  const [clinicIDList, setClinicIDList] = useState([])
   // itemsCountPerPage
   /*
   For Status:
@@ -29,7 +34,26 @@ function PatientList() {
   Deceased - badge-soft-danger
   Follow-up Checkup - badge-soft-success
   */
- 
+  let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
+  function hideModal(){
+    
+    $('#myModal').hide();
+    $('.modal-backdrop').hide();
+  }
+  function hourformat(hour){
+    if (hour>12){
+      return ((hour-12<10)?"0":"")+(hour-12)+":00 PM"
+    }
+    else if (hour===12){
+      return (12)+":00 PM"
+    }
+    else if (hour===0){
+      return (12)+":00 AM"
+    }
+    else{
+      return ((hour<10)?"0":"")+hour+":00 AM"
+    }
+  }
   const [dummylist,setDummyList] = useState([
     {address: "1111111",
     contact_info: "+639774011554",
@@ -289,7 +313,47 @@ function PatientList() {
     with_insurance: null}
     
   ])
- 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+
+  } = useForm();
+  async function createInPersonVisit(data) {
+    const controller = new AbortController()
+    const patient_obj=visitTarget
+    await axiosPrivate
+      .post(
+        'createInPersonVisit',
+        { ...data,
+          PatientID:patient_obj.patient_id,
+          Email: auth?.email || sessionStorage.getItem('email'),
+
+      },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        const { Status, Message } = res.data
+        if (Status){
+          document.getElementById("create-appointment").reset();
+          
+          Swal.fire({
+            title: "In-Person Appointment Created.",
+            html: ``,
+            icon: 'info'
+            
+          })
+          setUpdateVisit(!updateVisit)
+          hideModal()
+         
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
   async function getList() {
     const controller = new AbortController()
     setIsLoading(true)
@@ -306,7 +370,7 @@ function PatientList() {
         setIsLoading(false)
         console.log(res)
         const { Data = [] } = res.data
-        setList(Data)
+        setPatientList(Data)
       })
       .catch((err) => {
         setIsLoading(false)
@@ -314,10 +378,38 @@ function PatientList() {
         setErrMsg(err.message)
       })
   }
+  async function getClinicList() {
+    const controller = new AbortController()
 
-  async function handleSubmit(event) {
+    await axiosPrivate
+      .post(
+        'getClinics',
+        { Email: auth.email},
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        const { Status, Data: data = [], Message } = res.data
+
+        if (Status) {
+          // console.log("Clinics",data)
+          setClinicList(data)
+          setClinicIDList(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+          
+        } else {
+          throw new Error(Message)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+        setErrMsg(err.message)
+      })
+  }
+  async function handleSubmitSearch(event) {
     event.preventDefault()
-
+    setPageNum(1)
     if (searchText.length < 3) {
       return
     }
@@ -333,13 +425,14 @@ function PatientList() {
 
   useEffect(() => {
     getList()
+    getClinicList()
   }, [])
 
   return (
     <ContainerFluid>
       <TableTitle title="Patients">
         <div className="float-left">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmitSearch}>
             
             <div
               className="input-group"
@@ -363,30 +456,15 @@ function PatientList() {
           </form>
         </div>
       </TableTitle>
-      
-      {(list.length>0)?<>
-        <TableCard
-        headers={[
-          'Patient',
-          'Email',
-          'Phone No.',
-          'Status',
-          'Insurance',
-        ]}
-      >
-        
-        <PatientListData limit={pageLimit} pagenum={pageNum} list={list} />
-        
-      </TableCard>
       <CardLongItem>
-      {(list.length>pageLimit)?
+      {(patientList.length>pageLimit)?
       
             <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
               
               <Pagination
                 activePage={pageNum}
                 itemsCountPerPage={pageLimit}
-                totalItemsCount={list.length||[]}
+                totalItemsCount={patientList.length||[]}
                 pageRangeDisplayed={5}
                 // onPageChange={}
                 itemclassName="page-item "
@@ -395,18 +473,155 @@ function PatientList() {
                   console.log(e);
                   setPageNum(e)}}
                         />
-              <div className='row-lg-12 '>Page {pageNum}</div> 
+              <div className='row-lg-12 h-2'>Page {pageNum}</div> 
                   </div>:<></>}
         {/* {isLoading ? 'Loading please wait...' : null} */}
-        {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
+        {/* {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
+        {patientList.length <= 0 && searchText.length > 0
+          ? '0 record found.'
+          : null} */}
+          </CardLongItem>
+      {(patientList.length>0)?<>
+        <TableCard
+        headers={[
+          'Patient',
+          'Email',
+          'Phone No.',
+          'Status',
+          'Insurance',
+          'Visit'
+        ]}
+      >
+        
+        <PatientListData 
+          limit={pageLimit} 
+          pagenum={pageNum} 
+          list={patientList} 
+          showModal={
+            (patient)=>{
+              $("#myModal").modal()
+              setVisitTarget(patient)
+              
+              }} 
+          />
+        
+      </TableCard>
+      <CardLongItem>
+      {(patientList.length>pageLimit)?
+      
+            <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
+              
+              <Pagination
+                activePage={pageNum}
+                itemsCountPerPage={pageLimit}
+                totalItemsCount={patientList.length||[]}
+                pageRangeDisplayed={5}
+                // onPageChange={}
+                itemclassName="page-item "
+                linkClass="page-link float-center"
+                onChange={(e)=>{
+                  console.log(e);
+                  setPageNum(e)}}
+                        />
+              <div className='row-lg-12 h-2'>Page {pageNum}</div> 
+                  </div>:<></>}
+        {/* {isLoading ? 'Loading please wait...' : null} */}
+        {/* {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {list.length <= 0 && searchText.length > 0
           ? '0 record found.'
-          : null}
+          : null} */}
           </CardLongItem>
         </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"No Results."}</h5></CardLongItem>
         }
-      
-      
+         {/* {showModal===false?null: */}
+          <div id="myModal" className={"modal fade show"} role="form">
+            <div className="modal-dialog" style={{maxWidth: '500px', margin: '1.75rem auto'}}>
+
+              {/* <!-- Modal content--> */}
+              <div className="modal-content">
+
+                <div className="modal-header">
+                  
+                  <h4 className="modal-title">In-Person Visit</h4>
+                </div>
+                <form id="create-appointment" onSubmit={handleSubmit(createInPersonVisit)}>
+                <div className="modal-body">
+                  
+                <div className="nuModalCont visitRequestModal">
+                
+                <div className="" >
+                   <div className='row m-2'>
+                  
+                  <img
+                    src={AWS_BUCKET_SERVICES+"profiles/pictures/"+visitTarget.picture}
+                    alt=""
+                    className="thumb-sm rounded-circle mr-2 m-2"
+                    style={{objectFit:'cover' ,height:'100px',}}
+                  />{visitTarget.first_name} {visitTarget.last_name}
+                  </div>
+                  <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
+                  <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
+                  {/* <label  className="col-form-label">Patient</label>
+                  <select required className="form-control" {...register("PatientID")}>
+                      <option>Select Patient...</option>
+                        {patientList.map((item,index)=>{
+                                return(
+                                <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
+                              })}
+                  </select> */}
+                  
+                  <label  className="col-form-label">Clinic</label>
+                  <select required className="form-control" {...register("ClinicID")}>
+                              <option>Select Clinic...</option>
+                              {clinicList.map((item)=>{
+                                return(
+                                <option value={item.clinic_id}>{item.clinic_name} </option>)
+                              })}
+                          </select>
+                  <label htmlFor="date" className="col-form-label">Visit Date</label>
+                  <input required className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
+                  
+                  <label htmlFor="time" className="col-form-label">Time</label>
+                  {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
+                  <select
+                    required 
+                    {...register("Time")}
+                    className="form-control">   
+                    {morning_options.map((option, index)=>(
+                      <option key={index} value={option}>{hourformat(option)}</option>
+                      ))}
+                      
+                    <option value={null}>--:--</option>
+                  </select>
+                  <label  className="col-form-label">Internal Notes</label>
+                  <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea>
+                  
+                </div>
+              </div>
+              
+
+                </div>
+                <div className="modal-footer">
+                <div className="nuBtnContMod">
+                  <button type="submit" className="btn btn-success waves-effect waves-light" id="create-visit">Save Visit</button>
+                  </div>
+                  <button type="button" className="btn btn-outline-danger"
+                  data-target="#myModal" data-dismiss="modal"
+                  onClick={(e)=>{
+                    // setShowModal(false);
+                    $('#myModal').hide();
+                    $('.modal-backdrop').hide();
+                  }
+                  }
+                  >Close</button>
+                </div>
+                </form>
+              </div>
+
+            </div>
+           
+          </div>
+        
     </ContainerFluid>
   )
 }

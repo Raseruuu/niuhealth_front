@@ -77,11 +77,12 @@ function Services({ limit }) {
   
   async function handleSubmit(event) {
     event.preventDefault()
-
+    
     if (search.length < 3) {
+      getList()
       return
     }
-
+    setSearchString(search)
     getList()
   }
   useEffect(() => {
@@ -89,7 +90,7 @@ function Services({ limit }) {
       getList()
     
     
-  }, [])
+  }, [searchString])
  
   return (
     <div className='container-fluid'>
@@ -391,6 +392,7 @@ function Services({ limit }) {
 
           <div className='row m-1'>
             {(isLoading)?<CardItem>Loading...</CardItem>:
+            (searchString.length===0 &&list.length===0)?<CardItem>You have no created Services.</CardItem>:
             (searchString.length>0 &&list.length===0)?<CardItem>No Results.</CardItem>:
                 <>
             {list.map((item, index) => (
@@ -400,7 +402,7 @@ function Services({ limit }) {
                   <Link to=''>
                     <img
                       style={{width:'200px', height:'200px',objectFit: 'cover'}}
-                      src={AWS_BUCKET_SERVICES+item?.images }
+                      src={AWS_BUCKET_SERVICES+item?.default_image }
                       alt=''
                       className='img-fluid'
                     />
