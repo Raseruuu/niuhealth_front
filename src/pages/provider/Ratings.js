@@ -273,11 +273,11 @@ function RatingBar({ total, count,starscore}){
 function RatingsChart({ratinglist}){
   return(
     <ul className='list-unstyled mt-3'>
-      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => item === 5).length} starscore={5}/>
-      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => item >= 4 && item< 5).length} starscore={4}/>
-      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => item >= 3 && item< 4).length} starscore={3}/>
-      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => item >= 2 && item< 3).length} starscore={2}/>
-      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => item >= 1 && item< 2).length} starscore={1}/>
+      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => parseInt(item) === 5).length} starscore={5}/>
+      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => parseInt(item) >= 4 && item< 5).length} starscore={4}/>
+      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => parseInt(item) >= 3 && item< 4).length} starscore={3}/>
+      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => parseInt(item) >= 2 && item< 3).length} starscore={2}/>
+      <RatingBar total={ratinglist.length} count={ratinglist.filter(item => parseInt(item) >= 1 && item< 2).length} starscore={1}/>
     </ul>
   )
 }
@@ -395,7 +395,8 @@ function Ratings({}) {
             setList(res.data.Data)
             setRatingListOriginal(res.data.Data.Ratings)
             setRatingList(res.data.Data.Ratings)
-            setTotalRatings([...res.data.Data.Ratings,res.data.Data.GeneralVisitRatings].map((item)=>{return item.rating}))
+            console.log("totalRatings",[...res.data.Data.Ratings,...res.data.Data.GeneralVisitRatings])
+            setTotalRatings([...res.data.Data.Ratings,...res.data.Data.GeneralVisitRatings].map((item)=>{return item.rating}))
             // console.log([...res.data.Data.Ratings,res.data.Data.GeneralVisitRatings].map((item)=>{return item.rating}))
             setPatientRatingList(res.data.Data.Ratings)
             setPatientGeneralRatingList(res.data.Data.GeneralVisitRatings)
@@ -425,7 +426,7 @@ function Ratings({}) {
         <div>
           <div className='card'>
             <div className='card-body'>
-              <RatingsBoxOverall score={list?.Average} totalReviews={ratingList.length} size={24} />
+              <RatingsBoxOverall score={list?.Average} totalReviews={totalRatings.length} size={24} />
               <RatingsChart ratinglist={totalRatings}/>
               <div className=''>
                 {/* <span className='text-right ml-auto d-inline-block'>

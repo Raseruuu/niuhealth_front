@@ -10,6 +10,8 @@ import ImageViewer from 'react-simple-image-viewer';
 
 // TODO: check other UI if it has same layout
 import styled from "@emotion/styled"
+import { NavLink } from "react-router-dom"
+import Swal from "sweetalert2"
 
 export const StyleWrapper = styled.div`
   .styles-module_image__2hdkJ{
@@ -92,9 +94,9 @@ function PatientProfile() {
   };
   const axiosPrivate = useAxiosPrivate()
   const { auth } = useAuth()
-  let {
-    state: { selectedUser },
-  } = useLocation()
+  // let {
+  //   state: { selectedUser },
+  // } = useLocation()
 
   // console.log("selectedUser", selectedUser)
   useEffect(() => {
@@ -251,7 +253,7 @@ function PatientProfile() {
             </div>
             <div className='card-body'>
               <ul className='nav nav-pills mb-0' id='pills-tab' role='tablist'>
-                <li className='nav-item'>
+                {/* <li className='nav-item'>
                   <a
                     className='nav-link active'
                     id='general_detail_tab'
@@ -260,7 +262,7 @@ function PatientProfile() {
                   >
                     General
                   </a>
-                </li>
+                </li> */}
                 <li className='nav-item'>
                   <a
                     className='nav-link'
@@ -300,7 +302,7 @@ function PatientProfile() {
       <div className='row'>
         <div className='col-12'>
           <div className='tab-content detail-list' id='pills-tabContent'>
-            <div className='tab-pane fade show active' id='general_detail'>
+            <div className='tab-pane fade show' id='general2_detail'>
               <div className='row'>
                 <div className='col-xl-4'>
                   {/* <div className='card'>
@@ -455,37 +457,6 @@ function PatientProfile() {
                 </div> */}
               </div>
               <div className='row'>
-                {/* <div className='col-lg-4'>
-                  <div className='card'>
-                    <div className='card-body'>
-                      <h4 className='mt-0 header-title'>Patient Schedule</h4>
-                      <div className='dash-datepick'>
-                        <input type='hidden' id='light_datepick' />
-                      </div>
-                      <div className='d-flex justify-content-between p-3 bg-light'>
-                        <div className='media'>
-                          <img
-                            src={`${AWS_BUCKET}/assets/images/users/user-2.jpg`}
-                            className='mr-3 thumb-md rounded-circle'
-                            alt='...'
-                          />
-                          <div className='media-body align-self-center'>
-                            <h5 className='mt-0 text-dark mb-1'>
-                              Harry McCall
-                            </h5>
-                            <p className='mb-0'>
-                              Urologist
-                              <span className='text-muted'>
-                                {" "}
-                                Virtual Visit, follow up checkup @10:00AM
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
 
                 <div className='col-lg-4'>
                   <div className='card'>
@@ -662,7 +633,7 @@ function PatientProfile() {
                 </div>
               </div>
             </div>
-            <div className='tab-pane fade' id='appointments_list'>
+            <div className='tab-pane fade show active' id='appointments_list'>
               <div className='row-lg-12'>
                     {(appointmentslist.length!==0)?
                       <TableCard headers={["Description","Service Description","Appointment Time", "Status"]}>
@@ -670,10 +641,10 @@ function PatientProfile() {
                         <tr key={index}>
                         <td>
                           <Link
-                            to={"profile/"+item.patient_id}
-                            state={{
-                              selectedUser: item,
-                            }}
+                            to={"/provider/profiles/"+item.provider_id}
+                            // state={{
+                            //   selectedUser: item,
+                            // }}
                           >
                             <div className="row">
                               <div className="col">
@@ -710,20 +681,44 @@ function PatientProfile() {
             <div className='tab-pane fade' id='payment_history'>
               <div className='row-lg-12'>
                     {(paymentHistory.length!==0)?
-                      <TableCard headers={["Description","Payment Time", "Receipt", "Amount"]}>
+                      <TableCard headers={["Description","Payment Time", "Amount"]}>
                       {paymentHistory.map((item,index)=>(
                         <tr key={index}>
                         <td>
-                        {item.description} 
+                        <NavLink onClick={
+                            async ()=>{
+                              await axiosPrivate.post("getStripeReceipt",{Email:profileDetails.email,ChargeID:item.trans_id})
+                              .then((res)=>{
+                                console.log(res)
+                                const receipt_link=res.data.Data
+                                Swal.fire({
+                                  html:`Would you like to view your receipt?`,
+                                  title:"Payment Receipt",
+                                  showConfirmButton:true,
+                                  showCancelButton:true
+                                })
+                                .then((result)=>{
+                                  if (result.isConfirmed){
+                                  // navigate(receipt_link,{replace:true})
+                                    openInNewTab(receipt_link)
+                                  }
+                                  else{
+                                    console.log("uguu")
+                                  }
+                                })
+                              })
+                              }}>
+                            {item.description} 
+                          </NavLink>
                         </td>
                         <td>
                         {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
                         </td>
-                        <td>
+                        {/* <td>
                         <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
-                        </td>
+                        </td> */}
                         <td>
-                        {item.amount}
+                        {item.amount} USD
                         </td>
                         </tr>
 
@@ -836,3 +831,8 @@ function PatientProfile() {
 }
 
 export default PatientProfile
+
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+  win.focus();
+}

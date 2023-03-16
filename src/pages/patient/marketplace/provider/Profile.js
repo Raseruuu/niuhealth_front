@@ -271,7 +271,7 @@ function ProviderProfile() {
       await axiosPrivate
         .post(
           'patientGetProviderDetails',
-          { Email: auth.email ,ProviderID:id},
+          { Email: (auth.userType==="Patient"?auth.email:"patient1@gmail.com") ,ProviderID:id},
           {
             signal: controller.signal
           }
@@ -360,9 +360,12 @@ function ProviderProfile() {
               <Link to='/provider'>NIU Health</Link>
             </li>
             <li className='breadcrumb-item'>
-              <Link to='/provider/patient'>Provider</Link>
+             Provider
             </li>
-            {/* <li className='breadcrumb-item active'>{selectedUser.first_name} {selectedUser.middle_name} {selectedUser.last_name}</li> */}
+            <li className='breadcrumb-item'>
+              
+              {profile?.ProviderDetails?.provider_name}
+            </li>
           </ol>
         </div>
       </TableTitle>
@@ -681,7 +684,8 @@ function ProviderProfile() {
                     <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
                     <div className="card e-co-product" >
                     {/* {AWS_BUCKET_SERVICES+ item.images} */}
-                      <Link to="/patient/marketplace/booking" state={{ ...item }}>
+                      <Link to={(auth.userType==="Patient"?"/patient/marketplace/booking":"/provider/service/view")} 
+                      state={{ ...item }}>
                         <img
                           src={(AWS_BUCKET_SERVICES+item.image)}
                           alt=""
@@ -691,7 +695,7 @@ function ProviderProfile() {
                       </Link>
                       <div className="card-body product-info">
                         <Link
-                          to="/patient/marketplace/booking"
+                          to={(auth.userType==="Patient"?"/patient/marketplace/booking":"/provider/service/view")}
                           className="product-title"
                           state={{ ...item }}
                         >
@@ -705,7 +709,8 @@ function ProviderProfile() {
                         </div>
                         <br/> 
                         <h4 className='met-user-name'>{item.provider_name}</h4><br/> 
-                        <div className='text-muted' style={{marginTop:-20}}>Provider</div>
+
+                        {/* <div className='text-muted' style={{marginTop:-20}}>Provider</div> */}
                         
                         <div className="d-flex justify-content-between my-2 row">
                           <p className="product-price m-2">${item.cost_price}</p>
@@ -726,6 +731,7 @@ function ProviderProfile() {
                             </div>
                           </div>
                         </div>
+                        {auth.userType==="Patient"?
                         <div className="d-flex justify-content-between my-2 row">
                           <button 
                             onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
@@ -733,7 +739,7 @@ function ProviderProfile() {
                           <button 
                             onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}
                             className='btn btn-outline-success'>View Profile</button>
-                        </div>
+                        </div>:<></>}
                       </div>
                     </div>
                   </div>

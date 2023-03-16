@@ -25,19 +25,19 @@ function ManageServices() {
   const { action,id } = useParams();
   const { state } = useLocation();
   const [clinicList, setClinicList] = useState([]);
-  const [clinicIDList, setClinicIDList] = useState([])
-  const [serviceClinicList,setServiceClinicList]=useState([])
+  const [clinicIDList, setClinicIDList] = useState([{name:"",id:""}])
+  const [serviceClinicList,setServiceClinicList]=useState([{name:"",id:""}])
   const [images, setImages] = useState([{path:'services/Default.png',file:{}}]);
   const [service, setService] = useState({
     service_name:"",service_description:"",
     image1:"",image2:"",image3:"",image4:"",image5:"",
-    service_description:"",service_name:""
+    service_description:"",service_name:"",category:"1"
   });
   const [imagepreview, setImagePreview] = useState(true);
   const [isLoading,setIsLoading]=useState(true);
   const [categoryOptions,setCategoryOptions]=useState([{id:"",name:""}])
   const [isSuccess, setIsSuccess] = useState(false);
-  const [category,setCategory]=useState("");
+  const [category,setCategory]=useState("1");
   // const placeholderimage = `${AWS_BUCKET}/assets/images/users/user-4.jpg`;
   const {
     register,
@@ -146,6 +146,7 @@ function ManageServices() {
               id:   item.id,
               name: item.name}
           }))
+
           
             
         }
@@ -153,7 +154,7 @@ function ManageServices() {
       })
       .catch((err) => {
         console.error(err)
-        setErrMsg(err.message)
+        // setErrMsg(err.message)
       })
     }
     async function getClinicList() {
@@ -178,6 +179,8 @@ function ManageServices() {
             if (action==='update'){
               getServiceDetails(clinicidlist);
             }
+            
+            setIsLoading(false)
            
           } else {
             throw new Error(Message);
@@ -204,11 +207,28 @@ function ManageServices() {
           if (Status) {
             
             setService(data);
-            setIsLoading(false)
-            const clinic_list_temp=data.clinic_ids.split(",").map((clinicID,index)=>{if (clinicIDList[index].id===clinicID){return {id:clinicIDList[index].id,name:clinicIDList[index].name}}})
+
+            console.log("split",data.clinic_ids.split(","))
+            
+            console.log("clinicIDList",clinicIDList)
+            const serviceClinics = data.clinic_ids.split(",") 
+            const clinic_list_temp=
+              clinicIDList.map(
+                  (item,index)=>{
+                    for (let i = 0; i < serviceClinics.length; i++) {
+                        if ((item.id)===serviceClinics[i] ){
+                          return {name:item.name,id:item.id}
+                      }
+                        
+                    }
+                  }
+                ).filter((item)=>{if (item){return item}})
+            
             setServiceClinicList(clinic_list_temp)
+            
+           
             console.log("temp",clinic_list_temp)
-            console.log("ServiceDetails",)
+            console.log("ServiceDetails",data)
 
             var imagetemp=[]
             if (data.image1!=="Default.png"){
@@ -227,7 +247,8 @@ function ManageServices() {
               imagetemp.push({path:"services/"+data.image5})
             }
             setImages(imagetemp)
-
+            
+            setIsLoading(false)
           } else {
             throw new Error(Message);
           }
@@ -236,10 +257,9 @@ function ManageServices() {
           console.error(err);
         });
     }
-    
+   
     getClinicList();
     getServiceCategories();
-    
     return () => {
       isMounted = false;
       controller.abort();
@@ -391,7 +411,7 @@ function ManageServices() {
 
                     style={{zIndex:3}}
                     options={categoryOptions} // Options to display in the dropdown
-                    selectedValues={[categoryOptions[0]]} // Preselected value to persist in dropdown
+                    selectedValues={[]} // Preselected value to persist in dropdown
                     // {...register("category", {
                     //   value: service.category,
                     // })}
@@ -402,12 +422,13 @@ function ManageServices() {
                     
                     displayValue="name" // Property name to display in the dropdown options
                   />:<> 
-                  {(isLoading)?<></>:
+                  {(isLoading&&service.service_name!="")?<></>:
                     <Multiselect
 
                         style={{zIndex:3}}
                         options={categoryOptions} // Options to display in the dropdown
-                        selectedValues={[categoryOptions[parseInt(service.category)-1]]} // Preselected value to persist in dropdown
+                        selectedValues={
+                          [categoryOptions[parseInt(service.category)-1]]} // Preselected value to persist in dropdown
                         // {...register("category", {
                         //   value: service.category,
                         // })}
@@ -546,11 +567,12 @@ function ManageServices() {
                       )})}
                     </select>}
                       </>} */}<br/>
+                      {isLoading?<></>:
                       <StyleWrapper>
                         <Multiselect
                           style={{zIndex:3 ,width:'100%'}}
                           options={clinicIDList} // Options to display in the dropdown
-                          selectedValues={serviceClinicList} // Preselected value to persist in dropdown
+                          selectedValues={action==="new"?[]:serviceClinicList} // Preselected value to persist in dropdown
                           onSelect={
                             (selectedList,selectedItem)=>{
                                 var selected_ID_List= selectedList.map((clinic)=>{return clinic.id})
@@ -572,7 +594,7 @@ function ManageServices() {
                         />
                         
                       </StyleWrapper>
-
+                      }
 
                     {/* </div> */}
                   </div>

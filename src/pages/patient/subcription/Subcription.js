@@ -1,6 +1,7 @@
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { Card } from 'react-bootstrap'
+import { NavLink } from 'react-router-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import CardItem from '../../../components/cards/Card'
@@ -275,18 +276,37 @@ function Subscription() {
           </div> */}
           <div className='row-lg-12'>
                     {(paymentHistory.length!==0)?
-                      <TableCard headers={["Description","Payment Time", "Receipt", "Amount"]}>
+                      <TableCard headers={["Description","Payment Time", "Amount"]}>
                       {paymentHistory.map((item,index)=>(
                         <tr key={index}>
                         <td>
-                        {item.description} 
+                          <NavLink onClick={
+                            async ()=>{
+                              await axiosPrivate.post("getStripeReceipt",{Email:auth.email,ChargeID:item.trans_id})
+                              .then((res)=>{
+                                console.log(res)
+                                const receipt_link=res.data.Data
+                                Swal.fire({
+                                  html:`Would you like to view your receipt?`,
+                                  title:"Payment Receipt",
+                                  showConfirmButton:true,
+                                  showCancelButton:true
+                                })
+                                .then((response)=>{if (response){
+                                  // navigate(receipt_link,{replace:true})
+                                  openInNewTab(receipt_link)
+                                }})
+                              })
+                              }}>
+                            {item.description} 
+                          </NavLink>
                         </td>
                         <td>
                         {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
                         </td>
-                        <td>
+                        {/* <td>
                         <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
-                        </td>
+                        </td> */}
                         <td>
                         {item.amount}
                         </td>
@@ -306,3 +326,7 @@ function Subscription() {
 }
 
 export default Subscription
+function openInNewTab(url) {
+  var win = window.open(url, '_blank');
+  win.focus();
+}

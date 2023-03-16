@@ -248,12 +248,12 @@ function PatientSideNav({ openSideNav }) {
         {(openSideNav)?
           <NavLink onClick={handleLogout.bind(this)}
             >
-              <i class="fas fa-sign-out-alt"></i>
+              <i className="fas fa-sign-out-alt"></i>
               {(openSideNav_delayed)?
               <span>Logout</span>:<></>}
             </NavLink>:
           <NavLink onClick={handleLogout.bind(this)}>
-              <i class="fas fa-sign-out-alt"></i>
+              <i className="fas fa-sign-out-alt"></i>
             </NavLink>
             }
           </li>

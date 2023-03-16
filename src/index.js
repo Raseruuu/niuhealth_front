@@ -212,6 +212,7 @@ const router =createBrowserRouter(
           children: [
             { index: true, element: <ProviderIndex /> },
             { path: 'profile', element: <Profile /> },
+            { path: 'service/view', element: <Booking /> },
             {
               path: 'patient',
               element: <Outlet />,
@@ -221,6 +222,7 @@ const router =createBrowserRouter(
                 { path: 'profile/:id/:action', element: <PatientProfile /> },
               ],
             },
+            { path: 'profiles/:id', element: <ProviderProfile /> },
             { path: 'about', element: <About/>},
             {
               path: 'ratings',

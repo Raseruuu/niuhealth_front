@@ -547,57 +547,57 @@ function PatientList() {
                 <form id="create-appointment" onSubmit={handleSubmit(createInPersonVisit)}>
                 <div className="modal-body">
                   
-                <div className="nuModalCont visitRequestModal">
-                
-                <div className="" >
-                   <div className='row m-2'>
-                  
-                  <img
-                    src={AWS_BUCKET_SERVICES+"profiles/pictures/"+visitTarget.picture}
-                    alt=""
-                    className="thumb-sm rounded-circle mr-2 m-2"
-                    style={{objectFit:'cover' ,height:'100px',}}
-                  />{visitTarget.first_name} {visitTarget.last_name}
-                  </div>
-                  <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
-                  <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
-                  {/* <label  className="col-form-label">Patient</label>
-                  <select required className="form-control" {...register("PatientID")}>
-                      <option>Select Patient...</option>
-                        {patientList.map((item,index)=>{
-                                return(
-                                <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
-                              })}
-                  </select> */}
-                  
-                  <label  className="col-form-label">Clinic</label>
-                  <select required className="form-control" {...register("ClinicID")}>
-                              <option>Select Clinic...</option>
-                              {clinicList.map((item)=>{
-                                return(
-                                <option value={item.clinic_id}>{item.clinic_name} </option>)
-                              })}
-                          </select>
-                  <label htmlFor="date" className="col-form-label">Visit Date</label>
-                  <input required className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
-                  
-                  <label htmlFor="time" className="col-form-label">Time</label>
-                  {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
-                  <select
-                    required 
-                    {...register("Time")}
-                    className="form-control">   
-                    {morning_options.map((option, index)=>(
-                      <option key={index} value={option}>{hourformat(option)}</option>
-                      ))}
+                  <div className="nuModalCont visitRequestModal">
+                    
+                    <div className="" >
+                      <div className='row m-2'>
                       
-                    <option value={null}>--:--</option>
-                  </select>
-                  <label  className="col-form-label">Internal Notes</label>
-                  <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea>
-                  
-                </div>
-              </div>
+                      <img
+                        src={AWS_BUCKET_SERVICES+"profiles/pictures/"+visitTarget.picture}
+                        alt=""
+                        className="thumb-sm rounded-circle mr-2 m-2"
+                        style={{objectFit:'cover' ,height:'100px',}}
+                      />{visitTarget.first_name} {visitTarget.last_name}
+                      </div>
+                      <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
+                      <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
+                      {/* <label  className="col-form-label">Patient</label>
+                      <select required className="form-control" {...register("PatientID")}>
+                          <option>Select Patient...</option>
+                            {patientList.map((item,index)=>{
+                                    return(
+                                    <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
+                                  })}
+                      </select> */}
+                      
+                      <label  className="col-form-label">Clinic</label>
+                      <select required className="form-control" {...register("ClinicID")}>
+                                  <option>Select Clinic...</option>
+                                  {clinicList.map((item)=>{
+                                    return(
+                                    <option value={item.clinic_id}>{item.clinic_name} </option>)
+                                  })}
+                              </select>
+                      <label htmlFor="date" className="col-form-label">Visit Date</label>
+                      <input required className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
+                      
+                      <label htmlFor="time" className="col-form-label">Time</label>
+                      {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
+                      <select
+                        required 
+                        {...register("Time")}
+                        className="form-control">   
+                        {morning_options.map((option, index)=>(
+                          <option key={index} value={option}>{hourformat(option)}</option>
+                          ))}
+                          
+                        <option value={null}>--:--</option>
+                      </select>
+                      <label  className="col-form-label">Internal Notes</label>
+                      <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea>
+                      
+                    </div>
+                  </div>
               
 
                 </div>

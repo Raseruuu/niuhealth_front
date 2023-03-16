@@ -96,6 +96,7 @@ export default function Booking() {
         dateX,
         timeX,
       },
+      
     }
     
     Swal.fire(
@@ -224,7 +225,7 @@ export default function Booking() {
       await axiosPrivate
         .post(
           'patientGetService',
-          { Email: auth.email,
+          { Email: (auth.userType==="Patient"?auth.email:"patient1@gmail.com"),
             ServiceID:selectedProvider.service_id },
           {
             signal: controller.signal,
@@ -346,7 +347,7 @@ export default function Booking() {
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails.provider_id}/${serviceDetails?.image1}`}
+                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
                               alt=""
                               // width={30}
                               height={300}
