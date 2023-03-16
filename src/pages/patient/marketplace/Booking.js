@@ -345,6 +345,7 @@ export default function Booking() {
                   <div className="met-profile">
                     <div className="row ">
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
+                      {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
                         <div className='d-flex justify-content-center'>
                             <img
                               src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}

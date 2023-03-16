@@ -139,7 +139,7 @@ function Upload() {
                       required
                     />
                     <br/>
-                    {/* <div>
+                    <div className='mb-4 m-1'>
                       
                         <label>
                           Start Date
@@ -164,7 +164,7 @@ function Upload() {
                           name="End"
                           {...register('End', { required: true })}
                               />
-                    </div> */}
+                    </div>
                     {/* <label>
                       Insurance ID
                     </label>

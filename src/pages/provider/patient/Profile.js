@@ -199,12 +199,12 @@ function PatientProfile() {
                       </div>
                       <div className='met-profile_user-detail'>
                         <h5 className='met-user-name'>{profileDetails.first_name} {profileDetails.middle_name} {profileDetails.last_name}</h5>
-                        <div class="row col-md-12">
-                          <div class="m-1">
-                            <span class={ (profileDetails.subscription_plan == 0) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.subscription_plan == false) ? "Not subscribed" : "Subscribed" }</span></div>
+                        <div className="row col-md-12">
+                          <div className="m-1">
+                            <span className={ (profileDetails.subscription_plan == 0) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.subscription_plan == false) ? "Not subscribed" : "Subscribed" }</span></div>
                           <div>
-                          <div class="m-1">
-                            <span class={ (profileDetails.has_insurance == false) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.has_insurance == false) ? "Not insured" : "Insured" }</span></div>
+                          <div className="m-1">
+                            <span className={ (profileDetails.has_insurance == false) ? "badge badge-md badge-soft-danger" : "badge badge-md badge-soft-success m-1" }>{ (profileDetails.has_insurance == false) ? "Not insured" : "Insured" }</span></div>
                           </div>
                         </div>
                         {/* <p className='mb-0 met-user-name-post'>
@@ -718,7 +718,7 @@ function PatientProfile() {
                         <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
                         </td> */}
                         <td>
-                        {item.amount} USD
+                        $ {item.amount} USD
                         </td>
                         </tr>
 
@@ -794,15 +794,36 @@ function PatientProfile() {
                             </div>
                         </CardItem>
                       </div>
-                      
+                        
+                        
                         <button
                           type='button'
                           onClick={()=>{
                             setIns_view(false)
                           }}
-                          className='float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
+                          className='m-1 float-right btn btn-outline-purple btn-round waves-effect waves-light mt-2'
                         >
                           Back
+                        </button>
+
+                        
+                        <button
+                          type='button'
+                          onClick={()=>{
+                            setIns_view(false)
+                          }}
+                          className='m-1 float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
+                        >
+                          Reject
+                        </button>
+                        <button
+                          type='button'
+                          onClick={()=>{
+                            setIns_view(false)
+                          }}
+                          className='m-1 float-right btn btn-outline-success btn-round waves-effect waves-light mt-2'
+                        >
+                          Approve
                         </button>
                       </>}
                  </div>

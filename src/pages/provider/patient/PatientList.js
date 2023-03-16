@@ -550,14 +550,15 @@ function PatientList() {
                   <div className="nuModalCont visitRequestModal">
                     
                     <div className="" >
-                      <div className='row m-2'>
+                      <div className='row m-2 ' >
                       
-                      <img
-                        src={AWS_BUCKET_SERVICES+"profiles/pictures/"+visitTarget.picture}
-                        alt=""
-                        className="thumb-sm rounded-circle mr-2 m-2"
-                        style={{objectFit:'cover' ,height:'100px',}}
-                      />{visitTarget.first_name} {visitTarget.last_name}
+                        <img
+                          src={AWS_BUCKET_SERVICES+"profiles/pictures/"+visitTarget.picture}
+                          alt=""
+                          className="rounded-circle mr-2 m-2"
+                          style={{objectFit:'cover', height:'80px',width:'80px'}}
+                        />
+                        <div className='m-2 d-flex justify-content-center align-items-center'><h5>{visitTarget.first_name} {visitTarget.last_name}<div className="text-muted">Patient</div></h5></div>
                       </div>
                       <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
                       <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>

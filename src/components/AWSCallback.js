@@ -113,7 +113,9 @@ function AWSCallback() {
                 transactionType,
                 userType,
                 email,
-                name
+                name,
+                has_insurance,
+                isLoggedIn
               })
 
             navigate('/', { replace: true })

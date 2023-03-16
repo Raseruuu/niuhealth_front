@@ -118,6 +118,10 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
         console.log('uguu',images)
       };
     const removeClinicImage = (index) => {
+      // setImages([
+      //   ...images.slice(0, index),
+      //   ...images.slice(index + 1, images.length)
+      // ]);
       setImages([
         ...images.slice(0, index),
         ...images.slice(index + 1, images.length)

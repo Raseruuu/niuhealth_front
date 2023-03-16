@@ -128,7 +128,35 @@ export default function ClinicSchedule() {
   //       })
 
   // }
+  function blobCreationFromURL(inputURI) {
+  
+    var binaryVal;
+    console.log(inputURI)
+    // mime extension extraction
+    var inputMIME = inputURI.split(',')[0].split(':')[1].split(';')[0];
 
+    // Extract remaining part of URL and convert it to binary value
+    if (inputURI.split(',')[0].indexOf('base64') >= 0)
+        binaryVal = atob(inputURI.split(',')[1]);
+
+    // Decoding of base64 encoded string
+    else
+        binaryVal = unescape(inputURI.split(',')[1]);
+
+    // Computation of new string in which hexadecimal
+    // escape sequences are replaced by the character 
+    // it represents
+
+    // Store the bytes of the string to a typed array
+    var blobArray = [];
+    for (var index = 0; index < binaryVal.length; index++) {
+        blobArray.push(binaryVal.charCodeAt(index));
+    } 
+
+    return new Image([blobArray], {
+        type: "image/png"
+    });
+}
   const onSubmit = async (data) => {
     
     const formData = new FormData();
@@ -157,11 +185,24 @@ export default function ClinicSchedule() {
     }
     formData.append("LocalCurrency", localCurrency);
     formData.append("LocalTimeZone", localTimezone);
+
     for (var index in clinicImages){
+      if (clinicImages[index].file){
+        formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
+      }
+      else{
+        var imageblob=blobCreationFromURL(AWS_BUCKET_SERVICES+clinicImages[index].path)
+        formData.append('Image'+(parseInt(index)+1), imageblob)
+      }
       
-      formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
     }
-    
+    var clinicBlobObject = blobCreationFromURL(AWS_BUCKET_SERVICES+"clinics/Default.png");
+    console.log(clinicBlobObject)
+    for (var index in 5-clinicImages.length){
+      if (clinicImages[index].file){
+      formData.append('Image'+(clinicImages.length+parseInt(index)+1), clinicBlobObject)
+      }
+    }
     let endpoint=(
       (action==='edit')?
       "providerUpdateClinicDetails":
@@ -213,6 +254,7 @@ export default function ClinicSchedule() {
         })
     }
   }
+  
   useEffect(() => {
     const controller = new AbortController()
 
@@ -238,11 +280,16 @@ export default function ClinicSchedule() {
             setLocalCurrency(res.data.Data.local_currency)
             setTimeZone(res.data.Data.local_time_zone)
             var tempImgList=[]
-            if (res.data.Data.image1||res.data.Data.image1!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image1,file:null})}
-            if (res.data.Data.image2||res.data.Data.image2!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image2,file:null})}
-            if (res.data.Data.image3||res.data.Data.image3!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image3,file:null})}
-            if (res.data.Data.image4||res.data.Data.image4!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image4,file:null})}
-            if (res.data.Data.image5||res.data.Data.image5!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image5,file:null})}
+            if (res.data.Data.image1!=="clinics/Default.png"){
+              tempImgList.push({path:res.data.Data.image1})}
+            if (res.data.Data.image2!=="clinics/Default.png"){
+              tempImgList.push({path:res.data.Data.image2})}
+            if (res.data.Data.image3!=="clinics/Default.png"){
+              tempImgList.push({path:res.data.Data.image3})}
+            if (res.data.Data.image4!=="clinics/Default.png"){
+              tempImgList.push({path:res.data.Data.image4})}
+            if (res.data.Data.image5!=="clinics/Default.png"){
+              tempImgList.push({path:res.data.Data.image5})}
             
             setClinicImages(tempImgList)
             setImagePreview(true)
@@ -282,7 +329,7 @@ export default function ClinicSchedule() {
     })
     
   };
-
+  
   useEffect(() => {
     // let isMounted = true
     // const controller = new AbortController()
