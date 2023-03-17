@@ -581,7 +581,7 @@ function PatientList() {
 
                 <div className="modal-header">
                   
-                  <h4 className="modal-title">Book a Visit</h4>
+                  <h4 className="modal-title">Book an Appointment</h4>
                 </div>
                 <form id="create-appointment" onSubmit={handleSubmit(createInPersonVisit)}>
                 <div className="modal-body">

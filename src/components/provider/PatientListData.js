@@ -84,7 +84,7 @@ function PatientListData({ limit,pagenum, list = [],showModal,hideModal }) {
         <StatusTextInsurance status={item.with_insurance || 0} />
       </td>
       <td>
-        <button className='btn btn-outline-purple btn-round' style={{fontSize:11}}  onClick={()=>{handleNewVisit(item)}}> <i className='fas fa-video'></i> Book An Appointment</button >
+        <button className='btn btn-outline-purple btn-round' style={{fontSize:11}}  onClick={()=>{handleNewVisit(item)}}>  Book An Appointment</button >
       </td>
       {/* //Action!!
        <td>
