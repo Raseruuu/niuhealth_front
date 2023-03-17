@@ -98,7 +98,7 @@ export default function Booking() {
       },
       
     }
-    
+    if (auth.userType==="Patient"){
     Swal.fire(
       {
         title: 'Start Booking',
@@ -116,6 +116,7 @@ export default function Booking() {
         state,
       })}
     })
+    }
   }
 
   const handleEvents = (events) => {
@@ -326,7 +327,7 @@ export default function Booking() {
               </div>
             </div>
           </div> */}
-          <TableTitle title = "Book Appointment">
+          <TableTitle title = {auth.userType==="Patient"?"Book Appointment":"Service"}>
             <div className="float-right">    
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
@@ -345,7 +346,7 @@ export default function Booking() {
                   <div className="met-profile">
                     <div className="row ">
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
-                      {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
+                      {/* Sir Tata {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`} */}
                         <div className='d-flex justify-content-center'>
                             <img
                               src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
@@ -515,7 +516,7 @@ export default function Booking() {
             </div>
 
             <div className="col-lg-7">
-              <h4>Choose Appointment Schedule</h4>
+              <h4>{auth.userType==="Patient"?"Choose Appointment Schedule":"Provider's Schedule"}</h4>
               <div className="card">
                 <div className="card-body">
                   <div id="calendar"></div>

@@ -12,6 +12,7 @@ import ImageViewer from 'react-simple-image-viewer';
 import styled from "@emotion/styled"
 import { NavLink } from "react-router-dom"
 import Swal from "sweetalert2"
+import moment from "moment"
 
 export const StyleWrapper = styled.div`
   .styles-module_image__2hdkJ{
@@ -290,6 +291,11 @@ function PatientProfile() {
                     id='insurance_detail_tab'
                     data-toggle='pill'
                     href='#insurance'
+                    onClick={()=>{
+                      if (ins_view){
+                        setIns_view(false)
+                      }
+                    }}
                   >
                     Insurance
                   </a>
@@ -494,7 +500,7 @@ function PatientProfile() {
                   </div>
                 </div>
 
-                <div className='col-lg-8'>
+                {/* <div className='col-lg-8'>
                   <div className='card'>
                     <div className='card-body'>
                       <h4 className='header-title mt-0 mb-4'>
@@ -630,7 +636,7 @@ function PatientProfile() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             <div className='tab-pane fade show active' id='appointments_list'>
@@ -740,15 +746,15 @@ function PatientProfile() {
                         <CardItem>{(isLoading)?`Loading...`:(`${profileDetails.first_name} has no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
                     {insuranceList.map((item,index) => (
-                      <a
+                      <Link
                       // className="btn-success waves"
-                        key={index}
+                          key={index}
                           style={{background:'none', marginLeft:'2px' }}
                           onClick={()=>{
                                 setIns_view(true);setIns_index(index);
                                 setImages([
-                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[index].FrontImage}`,
-                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[index].BackImage}`
+                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].FrontImage}`,
+                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].BackImage}`
                                 ])
                               }
                             }
@@ -761,6 +767,7 @@ function PatientProfile() {
                             <div className='text-center'>
                             <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${item.BucketName}/${item.FrontImage}`}></img>
                               <i className={(item.Archive == 1) ? 'far fa-folder text-gray ml-3' : 'far fa-folder text-success ml-3'}></i>
+
                               <h6 className='text-truncate'>
                                 {item.BucketName}
                               </h6>
@@ -770,7 +777,7 @@ function PatientProfile() {
                               </small>
                             </div>
                           </div>
-                        </a>
+                        </Link>
                     ))}
 
                   </div>
@@ -788,9 +795,9 @@ function PatientProfile() {
                             </div>
                         </CardItem>
                         <CardItem className={"m-2 col lg-4"} >
-                        <div className='m-2 col lg-4'  onClick= {() => openImageViewer(1)}>
-                        Back Image<br/><br/>
-                            <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].BackImage}`}></img>
+                          <div className='m-2 col lg-4'  onClick= {() => openImageViewer(1)}>
+                            Back Image<br/><br/>
+                              <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].BackImage}`}></img>
                             </div>
                         </CardItem>
                       </div>
@@ -810,7 +817,8 @@ function PatientProfile() {
                         <button
                           type='button'
                           onClick={()=>{
-                            setIns_view(false)
+                            Swal.fire({title:"Reject Insurance",html:`Are you sure you want to reject this patient's insurance?<br><div class="text-muted">It can not be applied when availing services.<div>`,showCancelButton:true})
+                            .then((res)=>{if (res.isConfirmed){Swal.fire({title:"Insurance Rejected",icon:"success",text:"This insurance is now rejected as of "+moment().format("MMMM DD, yyyy")})}})
                           }}
                           className='m-1 float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
                         >
@@ -818,9 +826,12 @@ function PatientProfile() {
                         </button>
                         <button
                           type='button'
+                          
                           onClick={()=>{
-                            setIns_view(false)
-                          }}
+                            Swal.fire({title:"Approve Insurance",html:`Would you like to validate this Insurance entry?`,showCancelButton:true})
+                              .then((res)=>{if (res.isConfirmed){Swal.fire({title:"Insurance Approved",icon:"success",text:"This insurance is now validated as of "+moment().format("MMMM DD, yyyy")})}})
+                            }
+                          }
                           className='m-1 float-right btn btn-outline-success btn-round waves-effect waves-light mt-2'
                         >
                           Approve

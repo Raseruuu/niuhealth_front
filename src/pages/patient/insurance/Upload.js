@@ -51,7 +51,7 @@ function Upload() {
     // if (!data?.Image[0]) {
     //   return
     // }
-
+    console.log('formdataa',data)
     setIsSuccess(false)
     setErrMsg(null)
 
@@ -59,13 +59,12 @@ function Upload() {
       await axiosPrivate
         .post(
           'uploadInsuranceBucket',
-          {
+          { ...data,
             // Image: data?.Image[0],
             Email: auth?.email,
             // Title: data.Title,
             Front:frontImage.file,
             Back: backImage.file,
-            BucketName: data?.Title,
             // ID: data?.ID,
             // Type: 'Health Insurance',
             // Start: data.Start,
@@ -133,9 +132,9 @@ function Upload() {
                     <input
                       className="form-control"
                       type="text"
-                      name="Title"
+                      name="BucketName"
                       disabled={isSuccess}
-                      {...register('Title', { required: true })}
+                      {...register('BucketName', { required: true })}
                       required
                     />
                     <br/>
@@ -148,10 +147,10 @@ function Upload() {
                           className="form-control"
                           type="date"
                           placeholder={'mm-dd-yyyy'}
-                          name="Start"
+                          name="StartDate"
                                 // defaultValue={dateFormat(profile.date_of_birth)}
                                 // value={dateFormat(profile.date_of_birth)}
-                          {...register('Start', { required: true })}
+                          {...register('StartDate', { required: true })}
                                 // onChangeCapture={handleInputChange.bind(this)}
                               />
                         <label>
@@ -161,8 +160,8 @@ function Upload() {
                           className="form-control"
                           type="date"
                           placeholder={'mm-dd-yyyy'}
-                          name="End"
-                          {...register('End', { required: true })}
+                          name="EndDate"
+                          {...register('EndDate', { required: true })}
                               />
                     </div>
                     {/* <label>

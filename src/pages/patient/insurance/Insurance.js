@@ -108,10 +108,10 @@ function Insurance() {
                         <CardItem>{(isLoading)?`Loading...`:(`You have no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
                     {list.map((item) => (
-                      <a
+                      <Link
                       // className="btn-success waves"
                       style={{background:'none', marginLeft:'2px'}}
-                      href={`/patient/insurance/folders/${item.BucketId}`}
+                      to={`/patient/insurance/folders/${item.BucketId}`}
                       // onClick={()=>Swal.fire(
                       //   {html: 
                       //     `
@@ -137,7 +137,7 @@ function Insurance() {
                           </small>
                         </div>
                       </div>
-                        </a>
+                        </Link>
                     ))}
 
                     {/* <div className='file-box'>
@@ -170,7 +170,7 @@ function Insurance() {
         </div>
 
         <footer className='footer text-center text-sm-left'>
-          &copy; 2022 NU Health
+          &copy; 2022 NIU Health
         </footer>
       </div>
     </div>

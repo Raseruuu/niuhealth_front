@@ -19,6 +19,7 @@
     "animate.css": "^4.1.1",
     "axios": "^1.2.0",
     "bootstrap": "^5.2.3",
+    "cors": "^2.8.5",
     "dropify": "^0.2.2",
     "lottie-react": "^2.3.1",
     "moment": "^2.29.4",

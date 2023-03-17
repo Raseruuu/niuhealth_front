@@ -224,7 +224,7 @@ function Visits() {
       <div className='row'>
         <div className='col-sm-12'>
           <div className='page-title-box'>
-            <div className='float-right'>
+            {/* <div className='float-right'>
               <ol className='breadcrumb'>
                 <button
                   type='button'
@@ -240,7 +240,7 @@ function Visits() {
                   New Visit
                 </button>
               </ol>
-            </div>
+            </div> */}
             <h4 className='page-title'>Visits</h4>
           </div>
         </div>

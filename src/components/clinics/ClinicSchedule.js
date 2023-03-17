@@ -5,7 +5,7 @@ import { TableTitle } from '../../components/table/Tables'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
-import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES } from '../../constants'
+import { AWS_BUCKET_SERVICES, AWS_BUCKET_PROFILES, APP_URL, API_URL } from '../../constants'
 
 import TimeZoneSelect from  '../time/Timezone'
 import ScheduleSelect from  '../time/Hours'
@@ -13,6 +13,9 @@ import ScheduleSelect from  '../time/Hours'
 import ProfileEdit from '../../pages/patient/Profile'
 import UploadImage from '../form/UploadImage'
 import Swal from 'sweetalert2'
+
+
+
 function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
     <div className="row">
@@ -36,6 +39,18 @@ function CurrencySelect({ setLocalCurrency, value,disabled }){
 
 
 export default function ClinicSchedule() {
+
+
+  // const express = require('express')
+  // const cors = require('cors')
+  // const app = express()
+
+  
+  // app.use(cors({
+  //   origin: APP_URL,
+  //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  // }))
+
   const { auth } = useAuth()
   const { action, clinicID } = useParams()
   // console.log(useParams())
@@ -46,7 +61,7 @@ export default function ClinicSchedule() {
   const [localCurrency,setLocalCurrency]=useState("USD")
   const [localTimezone,setTimeZone]=useState("+8")
   const [clinicProfile,setClinicProfile]=useState({})
-  const [oldProfile,setOldProfile]=useState({})
+  // const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
   const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png',file:{}}])
   const [imagepreview, setImagePreview] = useState(false)
@@ -128,35 +143,40 @@ export default function ClinicSchedule() {
   //       })
 
   // }
-  function blobCreationFromURL(inputURI) {
+
+
+
+//   function blobCreationFromURL(inputURI) {
   
-    var binaryVal;
-    console.log(inputURI)
-    // mime extension extraction
-    var inputMIME = inputURI.split(',')[0].split(':')[1].split(';')[0];
+//     var binaryVal;
+//     console.log(inputURI)
+//     // mime extension extraction
+//     var inputMIME = inputURI.split(',')[0].split(':')[1].split(';')[0];
 
-    // Extract remaining part of URL and convert it to binary value
-    if (inputURI.split(',')[0].indexOf('base64') >= 0)
-        binaryVal = atob(inputURI.split(',')[1]);
+//     // Extract remaining part of URL and convert it to binary value
+//     if (inputURI.split(',')[0].indexOf('base64') >= 0)
+//         binaryVal = atob(inputURI.split(',')[1]);
 
-    // Decoding of base64 encoded string
-    else
-        binaryVal = unescape(inputURI.split(',')[1]);
+//     // Decoding of base64 encoded string
+//     else
+//         binaryVal = unescape(inputURI.split(',')[1]);
 
-    // Computation of new string in which hexadecimal
-    // escape sequences are replaced by the character 
-    // it represents
+//     // Computation of new string in which hexadecimal
+//     // escape sequences are replaced by the character 
+//     // it represents
 
-    // Store the bytes of the string to a typed array
-    var blobArray = [];
-    for (var index = 0; index < binaryVal.length; index++) {
-        blobArray.push(binaryVal.charCodeAt(index));
-    } 
+//     // Store the bytes of the string to a typed array
+//     var blobArray = [];
+//     for (var index = 0; index < binaryVal.length; index++) {
+//         blobArray.push(binaryVal.charCodeAt(index));
+//     } 
+//     const new_blob=new Image([blobArray], {
+//         type: inputMIME
+//     });
+//     console.log("blobb",new_blob)
+//     return new_blob
 
-    return new Image([blobArray], {
-        type: "image/png"
-    });
-}
+// }
   const onSubmit = async (data) => {
     
     const formData = new FormData();
@@ -167,6 +187,7 @@ export default function ClinicSchedule() {
       formData.append("Specialty",data.Specialty)
       formData.append("ContactInfo",data.ContactInfo)
       formData.append("Address",data.Address)
+      formData.append("Address2",data.Address2)
     }
     else if (action==='edit'){
       formData.append("Email", auth.email);
@@ -175,6 +196,7 @@ export default function ClinicSchedule() {
       formData.append("Specialty",clinicProfile.specialty)
       formData.append("ContactInfo",clinicProfile.contact_info)
       formData.append("Address",clinicProfile.address)
+      formData.append("Address2",clinicProfile.address2)
     }
     
     for (let key in hours) {
@@ -188,21 +210,22 @@ export default function ClinicSchedule() {
 
     for (var index in clinicImages){
       if (clinicImages[index].file){
+        // var clinicBlobObject = downloadImage(AWS_BUCKET_SERVICES+clinicImages[index].path);
         formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
       }
-      else{
-        var imageblob=blobCreationFromURL(AWS_BUCKET_SERVICES+clinicImages[index].path)
-        formData.append('Image'+(parseInt(index)+1), imageblob)
-      }
+      // else{
+      //   var imageblob = downloadImage(AWS_BUCKET_SERVICES+clinicImages[index].path);
+      //   formData.append('Image'+(parseInt(index)+1), imageblob)
+      // }
       
     }
-    var clinicBlobObject = blobCreationFromURL(AWS_BUCKET_SERVICES+"clinics/Default.png");
-    console.log(clinicBlobObject)
-    for (var index in 5-clinicImages.length){
-      if (clinicImages[index].file){
-      formData.append('Image'+(clinicImages.length+parseInt(index)+1), clinicBlobObject)
-      }
-    }
+    // var clinicBlobObject = downloadImage(AWS_BUCKET_SERVICES+"clinics/Default.png");
+    // console.log(clinicBlobObject)
+    // for (var index in 5-clinicImages.length){
+    //   if (clinicImages[index].file){
+    //   formData.append('Image'+(clinicImages.length+parseInt(index)+1), clinicBlobObject)
+    //   }
+    // }
     let endpoint=(
       (action==='edit')?
       "providerUpdateClinicDetails":
@@ -275,7 +298,7 @@ export default function ClinicSchedule() {
           if (Status) {
             console.log('details',res.data.Data)
             
-            setOldProfile(res.data.Data)
+            // setOldProfile(res.data.Data)
             setClinicProfile(res.data.Data)
             setLocalCurrency(res.data.Data.local_currency)
             setTimeZone(res.data.Data.local_time_zone)
@@ -293,8 +316,10 @@ export default function ClinicSchedule() {
             
             setClinicImages(tempImgList)
             setImagePreview(true)
+            
             // setAuth((prev) => ({ ...prev, ...details }))
             // setTimeZone(details?.local_time_zone)
+            // downloadImages()
           } else {
             throw new Error(Message)
           }
@@ -317,6 +342,7 @@ export default function ClinicSchedule() {
   
   function triggerFileInput() {
     if (imgRef.current) {
+      
       imgRef.current.click()
     }
   }
@@ -331,34 +357,77 @@ export default function ClinicSchedule() {
   };
   
   useEffect(() => {
+    
+    const controller = new AbortController()
+    async function downloadImage(imageSrc) {
+      // const image = await fetch(imageSrc)
+
+      const image = await axiosPrivate.get(imageSrc
+        ,{signal: controller.signal,headers:{
+            'Access-Control-Allow-Origin': "*",
+            "Content-Type": "image/webp",
+            Accept: "application/json, text/plain,image/webp,image/png, */*"
+          }}
+        
+        )
+        
+        
+      
+      const imageBlob = await image.blob().then((res)=>{
+        if (res){
+          console.log("BLOB",imageBlob)
+          return imageBlob}})
+     
+      // const imageURL = URL.createObjectURL(imageBlog)
+    
+    }
+    // Download and Reupload 
+    // for (var index in clinicImages){
+    //   if (clinicImages[index].file){
+    //     // var clinicBlobObject = downloadImage(AWS_BUCKET_SERVICES+clinicImages[index].path);
+    //     // formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
+    //     console.log(clinicImages[index].file)
+    //   }
+    //   else{
+    //     var imageblob = downloadImage(AWS_BUCKET_SERVICES+clinicImages[index].path);
+
+
+    //     console.log(imageblob)
+    //     setImages({...images,file:imageblob})
+    //     // formData.append('Image'+(parseInt(index)+1), imageblob)
+    //   }
+      
+    // }
     // let isMounted = true
     // const controller = new AbortController()
-    let fileReader, isCancel = false;
-    if (clinicProfile.picturefile) {
-      fileReader = new FileReader();
-      fileReader.onload = (e) => {
-        const { result } = e.target;
-        if (result && !isCancel) {
-          // setFileDataURL(result)
-          // console.log('result',result)
-          setClinicProfile({
-            ...clinicProfile,
-            picture:result 
-          })
-          setImagePreview(true)
-          onChangeImage({
-            ...clinicImages
-          })
-        }
-      }
-      fileReader.readAsDataURL(clinicProfile.picturefile);
-    }
-    return () => {
-      isCancel = true;
-      if (fileReader && fileReader.readyState === 1) {
-        fileReader.abort();
-      }
-    }
+    
+    
+    // let fileReader, isCancel = false;
+    // if (clinicProfile.picturefile) {
+    //   fileReader = new FileReader();
+    //   fileReader.onload = (e) => {
+    //     const { result } = e.target;
+    //     if (result && !isCancel) {
+    //       // setFileDataURL(result)
+    //       // console.log('result',result)
+    //       setClinicProfile({
+    //         ...clinicProfile,
+    //         picture:result 
+    //       })
+    //       setImagePreview(true)
+    //       onChangeImage({
+    //         ...clinicImages
+    //       })
+    //     }
+    //   }
+    //   fileReader.readAsDataURL(clinicProfile.picturefile);
+    // }
+    // return () => {
+    //   isCancel = true;
+    //   if (fileReader && fileReader.readyState === 1) {
+    //     fileReader.abort();
+    //   }
+    // }
     
 
   }, [clinicProfile])
@@ -402,13 +471,15 @@ export default function ClinicSchedule() {
                             setFormData={setClinicProfile} 
                             imagepreview={imagepreview} 
                             setImagePreview={setImagePreview}
-                            action={action}/>
+                            action={action}
+                            
+                            />
                        
                         ))}
                         {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1]?.path!="clinics/Default.png")))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
-                          minWidth="200px" height="150px"
+                          height="150px"
                           onClick={(e)=>{
                             e.preventDefault();
                             if (clinicImages.length<=4)
@@ -616,14 +687,17 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                  <div className='col-md-6'>
+                  
+                </div>
+                <div className='row'>
+                <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
                         <label
                           htmlFor='example-text-input'
                           className='col-form-label text-right'
                         >
-                          Address
+                          Address Line 1
                         </label>
                       </div>
                       <div className='col-md-12'>
@@ -634,6 +708,7 @@ export default function ClinicSchedule() {
                           }`}
                           type='text'
                           id='Address'
+                          required
                           disabled={action==='profile'}
                           name="address"
                           {...register('Address')}
@@ -646,6 +721,7 @@ export default function ClinicSchedule() {
                           id='Address'
                           disabled={action==='profile'}
                           value={clinicProfile.address}
+                          required
                           name="address"
                           onChange={handleInputChange.bind(this)}
                           // {...register('Address')}
@@ -661,8 +737,51 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className='row'>
+                  <div className='col-md-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='example-text-input'
+                          className='col-form-label text-right'
+                        >
+                          Address Line 2
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        {(action==="create")?(
+                        <input
+                          className={`form-control ${
+                            errors.Address2 ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address2'
+                          disabled={action==='profile'}
+                          name="address2"
+                          {...register('Address2')}
+                        />):
+                        <input
+                          className={`form-control ${
+                            errors.Address2 ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address2'
+                          disabled={action==='profile'}
+                          value={clinicProfile.address2}
+                          name="address2"
+                          onChange={handleInputChange.bind(this)}
+                          // {...register('Address2')}
+                        />}
+                        {errors.Address2 ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic address line 2.
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
                   <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>

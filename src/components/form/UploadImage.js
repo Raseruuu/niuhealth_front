@@ -10,6 +10,7 @@ export function UploadOneImage({image,setImage, disabled}){
   function triggerFileInput() {
    
     if (imgRef.current) {
+      console.log("imageref",imgRef.current,)
         imgRef.current.click()
     }}
   const handleImageInputChange = (e) => {
@@ -31,6 +32,7 @@ export function UploadOneImage({image,setImage, disabled}){
         fileReader = new FileReader();
         fileReader.onload = (e) => {
             const { result } = e.target;
+            console.log("fileblob??",result)
             if (result && !isCancel) {
             const tempimage={path:result,file:image.file}
             console.log(tempimage)
@@ -69,7 +71,7 @@ return (
                   <img
                       alt=""
                       style={{objectFit: 'cover', margin: 'unset' ,width:180,height:150}}
-
+                      
                       onClick={() => {
                       Swal.fire({
                           // title: 'Profile Picture',
@@ -105,6 +107,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
     const [image, setImage] = useState({})
     const imgRef = useRef()
    
+    const picRef = useRef()
     const handleImageInputChange = (e) => {
         const [file] = e.target.files;
         console.log("FILE HERE: ",file);
@@ -124,8 +127,11 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
       // ]);
       setImages([
         ...images.slice(0, index),
+        {path:"clinics/Default.png"},
         ...images.slice(index + 1, images.length)
       ]);
+      const tempimage={path:result,file:image.file}
+      updateImages(id,tempimage)
     }
     function triggerFileInput() {
         if (imgRef.current) {
@@ -189,8 +195,9 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                   <img
                       alt=""
                       style={{objectFit: 'cover', margin: 'unset' ,width:180,height:150}}
-
-                      onClick={() => {
+                      ref={picRef}
+                      onClick={(e) => {
+                      console.log(picRef)
                       Swal.fire({
                           // title: 'Profile Picture',
                           html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES + (previewImage.path): (previewImage.path)}"></img>`,
@@ -210,7 +217,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                           >
                             Change
                         </button>
-                        {images.length>1? (
+                        {/* {images.length>1&&id===images.length-1? (
                           <button
                             type="button"
                             className="btn btn-gradient-danger waves-effect waves-light"
@@ -219,7 +226,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                             >
                             Remove
                           </button>
-                        ): null }
+                        ): null } */}
                       </div>
                   ): null }
                  </>
