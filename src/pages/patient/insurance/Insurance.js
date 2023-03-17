@@ -131,8 +131,11 @@ function Insurance() {
                           <h6 className='text-truncate'>
                             {item.BucketName}
                           </h6>
+                          <div className='virtualvisitbadge btn-round btn-purple m-1 p-1'>
+                          {item.status==="0"?"For Approval":(item.status==="1")?"Approved":"Rejected"}<br/>
+                          </div>
                           <small className='text-muted'>
-                          {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
+                          {"Uploaded "+moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
                             {/* 06 March 2022 / 5MB */}
                           </small>
                         </div>

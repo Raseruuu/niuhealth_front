@@ -25,8 +25,10 @@ function PatientList() {
   const [isLoading, setIsLoading] = useState(true)
   const [pageNum,setPageNum]=useState(1)
   const [pageLimit,setPageLimit]=useState(10)
-
+  const [visitType,setVisitType]=useState("Virtual")
   const [clinicIDList, setClinicIDList] = useState([])
+  const [serviceList, setServiceList] = useState([])
+
   // itemsCountPerPage
   /*
   For Status:
@@ -326,6 +328,7 @@ function PatientList() {
       .post(
         'createInPersonVisit',
         { ...data,
+          VisitType:visitType,
           PatientID:patient_obj.patient_id,
           Email: auth?.email || sessionStorage.getItem('email'),
 
@@ -340,7 +343,7 @@ function PatientList() {
           document.getElementById("create-appointment").reset();
           
           Swal.fire({
-            title: "In-Person Appointment Created.",
+            title: "Appointment Created",
             html: ``,
             icon: 'info'
             
@@ -352,6 +355,41 @@ function PatientList() {
       })
       .catch((err) => {
         console.error(err)
+      })
+  }
+  async function getServicesList() {
+    const controller = new AbortController()
+    await axiosPrivate
+      .post(
+        ('getServices'),
+        { 
+          Email: auth.email || sessionStorage.getItem('email'),
+          Search: search
+        },
+        {
+          signal: controller.signal,
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        const { Status, Data: data = [], Message } = res.data
+
+        if (Status) {
+          setIsLoading(false)
+          const serviceList=res.data.Data
+          setServiceList(serviceList)
+          
+          // setSeListOriginal(serviceList)
+          // const serviceCategories=serviceList.map((item,index)=>{return item.category})
+          // console.log(serviceCategories)
+          // setCategoryOptions(serviceCategories )
+        } else {
+          throw new Error(Message)
+        }
+      })
+      .catch((err) => {
+        console.error(err)
+        setErrMsg(err.message)
       })
   }
   async function getList() {
@@ -424,6 +462,7 @@ function PatientList() {
   }, [searchText])
 
   useEffect(() => {
+    getServicesList()
     getList()
     getClinicList()
   }, [])
@@ -456,8 +495,8 @@ function PatientList() {
           </form>
         </div>
       </TableTitle>
-      <CardLongItem>
-      {(patientList.length>pageLimit)?
+      {/* <CardLongItem> */}
+      {/* {(patientList.length>pageLimit)?
       
             <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
               
@@ -474,13 +513,13 @@ function PatientList() {
                   setPageNum(e)}}
                         />
               <div className='row-lg-12 h-2'>Page {pageNum}</div> 
-                  </div>:<></>}
+                  </div>:<></>} */}
         {/* {isLoading ? 'Loading please wait...' : null} */}
         {/* {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
         {patientList.length <= 0 && searchText.length > 0
           ? '0 record found.'
           : null} */}
-          </CardLongItem>
+          {/* </CardLongItem> */}
       {(patientList.length>0)?<>
         <TableCard
         headers={[
@@ -489,7 +528,7 @@ function PatientList() {
           'Phone No.',
           'Status',
           'Insurance',
-          'Visit'
+          'Action'
         ]}
       >
         
@@ -542,7 +581,7 @@ function PatientList() {
 
                 <div className="modal-header">
                   
-                  <h4 className="modal-title">In-Person Visit</h4>
+                  <h4 className="modal-title">Book a Visit</h4>
                 </div>
                 <form id="create-appointment" onSubmit={handleSubmit(createInPersonVisit)}>
                 <div className="modal-body">
@@ -570,13 +609,34 @@ function PatientList() {
                                     <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
                                   })}
                       </select> */}
+                      <label htmlFor="visitTitle" className="col-form-label">Visit Type</label>
+                      <div className='row-sm-12 d-flex justify-content-center align-items-center'>
                       
+                        <button type="button" id="inperson" name="visit_type" 
+                          className={'m-1 col-lg-5 form-button btn waves-effect waves-light btn-'+(visitType==="In-Person"?"":"outline-")+'purple'}
+                          onClick={()=>{setVisitType('In-Person')}} >
+                             In-Person Visit
+                        </button>
+                        <button type="button" id="virtual" name="visit_type"
+                          className={'m-1 col-lg-5 form-button btn waves-effect waves-light btn-'+(visitType==="Virtual"?"":"outline-")+'purple'}
+                          onClick={()=>{setVisitType('Virtual')}} >
+                            Virtual Visit
+                            </button>
+                      </div>
                       <label  className="col-form-label">Clinic</label>
                       <select required className="form-control" {...register("ClinicID")}>
                                   <option>Select Clinic...</option>
                                   {clinicList.map((item)=>{
                                     return(
                                     <option value={item.clinic_id}>{item.clinic_name} </option>)
+                                  })}
+                              </select>
+                      <label  className="col-form-label">Service</label>
+                      <select required className="form-control" {...register("ServiceID")}>
+                                  <option>Select Service...</option>
+                                  {serviceList.map((item)=>{
+                                    return(
+                                    <option value={item.service_id}>{item.service_name} </option>)
                                   })}
                               </select>
                       <label htmlFor="date" className="col-form-label">Visit Date</label>
@@ -594,8 +654,8 @@ function PatientList() {
                           
                         <option value={null}>--:--</option>
                       </select>
-                      <label  className="col-form-label">Internal Notes</label>
-                      <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea>
+                      {/* <label  className="col-form-label">Internal Notes</label>
+                      <textarea className="form-control" rows="5" id="message" {...register("InternalNotes")}></textarea> */}
                       
                     </div>
                   </div>
@@ -604,11 +664,12 @@ function PatientList() {
                 </div>
                 <div className="modal-footer">
                 <div className="nuBtnContMod">
-                  <button type="submit" className="btn btn-success waves-effect waves-light" id="create-visit">Save Visit</button>
+                  <button type="submit" className="btn btn-purple waves-effect waves-light" id="create-visit">Save Visit</button>
                   </div>
                   <button type="button" className="btn btn-outline-danger"
                   data-target="#myModal" data-dismiss="modal"
                   onClick={(e)=>{
+                    e.preventDefault()
                     // setShowModal(false);
                     $('#myModal').hide();
                     $('.modal-backdrop').hide();
