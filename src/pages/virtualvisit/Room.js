@@ -6,6 +6,7 @@ import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { APP_URL,API_URL, USERTYPE, ZOOM_SDK } from '../../constants'
 import "./zoom.css"
+
 function Room() {
   const { auth } = useAuth()
   const { state } = useLocation()
@@ -23,7 +24,9 @@ function Room() {
   var signatureEndpoint =API_URL+"/generateZoomSignature"
     // 'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
     // REACT_APP_API_URL
-  var sdkKey = ZOOM_SDK
+  // var sdkKey = ZOOM_SDK
+  var sdkKey = 'etZwCMjsSMuHwjuLtQ_LA'
+  var zakToken = ''
   var meetingNumber = state?.MeetingID
   // var meetingNumber = '4737080721'
   var userName = name
@@ -40,12 +43,13 @@ function Room() {
       .post(
         signatureEndpoint,
         {
-          MeetingID:meetingNumber,
-          Role: isProvider ? 1 : 0,
+          meetingNumber:meetingNumber,
+          role: isProvider ? 1 : 0,
         },
         {
           headers: {
-            'Set-Cookie': 'cross-site-cookie=whatever; SameSite=None; Secure',
+            'Content-Type': 'application/json',
+            // 'Set-Cookie': 'cross-site-cookie=whatever; SameSite=None; Secure',
           },
         }
       )
@@ -71,12 +75,13 @@ function Room() {
         ZoomMtg.join({
           // signature: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzZGtLZXkiOiJzR3pOdWhaTUJXWkNjTkJqQXh2Q0ZXQXdqR2xuVDlYQnJjMnYiLCJtbiI6IjQ3MzcwODA3MjEiLCJyb2xlIjoiMSIsImlhdCI6MTY3MzYwMTcwMSwiZXhwIjoxNjczNjA1MzAxLCJ0b2tlbkV4cCI6MTY3MzYwNTMwMX0.xC8b0A1BFiJWbco0j3HdCdlPe7DgXCnozKB2KxhVi5g',
           signature: signature,
+          sdkKey: sdkKey,
           meetingNumber: meetingNumber,
           userName: userName,
-          sdkKey: sdkKey,
           userEmail: userEmail,
           passWord: passWord,
           tk: registrantToken,
+          zak: zakToken,
           success: (success) => {
             console.log(success)
             
@@ -106,8 +111,9 @@ function Room() {
     //   return
     // }
 
-    ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
+    // ZoomMtg.setZoomJSLib('https://source.zoom.us/2.9.5/lib', '/av')
 
+    ZoomMtg.setZoomJSLib('https://source.zoom.us/2.10.1/lib', '/av');
     ZoomMtg.preLoadWasm()
     ZoomMtg.prepareWebSDK()
     ZoomMtg.i18n.load('en-US')
