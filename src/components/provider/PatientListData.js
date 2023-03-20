@@ -6,24 +6,10 @@ import Swal from 'sweetalert2'
 import { StatusTextInsurance } from '../../components/status/Status'
 import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from '../../constants'
 
-function PatientListData({ limit,pagenum, list = [],showModal,hideModal }) {
+function PatientListData({ limit,pagenum, list = [],showModal }) {
   // var paginatedlist = new List('users', options);
   function handleNewVisit(patient){
-    // Swal.fire({
-    //   html:`Would you like to meet with ${patient.first_name}?`,
-    //   confirmButtonText:"Yeah.",
-    //   showConfirmButton:true,
-    //   showCancelButton:true,
-    //   cancelButtonText:"Nah."
-    
-    // })
-    // .then((isConfirmed)=>{
-        // if (isConfirmed){
     showModal(patient)
-    if (success){
-      hideModal()}
-        // }})
-    // $('.modal-backdrop').hide();
   }
   let paginatedlist=[]
   var j=0
@@ -84,7 +70,15 @@ function PatientListData({ limit,pagenum, list = [],showModal,hideModal }) {
         <StatusTextInsurance status={item.with_insurance || 0} />
       </td>
       <td>
-        <button className='btn btn-outline-purple btn-round' style={{fontSize:11}}  onClick={()=>{handleNewVisit(item)}}>  Book An Appointment</button >
+        <button 
+          className='btn btn-outline-purple btn-round' 
+          style={{fontSize:11}}  
+          onClick={
+            ()=>{
+              handleNewVisit(item)
+              }}>  
+              Book An Appointment
+        </button >
       </td>
       {/* //Action!!
        <td>

@@ -51,7 +51,6 @@ function Services({ limit }) {
         }
       )
       .then((res) => {
-        console.log(res)
         const { Status, Data: data = [], Message } = res.data
 
         if (Status) {
@@ -61,7 +60,7 @@ function Services({ limit }) {
           
           setListOriginal(serviceList)
           const serviceCategories=serviceList.map((item,index)=>{return item.category})
-          console.log(serviceCategories)
+          
           setCategoryOptions(serviceCategories )
         } else {
           throw new Error(Message)
@@ -399,7 +398,7 @@ function Services({ limit }) {
               <div key={item?.recno || index} className='col-lg-3'>
                 <div className='card e-co-product'>
                 
-                  <Link to=''>
+                  <Link to={'/provider/service/view'} state={{ ...item }}>
                     <img
                       style={{width:'200px', height:'200px',objectFit: 'cover'}}
                       src={AWS_BUCKET_SERVICES+item?.default_image }
@@ -408,7 +407,7 @@ function Services({ limit }) {
                     />
                   </Link>
                   <div className='card-body product-info'>
-                  <Link to='' className='product-title'>
+                  <Link to={'/provider/service/view'} state={{ ...item }} className='product-title'>
                     {/* <div className='col'> */}
                       
                      {item.service_name}<br/>

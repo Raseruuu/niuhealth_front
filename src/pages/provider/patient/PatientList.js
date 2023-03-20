@@ -10,6 +10,7 @@ import useDebounce from '../../../hooks/useDebounce'
 import Pagination from "react-js-pagination";
 import { CardLongItem } from '../../../components/cards/Card'
 import { useForm } from 'react-hook-form'
+import Swal from 'sweetalert2'
 // Provider list of patients
 
 function PatientList() {
@@ -28,7 +29,7 @@ function PatientList() {
   const [visitType,setVisitType]=useState("Virtual")
   const [clinicIDList, setClinicIDList] = useState([])
   const [serviceList, setServiceList] = useState([])
-
+  const [service, setService] = useState("")
   // itemsCountPerPage
   /*
   For Status:
@@ -38,7 +39,7 @@ function PatientList() {
   */
   let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
   function hideModal(){
-    
+    // Swal.fire("This Happened")
     $('#myModal').hide();
     $('.modal-backdrop').hide();
   }
@@ -325,12 +326,14 @@ function PatientList() {
     const controller = new AbortController()
     const patient_obj=visitTarget
     await axiosPrivate
+    
       .post(
-        'createInPersonVisit',
+        'providerCreateAppointment',
         { ...data,
-          VisitType:visitType,
+          Type:(visitType==="Virtual"?"1":"2"),
           PatientID:patient_obj.patient_id,
           Email: auth?.email || sessionStorage.getItem('email'),
+          ServiceID: service.service_id
 
       },
         {
@@ -339,22 +342,33 @@ function PatientList() {
       )
       .then((res) => {
         const { Status, Message } = res.data
+        
         if (Status){
           document.getElementById("create-appointment").reset();
           
           Swal.fire({
             title: "Appointment Created",
-            html: ``,
+            html: `When: ${hourformat(data.Time)}`,
             icon: 'info'
             
           })
-          setUpdateVisit(!updateVisit)
+          // setUpdateVisit(!updateVisit)
           hideModal()
          
+        }
+        else{
+          Swal.fire({
+            title: "Error",
+            html: `${Message}`,
+            icon: 'warning'
+            
+          })
+          hideModal()
         }
       })
       .catch((err) => {
         console.error(err)
+        hideModal()
       })
   }
   async function getServicesList() {
@@ -538,8 +552,10 @@ function PatientList() {
           list={patientList} 
           showModal={
             (patient)=>{
-              $("#myModal").modal()
               setVisitTarget(patient)
+              $("#myModal").modal()
+              $('#myModal').show();
+              $('.modal-backdrop').show();
               
               }} 
           />
@@ -599,8 +615,8 @@ function PatientList() {
                         />
                         <div className='m-2 d-flex justify-content-center align-items-center'><h5>{visitTarget.first_name} {visitTarget.last_name}<div className="text-muted">Patient</div></h5></div>
                       </div>
-                      <label htmlFor="visitTitle" className="col-form-label">Visit Title</label>
-                      <input required className="form-control" type="text" id="visitTitle" {...register("VisitTitle")}/>
+                      <label htmlFor="title" className="col-form-label">Visit Title</label>
+                      <input required className="form-control" type="text" id="visitTitle" {...register("Title")}/>
                       {/* <label  className="col-form-label">Patient</label>
                       <select required className="form-control" {...register("PatientID")}>
                           <option>Select Patient...</option>
@@ -609,7 +625,7 @@ function PatientList() {
                                     <option key={index} value={item.patient_id}>{item.first_name} {item.last_name}</option>)
                                   })}
                       </select> */}
-                      <label htmlFor="visitTitle" className="col-form-label">Visit Type</label>
+                      <label htmlFor="type" className="col-form-label">Visit Type</label>
                       <div className='row-sm-12 d-flex justify-content-center align-items-center'>
                       
                         <button type="button" id="inperson" name="visit_type" 
@@ -623,24 +639,46 @@ function PatientList() {
                             Virtual Visit
                             </button>
                       </div>
-                      <label  className="col-form-label">Clinic</label>
-                      <select required className="form-control" {...register("ClinicID")}>
-                                  <option>Select Clinic...</option>
-                                  {clinicList.map((item)=>{
-                                    return(
-                                    <option value={item.clinic_id}>{item.clinic_name} </option>)
-                                  })}
-                              </select>
                       <label  className="col-form-label">Service</label>
-                      <select required className="form-control" {...register("ServiceID")}>
-                                  <option>Select Service...</option>
+                      <select required className="form-control" 
+                        onChange={(e)=>{
+                        console.log("chosenservice",e.target.value)
+                        const [chosenService]=serviceList.filter((item)=>{return (e.target.value===item.service_id)})
+                        setService(chosenService)}}
+                        // {...register("ServiceID")}
+                        >
+                                  <option value="" 
+                                    >
+                                        Select Service...
+                                  </option>
                                   {serviceList.map((item)=>{
                                     return(
                                     <option value={item.service_id}>{item.service_name} </option>)
                                   })}
                               </select>
+                      <label  className="col-form-label">Clinic</label>
+                      <select required className="form-control" {...register("ClinicID")}>
+                                  <option value="">Select Clinic...</option>
+                                  {clinicList.filter((item,index)=>{
+                                    
+                                    const serviceClinics=service?.clinic_ids?.split(',')
+                                    console.log(item)
+                                    return (serviceClinics?.includes(item.clinic_id))
+                                  }
+                                ).map((item)=>{
+                                    return(
+                                    <option value={item.clinic_id}>{item.clinic_name} </option>)
+                                  })
+                                  
+                                  }
+                              </select>
+                      
                       <label htmlFor="date" className="col-form-label">Visit Date</label>
-                      <input required className="form-control" defaultValue={moment().format('yy-mm-dd')} type="date" id="date" {...register("Date")}/>
+                      <input required 
+                        className="form-control" 
+                        min={moment().add(1,"days").format("YYYY-MM-DD")}
+                        defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
+                        type="date" id="date" {...register("Date")}/>
                       
                       <label htmlFor="time" className="col-form-label">Time</label>
                       {/* <input className="form-control" pattern="[0-9]{2}:[0]{2}" defaultValue={moment().format('HH:MM a')} type="time" id="time" {...register("Time")}/> */}
@@ -670,7 +708,6 @@ function PatientList() {
                   data-target="#myModal" data-dismiss="modal"
                   onClick={(e)=>{
                     e.preventDefault()
-                    // setShowModal(false);
                     $('#myModal').hide();
                     $('.modal-backdrop').hide();
                   }

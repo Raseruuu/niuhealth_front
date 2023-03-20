@@ -4,7 +4,7 @@ import { Link,useNavigate } from "react-router-dom";
 
 import {USERTYPE} from '../constants'
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
-function Login( text=null ) {
+function Login( ) {
   
   const axiosPrivate = useAxiosPrivate();
   const {
@@ -16,7 +16,6 @@ function Login( text=null ) {
   
   const effectRun = useRef(false);
   const navigate = useNavigate()
-  console.log(text)
   async function logoutCurrentUser(){
   await axiosPrivate
     .get(
@@ -36,7 +35,6 @@ function Login( text=null ) {
   async function handleLogin(data){
     const controller = new AbortController()
 
-    console.log("data",data)
     await axiosPrivate
     .post("cognitoSignIn", {...data},
     {
@@ -45,7 +43,6 @@ function Login( text=null ) {
       
     )
     .then((res) => {
-      console.log(res); 
       const { StatusCode, Data: data = {}, Message } = res.data;
       
       if (StatusCode===200) {

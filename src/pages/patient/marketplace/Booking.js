@@ -493,8 +493,8 @@ export default function Booking() {
                               {/* </CardItem> */}
                               </div>
                               <div>
-                                <ul className="list-unstyled personal-detail">
-                                  <li className="">
+                                <ul className="list-unstyled personal-detail m-3">
+                                  <li className="mt-2">
                                     <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
                                     <b> Specialization </b> : 
                                     {serviceClinics[index]?.specialty}

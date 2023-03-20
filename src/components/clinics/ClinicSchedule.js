@@ -63,7 +63,7 @@ export default function ClinicSchedule() {
   const [clinicProfile,setClinicProfile]=useState({})
   // const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
-  const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png',file:{}}])
+  const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png'}])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
 
@@ -257,7 +257,7 @@ export default function ClinicSchedule() {
             if (action==="create")
             { 
               alert("Success! You created a new Clinic.")
-              // navigate('/provider/clinics')
+              navigate('/provider/clinics')
             }
             else if (action==="edit")
               {

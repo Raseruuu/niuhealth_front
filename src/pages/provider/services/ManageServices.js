@@ -54,8 +54,8 @@ function ManageServices() {
     //     formData.append("Image"+parseInt(index+1), data.image[index], data.image[index].name);
     //   }
     // }
-    console.log("images",images)
-    console.log("service",service)
+    // console.log("images",images)
+    // console.log("service",service)
     
     
     if ((images.length > 0 )&& images[0].path!=='services/Default.png'){
@@ -70,10 +70,9 @@ function ManageServices() {
     formData.append("Email", auth.email);
     // formData.append("ServiceType", data.type);
     if (action==='update'){
-      console.log('formdaataaa',service)
       formData.append("ServiceID", id);
       formData.append("Price", service.cost_price);
-      formData.append("Status", service.status);
+      formData.append("Status", (Boolean(service.status)*1));
       
       formData.append("Name", service.service_name);
       formData.append("ServiceName", service.service_name);
@@ -82,11 +81,10 @@ function ManageServices() {
       formData.append("ClinicIDs", [...service.clinic_ids]);
     }
     else if (action==='new'){
-      console.log('formdaataaa',data)
       
       formData.append("ServiceName", data.name);
       formData.append("ServiceDescription", data.description);
-      console.log('category',category)
+      // console.log('category',category)
       formData.append("CategoryID", category);
       formData.append("CostPrice", data.rate);
 
@@ -107,7 +105,6 @@ function ManageServices() {
         },
       })
       .then((res) => {
-        console.log(res);
         const { Status, Data: data = [], Message } = res.data;
 
         if (Status) {
@@ -132,7 +129,6 @@ function ManageServices() {
         signal: controller.signal,
       })
       .then((res)=>{
-        console.log('res',res.data.Status)
         const {Status,Data, Message}=res.data
         if (Status){
           
@@ -141,11 +137,11 @@ function ManageServices() {
             return {id:item.id,name:item.name}
           }))
           
-          console.log("categoryOptions",Data.map((item)=>{
-            return {
-              id:   item.id,
-              name: item.name}
-          }))
+          // console.log("categoryOptions",Data.map((item)=>{
+          //   return {
+          //     id:   item.id,
+          //     name: item.name}
+          // }))
 
           
             
@@ -175,7 +171,7 @@ function ManageServices() {
             isMounted && setClinicList(data);
             const clinicidlist=data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}})
             setClinicIDList(clinicidlist)
-            console.log(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+            // console.log(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
             if (action==='update'){
               getServiceDetails(clinicidlist);
             }
@@ -206,12 +202,13 @@ function ManageServices() {
 
           if (Status) {
             
-            setService(data);
+            
 
-            console.log("split",data.clinic_ids.split(","))
+            console.log("split",(data.clinic_ids+",''").split(","))
             
             console.log("clinicIDList",clinicIDList)
             const serviceClinics = data.clinic_ids.split(",") 
+            setService({...data,clinic_ids:serviceClinics});
             const clinic_list_temp=
               clinicIDList.map(
                   (item,index)=>{
@@ -415,7 +412,7 @@ function ManageServices() {
                     // {...register("category", {
                     //   value: service.category,
                     // })}
-                    onSelect={(selectedItem)=>{console.log(selectedItem,"newservice",{...service,category:selectedItem[0].id});setService({...service,category:selectedItem[0].id});setCategory(selectedItem[0].id)}} // Function will trigger on select event
+                    onSelect={(selectedItem)=>{setService({...service,category:selectedItem[0].id});setCategory(selectedItem[0].id)}} // Function will trigger on select event
                     onRemove={(selectedItem)=>{setService({...service,category:selectedItem});setCategory(selectedItem)}} // Function will trigger on remove event
                     isObject={true}
                     singleSelect={true}
@@ -576,7 +573,7 @@ function ManageServices() {
                           onSelect={
                             (selectedList,selectedItem)=>{
                                 var selected_ID_List= selectedList.map((clinic)=>{return clinic.id})
-                               
+                                // console.log("selected_ID_List",selected_ID_List)
                                 setService({...service,clinic_ids:selected_ID_List})
                                
                               }} // Function will trigger on select event
