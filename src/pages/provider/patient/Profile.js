@@ -13,6 +13,7 @@ import styled from "@emotion/styled"
 import { NavLink } from "react-router-dom"
 import Swal from "sweetalert2"
 import moment from "moment"
+import { StatusTextInsurance2, StatusTextInsurance3 } from "../../../components/status/Status"
 
 export const StyleWrapper = styled.div`
   .styles-module_image__2hdkJ{
@@ -51,6 +52,7 @@ const StatusText = ({ status }) => {
     </span>
   )
 }
+
 const StatusIcon = ({ icontype }) => {
   const StatusColor = {
     0: 'text-purple',
@@ -72,7 +74,9 @@ function PatientProfile() {
   const [insuranceList,setInsuranceList] = useState([])
   const [profileDetails,setProfileDetails] = useState({})
   const [paymentHistory,setPaymentHistory] = useState([ ])
-  const [validDateEnd,setValidDateEnd] = useState("")
+  const [validDateEnd,setValidDateEnd] = useState(moment().format("YYYY-MM-DD"))
+  
+  const [validDateStart,setValidDateStart] = useState(moment().format("YYYY-MM-DD"))
   const [appointmentslist,setAppointmentsList] = useState([])
   setAppointmentsList
   const [isLoading, setIsLoading] = useState(true)
@@ -85,7 +89,7 @@ function PatientProfile() {
     setIsViewerOpen(true);
   }, []);
   
-  
+  const [refreshProfile,setRefreshProfile]=useState(false)
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const [images,setImages] = useState( []);
@@ -128,8 +132,6 @@ function PatientProfile() {
             setPaymentHistory(res.data.Data.Payments)
             setAppointmentsList(res.data.Data.Appointments)
 
-
-
           } else {
             throw new Error(Message)
           }
@@ -144,7 +146,7 @@ function PatientProfile() {
       isMounted = false
       controller.abort()
     }
-  }, [])
+  }, [refreshProfile])
 
 
 
@@ -295,6 +297,7 @@ function PatientProfile() {
                       if (ins_view){
                         setIns_view(false)
                       }
+                      
                     }}
                   >
                     Insurance
@@ -751,11 +754,15 @@ function PatientProfile() {
                           key={index}
                           style={{background:'none', marginLeft:'2px' }}
                           onClick={()=>{
-                                setIns_view(true);setIns_index(index);
+                                setIns_view(true);
+                                setIns_index(index);
                                 setImages([
                                   `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].FrontImage}`,
                                   `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].BackImage}`
                                 ])
+                                
+                                setValidDateStart(insuranceList[index].start_date)
+                                setValidDateEnd(insuranceList[index].end_date)
                               }
                             }
                         
@@ -771,8 +778,11 @@ function PatientProfile() {
                               <h6 className='text-truncate'>
                                 {item.BucketName}
                               </h6>
+                              {/* <span className="virtualvisitbadge badge badge-md badge-soft-purple">{((insuranceList[index].Status)==="1")?"Approved":(insuranceList[index].Status==="0")?"For Approval":(insuranceList[index].Status==="2")?"Rejected":""}</span> */}
+                              <StatusTextInsurance3 status={insuranceList[index].Archive}/><br/>
+                              <StatusTextInsurance2 status={(insuranceList[index].Status)}/><br/>
                               <small className='text-muted'>
-                              {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
+                              {moment(item.DateUploaded).format('MM/DD/YY')}
                                 {/* 06 March 2022 / 5MB */}
                               </small>
                             </div>
@@ -783,16 +793,48 @@ function PatientProfile() {
                   </div>
 
                 </>:<>
-                  <h4 className='header-title mt-0 mb-3'> {insuranceList[ins_index].BucketName}</h4>
-                      Created: {moment(insuranceList[ins_index].DateUploaded).format('hh:mm a MM/DD/YY')}<br/>
-                      Archive Status : {insuranceList[ins_index].Archive==="0"?"Active":insuranceList[ins_index].Archive==="1"?"Archived":""}<br/>
-                      Approval Status: {((insuranceList[ins_index].Status)==="1")?"Approved":(insuranceList[ins_index].Status==="0")?"For Approval":"Rejected"}<br/>
+                  <h2 className=' mt-0 mb-3 col'>  Insurance Entry</h2><br/>
+                     <label className='col-form-label'> <b> Title:  </b></label> <br/>
+                      <h3 className="ml-2">{insuranceList[ins_index].BucketName}</h3><br/>
+                      <b className="mr-2">Created:</b> {moment(insuranceList[ins_index].DateUploaded).format('hh:mm a MMMM DD, YYYY')}<br/>
+                      <b className="mr-2">Active Status: </b> <StatusTextInsurance3 status={insuranceList[ins_index].Archive}/> <br/>
+                      <b className="mr-2">Approval Status: </b><StatusTextInsurance2 status={(insuranceList[ins_index].Status)}/><br/>
                       {(insuranceList[ins_index].Status)==="1" ? 
                       
-                        <>Approved Date: {moment(insuranceList[ins_index].DateApproved).format('hh:mm a MM/DD/YY')}<br/></>:<></>}
+                      <><b className="mr-2">Approved Date:</b> {moment(insuranceList[ins_index].DateApproved).format('MM/DD/YY')}<br/></>:<></>}
                       
                       <br/>
-                      <div className='row m-5'>
+                      <div className="col-lg-6">
+                        <div className="row text-center align-item col-lg-12">
+                          <div className="col">
+                            
+                            <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
+                            
+                            {moment(insuranceList[ins_index].start_date).format("MMMM DD, YYYY ")}
+                          </div>
+                            <div className="col">
+                            <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
+                            
+                            {moment(insuranceList[ins_index].end_date).format("MMMM DD, YYYY ")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-lg-6">
+                        <div className="row text-center align-item col-lg-12">
+                          <div className="col">
+                            
+                            <label htmlFor="date" className="col-form-label"> <b>Validated Date Start</b></label><br/>
+                            
+                            {moment(insuranceList[ins_index].validated_start_date).format("MMMM DD, YYYY")}
+                          </div>
+                            <div className="col">
+                            <label htmlFor="date" className="col-form-label"><b> Validated Date End</b></label><br/>
+                            
+                            {moment(insuranceList[ins_index].validated_end_date).format("MMMM DD, YYYY")}
+                          </div>
+                        </div>
+                      </div>
+                      <div className='row m-4'>
                         
                         <CardItem className={"m-2 col lg-4"}  >
                           <div className='' onClick= {() => openImageViewer(0)}>
@@ -806,102 +848,134 @@ function PatientProfile() {
                               <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].BackImage}`}></img>
                             </div>
                         </CardItem>
+                        
                       </div>
+                      
+                     {(insuranceList[ins_index].Status)==="0"&&insuranceList[ins_index].Archive==="0"?<>
+                      <h3> <i className="fas fa-exclamation-triangle" style={{color:'#f14b4b'}}/> Insurance Approval Required</h3>
+                      <h5 className="text-muted">Validated dates must match with insurance documents </h5></>:<></>}
+                      <div className="float-right col text-center align-item col-lg-12">
+                        {(insuranceList[ins_index].Status)==="0"&&insuranceList[ins_index].Archive==="0"?
+                        <>
+                        <div>
+                           
+                            
+                          
+                          <div className="row">
+                          
+                          <div className="col-lg-3">
+                          
+                            <label htmlFor="date" className="col-form-label">Validated Date Start</label>
+                              <input required 
+                                className="form-control" 
+                                // min={moment().add(1,"days").format("YYYY-MM-DD")}
+                                // defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
+                                type="date" id="date" value={validDateStart} onChange={(e)=>{setValidDateStart(e.target.value)}}/>
+                          </div>
+                          <div className="col-lg-3">
+                            <label htmlFor="date" className="col-form-label">Validated Date End</label>
+                              <input required 
+                                className="form-control" 
+                                min={moment().add(1,"days").format("YYYY-MM-DD")}
+                                // defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
+                                type="date" id="date" value={validDateEnd} onChange={(e)=>{setValidDateEnd(e.target.value)}}/>
+                          </div>
+                          
+                          </div>
+                         
+                          
+                        </div>
+                         <button
+                         type='button'
+                         
+                         onClick={()=>{
+                           Swal.fire({
+                             title:"Approve Insurance",
+                             html:`Would you like to validate this Insurance entry?`,
+                             showCancelButton:true
+                           })
+                             .then( async (res)=>{
+                               if (res.isConfirmed){
+                                 
+                                 await axiosPrivate.post("providerApproveInsurance",
+                                 {
+                                   Email:auth.email,
+                                   PatientID:id,
+                                   InsuranceID:insuranceList[ins_index].BucketId,
+                                   ValidatedStartDate:validDateStart,
+                                   ValidatedEndDate:validDateEnd
+                                 })
+                                 .then((res)=>{
+                                   const {Status,Message}=res.data
+                                   if (Status){
+                                     Swal.fire({
+                                       title:"Insurance Approved",
+                                       icon:"success",
+                                       text:"This insurance is now validated as of "+moment().format("MMMM DD, yyyy")})
+                                     setIns_view(false)
+                                     setRefreshProfile(!refreshProfile)
+
+                                   }
+                                   else{
+                                     const msg=Message
+                                     Swal.fire({title:"Error",icon:"error",text:`${msg}`})
+                                   }
+                                 })
+                               }})
+                               
+                           }
+                         }
+                         className='m-1 btn btn-outline-success waves-effect waves-light mt-2'
+                       >
+                         Approve
+                       </button>
+                       <button
+                         type='button'
+                         onClick={()=>{
+                           Swal.fire({title:"Reject Insurance",html:`Are you sure you want to reject this patient's insurance?<br><div class="text-muted">It can not be applied when availing services.<div>`,showCancelButton:true})
+                           .then(async (res)=>{if (res.isConfirmed){
+                             await axiosPrivate.post("providerRejectInsurance",
+                                 {
+                                   Email:auth.email,
+                                   PatientID:id,
+                                   InsuranceID:insuranceList[ins_index].BucketId
+                                 })
+                                 .then((res)=>{
+                                   const {Status,Message}=res.data
+                                   if (Status){
+                                   
+                                     Swal.fire({title:"Insurance Rejected",icon:"success",text:"This insurance is now rejected."})
+                                     setIns_view(false)
+                                     setRefreshProfile(!refreshProfile)
+                                   }
+                                   else{
+                                     const msg=Message
+                                     Swal.fire({title:"Error",icon:"error",text:`${msg}`})
+                                   }
+                                 })
+
+                           }
+                           })
+                         }}
+                         className='m-1 btn btn-outline-danger waves-effect waves-light mt-2'
+                       >
+                         Reject
+                       </button>
+                       
+                       </>
+                        :<>
                         
-                        
+                        </>}
                         <button
                           type='button'
                           onClick={()=>{
                             setIns_view(false)
                           }}
-                          className='m-1 float-right btn btn-outline-purple btn-round waves-effect waves-light mt-2'
+                          className='m-1  btn btn-outline-purple waves-effect waves-light mt-2'
                         >
                           Back
                         </button>
-                        {(insuranceList[ins_index].Status)==="0"&&insuranceList[ins_index].Archive==="0"?
-                        <div>
-                          <button
-                          type='button'
-                          onClick={()=>{
-                            Swal.fire({title:"Reject Insurance",html:`Are you sure you want to reject this patient's insurance?<br><div class="text-muted">It can not be applied when availing services.<div>`,showCancelButton:true})
-                            .then(async (res)=>{if (res.isConfirmed){
-                              await axiosPrivate.post("providerRejectInsurance",
-                                  {
-                                    Email:auth.email,
-                                    PatientID:id,
-                                    InsuranceID:insuranceList[ins_index].BucketId
-                                  })
-                                  .then((res)=>{
-                                    const {Status,Message}=res.data
-                                    if (Status){
-                                     
-                                      Swal.fire({title:"Insurance Rejected",icon:"success",text:"This insurance is now rejected."})
-                                    }
-                                    else{
-                                      const msg=Message
-                                      Swal.fire({title:"Error",icon:"error",text:`${msg}`})
-                                    }
-                                  })
-
-                            }
-                            })
-                          }}
-                          className='m-1 float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
-                        >
-                          Reject
-                        </button>
-                        <button
-                          type='button'
-                          
-                          onClick={()=>{
-                            Swal.fire({
-                              title:"Approve Insurance",
-                              html:`Would you like to validate this Insurance entry?`,
-                              showCancelButton:true
-                            })
-                              .then( async (res)=>{
-                                if (res.isConfirmed){
-                                  
-                                  await axiosPrivate.post("providerApproveInsurance",
-                                  {
-                                    Email:auth.email,
-                                    PatientID:id,
-                                    InsuranceID:insuranceList[ins_index].BucketId,
-                                    ValidatedStartDate:moment().format("MMMM DD, yyyy"),
-                                    ValidatedEndDate:validDateEnd
-                                  })
-                                  .then((res)=>{
-                                    const {Status,Message}=res.data
-                                    if (Status){
-                                      Swal.fire({
-                                        title:"Insurance Approved",
-                                        icon:"success",
-                                        text:"This insurance is now validated as of "+moment().format("MMMM DD, yyyy")})
-                                    }
-                                    else{
-                                      const msg=Message
-                                      Swal.fire({title:"Error",icon:"error",text:`${msg}`})
-                                    }
-                                  })
-                                }})
-                                
-                            }
-                          }
-                          className='m-1 float-right btn btn-outline-success btn-round waves-effect waves-light mt-2'
-                        >
-                          Approve
-                        </button>
-                        <div className="col-lg-3">
-                    <label htmlFor="date" className="col-form-label">Validation Date End</label>
-                      <input required 
-                        className="form-control" 
-                        min={moment().add(1,"days").format("YYYY-MM-DD")}
-                        defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
-                        type="date" id="date" value={validDateEnd} onChange={(e)=>{setValidDateEnd(e.target.value)}}/>
-                      </div>
-
-                        </div>:<></>}
-                        
+                       </div>
                       </>}
                  </div>
               </div>

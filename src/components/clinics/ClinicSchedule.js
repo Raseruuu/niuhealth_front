@@ -139,6 +139,10 @@ export default function ClinicSchedule() {
       formData.append("Specialty",data.Specialty)
       formData.append("ContactInfo",data.ContactInfo)
       formData.append("Address",data.Address)
+      
+      if (data.Address2.length!==0){
+          formData.append("Address2",data.Address2)
+      }
     }
     else if (action==='edit'){
       formData.append("Email", auth.email);
@@ -147,6 +151,9 @@ export default function ClinicSchedule() {
       formData.append("Specialty",clinicProfile.specialty)
       formData.append("ContactInfo",clinicProfile.contact_info)
       formData.append("Address",clinicProfile.address)
+      if (clinicProfile?.address2.length!==0){
+        formData.append("Address2",clinicProfile.address2)
+      }
     }
     
     for (let key in hours) {
@@ -158,9 +165,11 @@ export default function ClinicSchedule() {
     formData.append("LocalCurrency", localCurrency);
     formData.append("LocalTimeZone", localTimezone);
     for (var index in clinicImages){
-      
-      formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
+      if (clinicImages[index].file){
+        formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
+      }
     }
+
     
     let endpoint=(
       (action==='edit')?
@@ -192,12 +201,12 @@ export default function ClinicSchedule() {
             setIsSuccess(true)
             if (action==="create")
             { 
-              alert("Success! You created a new Clinic.")
+              Swal.fire("Success! You created a new Clinic.")
               // navigate('/provider/clinics')
             }
             else if (action==="edit")
               {
-              alert("Clinic Info is now updated.")
+              Swal.fire("Clinic Info is now updated.")
               navigate('/provider/clinics/profile/'+clinicID)
               }
 
@@ -238,13 +247,31 @@ export default function ClinicSchedule() {
             setLocalCurrency(res.data.Data.local_currency)
             setTimeZone(res.data.Data.local_time_zone)
             var tempImgList=[]
-            if (res.data.Data.image1||res.data.Data.image1!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image1})}
-            if (res.data.Data.image2||res.data.Data.image2!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image2})}
-            if (res.data.Data.image3||res.data.Data.image3!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image3})}
-            if (res.data.Data.image4||res.data.Data.image4!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image4})}
-            if (res.data.Data.image5||res.data.Data.image5!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image5})}
-            
+            if (res.data.Data.image1!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image1})}
+            if (res.data.Data.image2!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image2})}
+            if (res.data.Data.image3!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image3})}
+            if (res.data.Data.image4!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image4})}
+            if (res.data.Data.image5!="clinics/Default.png"){tempImgList.push({path:res.data.Data.image5})}
+            if (tempImgList.length===0){tempImgList.push({path:"clinics/Default.png"})}
+            console.log(tempImgList)
             setClinicImages(tempImgList)
+            setHours({
+              'HoursMonStart':data.hours_mon_start,
+              'HoursMonEnd':data.hours_mon_end,
+              'HoursTueStart':data.hours_tue_start,
+              'HoursTueEnd':data.hours_tue_end,
+              'HoursWedStart':data.hours_wed_start,
+              'HoursWedEnd':data.hours_wed_end,
+              'HoursThuStart':data.hours_thu_start,
+              'HoursThuEnd':data.hours_thu_end,
+              'HoursFriStart':data.hours_fri_start,
+              'HoursFriEnd':data.hours_fri_start,
+              'HoursSatStart':data.hours_sat_start,
+              'HoursSatEnd':data.hours_sat_end,
+              'HoursSunStart':data.hours_sun_start,
+              'HoursSunEnd':data.hours_sun_end
+              })
+            
             setImagePreview(true)
             // setAuth((prev) => ({ ...prev, ...details }))
             // setTimeZone(details?.local_time_zone)
@@ -299,9 +326,9 @@ export default function ClinicSchedule() {
             picture:result 
           })
           setImagePreview(true)
-          onChangeImage({
-            ...clinicImages
-          })
+          // onChangeImage({
+          //   ...clinicImages
+          // })
         }
       }
       fileReader.readAsDataURL(clinicProfile.picturefile);
@@ -569,19 +596,23 @@ export default function ClinicSchedule() {
                       </div>
                     </div>
                   </div>
-                  <div className='col-md-6'>
+                  
+                </div>
+                <div className='row'>
+                <div className='col-md-6'>
                     <div className='form-group row'>
                       <div className='col-md-12'>
                         <label
                           htmlFor='example-text-input'
                           className='col-form-label text-right'
                         >
-                          Address
+                          Address Line 1
                         </label>
                       </div>
                       <div className='col-md-12'>
                         {(action==="create")?(
                         <input
+                          required
                           className={`form-control ${
                             errors.Address ? 'is-invalid' : ''
                           }`}
@@ -595,6 +626,7 @@ export default function ClinicSchedule() {
                           className={`form-control ${
                             errors.Address ? 'is-invalid' : ''
                           }`}
+                          
                           type='text'
                           id='Address'
                           disabled={action==='profile'}
@@ -609,6 +641,51 @@ export default function ClinicSchedule() {
                             style={{ display: 'block' }}
                           >
                             Please enter clinic address.
+                          </div>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='col-md-6'>
+                    <div className='form-group row'>
+                      <div className='col-md-12'>
+                        <label
+                          htmlFor='example-text-input'
+                          className='col-form-label text-right'
+                        >
+                          Address Line 2
+                        </label>
+                      </div>
+                      <div className='col-md-12'>
+                        {(action==="create")?(
+                        <input
+                          className={`form-control ${
+                            errors.Address2 ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address2'
+                          disabled={action==='profile'}
+                          name="address2"
+                          {...register('Address2')}
+                        />):
+                        <input
+                          className={`form-control ${
+                            errors.Address2 ? 'is-invalid' : ''
+                          }`}
+                          type='text'
+                          id='Address2'
+                          disabled={action==='profile'}
+                          value={clinicProfile.address2}
+                          name="address2"
+                          onChange={handleInputChange.bind(this)}
+                          // {...register('Address2')}
+                        />}
+                        {errors.Address2 ? (
+                          <div
+                            className='invalid-feedback'
+                            style={{ display: 'block' }}
+                          >
+                            Please enter clinic address line 2.
                           </div>
                         ) : null}
                       </div>

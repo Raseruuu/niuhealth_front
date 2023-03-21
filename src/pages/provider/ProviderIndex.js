@@ -39,6 +39,8 @@ function ProviderIndex() {
   const myModal=useRef();
   const [updateVisit,setUpdateVisit]=useState(true)
   
+  const [pageNum,setPageNum]=useState(1)
+  const [pageLimit,setPageLimit]=useState(10)
   const [showModal,setShowModal]=useState(false)
   const {
     register,
@@ -86,11 +88,11 @@ function ProviderIndex() {
   //   title: `In-Person Visit`,
   //       customClass: 'swal-wide',
   //       html:`
-  //         <div class='col-lg-12 p-1'>
-  //           <i class='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
-  //           <i class='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
-  //           <i class='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
-  //           <div class='col'>
+  //         <div className='col-lg-12 p-1'>
+  //           <i className='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
+  //           <div className='col'>
   //             <label>o</label>
               
   //             <label>Choose A Patient</label>
@@ -229,7 +231,7 @@ function ProviderIndex() {
           <Activity />
         </div> */}
 
-        <div className="col-lg-8">
+        {/* <div className="col-lg-8">
           <div className="card">
             <div className="card-body">
               <h4 className="header-title mt-0 mb-3">Patient Details</h4>
@@ -241,16 +243,28 @@ function ProviderIndex() {
                     'Phone No.',
                     'Status',
                     'Insurance',
+                    'Action',
                   ]}
                 > 
                 
-                    <PatientListData list={patientList} />
+                    <PatientListData 
+                      limit={pageLimit} 
+                      pagenum={pageNum} 
+                      list={patientList} 
+                      showModal={
+                        (patient)=>{
+                          setVisitTarget(patient)
+                          $("#myModal").modal()
+                          $('#myModal').show();
+                          $('.modal-backdrop').show();
+                          
+                          }} />
                 </TableCard>:
                 <CardLongItem><h4>There are no Patients to display.</h4></CardLongItem> 
               }
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* <div className="row">

@@ -303,7 +303,7 @@ export default function Booking() {
       }
     // if (effectRun.current){
       getService()
-      
+      console.log(selectedProvider)
     // }
     return () => {
       isMounted = false
@@ -349,7 +349,7 @@ export default function Booking() {
                       {/* Sir Tata {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`} */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}${selectedProvider?.image}`}
+                              src={(auth.userType==="Patient")?`${AWS_BUCKET_SERVICES}${selectedProvider?.images}`:`${AWS_BUCKET_SERVICES}${selectedProvider?.image}`}
                               alt=""
                               // width={30}
                               height={300}

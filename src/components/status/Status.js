@@ -23,12 +23,43 @@ export function StatusTextInsurance({ status=0 }){
       1: "Insured"
     }
     return (
-      <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
+      <span className={`virtualvisitbadge ml-0 badge badge-md ${statusColor[status]}`}>
         {text[status]}
       </span>
     )
   }  
-
+  export function StatusTextInsurance3({ status=0 }){
+    const statusColor = {
+      0: 'badge-soft-success',
+      1: "badge-soft-purple",
+    }
+    const text = {
+      0: 'Active',
+      1: "Archived"
+    }
+    return (
+      <span className={`virtualvisitbadge ml-0 badge badge-md ${statusColor[status]}`}>
+        {text[status]}
+      </span>
+    )
+  }  
+  export function StatusTextInsurance2({ status=0 }){
+    const statusColor = {
+      0: 'badge-soft-purple',
+      1: "badge-soft-success",
+      2: "badge-soft-danger"
+    }
+    const text = {
+      0: 'For Approval',
+      1: "Approved",
+      2: 'Rejected'
+    }
+    return (
+      <span  className={`virtualvisitbadge ml-0 badge badge-md ${statusColor[status]}`}>
+        {text[status]}
+      </span>
+    )
+  }  
 export default function StatusTextVisit({ status }){
     const statusColor = {
       0: 'badge-soft-purple',

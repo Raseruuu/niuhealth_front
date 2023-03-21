@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import CardItem from '../../../components/cards/Card'
+import { StatusTextInsurance2, StatusTextInsurance3 } from '../../../components/status/Status'
 import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -127,13 +128,16 @@ function Insurance() {
                         
                         <div className='text-center'>
                         <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}`}></img>
-                          <i className='far fa-folder text-primary ml-3'></i>
+                          <i className={(item.status == "1") ? 'far fa-folder text-success ml-3' :(item.status == "2")? 'far fa-folder text-danger ml-3':'far fa-folder text-purple ml-3'}></i>
                           <h6 className='text-truncate'>
                             {item.BucketName}
                           </h6>
-                          <div className='virtualvisitbadge btn-round btn-purple m-1 p-1'>
+                          {/* <StatusTextInsurance3 status={item.archive}/><br/> */}
+                          <StatusTextInsurance2 status={item.status}/><br/>
+                          {/* <div className='virtualvisitbadge btn-round btn-purple m-1 p-1'>
+                            
                           {item.status==="0"?"For Approval":(item.status==="1")?"Approved":"Rejected"}<br/>
-                          </div>
+                          </div> */}
                           <small className='text-muted'>
                           {"Uploaded "+moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
                             {/* 06 March 2022 / 5MB */}

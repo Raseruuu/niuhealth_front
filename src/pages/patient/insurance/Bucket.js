@@ -9,6 +9,7 @@ import ImageViewer from 'react-simple-image-viewer';
 import { useCallback } from 'react'
 
 import styled from "@emotion/styled"
+import { StatusTextInsurance2 } from '../../../components/status/Status'
 
 
 export const StyleWrapper = styled.div`
@@ -139,7 +140,7 @@ function Bucket() {
           <div className='row'>
             <div className='col-lg-12'>
               <div className='card'>
-                <div className='card-body'>
+                <div className='card-body '>
                   <button 
                     className='btn btn-outline-danger btn-round float-right' 
                     onClick={
@@ -189,8 +190,40 @@ function Bucket() {
                 <i className="fa fa-trash ml-2" style={{color: 'red',fontSize:'18px'}}></i>
                 </button>
                   <h4 className='header-title mt-0 mb-3'> {item.BucketName}</h4>
-                  Created: {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
+                  <b>Approval Status:</b> <StatusTextInsurance2 status={item.status}/><br/>
+                          
+                  <b>Created:</b> {moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}<br/>
                   <br/>
+                  {(item.status==="0")||(item.status==="2")?
+                  <div className="col-lg-6">
+                        <div className="row text-center align-item col-lg-12">
+                          <div className="col">
+                            
+                            <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
+                            
+                            {moment(item.start_date).format("MMMM DD, YYYY ")}
+                          </div>
+                            <div className="col">
+                              <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
+                              {moment(item.end_date).format("MMMM DD, YYYY ")}
+                        </div>
+                    </div>
+                  </div>
+                  :(item.status==="1")?
+                  <div className="col-lg-6">
+                        <div className="row text-center align-item col-lg-12">
+                          <div className="col">
+                            
+                            <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
+                            
+                            {moment(item.validated_start_date).format("MMMM DD, YYYY ")}
+                          </div>
+                            <div className="col">
+                              <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
+                              {moment(item.validated_end_date).format("MMMM DD, YYYY ")}
+                        </div>
+                    </div>
+                  </div>:<></>}
                   <div className='row m-5'>
                     
                      <CardItem className={"m-2 col lg-4"}  >
@@ -205,6 +238,7 @@ function Bucket() {
                         <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.BackImage}`}></img>
                         </div>
                      </CardItem>
+                     
                   </div>
                   {/* <div className='file-box-content'> */}
 
@@ -223,11 +257,10 @@ function Bucket() {
                       </div>
                     </div> */}
                   {/* </div> */}
-
                   <Link to='..'>
                     <button
                       type='button'
-                      className='float-right btn btn-outline-danger btn-round waves-effect waves-light mt-2'
+                      className='float-right btn btn-outline-purple btn-round waves-effect waves-light mt-2'
                     >
                       Back
                     </button>
@@ -245,14 +278,14 @@ function Bucket() {
       {isViewerOpen && (
         <div style={{marginTop:'100px'}}>
           <StyleWrapper>
-        <ImageViewer
-          src={ images }
-          currentIndex={ currentImage }
-          disableScroll={ true   }
-          closeOnClickOutside={ true }
-          onClose={ closeImageViewer }
-        />
-        </StyleWrapper>
+            <ImageViewer
+              src={ images }
+              currentIndex={ currentImage }
+              disableScroll={ true   }
+              closeOnClickOutside={ true }
+              onClose={ closeImageViewer }
+            />
+          </StyleWrapper>
         </div>
       )}
     </div>

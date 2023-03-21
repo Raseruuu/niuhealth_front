@@ -67,7 +67,7 @@ return (
                 />
                 {(image.path!=='undefined')?(
                   <>
-                  {!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}
+                  {/* {!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)} */}
                   {(imagepreview)?(
                   <img
                       alt=""
@@ -128,7 +128,6 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
       // ]);
       setImages([
         ...images.slice(0, index),
-        {path:"clinics/Default.png"},
         ...images.slice(index + 1, images.length)
       ]);
       const tempimage={path:result,file:image.file}
