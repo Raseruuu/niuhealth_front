@@ -14,6 +14,7 @@ import CardItem from '../../components/cards/Card'
 import Swal from 'sweetalert2'
 import { useForm } from 'react-hook-form'
 import { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import moment from 'moment'
 
 function hourformat(hour){
@@ -38,7 +39,7 @@ function ProviderIndex() {
   const [clinicList, setClinicList] = useState([])
   const myModal=useRef();
   const [updateVisit,setUpdateVisit]=useState(true)
-  
+  const navigate = useNavigate()
   const [pageNum,setPageNum]=useState(1)
   const [pageLimit,setPageLimit]=useState(10)
   const [showModal,setShowModal]=useState(false)
@@ -189,10 +190,11 @@ function ProviderIndex() {
                 <button
                   className='btn btn-outline-success btn-round ' 
                   onClick={()=>{
-                    setShowModal(true)
+                    navigate("patient")
+                    // setShowModal(true)
                   }}
-                  data-toggle="modal"
-                  data-target="#myModal"
+                  // data-toggle="modal"
+                  // data-target="#myModal"
                   
                   >
                   New Visit
@@ -226,7 +228,7 @@ function ProviderIndex() {
         </div>
       </div>
 
-      <div className="row">
+      {/* <div className="row"> */}
         {/* <div className="col-lg-4">
           <Activity />
         </div> */}
@@ -265,7 +267,7 @@ function ProviderIndex() {
             </div>
           </div>
         </div> */}
-      </div>
+      {/* </div> */}
 
       {/* <div className="row">
             <div className="col-xl-3">

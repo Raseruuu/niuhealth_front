@@ -24,6 +24,8 @@ function AWSCallback() {
   const navigate = useNavigate()
   const { code } = useLoaderData()
   const [errMsg, setErrMsg] = useState()
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   // const effectRun = useRef(false);
   // const [effectRun, setEffectRun] = useState()
   
@@ -85,7 +87,8 @@ function AWSCallback() {
               sessionStorage.removeItem('userType')
               sessionStorage.removeItem('email')
               sessionStorage.removeItem('name')
-              sessionStorage.removeItem('isLoggedIn',  false)
+              // sessionStorage.removeItem('isLoggedIn',  false)
+              
               setAuth({})
 
               throw new Error(msg)
@@ -102,7 +105,7 @@ function AWSCallback() {
             
             sessionStorage.setItem('has_insurance',has_insurance)
             sessionStorage.setItem('isLoggedIn',  true)
-            
+            setIsLoggedIn(true)
 
             isMounted &&
               setAuth({

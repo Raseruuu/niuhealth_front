@@ -9,7 +9,7 @@ export default function Complete() {
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
-  const [rating, setRating] = useState(4.5)
+  const [rating, setRating] = useState(5.0)
   const [review, setReview] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { meetingId } = useParams()
@@ -133,7 +133,7 @@ export default function Complete() {
                       <Rating
                         allowFraction
                         onClick={handleRating}
-                        initialValue={4.5}
+                        initialValue={5.0}
                         ratingValue={rating}
                         transition
                         fillColorArray={[

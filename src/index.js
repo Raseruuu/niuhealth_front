@@ -69,16 +69,7 @@ const App = () => (
   </Suspense>
 )
 // const { auth } = useAuth();  
-const email = sessionStorage.getItem('email')
 
-const userType = sessionStorage.getItem('userType')
-function isLoggedIn(){
-  return (sessionStorage.getItem('isLoggedIn'))==='true'
-}
-function user_type(){
-  return sessionStorage.getItem('userType')
-
-}
 const router =createBrowserRouter(
   [
     {

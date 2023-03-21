@@ -134,6 +134,10 @@ const StatusIcon = ({ icontype }) => {
     3: 'text-danger',
     1:"text-success",
     4:"text-success",
+    
+    5: "text-success",
+    
+    6: "text-success",
   }
   return (
     <div className="task-priority-icon">
@@ -149,6 +153,8 @@ const StatusText = ({ status }) => {
     2: 'badge-soft-danger',
     3: 'badge-soft-danger',
     4: "badge-soft-success",
+    5: "badge-soft-success",
+    6: "badge-soft-success",
   }
   const statusText = {
     0: 'For Approval',
@@ -156,6 +162,8 @@ const StatusText = ({ status }) => {
     2: 'Cancelled By You',
     3: 'Cancelled By Doctor',
     4: "Approved",
+    5: "Started",
+    6: "Created By Doctor",
   }
   return (
     <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Footer from '../../components/Footer'
+import { APP_URL } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
@@ -106,7 +107,7 @@ function PatientIndexPage() {
                           Swal.fire({
                             html:
                             `
-                            Access Virtual Visits by uploading your updated <a href='/patient/insurance'>Insurance</a>  or by <a href='/patient/subscription/plans'>Subscribing.</a>
+                            Access Virtual Visits by uploading your updated <a href='${APP_URL}/patient/insurance'>Insurance</a>  or by <a href='${APP_URL}/patient/subscription/plans'>Subscribing.</a>
                           
                             `})
                           }
