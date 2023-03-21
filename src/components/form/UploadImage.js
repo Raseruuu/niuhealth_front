@@ -67,6 +67,7 @@ return (
                 />
                 {(image.path!=='undefined')?(
                   <>
+                  {!imagepreview?AWS_BUCKET_SERVICES + (image.path): (image.path)}
                   {(imagepreview)?(
                   <img
                       alt=""

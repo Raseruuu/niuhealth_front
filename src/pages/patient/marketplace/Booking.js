@@ -349,11 +349,11 @@ export default function Booking() {
                       {/* Sir Tata {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`} */}
                         <div className='d-flex justify-content-center'>
                             <img
-                              src={`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`}
+                              src={`${AWS_BUCKET_SERVICES}${selectedProvider?.image}`}
                               alt=""
                               // width={30}
                               height={300}
-                              style={{objectFit:'cover'}}
+                              style={{objectFit:'cover',width:300}}
                               // className="rounded-circle"
                             />
                         </div> 
@@ -361,13 +361,13 @@ export default function Booking() {
                           {/* <div className="met-profile-main-pic"> */}
                           
                           {/* </div> */}
-                          <div className="met-profile_user-detail">
-                            <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}>
+                          <div className="met-profile_user-detail m-2">
+                            {/* <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}> */}
                               
                               <h5 className="met-user-name">
                                 {serviceDetails?.service_name}
                               </h5>
-                            </Link>
+                            {/* </Link> */}
                             <p className="mb-0 met-user-name-post">
                               {serviceDetails?.service_description}
 
@@ -484,10 +484,10 @@ export default function Booking() {
                           />
                           
                               <h5 className='card-title'>{item.clinic_name}</h5>
-                              <p className='card-text mb-0'>{item.address}</p>
+                              {/* <p className='card-text mb-0'>{item.address}</p>
                               <p className='text-muted mb-0'>
                                 {item.specialty}
-                              </p>
+                              </p> */}
                               
                               <p className='mb-0'>{item.working_hours}</p>
                               {/* </CardItem> */}
@@ -496,12 +496,12 @@ export default function Booking() {
                                 <ul className="list-unstyled personal-detail m-3">
                                   <li className="mt-2">
                                     <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
-                                    <b> Specialization </b> : 
+                                    <b> Specialization </b> : <br/>
                                     {serviceClinics[index]?.specialty}
                                   </li>
                                   <li className="mt-2">
                                     <i className="dripicons-location text-info font-18 mt-2 mr-2"></i>{' '}
-                                    <b>Location</b> :
+                                    <b>Location</b> :<br/>
                                     {serviceClinics[index]?.address}
                                   </li>
                                  
