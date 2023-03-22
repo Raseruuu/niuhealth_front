@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router-dom'
 import axios from '../api/axios'
-import { AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from '../constants'
+import { APP_LOGIN, AWS_COGNITO_HOSTUI_DOMAIN, USERTYPE } from '../constants'
 import useAuth from '../hooks/useAuth'
 import LottieFailed from './lottie/LottieFailed'
 import GreenLock from './lottie/LottieGreenLock'
@@ -121,7 +121,7 @@ function AWSCallback() {
                 isLoggedIn
               })
 
-            navigate('/', { replace: true })
+            // navigate('/', { replace: true })
           }
         )
         .catch((err) => {
@@ -151,7 +151,7 @@ function AWSCallback() {
           <p>
             <button
               onClick={() => {
-                window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
+                window.location.replace(APP_LOGIN)
               }}
               type='button'
               className='btn btn-success btn-round py-2 waves-effect waves-light figmaBigButton'

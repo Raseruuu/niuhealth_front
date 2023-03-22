@@ -135,7 +135,7 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
                 
                 <ul className='list-inline m-2 p-1 col-xl-12 product-review ratingsPage'>
                   {/* <RatingsStars score={rating} size={14}/> */}
-                  <div className='row bg-light'>
+                  <div className='row'>
                   <div className='m-1 mr-4'><b>{rating} Stars</b> </div>
                   <Rating
                     fillColor="#ffb822"

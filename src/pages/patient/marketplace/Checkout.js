@@ -4,13 +4,14 @@ import { Button, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Footer from '../../../components/Footer'
-import { AWS_BUCKET } from '../../../constants'
+import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
 export default function Checkout() {
   const cardRef = useRef()
   const { state: selectedService } = useLocation()
+  
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
@@ -25,7 +26,8 @@ export default function Checkout() {
   const [totalAmount, setTotalAmount] = useState(
     selectedService?.selectedProvider?.cost_price
   )
-
+  const [clinic] = useState(selectedService?.clinic_obj)
+  console.log("CLINIC",selectedService?.clinic_obj)
   const handleClose = () => setShow(false)
 
   const onSubmit = async (data) => {
@@ -41,7 +43,7 @@ export default function Checkout() {
         Email: auth?.email,
         ServiceID: selectedService.selectedProvider.service_id,
         PaymentType: 3,
-        ClinicID:selectedService.selectedProvider.service_id,
+        ClinicID:clinic.clinic_id,
         ProviderID: selectedService.selectedProvider.provider_id,
         Date: selectedService.timeSlot.dateX,
         Time: selectedService.timeSlot.timeX,
@@ -104,7 +106,7 @@ export default function Checkout() {
           </div>
           <form onSubmit={(e) => e.preventDefault()}>
             <div className='row'>
-              <div className='col-lg-4'>
+              <div className='col-lg-5'>
                 <div className='card'>
                   <div className='card-body'>
                     <h4 className='header-title mt-0 mb-3'>Order Summary</h4>
@@ -113,15 +115,16 @@ export default function Checkout() {
                         <thead>
                           <tr>
                             <th>Service</th>
-                            <th>Appt Date</th>
+                            <th>Appointment Date</th>
                             <th>Total</th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>
+                           
                               <img
-                                src={`${AWS_BUCKET}/assets/images/products/img-5.png`}
+                                src={`${AWS_BUCKET_SERVICES}${selectedService?.selectedProvider.images}`}
                                 alt=''
                                 height='52'
                               />
@@ -133,8 +136,9 @@ export default function Checkout() {
                                 -{' '}
                                 {
                                   selectedService?.selectedProvider
-                                    ?.service_description
+                                    ?.service_name
                                 }
+                                
                               </p>
                             </td>
                             <td>
@@ -207,7 +211,7 @@ export default function Checkout() {
                 </div> */}
               </div>
 
-              <div className='col-lg-8'>
+              <div className='col-lg-7'>
                 <div className='card'>
                   <div className='card-body'>
                     <h4 className='header-title mt-0 mb-3'>Billing Address</h4>

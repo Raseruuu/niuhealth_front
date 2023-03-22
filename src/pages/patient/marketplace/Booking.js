@@ -37,6 +37,7 @@ export default function Booking() {
   const effectRun = useRef(false);
   const [serviceDetails,setServiceDetails] = useState({})
   const [serviceClinics,setServiceClinics] = useState([])
+  const [selected_clinic_index,setSelected_clinic_index]=useState(0)
   const [providerSched, setProviderSched] = useState({
     hours_mon_start: '8',
     hours_mon_end: '17',
@@ -89,33 +90,51 @@ export default function Booking() {
   const handleEventClick = (clickInfo) => {
     const dateX = moment(clickInfo.event.startStr).format('MM/DD/YY')
     const timeX = moment(clickInfo.event.startStr).format('HH')
-
+    const clinic_obj=serviceClinics[selected_clinic_index]
+    console.log(selectedProvider)
     const state = {
       selectedProvider,
       timeSlot: {
         dateX,
         timeX,
       },
+      clinic_obj
       
     }
     if (auth.userType==="Patient"){
-    Swal.fire(
-      {
-        title: 'Start Booking',
-        html:`Are you sure you want to book on this slot/time?<br> ${moment(
-            clickInfo.event.startStr).format('MMM DD, YYYY, hA')}?`,
-        showCancelButton: true,
-        confirmButtonColor: '#008000',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      }
-    )
-    .then(({isConfirmed}) => {
-    if (isConfirmed){
-      navigate('../checkout', {
-        state,
-      })}
-    })
+      Swal.fire(
+        {
+          title: 'Start Booking',
+          html:`Are you sure you want to book on this slot/time?<br> 
+          <b>
+          ${moment(
+              clickInfo.event.startStr).format('MMM DD, YYYY, hA'
+              )}<b>
+            <br><br>
+            <img 
+              class="" 
+              style="height: 150px;width: 200px; object-fit:cover" 
+              src="${
+                (serviceClinics[selected_clinic_index].default_image!=="Default.png")?
+                AWS_BUCKET_SERVICES+"clinics/"+serviceClinics[selected_clinic_index].clinic_id+"/"+serviceClinics[selected_clinic_index].default_image:
+                AWS_BUCKET_SERVICES+"clinics/Default.png"
+              }">
+            <br>
+              Clinic: ${serviceClinics[selected_clinic_index].clinic_name}<br>
+              Clinic Address: ${serviceClinics[selected_clinic_index].address}
+              `,
+          showCancelButton: true,
+          confirmButtonColor: '#008000',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }
+      )
+      .then(({isConfirmed}) => {
+      if (isConfirmed){
+        navigate('../checkout', {
+          state,
+        })}
+      })
     }
   }
 
@@ -464,10 +483,13 @@ export default function Booking() {
               <h4>Clinic</h4>
               <div className="card">
                   <div className="card-body">
+                  <h4> <b>Available Clinics with this Service</b></h4> 
+                  <div className='text-muted'>Choose a clinic for this service</div>
                     {serviceClinics.map((item,index) => (
                               // <CardItem title="Clinic">
                       <div key={index} className="card" >
                         <div className="card-body">
+                        
                           <div className='row'>
                             
                           <div>
@@ -483,17 +505,20 @@ export default function Booking() {
                             alt=''
                           />
                           
-                              <h5 className='card-title'>{item.clinic_name}</h5>
+                              
                               {/* <p className='card-text mb-0'>{item.address}</p>
                               <p className='text-muted mb-0'>
                                 {item.specialty}
                               </p> */}
-                              
-                              <p className='mb-0'>{item.working_hours}</p>
+{/*                               
+                              <p className='mb-0'>{item.working_hours}</p> */}
                               {/* </CardItem> */}
                               </div>
-                              <div>
+                              <div className='row-lg-8'>
                                 <ul className="list-unstyled personal-detail m-3">
+                                  <li className="mt-2">
+                                    <h5 className='card-title'>{item.clinic_name}</h5>
+                                  </li>
                                   <li className="mt-2">
                                     <i className="dripicons-message mr-2 text-info font-18 mt-2 mr-2"></i>{' '}
                                     <b> Specialization </b> : <br/>
@@ -504,10 +529,22 @@ export default function Booking() {
                                     <b>Location</b> :<br/>
                                     {serviceClinics[index]?.address}
                                   </li>
-                                 
+                                  
                                 </ul>
+                                
                               </div>
+                              
                             </div>
+                            <div className='row-lg'>
+                              <button 
+                          className={`btn waves ${selected_clinic_index===index?"btn-success":"btn-gray"}`}
+                          onClick={()=>{setSelected_clinic_index(index)}}
+                        
+                        >
+                          
+                          {selected_clinic_index===index?"Chosen":"Choose"}
+                        </button>
+                        </div>
                         </div> 
                   </div>           
                             ))}

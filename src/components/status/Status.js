@@ -38,7 +38,7 @@ export function StatusTextInsurance({ status=0 }){
       1: "Archived"
     }
     return (
-      <span className={`virtualvisitbadge ml-0 badge badge-md ${statusColor[status]}`}>
+      <span className={`virtualvisitbadge ml-0 badge badge-md ml-0 ${statusColor[status]}`}>
         {text[status]}
       </span>
     )
@@ -60,24 +60,56 @@ export function StatusTextInsurance({ status=0 }){
       </span>
     )
   }  
-export default function StatusTextVisit({ status }){
+
+  export function StatusTextVisit ({ status }) {
     const statusColor = {
       0: 'badge-soft-purple',
+      1: "badge-soft-success",
       2: 'badge-soft-danger',
       3: 'badge-soft-danger',
-      1: "badge-soft-success",
       4: "badge-soft-success",
+      5: "badge-soft-success",
+      6: "badge-soft-success",
     }
     const statusText = {
-      0: 'Upcoming',
-      2: 'Cancelled By You',
-      3: 'Cancelled By Doctor',
+      0: 'For Approval',
       1: "Completed",
+      2: 'Cancelled By Patient',
+      3: 'Cancelled By Provider',
       4: "Approved",
+      5: "Started",
+      6: "Created By Provider",
     }
     return (
-      <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
+      <span className={`virtualvisitbadge badge badge-md ml-0 ${statusColor[status]}`}>
         {statusText[status]}
       </span>
     )
-  }  
+  } 
+
+  export default function StatusText ({ status }) {
+    const statusColor = {
+      0: 'badge-soft-purple',
+      1: "badge-soft-success",
+      2: 'badge-soft-danger',
+      3: 'badge-soft-danger',
+      4: "badge-soft-success",
+      5: "badge-soft-success",
+      6: "badge-soft-success",
+    }
+    const statusText = {
+      0: 'For Approval',
+      1: "Completed",
+      2: 'Cancelled By Patient',
+      3: 'Cancelled By Provider',
+      4: "Approved",
+      5: "Started",
+      6: "Created By Provider",
+    }
+    return (
+      <span className={`virtualvisitbadge badge badge-md ml-0 ${statusColor[status]}`}>
+        {statusText[status]}
+      </span>
+    )
+  }
+

@@ -14,7 +14,7 @@ function PatientDashboard() {
   // Comment in for Actual Route Protection
   useEffect(() => {
     
-    if ((String(sessionStorage.getItem('userType')))!=='Patient'){
+    if ((String(sessionStorage.getItem('userType')))!=='Patient'&&auth.isLoggedIn===false){
       navigate((`/`), { replace: true })
     }
     

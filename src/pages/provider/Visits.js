@@ -14,6 +14,7 @@ import { useRef } from 'react'
 import moment from 'moment'
 import styled from "@emotion/styled"
 import Multiselect from 'multiselect-react-dropdown'
+import { StatusTextVisit } from '../../components/status/Status'
 
 
 
@@ -463,14 +464,14 @@ function Visits() {
                                   // }
                                 }}
                               >
-                                Transaction Type
+                                Visit Type
                               </a>
                               <div className='tab-content detail-list position-absolute' id='pills-tabContent'>
                               <div className='tab-pane position-absolute ' style={{zIndex:3}} id='ratings'>
                               {(showFilterWindow&&activeFilter==='ratings')?
                               <CardItem>
                                 <div className="p-3">
-                                  <h6 className="mt-0 ">Transaction Type</h6>
+                                  <h6 className="mt-0 ">Visit Type</h6>
                                   {["Virtual Visit","In-Person Visit"].map((val,index) => (
                                     <div key={index} className="checkbox checkbox-success" style={{width:240}}>
                                       
@@ -573,7 +574,7 @@ function Visits() {
         <div className='tab-pane fade position-absolute p-3' id='list_view'>
           {/* <div className='col-lg-12'> */}
           {(appointmentList.length!==0)?
-              <TableCard headers={["Patient","Service Description","Category","Clinic","Appointment Time","Transaction Type", "Status"]}>
+              <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status"]}>
               {appointmentList.map((item,index)=>(
                 <tr key={index}>
                 <td>
@@ -598,7 +599,7 @@ function Visits() {
                 </td>
 
                 <td>
-                {item.service_description}
+                {item.service_name}
                 </td>
                 <td>
                 {item.category}
@@ -607,13 +608,13 @@ function Visits() {
                 {item.clinic_name}
                 </td>
                 <td>
-                {moment(item.trans_date_time).format('hh:mm a MM/DD/YY')}
+                {(hourformat(item.trans_start)+"  "+moment(item.trans_date_time).format('MM/DD/YY'))}
                 </td>
                 <td>
                 {item.trans_type==="1"?"Virtual Visit":(item.trans_type==="2")?"In-Person Visit":""}
                 </td>
                 <td>
-                <StatusText status={item.status}/>
+                <StatusTextVisit status={item.status}/>
                 </td>
                 </tr>
 

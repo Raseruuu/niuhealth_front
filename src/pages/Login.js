@@ -212,19 +212,19 @@ function Login( ) {
               <div className="account-social text-center mt-4">
                 <h6 className="my-4">Or Login With</h6>
                 <ul className="list-inline mb-4">
-                  <li className="list-inline-item">
-                    <a href="" className="">
-                      <i className="fab fa-facebook-f facebook"></i>
-                    </a>
-                  </li>
-                  <li className="list-inline-item">
-                    <a href="" className="">
-                      <i className="fab fa-twitter twitter"></i>
-                    </a>
-                  </li>
+                    {/* <li className="list-inline-item">
+                      <a href="" className="">
+                        <i className="fab fa-facebook-f facebook"></i>
+                      </a>
+                    </li>
+                    <li className="list-inline-item">
+                      <a href="" className="">
+                        <i className="fab fa-twitter twitter"></i>
+                      </a>
+                    </li> */}
                   <li className="list-inline-item">
                     <a 
-                      href= "https://app-niuhealth.auth.us-west-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https://app.niuhealth.com/niuhealth/cburl&response_type=CODE&client_id=3hu5d3btuvetk1avo9ob0i4r0a&scope=email+openid"
+                      href= "https://app-niuhealth.auth.us-west-1.amazoncognito.com/oauth2/authorize?identity_provider=Google&redirect_uri=https://app.niuhealth.com/niuhealth/cburl&response_type=CODE&client_id=3hu5d3btuvetk1avo9ob0i4r0a&scope=email+openid+profile"
                       className="">
                       <i className="fab fa-google google"></i>
                       {/* Google */}
