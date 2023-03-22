@@ -106,11 +106,8 @@ function Renew() {
                         <small className='text-muted'></small>
                       </h6>
                       <ul className='list-unstyled pricing-content-2 pb-3'>
-                        <li>Lorem ipsum</li>
-                        <li>Dolor sit amet</li>
-                        <li>Consectetur adipiscing</li>
-                        <li>Nulla quis accumsan</li>
-                        <li>Sed auctor</li>
+                        <li>Access to Virtual Visits</li>
+                       
                       </ul>
                       <div className='text-center'>
                         <h3 className='amount'>

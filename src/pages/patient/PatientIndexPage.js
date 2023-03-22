@@ -15,6 +15,7 @@ function PatientIndexPage() {
   
   const axiosPrivate = useAxiosPrivate()
   const [isLoading,setIsLoading]=useState(true)
+  const [patient,setPatient]=useState({})
   const has_insurance=sessionStorage.getItem('has_insurance')
   useEffect(()=>{
     
@@ -33,7 +34,7 @@ function PatientIndexPage() {
           setIsLoading(false)
           console.log('res',res)
           setSubscribed(parseInt(res.data.Data[0].subscription_plan)>0)
-
+          
           sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
         })
         .catch((error) => {
@@ -99,6 +100,11 @@ function PatientIndexPage() {
                     onClick={
                       () => {
                         console.log(has_insurance)
+                        if (!auth.username||!auth.name||auth.name){
+                          Swal.fire({icon:'warning',html:"Please complete your registration."}).then(()=>{
+                          navigate((`/patient/profile`), { replace: true })
+                          })
+                        }
                         if (has_insurance==='true'||subscribed){
                           navigate('/virtualvisit')
                         }

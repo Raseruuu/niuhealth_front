@@ -33,8 +33,8 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
     html: 
       `
       <div class='col'>
-        <div class='row'>
-            <div class='col-sm-2'>
+        <div class='col'>
+            <div class='col'>
               <img 
                 class='rounded-circle'
                 height="100px"
@@ -46,15 +46,17 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
                 >  
               </img>
             </div>
-            <div class='col-sm-8'>
-              <p class='font-22 font-weight-bold responsive'}>${patientName} </p>
+            <div class='col' >
+              <p class='font-22 font-weight-bold responsive mb-0'}>${patientName} </p>
               <p className='mb-0 font-12 text-muted responsive'>${patientEmail}</p>
-              <b>${service_name}</b>
+              Review For:
+              <b>${service_name}</b><br>
               <i>${service_description}</i>
+              <br>
             </div>
     
         </div>
-        <div class='col-xl-12 bg-light'>
+        <div class='col-xl-12 bg-light mt-4'>
           
           <div class='col'>
                 <i class='mdi mdi-star text-warning'></i>

@@ -448,7 +448,7 @@ function PatientList() {
         if (Status) {
           // console.log("Clinics",data)
           setClinicList(data)
-          setClinicIDList(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+          setClinicIDList(data?.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
           
         } else {
           throw new Error(Message)
@@ -651,7 +651,7 @@ function PatientList() {
                                     >
                                         Select Service...
                                   </option>
-                                  {serviceList.map((item)=>{
+                                  {serviceList?.map((item)=>{
                                     return(
                                     <option value={item.service_id}>{item.service_name} </option>)
                                   })}
@@ -665,7 +665,7 @@ function PatientList() {
                                     console.log(item)
                                     return (serviceClinics?.includes(item.clinic_id))
                                   }
-                                ).map((item)=>{
+                                )?.map((item)=>{
                                     return(
                                     <option value={item.clinic_id}>{item.clinic_name} </option>)
                                   })

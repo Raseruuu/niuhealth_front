@@ -59,7 +59,7 @@ function Services({ limit }) {
           setList(data.slice(0, limit))
           
           setListOriginal(serviceList)
-          const serviceCategories=serviceList.map((item,index)=>{return item.category})
+          const serviceCategories=serviceList?.map((item,index)=>{return item.category})
           
           setCategoryOptions(serviceCategories )
         } else {
@@ -394,7 +394,7 @@ function Services({ limit }) {
             (searchString.length===0 &&list.length===0)?<CardItem>You have no created Services.</CardItem>:
             (searchString.length>0 &&list.length===0)?<CardItem>No Results.</CardItem>:
                 <>
-            {list.map((item, index) => (
+            {list?.map((item, index) => (
               <div key={item?.recno || index} className='col-lg-3'>
                 <div className='card e-co-product'>
                 

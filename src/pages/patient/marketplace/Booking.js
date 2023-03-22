@@ -109,7 +109,7 @@ export default function Booking() {
           <b>
           ${moment(
               clickInfo.event.startStr).format('MMM DD, YYYY, hA'
-              )}<b>
+              )}</b>
             <br><br>
             <img 
               class="" 
@@ -120,8 +120,8 @@ export default function Booking() {
                 AWS_BUCKET_SERVICES+"clinics/Default.png"
               }">
             <br>
-              Clinic: ${serviceClinics[selected_clinic_index].clinic_name}<br>
-              Clinic Address: ${serviceClinics[selected_clinic_index].address}
+            <b>Clinic:</b> ${serviceClinics[selected_clinic_index].clinic_name}<br>
+            <b> Clinic Address:</b> ${serviceClinics[selected_clinic_index].address}
               `,
           showCancelButton: true,
           confirmButtonColor: '#008000',

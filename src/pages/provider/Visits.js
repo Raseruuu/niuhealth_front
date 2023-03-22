@@ -96,6 +96,12 @@ function Visits() {
     formState: { errors, isSubmitting, isSubmitSuccessful },
 
   } = useForm();
+  function formatLongtxt(string=""){
+
+    if (string?.length>20){
+      return string.substring(0,20)+"..."}
+    return string
+  }
   async function createInPersonVisit(data) {
     const controller = new AbortController()
 
@@ -198,7 +204,19 @@ function Visits() {
           if (Status) {
             // console.log("Clinics",data)
             setClinicList(data)
-            setClinicIDList(data.map((item)=>{return {name:item.clinic_name,id:item.clinic_id}}))
+            var clinics=[]
+            setClinicIDList(data.map((item)=>{
+              console.log("clinsss",clinics)
+              if (clinics.includes(item.clinic_id)){
+                pass
+              }
+              else{
+                clinics.push(item.clinic_id)
+                
+                return {name:item.clinic_name,id:item.clinic_id}
+              }
+            
+            }))
             
           } else {
             throw new Error(Message)
@@ -571,7 +589,7 @@ function Visits() {
           </div>
         </div>
       
-        <div className='tab-pane fade position-absolute p-3' id='list_view'>
+        <div className='tab-pane fade position-absolute p-3 w-100' id='list_view'>
           {/* <div className='col-lg-12'> */}
           {(appointmentList.length!==0)?
               <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status"]}>
@@ -599,13 +617,13 @@ function Visits() {
                 </td>
 
                 <td>
-                {item.service_name}
+                {formatLongtxt(item.service_name)}
                 </td>
                 <td>
-                {item.category}
+                {formatLongtxt(item.category)}
                 </td>
                 <td>
-                {item.clinic_name}
+                {formatLongtxt(item.clinic_name)}
                 </td>
                 <td>
                 {(hourformat(item.trans_start)+"  "+moment(item.trans_date_time).format('MM/DD/YY'))}
@@ -705,6 +723,7 @@ function Visits() {
             </div>
            
           </div>}
+          
     </div>
   )
 }

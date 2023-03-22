@@ -21,7 +21,7 @@ function ProviderDashboard() {
   
   useEffect(() => {
     
-      if ((String(sessionStorage.getItem('userType')))!=='Provider'&&auth.isLoggedIn===false){
+      if ((String(sessionStorage.getItem('userType')))!=='Provider'||auth.isLoggedIn===false){
         navigate((`/`), { replace: true })
       }
     

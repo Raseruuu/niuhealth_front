@@ -114,7 +114,7 @@ function Login( ) {
                     <div className="text-center auth-logo-text">
                       <h4 className="mt-0 mb-3 mt-5">Let's Get Started</h4>
                       <p className="text-muted mb-0">
-                        Sign in to continue to NU Health.
+                        Sign in to continue to NIU Health.
                       </p>
                     </div>
 

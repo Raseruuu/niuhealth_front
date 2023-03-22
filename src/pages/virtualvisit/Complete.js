@@ -4,6 +4,7 @@ import { Rating } from 'react-simple-star-rating'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import useAuth from '../../hooks/useAuth'
+import Swal from 'sweetalert2'
 
 export default function Complete() {
   const { auth } = useAuth()
@@ -39,6 +40,7 @@ export default function Complete() {
           console.log(res.data)
           const { Status, Message } = res.data
           if (Status) {
+            Swal.fire("New Rating Created.")
             navigate('/patient')
           } else {
             alert(Message)
@@ -69,7 +71,6 @@ export default function Complete() {
       .then((res) => {
         const { Data } = res.data
 
-        console.log(Data)
         // setMeetingID(Data.MeetingID)
         setMeetingDetails(Data)
         console.log(meetingDetails)

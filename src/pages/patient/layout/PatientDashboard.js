@@ -4,6 +4,7 @@ import { Outlet ,useNavigate} from 'react-router-dom'
 import PatientSideNav from './PatientSideNav'
 import TopBar from '../../../components/topbar/TopBar'
 import useAuth from '../../../hooks/useAuth'
+import Swal from 'sweetalert2'
 
 function PatientDashboard() {
   
@@ -13,10 +14,12 @@ function PatientDashboard() {
   const [openSideNav, setOpenSideNav] = useState(!matches)
   // Comment in for Actual Route Protection
   useEffect(() => {
-    
-    if ((String(sessionStorage.getItem('userType')))!=='Patient'&&auth.isLoggedIn===false){
+    console.log(auth)
+    console.log(sessionStorage.getItem("isLoggedIn"))
+    if ((String(sessionStorage.getItem('userType')))!=='Patient'||auth.isLoggedIn===false){
       navigate((`/`), { replace: true })
     }
+   
     
     
   }, [])
@@ -24,6 +27,7 @@ function PatientDashboard() {
     
 
     if (matches) {
+      console.log(auth)
       setOpenSideNav(false)
     }
   }, [matches])
