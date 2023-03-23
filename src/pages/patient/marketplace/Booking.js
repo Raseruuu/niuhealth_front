@@ -181,7 +181,7 @@ export default function Booking() {
             
               schedArray.push({
               id: 'id_' + index + j,
-              title: 'Available',
+              title: 'Open',
               start: startStr,
               backgroundColor: '#1eca7b',
               borderColor: 'transparent',
@@ -371,8 +371,7 @@ export default function Booking() {
                               src={(auth.userType==="Patient")?`${AWS_BUCKET_SERVICES}${selectedProvider?.images}`:`${AWS_BUCKET_SERVICES}${selectedProvider?.image}`}
                               alt=""
                               // width={30}
-                              height={300}
-                              style={{objectFit:'cover',width:300}}
+                              style={{objectFit:'cover',width:'100%',maxWidth:'300px', maxHeight:'250px', height:'auto'}}
                               // className="rounded-circle"
                             />
                         </div> 
@@ -380,7 +379,7 @@ export default function Booking() {
                           {/* <div className="met-profile-main-pic"> */}
                           
                           {/* </div> */}
-                          <div className="met-profile_user-detail m-2">
+                          <div className="met-profile_user-detail m-4">
                             {/* <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}> */}
                               
                               <h5 className="met-user-name">
@@ -435,8 +434,12 @@ export default function Booking() {
                               src={`${AWS_BUCKET_SERVICES}providers/${serviceDetails?.provider_photo}`}
                               alt=""
                               // width={120}
-                              height={120}
-                              style={{objectFit:'cover'}}
+                              // height={120}
+                              // style={{objectFit:'cover'}}
+                              style={{ 
+                                // width: 'unset', 
+                                 maxWidth:'120px',maxHeight:'120px',
+                                 width:'100%', height:'auto',objectFit: 'cover'}}
                               // className="rounded-circle"
                             />):null
                           }
@@ -497,7 +500,8 @@ export default function Booking() {
                             className='card-img-top'
                             style={{ 
                               // width: 'unset', 
-                              width:'180px', height:'130px',objectFit: 'cover'}}
+                               maxWidth:'180px',maxHeight:'130px',
+                               width:'100%', height:'auto',objectFit: 'cover'}}
                             // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
                             // src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
                             src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+item.clinic_id+"/"+item.default_image}
@@ -552,11 +556,12 @@ export default function Booking() {
                   </div>
             </div>
 
-            <div className="col-lg-7">
+            <div className="" style={{minWidth: '500px', width: "device-width", overflow:'scroll'}}>
               <h4>{auth.userType==="Patient"?"Choose Appointment Schedule":"Provider's Schedule"}</h4>
               <div className="card">
                 <div className="card-body">
-                  <div id="calendar"></div>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                  <div id="calendar" ></div>
                   <StyleWrapper>
                     <FullCalendar
                       

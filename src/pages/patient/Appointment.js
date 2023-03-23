@@ -11,6 +11,7 @@ import useInterval from '../../hooks/useInterval'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import 'animate.css';
+import RingLoading from "../../components/lottie/RingLoading"
 function dateTimeFormat(date) {
   return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
 }
@@ -166,7 +167,7 @@ const StatusText = ({ status }) => {
     6: "Created By Doctor",
   }
   return (
-    <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
+    <span className={`virtualvisitbadge badge badge-md ml-0 ${statusColor[status]}`}>
       {statusText[status]}
     </span>
   )
@@ -204,30 +205,33 @@ const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_n
   if (status==="4"&& withinAppointmentPeriod){
     return (
       <>
-        <h6>Virtual visit period is now!</h6>
+        <h6 className="m-3">Virtual visit period is now!</h6>
+        
         <StartButton appointment={appointment} joinAppointment={joinAppointment}/>
       </>
     )}
   else if (status==="4"&& !withinAppointmentPeriod&&timenow>appointmentPeriod[1]){
       return (
-        <><h6>Virtual visit period is over.</h6>
+        <div className="col-md-12">
+          <h6 className="m-3">Virtual visit period is over.</h6>
         <ViewVisitButton appointmentPeriod={[moment(appointmentTime).format('MMM DD, yyyy hh:mm'),moment(appointmentTime).add(1, 'hours').format('hh:mm')]} image={image} provider_name={provider_name} provider_description={provider_description}  />
         {/* <StartButton appointment={appointment}/> */}
-        </>
+        </div>
       )}
   else if (status==="4" && timenow<appointmentPeriod[1]){
     return (
-      <>
-        <h6>Appointment ETA: {appointmentETA}
+      <div className="col-md-12 ">
+        <h6 className="m-3">Appointment ETA: {appointmentETA}
         </h6>
         <CancelButton visit_id={visit_id}/>
-      </>
+      </div>
     )}
     
   else if (status==="0"){
     return (
-      <><h6>Awaiting doctor {provider_name}'s approval.</h6>
-      <CancelButton visit_id={visit_id}/></>
+      <div className="col-md-12 ">
+        <h6 className="m-3">Awaiting doctor {provider_name}'s approval.</h6>
+        <CancelButton visit_id={visit_id}/></div>
     )}
   else if (status==="1"){
     return (
@@ -281,48 +285,61 @@ function AppointmentItem({
   const time=moment(trans_date_time+", "+trans_start+":00").format('hh:mm A')+" - "+moment(dateTime).add(1, 'hours').format('hh:mm A')
   // const time=moment(dateTime).get('hour')+":"+moment(dateTime).get('minute')
   return(
-    <div className="card" id={service_id}>
+    <div className="card" id={service_id} >
     <div className="card-body">
-      <div className="task-box" key ={visit_id}>
+      <div className="task-box row" key ={visit_id}>
 
         <div className="task-priority-icon">
           {/* <i className="fas fa-circle text-purple"></i> */}
           <StatusIcon icontype={status}/>
         </div>
         {/* {dateTimeFormat(trans_date_time+", "+trans_start+":00")} */}
-        <p className="text-muted float-right">
-          <span className="text-muted">{date}</span>
-          <span className="mx-1">·</span>
-          <span>
-            <i className="far fa-fw fa-clock"></i> {time}
-            {/* //date */}
-          </span>
-        </p>
-        <div className="media">
-          <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
-            <img
-              src={AWS_BUCKET_SERVICES+"providers/"+image}
-              alt="user"
-              className="rounded-circle thumb-md"
-            />
-          </Link>
-          <div className="media-body align-self-center ml-3">
-            <p className="font-14 font-weight-bold mb-0">
-                <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
-                  {provider_name}
-              </Link>
+        <div className="media col-lg-12">
+          
+          <div className="media col-md-8">
+            
+            <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
+              <img
+                src={AWS_BUCKET_SERVICES+"providers/"+image}
+                alt="user"
+                className="rounded-circle thumb-md"
+              />
+            </Link>
+            <div className="media-body align-self-center ml-3">
+              Appointment With:
+              <p className="font-16 font-weight-bold mb-0 ">
+              
+                  <Link className="" to={`/patient/marketplace/provider/${provider_id}`}>
+                    {provider_name}
+                </Link>
+                
+              </p>
               <StatusText status={status}/>
-            </p>
-            <p className="mb-0 font-12 text-muted">Provider</p>
+              <p className="mb-0 font-12 text-muted">Provider</p>
+            </div>
+            
+          </div>
+          <div className="col-lg-4 text-right w-100">
+            <div className="text-muted">
+              <b>{date}</b><br/>
+                <i className="far fa-fw fa-clock"></i>
+                {time}
+            </div>
           </div>
         </div>
-        <p className="font-18 mb-1 virtDesc">
-          <strong>{service_name}</strong> 
-        </p>
-        <p className="font-14 mb-1 virtDesc">
-          <strong>{service_description}</strong> 
-        </p>
-        <div className="virtDesc d-flex justify-content-between">
+        <div className="row m-2 bg-light w-100">
+         
+          <div className="col m-1">
+          
+            <p className="font-18 mb-0 virtDesc">
+              Service Title: <strong>{(service_name===""?"Untitled":service_name)}</strong> 
+            </p>
+            <p className="font-14 mt-0 mb-0 virtDesc">
+              Service Description:  <strong>{service_description}</strong> 
+            </p>
+          </div>
+        </div>
+        <div className="col-md-12 text-right m-2">
           
           <AppointmentAction status={status} visit_id={visit_id} appointmentTime={dateTime} image={image} provider_name={provider_name} provider_description={provider_description} appointment={visit_id} joinAppointment={joinAppointment} />
           
@@ -464,7 +481,7 @@ function Appointment() {
               <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index} />
               )}
             </div>
-          </div>):<CardItem><h4>There are no appointments to display.</h4></CardItem>}
+          </div>):<CardItem><h4><RingLoading /></h4></CardItem>}
         </div>
 
         <Footer />

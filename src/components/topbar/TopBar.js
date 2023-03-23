@@ -59,7 +59,7 @@ function NotifLink({ type, subject, body, timeReceived }) {
   )
 }
 
-export function TopBar({ menuClick, homeAddress }) {
+export function TopBar({ menuClick, homeAddress,removePfp }) {
   const logout = useLogout()
   const [notifs, setNotifs] = useState(SAMPLENOTIF)
   const navigate = useNavigate()
@@ -139,7 +139,7 @@ export function TopBar({ menuClick, homeAddress }) {
 
   return (
     <div className='dev-top-bar'>
-      <div>
+      <div style={{minWidth:'240px'}}>
         <button
           onClick={menuClick}
           className='nav-link button-menu-mobile waves-effect waves-light btn-lg'
@@ -147,8 +147,8 @@ export function TopBar({ menuClick, homeAddress }) {
         >
           <i className='ti-menu nav-icon'></i>
         </button>
-        <Link to={homeAddress} className='logo'>
-          <SideNavLogo style={{ width: '170px' }} />
+        <Link to={homeAddress} className='logo' style={{ maxHeight:'100px',height:'auto', width: '100%', maxWidth:'170px'}}>
+          <SideNavLogo style={{ maxHeight:'100px',height:'auto', width: '100%', maxWidth:'170px'}} />
         </Link>
       </div>
 
@@ -162,9 +162,10 @@ export function TopBar({ menuClick, homeAddress }) {
             aria-haspopup='false'
             aria-expanded='false'
           > 
+            
             {(profile)?
              <>
-             <span className='ml-1 nav-user-name hidden-sm m-4'>
+             <span className='ml-1 nav-user-name hidden-sm m-4' >
               
              {(auth.userType==='Patient')?(profile.first_name):(auth.userType==='Provider')?profile.provider_name:null}
              {/*  <i className='mdi mdi-chevron-down'></i>{' '} */}
@@ -173,7 +174,7 @@ export function TopBar({ menuClick, homeAddress }) {
               src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}profiles/pictures/${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
-              style={{objectFit:"cover", width:50, height:50}}
+              style={{display:(removePfp?'none':'unset'),objectFit:"cover", width:50, height:50}}
             /></>:null}
            
           </Link>

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 
-function PatientSideNav({ openSideNav }) {
+function PatientSideNav({ openSideNav,openSideIcons,removePfp }) {
   const location = useLocation()
   const navigate = useNavigate()
   const logout = useLogout()
@@ -88,7 +88,16 @@ function PatientSideNav({ openSideNav }) {
     <div
       className='left-sidenav'
       // style={{ display: openSideNav ? 'block' : 'none', minWidth: '308px' ,}}
-      style={{ display: 'block' , marginTop: '70px' ,padding:'0px',marginTop:'70px' ,minWidth:'80px', pxmarginLeft:'-26zpx',width:(openSideNav?'320px':'78px'),position:'unset'}}
+      style={{ 
+        display: (openSideIcons?'block':'none') , 
+        marginTop: '70px' ,
+        padding:'0px',
+        marginTop:'70px' ,
+        minWidth:'80px', 
+        pxmarginLeft:'-26zpx',
+        width:(openSideNav?'400px':'78px'),
+        zIndex:10,
+        position:(openSideIcons||removePfp?'unset':'absolute')}}
 
     >
       {/* <div className='topbar-left'>

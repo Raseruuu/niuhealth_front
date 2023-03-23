@@ -66,6 +66,8 @@ function ProfileEdit() {
   })
   const [oldProfile, setOldProfile] = useState({})
   const [disableForm, setDisableForm] = useState(true)
+  
+  const [isLoading, setIsLoading] = useState(true)
   const [timeZone, setTimeZone] = useState('+00:00')
   const [countries, setCountries] = useState([])
   const [cities, setCities] = useState([])
@@ -169,9 +171,11 @@ function ProfileEdit() {
         if (Status) {
           setAuth((prev) => ({ ...prev, profile }))
           setOldProfile(profile)
-          Swal.fire('Successfully Updated Your Profile.')
+          Swal.fire({icon:'success',text:'Successfully Updated Your Profile.'})
           setDisableForm(!disableForm)
         } else {
+          
+          Swal.fire({icon:'error',text:Message})
           throw new Error(Message)
         }
       })
@@ -419,16 +423,16 @@ function ProfileEdit() {
                             {/* {auth.userType} */}
                         <img
                           alt=""
-                          style={{objectFit: 'cover', margin: 'unset' ,width:100,height:100}}
+                          style={{objectFit: 'cover' ,width:100,height:100}}
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES:""}${!imagepreview&&auth.userType==='Provider'?"providers/":"profiles/pictures/"}${profile.picture}"></img>`,
+                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile.picture: (profile.picture)}"></img>`,
                               // { AWS_BUCKET_SERVICES } + profile.picture,
                             })
                           }}
                           src={!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile.picture: (profile.picture)}
-                          className="rounded-circle profile-pic"
+                          className="m-4 rounded-circle profile-pic"
                           // style={{ margin: 'unset' }}
                         />
 
@@ -531,8 +535,8 @@ function ProfileEdit() {
                       ):null}
                       <div className="form-group row">
                         <label
-                          htmlFor="example-email-input"
-                          className="col-sm-2 col-form-label text-right"
+                          htmlFor="email-input"
+                          className="col-sm-2 col-form-label"
                         >
                           Email
                         </label>
@@ -570,7 +574,7 @@ function ProfileEdit() {
                       <div className="form-group row">
                         <label
                           htmlFor="example-tel-input"
-                          className="col-sm-2 col-form-label text-right"
+                          className="col-sm-2 col-form-label"
                         >
                           About Me
                         </label>
@@ -589,7 +593,7 @@ function ProfileEdit() {
                       <div className="form-group row">
                       <label
                         htmlFor="example-tel-input"
-                        className="col-sm-2 col-form-label text-right"
+                        className="col-sm-2 col-form-label"
                       >
                         Specialization
                       </label>
@@ -608,7 +612,7 @@ function ProfileEdit() {
                       <div className="form-group row">
                         <label
                           htmlFor="example-tel-input"
-                          className="col-sm-2 col-form-label text-right"
+                          className="col-sm-2 col-form-label"
                         >
                           Contact Info
                         </label>
@@ -629,7 +633,7 @@ function ProfileEdit() {
                         <div className="form-group row">
                           <label
                             htmlFor="example-text-input"
-                            className="col-sm-2 col-form-label text-right"
+                            className="col-sm-2 col-form-label"
                           >
                             Address Line 1
                           </label>
@@ -647,7 +651,7 @@ function ProfileEdit() {
                         <div className="form-group row">
                           <label
                             htmlFor="example-text-input"
-                            className="col-sm-2 col-form-label text-right"
+                            className="col-sm-2 col-form-label"
                           >
                             Address Line 2
                           </label>
@@ -665,7 +669,7 @@ function ProfileEdit() {
                         <div className="form-group row">
                           <label
                             htmlFor="example-text-input"
-                            className="col-sm-2 col-form-label text-right"
+                            className="col-sm-2 col-form-label"
                           >
                             Zip Code
                           </label>
@@ -684,7 +688,7 @@ function ProfileEdit() {
                         <div className="form-group row">
                           <label
                             htmlFor="example-text-input"
-                            className="col-sm-2 col-form-label text-right"
+                            className="col-sm-2 col-form-label"
                           >
                             Province
                           </label>
@@ -706,9 +710,9 @@ function ProfileEdit() {
                         <>
                       <div
                         className="form-group row"
-                        style={{ marginLeft: '80px' }}
+                        // style={{ marginLeft: '80px' }}
                       >
-                        <label className="col-sm-2 col-form-label text-right">
+                        <label className="col-sm-2 col-form-label ">
                           Country
                         </label>
 
@@ -728,7 +732,7 @@ function ProfileEdit() {
                             ))}
                           </select>
                         </div>
-                        <label className="col-sm-2 col-form-label text-right">
+                        <label className="col-sm-2 col-form-label">
                           City
                         </label>
                         <div className="col-sm-4">

@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import CardItem from '../../../components/cards/Card'
+import LottieFailed from '../../../components/lottie/LottieFailed'
+import RingLoading from '../../../components/lottie/RingLoading'
 import { StatusTextInsurance2, StatusTextInsurance3 } from '../../../components/status/Status'
 import { AWS_BUCKET, AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
@@ -106,7 +108,7 @@ function Insurance() {
                   <div className='file-box-content'>
                     {(list.length===0)?
                       <>
-                        <CardItem>{(isLoading)?`Loading...`:(`You have no submitted Insurance Documents.`)}</CardItem>
+                        <CardItem>{(isLoading)?<RingLoading /> :(`You have no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
                     {list.map((item) => (
                       <Link

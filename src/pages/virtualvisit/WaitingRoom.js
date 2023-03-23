@@ -107,7 +107,15 @@ export default function WaitingRoom() {
   // we need to put getStatus and getQueueCount on useInterval,
   useInterval(getStatus, delay)
   useInterval(getQueueCount, delay)
-
+  useEffect(() => {
+    const handleContextmenu = e => {
+        e.preventDefault()
+    }
+    document.addEventListener('contextmenu', handleContextmenu)
+    return function cleanup() {
+        document.removeEventListener('contextmenu', handleContextmenu)
+    }
+  }, [ ])
   useEffect(() => {
     
     getStatus()

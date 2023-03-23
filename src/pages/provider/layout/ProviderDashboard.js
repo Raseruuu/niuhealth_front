@@ -24,17 +24,10 @@ function ProviderDashboard() {
       if ((String(sessionStorage.getItem('userType')))!=='Provider'||auth.isLoggedIn===false){
         navigate((`/`), { replace: true })
       }
-    
-    
-    
   }, [])
-  
   useEffect(() => {
-    
     if (matches) {
       setOpenSideNav(false)
-     
-      
     }
   }, [matches])
 

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Footer from '../../../components/Footer'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -50,16 +51,16 @@ export default function PaymentForm() {
         .then((res) => {
           const { Status, Message } = res.data
           if (Status) {
-            alert(Message)
+            Swal.fire({icon:'success',html:`${Message}`})
             sessionStorage.setItem('has_subscribed',true)
             navigate('/patient/subscription', { replace: true })
           } else {
-            alert(Message)
+            Swal.fire(Message)
           }
         })
         .catch((err) => {
           console.error(err)
-          alert(err.message)
+          Swal.fire(err.message)
         })
     } catch (error) {
       console.error(error)

@@ -10,6 +10,7 @@ import Multiselect from 'multiselect-react-dropdown';
 import { Card } from 'react-bootstrap'
 
 import styled from "@emotion/styled"
+import RingLoading from '../../../components/lottie/RingLoading'
 
 
 
@@ -132,8 +133,8 @@ export default function Marketplace() {
                       <div className="col-lg-12">
                         <h5 className="mt-1 ">Filters</h5>
                         
-                        <ul className='nav nav-pills m-2' id='pills-tab' role='tablist'>
-                          <li className='nav-item col-xl-5 m-2' >
+                        <ul className='nav nav-pills' id='pills-tab' role='tablist'>
+                          <li className='nav-item col-xl-5 mt-2 mb-0' >
                             <div className="row-xl-12">
                                   <form onSubmit={handleSubmit} >
                                   <div className="form-group">
@@ -154,8 +155,8 @@ export default function Marketplace() {
                                   </div>
                                   </form>
                               </div>
-                              </li>
-                            <li className='nav-item m-2'>
+                          </li>
+                            <li className='nav-item m-2 mt-0 '>
                               <a
                                 className='nav-link'
                                 id='service_category_tab'
@@ -177,7 +178,8 @@ export default function Marketplace() {
                                 }}
                               >
                                 Service Category
-                              </a><div className='tab-content detail-list position-absolute' id='pills-tabContent'>
+                              </a>
+                            <div className='tab-content detail-list position-absolute' id='pills-tabContent'>
                               <div className='tab-pane position-absolute' style={{zIndex:4 }}  id='service_category'>
                                 {showFilterWindow&&activeFilter==='service_category'?
                                 <CardItem> 
@@ -398,7 +400,7 @@ export default function Marketplace() {
               <div className="col-lg-12">
                 
                 <div className="row">
-                {(isLoading)?<CardItem>Loading...</CardItem>:
+                {(isLoading)?<CardItem><RingLoading /></CardItem>:
                 (searchString.length>0 &&list.length===0)?<CardItem>No Results.</CardItem>:
                 <>
                   {
@@ -410,7 +412,11 @@ export default function Marketplace() {
                           <img
                             src={(AWS_BUCKET_SERVICES+ item.images)}
                             alt=""
-                            style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                            // style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                            style={{ 
+                              // width: 'unset', 
+                               maxWidth:'200px',minHeight:'200px',
+                               width:'100%', height:'100%',objectFit: 'cover'}}
                             className="img-fluid"
                           />
                         </Link>

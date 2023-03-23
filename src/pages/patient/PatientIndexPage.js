@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Footer from '../../components/Footer'
+import RingLoading from '../../components/lottie/RingLoading'
 import { APP_URL } from '../../constants'
 import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
@@ -11,7 +13,7 @@ function PatientIndexPage() {
   // TODO: get from CONTEXT
   const isEmailVerified = Boolean(sessionStorage.getItem('email_verified'))
   const [subscribed,setSubscribed] = useState()
-  const { auth } = useAuth();
+  const { auth,setAuth } = useAuth();
   
   const axiosPrivate = useAxiosPrivate()
   const [isLoading,setIsLoading]=useState(true)
@@ -33,6 +35,7 @@ function PatientIndexPage() {
           
           setIsLoading(false)
           console.log('res',res)
+          setAuth({...auth,...res.data.Data[0]})
           setSubscribed(parseInt(res.data.Data[0].subscription_plan)>0)
           
           sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
@@ -99,13 +102,14 @@ function PatientIndexPage() {
                     className={`btn ${(has_insurance==='true'||subscribed)?"btn-success":"btn-outline-success"}  btn-round waves-effect waves-light figmaBigButton`}
                     onClick={
                       () => {
-                        console.log(has_insurance)
-                        if (!auth.username||!auth.name||auth.name){
-                          Swal.fire({icon:'warning',html:"Please complete your registration."}).then(()=>{
-                          navigate((`/patient/profile`), { replace: true })
+                        console.log("auth",auth)
+                        if (!auth||auth.first_name==="name"||auth.address_line_1===""){
+                          Swal.fire({icon:'warning',html:"Complete your registration."})
+                          .then(()=>{
+                            navigate((`/patient/profile`), { replace: true })
                           })
                         }
-                        if (has_insurance==='true'||subscribed){
+                        else if (has_insurance==='true'||subscribed){
                           navigate('/virtualvisit')
                         }
                         else{
@@ -119,7 +123,7 @@ function PatientIndexPage() {
                           }
                       }}
                   >
-                    {(isLoading)?"Loading...":"Start Your Virtual Visit"}
+                    {(isLoading)?<div className="row d-flex align-items-center m-0"><RingLoading size={30}/><b>Loading...</b></div>:"Start Your Virtual Visit"}
                   </button>
                   </p>
                 </div>

@@ -177,7 +177,7 @@ function ProviderProfile() {
               id: 'id_' + index + j,
               title: 'Available',
               start: startStr,
-              backgroundColor: '#516856',
+              backgroundColor: '#007e26',
               borderColor: '#1eca7b',
             })
         }

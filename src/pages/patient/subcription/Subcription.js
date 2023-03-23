@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import CardItem from '../../../components/cards/Card'
 import Footer from '../../../components/Footer'
+import RingLoading from '../../../components/lottie/RingLoading'
 import TableCard from '../../../components/table/Tables'
 import useAuth from '../../../hooks/useAuth'
 import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
@@ -204,7 +205,7 @@ function Subscription() {
                 </div>
               </div>
             </div>
-          :<CardItem className={'col-lg-6'}>Loading...</CardItem>}
+          :<CardItem className={'col-lg-6'}><RingLoading /></CardItem>}
           {/* <div className='row'>
             <div className='col-lg-6'>
               <div className='card'>
@@ -314,7 +315,7 @@ function Subscription() {
 
                       ))}
                       
-                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?"Loading...":"No Payment History results."}</CardItem></>}
+                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?<RingLoading />:"No Payment History results."}</CardItem></>}
                   
                 </div>
         </div>
