@@ -221,12 +221,12 @@ function Upload() {
                           setImage={setFrontImage} 
                           previewImage={frontImage} />
                     </div> */}
-                    <label className=''>Insurance Files</label>
+                    <label className=''>Insurance Files</label><br/>
 
                     {imageList.map((image,index)=>{
                       console.log("imageList",imageList)
                       return(
-                      <div className='bg-light col-lg-2 mt-5 mr-0 d-flex align-items-center ' width={180}>
+                      <div className='bg-light col-lg-2 mr-1' width={180}>
 
                         
                           <UploadOneImage
@@ -244,14 +244,15 @@ function Upload() {
                         
                     </div>)
                             })}
+                            {imageList.length<=5?
                             <button
                           className="btn btn-gradient-success waves-effect waves-light"
-                          style={{minWidth:"40px", height:"100%", maxHeight:"150px"}}
+                          style={{minWidth:"80px", height:"80px"}}
                           onClick={(e)=>{
                             e.preventDefault();
-                            (imageList.length<=6)
+                            (imageList.length<=4)
                               {setImageList([...imageList,{path:'Default.png'}])}
-                            }}>+</button>
+                            }}>Add File</button>:null}
                     </div>
                     {/* <div>
                       <input
