@@ -95,9 +95,9 @@ function PatientSideNav({ openSideNav,openSideIcons,removePfp }) {
         marginTop:'70px' ,
         minWidth:'80px', 
         pxmarginLeft:'-26zpx',
-        width:(openSideNav?'400px':'78px'),
+        width:(openSideNav?'320px':'78px'),
         zIndex:10,
-        position:(openSideIcons||removePfp?'unset':'absolute')}}
+        position:(!removePfp?'unset':'absolute')}}
 
     >
       {/* <div className='topbar-left'>

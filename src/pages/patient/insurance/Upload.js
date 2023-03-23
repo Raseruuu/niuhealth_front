@@ -18,7 +18,8 @@ function Upload() {
   const [selectedCoverage, setSelectedCoverage] = useState([])
   const [frontImage,setFrontImage]=useState({})
   const [backImage,setBackImage]=useState({})
-
+  const [imageList,setImageList]=useState([{path:"Default.png"}])
+ 
   const {
     register,
     handleSubmit,
@@ -211,24 +212,46 @@ function Upload() {
                             </button>
                           ))}
                     </div> */}
-                  <div className='row'>
-                    <div className='col lg-4'>
+                  <div className='form-group row mb-4 m-1'>
+                    {/* <div className='col lg-4'>
                       <label>Front Image</label>
                         <UploadOneImage 
                           disabled={isSuccess}
                           image={frontImage} 
                           setImage={setFrontImage} 
                           previewImage={frontImage} />
-                    </div>
-                    
-                    <div className='col lg-4'>
-                    <label>Back Image</label>
+                    </div> */}
+                    <label className=''>Insurance Files</label>
+
+                    {imageList.map((image,index)=>{
+                      console.log("imageList",imageList)
+                      return(
+                      <div className='bg-light col-lg-2 mt-5 mr-0 d-flex align-items-center ' width={180}>
+
+                        
                           <UploadOneImage
                             disabled={isSuccess}
-                            image={backImage} 
-                            setImage={setBackImage} 
-                            previewImage={backImage} />
-                            </div>
+                            image={image} 
+                            previewImage={image} 
+                            setImage={(img)=>{
+                                var newImageList=[...imageList]
+                                newImageList[index]=img
+                                setImageList(newImageList)
+                              }
+                            } 
+                          
+                          />
+                        
+                    </div>)
+                            })}
+                            <button
+                          className="btn btn-gradient-success waves-effect waves-light"
+                          style={{minWidth:"40px", height:"100%", maxHeight:"150px"}}
+                          onClick={(e)=>{
+                            e.preventDefault();
+                            (imageList.length<=6)
+                              {setImageList([...imageList,{path:'Default.png'}])}
+                            }}>+</button>
                     </div>
                     {/* <div>
                       <input

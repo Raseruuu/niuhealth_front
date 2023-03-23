@@ -72,15 +72,32 @@ function Bucket() {
             setList(data.Buckets)
             setPatientID(res.data.Data.PatientId)
             setItem(data.Buckets.filter((item)=>item.BucketId===bucketid)[0] )
+            const item=data.Buckets.filter((item)=>item.BucketId===bucketid)[0]
             console.log(data.Buckets.filter((item)=>item.BucketId===bucketid)[0] )
             const front=data.Buckets.filter((item)=>item.BucketId===bucketid)[0].FrontImage
             const back =data.Buckets.filter((item)=>item.BucketId===bucketid)[0].BackImage
             const bucketName=data.Buckets.filter((item)=>item.BucketId===bucketid)[0].BucketName
             setInsuranceBucketName(bucketName)
-            setImages([
-              `${AWS_BUCKET_SERVICES}insurance/${res.data.Data.PatientId}/${bucketName}/${front}`,
-              `${AWS_BUCKET_SERVICES}insurance/${res.data.Data.PatientId}/${bucketName}/${back}`,
-            ])
+            var tempImageList=[]
+            if (item.image1!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image1}`)
+            }
+            if (item.image2!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image2}`)
+            }
+            if (item.image3!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image3}`)
+            }
+            if (item.image4!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image4}`)
+            }
+            if (item.image5!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image5}`)
+            }
+            if (item.image6!==""){
+              tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item.image6}`)
+            }
+            setImages([...tempImageList])
           } 
           else {
             throw new Error(Message)
@@ -225,19 +242,20 @@ function Bucket() {
                     </div>
                   </div>:<></>}
                   <div className='row m-5'>
+
+
+                     {images.map((image,index)=>{
+                      return(
+                      <CardItem className={"m-2 col lg-4"} >
+                      <div className='m-2 col lg-4'  onClick= {() => openImageViewer(index)}>
+                          File {index+1}<br/><br/>
+                          <img  style={{width:'250px',objectFit:'cover'}} src={image}></img>
+                          </div>
+                      </CardItem>)
+                      })
+                    }
+
                     
-                     <CardItem className={"m-2 col lg-4"}  >
-                      <div className='' onClick= {() => openImageViewer(0)}>
-                        Front Image<br/><br/>
-                        <img style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}`}></img>
-                        </div>
-                     </CardItem>
-                     <CardItem className={"m-2 col lg-4"} >
-                     <div className='m-2 col lg-4'  onClick= {() => openImageViewer(1)}>
-                     Back Image<br/><br/>
-                        <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.BackImage}`}></img>
-                        </div>
-                     </CardItem>
                      
                   </div>
                   {/* <div className='file-box-content'> */}

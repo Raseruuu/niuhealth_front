@@ -32,7 +32,6 @@ export function UploadOneImage({image,setImage, disabled}){
         fileReader = new FileReader();
         fileReader.onload = (e) => {
             const { result } = e.target;
-            console.log("fileblob??",result)
             if (result && !isCancel) {
             const tempimage={path:result,file:image.file}
             console.log(tempimage)

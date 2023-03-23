@@ -129,7 +129,7 @@ function Insurance() {
                           {/* <i className='dripicons-download file-download-icon'></i> */}
                         
                         <div className='text-center'>
-                        <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${patientID}/${item.BucketName}/${item.FrontImage}`}></img>
+                        <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${item.image1}`}></img>
                           <i className={(item.status == "1") ? 'far fa-folder text-success ml-3' :(item.status == "2")? 'far fa-folder text-danger ml-3':'far fa-folder text-purple ml-3'}></i>
                           <h6 className='text-truncate'>
                             {item.BucketName}

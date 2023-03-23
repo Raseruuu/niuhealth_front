@@ -39,6 +39,10 @@ function PatientDashboard() {
       // console.log("sideIcons",openSideIcons)
       setOpenSideIcons(false)
     }
+    
+    if (!narrowmatch) {
+      setOpenSideIcons(true)
+    }
     if (narrowscreen) {
       setRemovePfp(narrowscreen)
     }
