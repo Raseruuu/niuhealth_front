@@ -762,7 +762,7 @@ function PatientProfile() {
                                 // ])
                                 var tempImageList=[]
                                 for (var i=1;i<=6;i++){
-                                  if (item["image"+String(i+1)]!==""){
+                                  if (item["image"+String(i)]!==""){
                                     tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item["image"+i]}`)
                                   }
                                 }

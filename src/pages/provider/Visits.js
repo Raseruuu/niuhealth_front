@@ -181,6 +181,7 @@ function Visits() {
         .then((res) => {
           const { Data = [] } = res.data
           setPatientList(Data.Patients)
+          
         })
         .catch((err) => {
           console.error(err)

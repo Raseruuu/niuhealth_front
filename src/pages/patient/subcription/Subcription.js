@@ -110,11 +110,11 @@ function Subscription() {
         .then((res) => {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
-
+          setIsSuccess(true)
           if (Status && Message === 'Patient not subscribed') {
             
             setIsLoading(false)
-            setIsSuccess(true)
+            
             navigate('plans')
           }
 

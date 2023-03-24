@@ -17,7 +17,12 @@ function dateTimeFormat(date) {
 }
 const timenow=moment()
 
-  
+function formatLongtxt(string=""){
+
+  if (string?.length>40){
+    return string.substring(0,40)+"..."}
+  return string
+}
       
 const CancelButton = ({visit_id}) => {
   
@@ -335,7 +340,7 @@ function AppointmentItem({
               Service Title: <strong>{(service_name===""?"Untitled":service_name)}</strong> 
             </p>
             <p className="font-14 mt-0 mb-0 virtDesc">
-              Service Description:  <strong>{service_description}</strong> 
+              Service Description:  <strong>{formatLongtxt(service_description)}</strong> 
             </p>
           </div>
         </div>

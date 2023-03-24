@@ -422,7 +422,13 @@ function PatientList() {
         setIsLoading(false)
         console.log(res)
         const { Data = [] } = res.data
-        setPatientList(Data.Patients)
+        if (searchText.length>0){
+          
+          setPatientList(Data)
+        }
+        else{
+          setPatientList(Data.Patients)
+        }
       })
       .catch((err) => {
         setIsLoading(false)
