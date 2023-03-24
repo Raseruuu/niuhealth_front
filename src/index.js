@@ -165,6 +165,8 @@ const router =createBrowserRouter(
                 { path: 'providers', element: <ProvidersList /> },
                 { path: 'provider/:id', element: <ProviderProfile /> },
                 { path: 'booking', element: <Booking /> },
+                
+                { path: 'booking/:id', element: <Booking /> },
                 { path: 'checkout', element: <Checkout /> },
                 { path: 'success', element: <Success /> },
                 

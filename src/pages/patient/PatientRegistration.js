@@ -11,7 +11,7 @@ function PatientRegistration() {
     const axiosPrivate = useAxiosPrivate()
     const [password,setPassword]=useState('');
     const { email } = useParams();
-    const [profile,setProfile]=useState({local_time_zone:"+8:00"});
+    const [profile,setProfile]=useState({local_time_zone:"-10:00"});
     const controller = new AbortController()
     const [countries, setCountries] = useState([])
     const [cities, setCities] = useState([])
@@ -45,7 +45,7 @@ function PatientRegistration() {
     if (Status) {
         Swal.fire({icon: 'success',html:`${Message}`})
         .then(()=>{
-          Swal.fire({icon:'success',html:`Logging you in...`}).then(()=>{
+          Swal.fire({icon:'success',html:`Logging you in...`,timer: 3000}).then(()=>{
             navigate((`/`), { replace: true })
             
           })
@@ -233,6 +233,7 @@ function PatientRegistration() {
           </label>
           <div className="col-sm-8">
             <TimeZoneSelect
+              required={true}
               value={profile.local_time_zone}
               setTimeZone={(selected) =>
                 setProfile((prev) => ({
@@ -258,6 +259,7 @@ function PatientRegistration() {
               type="date"
               placeholder={'mm-dd-yyyy'}
               name="DateOfBirth"
+              required
               {...register("DateOfBirth")}
               // defaultValue={dateFormat(profile.date_of_birth)}
               // value={dateFormat(date_of_birth)}

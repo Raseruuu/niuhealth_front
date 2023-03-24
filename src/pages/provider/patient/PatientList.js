@@ -413,7 +413,7 @@ function PatientList() {
     await axiosPrivate
       .post(
         searchText ? 'searchPatient' : 'getPatients',
-        { Email: auth.email, Search: searchText },
+        { Email: auth.email, Search: searchText},
         {
           signal: controller.signal,
         }
@@ -422,7 +422,7 @@ function PatientList() {
         setIsLoading(false)
         console.log(res)
         const { Data = [] } = res.data
-        setPatientList(Data)
+        setPatientList(Data.Patients)
       })
       .catch((err) => {
         setIsLoading(false)

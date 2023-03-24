@@ -108,7 +108,7 @@ function Insurance() {
                   <div className='file-box-content'>
                     {(list?.length===0)?
                       <>
-                        <CardItem>{(isLoading)?<RingLoading /> :(`You have no submitted Insurance Documents.`)}</CardItem>
+                        <CardItem>{(isLoading)?<div className='d-flex justify-content-center'><RingLoading size={200}/></div> :(`You have no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
                     {list?.map((item) => (
                       <Link

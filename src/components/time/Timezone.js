@@ -29,7 +29,7 @@ function hourFormat(minutes) {
 return HMFormat(minutes*-1)
 } 
 
-function TimeZoneSelect({setTimeZone,value, disabled=false}){
+function TimeZoneSelect({setTimeZone,value, disabled=false,required=false}){
   
     var timezonecountries = moment.tz.countries()
     var timezoneoptions=[]
@@ -64,7 +64,7 @@ function TimeZoneSelect({setTimeZone,value, disabled=false}){
         <select 
           className="col-sm form-control" 
           disabled={disabled}
-          required={true} 
+          required={required} 
           value={value}
           style={{marginLeft:"10px",marginRight:"20px",maxWidth:400}}
           onChange={(e)=>{setTimeZone(e.target.value)}}

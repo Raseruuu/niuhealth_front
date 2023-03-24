@@ -481,7 +481,7 @@ function Appointment() {
               <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index} />
               )}
             </div>
-          </div>):<CardItem><h4><RingLoading /></h4></CardItem>}
+          </div>):<CardItem><h4><div className='d-flex justify-content-center'><RingLoading size={200}/></div></h4></CardItem>}
         </div>
 
         <Footer />

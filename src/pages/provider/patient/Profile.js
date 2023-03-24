@@ -868,11 +868,11 @@ function PatientProfile() {
                         
                       </div>
                       
-                     {(insuranceList[ins_index].Status)==="0"&&insuranceList[ins_index].Archive==="0"?<>
+                     {(insuranceList[ins_index].Status)==="0"?<>
                       <h3> <i className="fas fa-exclamation-triangle" style={{color:'#f14b4b'}}/> Insurance Approval Required</h3>
                       <h5 className="text-muted">Validated dates must match with insurance documents </h5></>:<></>}
                       <div className="float-right col text-center align-item col-lg-12">
-                        {(insuranceList[ins_index].Status)==="0"&&insuranceList[ins_index].Archive==="0"?
+                        {(insuranceList[ins_index].Status)==="0"?
                         <>
                         <div>
                            

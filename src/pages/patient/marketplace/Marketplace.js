@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
-import CardItem from '../../../components/cards/Card'
+import CardItem, { CardLongItem } from '../../../components/cards/Card'
 import Footer from '../../../components/Footer'
 import { AWS_BUCKET,AWS_BUCKET_SERVICES } from '../../../constants'
 import useAuth from '../../../hooks/useAuth'
@@ -47,7 +47,12 @@ export default function Marketplace() {
   // const [starFilter5, setStarFilter5]=useState(true)
   
   const controller = new AbortController()
- 
+  function formatLongtxt(string="",limit=50){
+
+    if (string?.length>limit){
+      return string.substring(0,limit)+"..."}
+    return string
+  }
   async function getList() {
     if (searchString.length>=3||searchString!==""){
       await axiosPrivate
@@ -400,15 +405,15 @@ export default function Marketplace() {
               <div className="col-lg-12">
                 
                 <div className="row">
-                {(isLoading)?<CardItem><RingLoading /></CardItem>:
+                {(isLoading)?<CardLongItem><div className='d-flex justify-content-center'><RingLoading size={200}/></div></CardLongItem>:
                 (searchString.length>0 &&list.length===0)?<CardItem>No Results.</CardItem>:
                 <>
                   {
                   list.map((item, index) => (
                     <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
-                      <div className="card e-co-product" >
+                      <div className="card e-co-product" style={{minHeight:'700px'}} >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
-                        <Link to="booking" state={{ ...item }}>
+                        <Link to={"booking/"+item.service_id} state={{ ...item }}>
                           <img
                             src={(AWS_BUCKET_SERVICES+ item.images)}
                             alt=""
@@ -422,7 +427,7 @@ export default function Marketplace() {
                         </Link>
                         <div className="card-body product-info">
                           <Link
-                            to="booking"
+                            to={"booking/"+item.service_id}
                             className="product-title"
                             state={{ ...item }}
                           >
@@ -431,7 +436,7 @@ export default function Marketplace() {
                           </Link>
                           <br/>
                           <div className='row-lg-3'>
-                          <b>Description : </b><br/>{item.service_description}<br/>
+                          <b>Description : </b><br/>{formatLongtxt(item.service_description,160)}<br/>
                           <b>Category :</b><br/> {item.category}<br/>
                           </div>
                           <br/> 
@@ -457,7 +462,7 @@ export default function Marketplace() {
                               </div>
                             </div>
                           </div>
-                          <div className="d-flex justify-content-between my-2 row">
+                          <div className="d-flex align-items-end justify-content-between my-2 row">
                             <button 
                               onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
                               className='btn btn-success'>Book Appointment</button>

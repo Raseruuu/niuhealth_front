@@ -1,6 +1,6 @@
 import FullCalendar from '@fullcalendar/react'
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom'
 import Footer from '../../../components/Footer'
 import { AWS_BUCKET_SERVICES } from '../../../constants'
 import dayGridPlugin from '@fullcalendar/daygrid'
@@ -10,33 +10,64 @@ import useAxiosPrivate from '../../../hooks/useAxiosPrivate'
 import moment from 'moment'
 import { TableTitle } from '../../../components/table/Tables'
 
+import ImageViewer from 'react-simple-image-viewer';
 import { Rating } from 'react-simple-star-rating'
 import useAuth from '../../../hooks/useAuth'
 import CardItem from '../../../components/cards/Card'
+
+import { useCallback } from 'react'
 
 
 // needed for the style wrapper
 import styled from "@emotion/styled"
 import Swal from 'sweetalert2'
+import RingLoading from '../../../components/lottie/RingLoading'
 
 
 // add styles as css
 export const StyleWrapper = styled.div`
   .fc-button.fc-prev-button, .fc-button.fc-next-button, .fc-timegrid-event, .fc-button.fc-button-primary{
     background: green;
-    background-image: none
+    background-image: none 
+  } 
+   .fc-event {cursor: pointer;waves-effect}
+  .styles-module_image__2hdkJ{
+    height : 800px;
+    margin-bottom : 120px;
     
-} .fc-event {cursor: pointer;waves-effect}
+    }
+  .styles-module_wrapper__1I_qj{
+    margin-top : 70px;
+    background-color :rgba(0 0 0 / 50%);
+  }
+  img{
+    z-index : 50;
+    opacity: 1.0 !important;
+  }
 `
 export default function Booking() {
   const { state: selectedProvider } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const { auth, setAuth } = useAuth()
-  
+  const {id}=useParams()
+  const openImageViewer = useCallback((index) => {
+    setCurrentImage(index);
+    setIsViewerOpen(true);
+  }, []);
+  const closeImageViewer = () => {
+    setCurrentImage(0);
+    setIsViewerOpen(false);
+  };
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
   const effectRun = useRef(false);
   const [serviceDetails,setServiceDetails] = useState({})
+  const [service,setService] = useState({})
+  const [isLoading,setIsLoading]=useState(true)
+  const [serviceImages,setServiceImages] = useState([])
   const [serviceClinics,setServiceClinics] = useState([])
+
   const [selected_clinic_index,setSelected_clinic_index]=useState(0)
   const [providerSched, setProviderSched] = useState({
     hours_mon_start: '8',
@@ -246,7 +277,7 @@ export default function Booking() {
         .post(
           'patientGetService',
           { Email: (auth.userType==="Patient"?auth.email:"patient1@gmail.com"),
-            ServiceID:selectedProvider.service_id },
+            ServiceID:id },
           {
             signal: controller.signal,
           }
@@ -261,6 +292,28 @@ export default function Booking() {
             setServiceClinics(data.clinics)
             getDoctorSchedule(data.service_details.provider_id)
             getSched(data.service_details.email)
+            setService(data)
+            
+            var tempImageList=[]
+            if (data.service_details.image1){
+              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image1)
+              // `${AWS_BUCKET_SERVICES}services/${serviceDetails?.service_number}/${serviceImages[0]}`
+            }
+            if (data.service_details.image2){
+              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image2)
+            }
+            if (data.service_details.image3){
+              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image3)
+            }
+            if (data.service_details.image4){
+              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image4)
+            }
+            if (data.service_details.image5){
+              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image5)
+            }
+            setServiceImages(tempImageList)
+            console.log(tempImageList)
+            
           } else {
             throw new Error(Message)
           }
@@ -283,6 +336,7 @@ export default function Booking() {
           if (Status) {
             // console.log("providerschedule",data)
             isMounted && setProviderSched(data)
+            
             
             
           } else {
@@ -311,6 +365,7 @@ export default function Booking() {
           console.log("provideroccupiedtimeslots",data)
           if (Status) {
             isMounted && INITIAL_EVENTS(data)
+            setIsLoading(true)
           } else {
             throw new Error(Message)
           }
@@ -358,38 +413,68 @@ export default function Booking() {
               </ol>
             </div>
           </TableTitle>
+          {(isLoading)?<CardItem><div className='d-flex justify-content-center'><RingLoading size={200}/></div></CardItem>:<>
           <div className="row">
             <div className="col-lg-8">
               <div className="card">
                 <div className="card-body doctor">
                   <div className="met-profile">
-                    <div className="row ">
+                    <div className="col ">
                       {/* <div className="row-lg-4 align-self-center mb-3 mb-lg-0 "> */}
                       {/* Sir Tata {`${AWS_BUCKET_SERVICES}services/${serviceDetails?.image1}`} */}
+                      <div className="row ">
                         <div className='d-flex justify-content-center'>
+                        <Link onClick={() => openImageViewer(0)}>
                             <img
-                              src={(auth.userType==="Patient")?`${AWS_BUCKET_SERVICES}${selectedProvider?.images}`:`${AWS_BUCKET_SERVICES}${selectedProvider?.image}`}
+                              src={`${serviceImages[-0]}`}
                               alt=""
                               // width={30}
-                              style={{objectFit:'cover',width:'100%',maxWidth:'300px', maxHeight:'250px', height:'auto'}}
+                              style={{objectFit:'cover',width:'100%',maxWidth:'560px', maxHeight:'380px', height:'auto'}}
                               // className="rounded-circle"
                             />
+                            </Link>
                         </div> 
+                        <div className='d-flex justify-content-center'>
+                        
+                          <div className='row-lg-12'>
+                          {serviceImages.map((serviceImage,index)=>{
+                              // console.log("ServeIMG",serviceImage);
+                              if (index!==0){
+                              return(<div className='row-lg-4'>
+                              <Link onClick={() => {console.log(serviceImages);openImageViewer(index)}}>
+                              <img
+                                src={`${serviceImage}`}
+                                alt=""
+                                // width={30}
+                                className='img-thumbnail'
+                                style={{objectFit:'cover',width:'100%',maxWidth:'140px', maxHeight:'200px', height:'auto'}}
+
+                                // className="rounded-circle"
+                              />
+                              </Link>
+                              </div>
+                              )}
+                            })
+                          }
+                          </div>
+                        </div>
+                        </div>
                         <div className="met-profile-main">
                           {/* <div className="met-profile-main-pic"> */}
                           
                           {/* </div> */}
                           <div className="met-profile_user-detail m-4">
                             {/* <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}> */}
-                              
-                              <h5 className="met-user-name">
+                              Service Title:
+                              <h3 className="">
                                 {serviceDetails?.service_name}
-                              </h5>
+                              </h3>
                             {/* </Link> */}
-                            <p className="mb-0 met-user-name-post">
+                            Service Description:
+                            <h4 className="mb-4">
                               {serviceDetails?.service_description}
 
-                            </p>
+                            </h4>
                             <p>
                               {/* <label htmlFor="checkbox3">
                                 <i className="mdi mdi-star text-warning"></i>
@@ -398,7 +483,7 @@ export default function Booking() {
                                 <i className="mdi mdi-star text-warning"></i>
                                 <i className="mdi mdi-star text-warning"></i>
                               </label> */}
-                              
+                              <b>Average Rating:</b><br/>
                               <Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
@@ -406,9 +491,10 @@ export default function Booking() {
                                 SVGstorkeWidth={1}
                                 size={14}
                                 allowFraction={true}
-                                initialValue={selectedProvider?.rating}
+                                initialValue={serviceDetails?.average}
                                 readonly={true}
-                              />
+                              /><br/>
+                              {service?.average} ({service?.total_reviews} Total Reviews)
                             </p>
                             <h5>
                               <b>Price:</b>{' '}
@@ -556,7 +642,7 @@ export default function Booking() {
                   </div>
             </div>
 
-            <div className="" style={{minWidth: '500px', width: "device-width", overflow:'scroll'}}>
+            <div className="col-lg-7" >
               <h4>{auth.userType==="Patient"?"Choose Appointment Schedule":"Provider's Schedule"}</h4>
               <div className="card">
                 <div className="card-body">
@@ -600,10 +686,25 @@ export default function Booking() {
               </div>
             </div>
           </div>
+          </>
+          }
         </div>
 
         <Footer />
       </div>
+      {isViewerOpen && (
+        <div style={{marginTop:'100px', zIndex:40}}>
+          <StyleWrapper>
+            <ImageViewer
+              src={ serviceImages }
+              currentIndex={ currentImage }
+              disableScroll={ true   }
+              closeOnClickOutside={ true }
+              onClose={ closeImageViewer }
+            />
+          </StyleWrapper>
+        </div>
+      )}
     </div>
   )
 }

@@ -180,7 +180,7 @@ function Visits() {
         )
         .then((res) => {
           const { Data = [] } = res.data
-          setPatientList(Data)
+          setPatientList(Data.Patients)
         })
         .catch((err) => {
           console.error(err)

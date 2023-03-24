@@ -11,6 +11,12 @@ function PatientListData({ limit,pagenum, list = [],showModal }) {
   function handleNewVisit(patient){
     showModal(patient)
   }
+  function formatLongtxt(string=""){
+
+    if (string?.length>20){
+      return string.substring(0,20)+"..."}
+    return string
+  }
   let paginatedlist=[]
   var j=0
   var k=0
@@ -57,7 +63,7 @@ function PatientListData({ limit,pagenum, list = [],showModal }) {
       </td>
       <td>
         <a href={`tel:${item.contact_info}`}>
-          <MdPhone /> {item.contact_info}
+          <MdPhone /> {formatLongtxt(item.contact_info)}
         </a>
       </td>
       <td>

@@ -48,6 +48,7 @@ function Subscription() {
   
   const [paymentHistory,setPaymentHistory] = useState([])
   const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
+  const [isSuccess,setIsSuccess]=useState(false)
   async function handleCancelSub(){
     await axiosPrivate
       .post(
@@ -113,6 +114,7 @@ function Subscription() {
           if (Status && Message === 'Patient not subscribed') {
             
             setIsLoading(false)
+            setIsSuccess(true)
             navigate('plans')
           }
 
@@ -158,16 +160,16 @@ function Subscription() {
                 <div className='card'>
                   <div className='card-body'>
                     <div className='total-payment'>
-                      <h5>Subscription</h5>
+                      <h5 className='m-2'>Subscription</h5>
                       <table className='table mb-0'>
                         <tbody>
                           <tr>
                             <td className='payment-title'>Start date</td>
-                            <td>{moment(subs.subsStart).format('MM/DD/YYYY')}</td>
+                            <td>{isSuccess?moment(subs.subsStart).format('MM/DD/YYYY'):''}</td>
                           </tr>
                           <tr>
                             <td className='payment-title'>End Date</td>
-                            <td>{moment(subs.subsEnd).format('MM/DD/YYYY')}</td>
+                            <td>{isSuccess?moment(subs.subsEnd).format('MM/DD/YYYY'):''}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -205,7 +207,7 @@ function Subscription() {
                 </div>
               </div>
             </div>
-          :<CardItem className={'col-lg-6'}><RingLoading /></CardItem>}
+          :<CardItem><div className='d-flex justify-content-center'><RingLoading size={200}/></div></CardItem>}
           {/* <div className='row'>
             <div className='col-lg-6'>
               <div className='card'>
@@ -315,7 +317,7 @@ function Subscription() {
 
                       ))}
                       
-                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?<RingLoading />:"No Payment History results."}</CardItem></>}
+                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?<div className='d-flex justify-content-center'><RingLoading size={200}/></div>:"No Payment History results."}</CardItem></>}
                   
                 </div>
         </div>

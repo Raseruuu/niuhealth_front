@@ -40,7 +40,7 @@ export default function Complete() {
           console.log(res.data)
           const { Status, Message } = res.data
           if (Status) {
-            Swal.fire("New Rating Created.")
+            Swal.fire("Your response has been submitted.")
             navigate('/patient')
           } else {
             alert(Message)
