@@ -18,7 +18,7 @@ function Upload() {
   const [selectedCoverage, setSelectedCoverage] = useState([])
   const [frontImage,setFrontImage]=useState({})
   const [backImage,setBackImage]=useState({})
-  const [imageList,setImageList]=useState([{path:"Default.png"}])
+  const [imageList,setImageList]=useState([{path:""}])
  
   const {
     register,
@@ -55,17 +55,19 @@ function Upload() {
     console.log('formdataa',data)
     setIsSuccess(false)
     setErrMsg(null)
-
+    var additional_formdata={}
+    for (let index = 0; index < imageList.length; index++) {
+      
+      additional_formdata["Image"+String(parseInt(index)+1)]=imageList[index].file
+    }
     try {
       await axiosPrivate
         .post(
           'uploadInsuranceBucket',
-          { ...data,
+          { ...data,...additional_formdata,
             // Image: data?.Image[0],
             Email: auth?.email,
             // Title: data.Title,
-            Front:frontImage.file,
-            Back: backImage.file,
             // ID: data?.ID,
             // Type: 'Health Insurance',
             // Start: data.Start,
@@ -149,11 +151,13 @@ function Upload() {
                           type="date"
                           placeholder={'mm-dd-yyyy'}
                           name="StartDate"
+                          disabled={isSuccess}
                                 // defaultValue={dateFormat(profile.date_of_birth)}
                                 // value={dateFormat(profile.date_of_birth)}
                           {...register('StartDate', { required: true })}
                                 // onChangeCapture={handleInputChange.bind(this)}
                               />
+                              <br/>
                         <label>
                           End Date
                         </label>
@@ -161,6 +165,7 @@ function Upload() {
                           className="form-control"
                           type="date"
                           placeholder={'mm-dd-yyyy'}
+                          disabled={isSuccess}
                           name="EndDate"
                           {...register('EndDate', { required: true })}
                               />
@@ -212,7 +217,8 @@ function Upload() {
                             </button>
                           ))}
                     </div> */}
-                  <div className='form-group row mb-4 m-1'>
+                    <div className='row'>
+                  <div className='form-group row-lg-12 mb-4 mt-4 m-1'>
                     {/* <div className='col lg-4'>
                       <label>Front Image</label>
                         <UploadOneImage 
@@ -221,13 +227,21 @@ function Upload() {
                           setImage={setFrontImage} 
                           previewImage={frontImage} />
                     </div> */}
-                    <label className=''>Insurance Files</label><br/>
-
+                    {/* <label className='col-form-label text-right'>Insurance Files</label><br/> */}
+                    <div className='col-md-12'>
+                        <label
+                          htmlFor='insurance'
+                          className='col-form-label text-right'
+                        >
+                          Insurance Files
+                        </label>
+                      </div>
+                      <div className='row-md-12 m-4' style={{width:360}}>
                     {imageList.map((image,index)=>{
                       console.log("imageList",imageList)
                       return(
-                      <div className='bg-light col-lg-2 mr-1' width={180}>
-
+                      <div className='col-lg-12 mr-1 p-4 w-100'  style={{height:240}}>
+                        
                         
                           <UploadOneImage
                             disabled={isSuccess}
@@ -242,17 +256,25 @@ function Upload() {
                           
                           />
                         
+                        
                     </div>)
                             })}
-                            {imageList.length<=5?
+                           </div>
+                           <div className='d-flex justify-content-center text-center'>
+                            {imageList.length<=5&&imageList[imageList.length-1].path!="Default.png"?
                             <button
                           className="btn btn-gradient-success waves-effect waves-light"
-                          style={{minWidth:"80px", height:"80px"}}
+                          style={{minWidth:"80px", height:"60px"}}
+                          disabled={isSuccess}
                           onClick={(e)=>{
                             e.preventDefault();
                             (imageList.length<=4)
                               {setImageList([...imageList,{path:'Default.png'}])}
                             }}>Add File</button>:null}
+                            </div>
+                            
+                             
+                    </div>
                     </div>
                     {/* <div>
                       <input

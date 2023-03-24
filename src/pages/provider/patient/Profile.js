@@ -756,11 +756,18 @@ function PatientProfile() {
                           onClick={()=>{
                                 setIns_view(true);
                                 setIns_index(index);
-                                setImages([
-                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].FrontImage}`,
-                                  `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].BackImage}`
-                                ])
-                                
+                                // setImages([
+                                //   `${AWS_BUCKET_SERVICES}insurance/${insuranceList[index].image1}`,
+                                //   `${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[index].BucketName}/${insuranceList[index].BackImage}`
+                                // ])
+                                var tempImageList=[]
+                                for (var i=1;i<=6;i++){
+                                  if (item["image"+String(i+1)]!==""){
+                                    tempImageList.push(`${AWS_BUCKET_SERVICES}insurance/${item["image"+i]}`)
+                                  }
+                                }
+                                console.log(tempImageList)
+                                setImages([...tempImageList])
                                 setValidDateStart(insuranceList[index].start_date)
                                 setValidDateEnd(insuranceList[index].end_date)
                               }
@@ -772,7 +779,7 @@ function PatientProfile() {
                               {/* <i className='dripicons-download file-download-icon'></i> */}
                             
                             <div className='text-center'>
-                            <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${item.BucketName}/${item.FrontImage}`}></img>
+                            <img width={'51px'} height={'66px'} style={{objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${item.image1}`}></img>
                               <i className={(item.Archive == 1) ? 'far fa-folder text-gray ml-3' : 'far fa-folder text-success ml-3'}></i>
 
                               <h6 className='text-truncate'>
@@ -836,7 +843,17 @@ function PatientProfile() {
                       </div>
                       <div className='row m-4'>
                         
-                        <CardItem className={"m-2 col lg-4"}  >
+                          {images.map((image,index)=>{
+                          return(
+                          <CardItem className={"m-2 col lg-4"} >
+                          <div className='m-2 col lg-4'  onClick= {() => openImageViewer(index)}>
+                              File {index+1}<br/><br/>
+                              <img  style={{width:'250px',objectFit:'cover'}} src={image}></img>
+                              </div>
+                          </CardItem>)
+                          })
+                        }
+                        {/* <CardItem className={"m-2 col lg-4"}  >
                           <div className='' onClick= {() => openImageViewer(0)}>
                             Front Image<br/><br/>
                             <img style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].FrontImage}`}></img>
@@ -847,7 +864,7 @@ function PatientProfile() {
                             Back Image<br/><br/>
                               <img  style={{width:'250px',objectFit:'cover'}} src={`${AWS_BUCKET_SERVICES}insurance/${id}/${insuranceList[ins_index].BucketName}/${insuranceList[ins_index].BackImage}`}></img>
                             </div>
-                        </CardItem>
+                        </CardItem> */}
                         
                       </div>
                       
@@ -922,6 +939,8 @@ function PatientProfile() {
                                    }
                                  })
                                }})
+
+                               
                                
                            }
                          }

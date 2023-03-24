@@ -104,7 +104,7 @@ function PatientIndexPage() {
                       () => {
                         console.log("auth",auth)
                         if (!auth||auth.first_name==="name"||auth.address_line_1===""){
-                          Swal.fire({icon:'warning',html:"Complete your registration."})
+                          Swal.fire({icon:'info',html:"Please complete your registration to continue."})
                           .then(()=>{
                             navigate((`/patient/profile`), { replace: true })
                           })

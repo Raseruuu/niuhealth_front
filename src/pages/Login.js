@@ -3,9 +3,10 @@ import { useForm } from "react-hook-form";
 import { Link,useNavigate } from "react-router-dom";
 
 import {USERTYPE} from '../constants'
+import useAuth from "../hooks/useAuth";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 function Login( ) {
-  
+  const { auth, setAuth } = useAuth()
   const axiosPrivate = useAxiosPrivate();
   const {
     register,
@@ -57,6 +58,17 @@ function Login( ) {
         sessionStorage.setItem('userType',  res.data.UserType)
         sessionStorage.setItem('has_insurance', res.data.has_insurance)
         sessionStorage.setItem('isLoggedIn', true)
+        setAuth({...auth,
+          isLoggedIn:true,
+          has_insurance:res.data.has_insurance,
+          userType:res.data.UserType,
+          transactionType:res.data.TransactionType,
+          expires_in:res.data.Tokens.expires_in,
+          token_type:res.data.Tokens.token_type,
+          refresh_token: res.data.Tokens.refresh_token,
+          id_token: res.data.Tokens.id_token
+
+        })
         Swal.fire({ icon: 'success',html:`${Message}`}).then(()=>{
           navigate((`/`), { replace: true })
         })

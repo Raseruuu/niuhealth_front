@@ -408,7 +408,7 @@ function Visits() {
                                     <div className="p-3">
                                       {/* <h6 className=" mt-0">Price Range</h6> */}
                                       <div className='m-1'> 
-                                        <h6 className=" mb-0">Status</h6>
+                                        <h6 className=" mb-2">Status</h6>
                                         {statusdict.map((val,index) => (
                                           <div key={index} className="checkbox checkbox-success" style={{width:240}}>
                                             

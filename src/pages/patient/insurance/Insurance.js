@@ -106,11 +106,11 @@ function Insurance() {
                   <h4 className='header-title mt-0 mb-3'>Insurance Folders</h4>
 
                   <div className='file-box-content'>
-                    {(list.length===0)?
+                    {(list?.length===0)?
                       <>
                         <CardItem>{(isLoading)?<RingLoading /> :(`You have no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
-                    {list.map((item) => (
+                    {list?.map((item) => (
                       <Link
                       // className="btn-success waves"
                       style={{background:'none', marginLeft:'2px'}}
