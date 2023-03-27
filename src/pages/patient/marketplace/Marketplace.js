@@ -464,7 +464,7 @@ export default function Marketplace() {
                           </div>
                           <div className="d-flex align-items-end justify-content-between my-2 row">
                             <button 
-                              onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
+                              onClick={()=>{navigate("/patient/marketplace/booking/"+item.service_id,{state:{ ...item}})}}
                               className='btn btn-success'>Book Appointment</button>
                             <button 
                               onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}

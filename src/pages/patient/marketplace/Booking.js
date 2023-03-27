@@ -252,6 +252,7 @@ export default function Booking() {
 
     const startTime = startTimeArr.reduce((a, b) => Math.min(a, b), [8])
     const endTime = endTimeArr.reduce((a, b) => Math.max(a, b), [17])
+    
 
     setCalendarStartEndTime({ start: startTime, end: endTime })
     setWeeklySched(weeklySched)
@@ -364,8 +365,8 @@ export default function Booking() {
           const { Status, Data: data = [], Message } = res.data
           console.log("provideroccupiedtimeslots",data)
           if (Status) {
+            setIsLoading(false)
             isMounted && INITIAL_EVENTS(data)
-            setIsLoading(true)
           } else {
             throw new Error(Message)
           }

@@ -106,7 +106,7 @@ export function PaginatedList( {limit,pagenum, list = [] }){
           <div className='row'>
           
             <img
-              src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.patient_id+"/"+item.picture}
+              src={AWS_BUCKET_SERVICES+"profiles/pictures/"+item.picture}
               alt=''
               className='thumb-sm rounded-circle mr-2'
               style={{width:100,height:100}}
