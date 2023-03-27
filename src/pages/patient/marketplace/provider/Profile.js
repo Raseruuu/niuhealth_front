@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { AWS_BUCKET, AWS_BUCKET_PROFILES, AWS_BUCKET_SERVICES } from "../../../../constants"
 import TableCard, { ContainerFluid, TableTitle } from "../../../../components/table/Tables"
 import { useEffect, useState } from 'react'
@@ -21,6 +21,7 @@ function ProviderProfile() {
   
   const [profile, setProfile] = useState({})
   
+  const navigate = useNavigate()
   const [errMsg, setErrMsg] = useState(null)  
   const [reviews, setReviews] = useState([])
   const { id } = useParams()
@@ -684,7 +685,7 @@ function ProviderProfile() {
                     <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
                     <div className="card e-co-product" >
                     {/* {AWS_BUCKET_SERVICES+ item.images} */}
-                      <Link to={(auth.userType==="Patient"?"/patient/marketplace/booking":"/provider/service/view")} 
+                      <Link to={(auth.userType==="Patient"?"/patient/marketplace/booking/"+item.service_id:"/provider/service/view")} 
                       state={{ ...item }}>
                         <img
                           src={(AWS_BUCKET_SERVICES+item.image)}
@@ -695,7 +696,7 @@ function ProviderProfile() {
                       </Link>
                       <div className="card-body product-info">
                         <Link
-                          to={(auth.userType==="Patient"?"/patient/marketplace/booking":"/provider/service/view")}
+                          to={(auth.userType==="Patient"?"/patient/marketplace/booking/"+item.service_id:"/provider/service/view")}
                           className="product-title"
                           state={{ ...item }}
                         >
@@ -734,11 +735,11 @@ function ProviderProfile() {
                         {auth.userType==="Patient"?
                         <div className="d-flex justify-content-between my-2 row">
                           <button 
-                            onClick={()=>{navigate("/patient/marketplace/booking",{state:{ ...item}})}}
+                            onClick={()=>{navigate("/patient/marketplace/booking/"+(item?.service_id),{state:{ ...item}})}}
                             className='btn btn-success'>Book Appointment</button>
-                          <button 
-                            onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}
-                            className='btn btn-outline-success'>View Profile</button>
+                          {/* <button 
+                            onClick={()=>{navigate("/patient/marketplace/provider/"+(id))}}
+                            className='btn btn-outline-success'>View Profile</button> */}
                         </div>:<></>}
                       </div>
                     </div>

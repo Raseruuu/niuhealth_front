@@ -212,13 +212,19 @@ const AppointmentAction = ({
 }) => {
 
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
-  const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
-  const appointmentETA=HMFormat(moment(appointmentTime).diff(timenow, 'minutes', true))
 
+
+  const withinAppointmentPeriod=timenow.isAfter(appointmentPeriod[0])&&appointmentPeriod[1].isAfter(timenow)
+  const withinAppointmentPeriod2=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
+
+  
+  const appointmentETA=HMFormat(moment(appointmentTime).diff(timenow, 'minutes', true))
+  console.log("AAAAA",withinAppointmentPeriod)
   // const appointmentETAhrs=parseInt(moment(appointmentTime).diff(timenow, 'hours', true))
   
   
-  if (status==="4"&& withinAppointmentPeriod){
+  if ( withinAppointmentPeriod){
+    
     return (
       <>
         <h6 className="m-3">Virtual visit period is now!</h6>

@@ -39,7 +39,7 @@ export function TableTextLink({ text, to, children }) {
 }
 export default function TableCard({ headers, children }) {
   return (
-    <div className="row">
+    // <div className="row">
       <div className="col-lg-12">
         <div className="card">
           <div className="card-body">
@@ -58,6 +58,6 @@ export default function TableCard({ headers, children }) {
           </div>
         </div>
       </div>
-    </div>
+    // </div>
   )
 }

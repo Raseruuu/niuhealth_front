@@ -590,10 +590,10 @@ function Visits() {
           </div>
         </div>
       
-        <div className='tab-pane fade position-absolute p-3 w-100' id='list_view'>
+        <div className='tab-pane fade show' id='list_view'>
           {/* <div className='col-lg-12'> */}
           {(appointmentList.length!==0)?
-              <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status"]}>
+              <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status","Action"]}>
               {appointmentList.map((item,index)=>(
                 <tr key={index}>
                 <td>

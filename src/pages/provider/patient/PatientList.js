@@ -682,7 +682,7 @@ function PatientList() {
                       <label htmlFor="date" className="col-form-label">Visit Date</label>
                       <input required 
                         className="form-control" 
-                        min={moment().add(1,"days").format("YYYY-MM-DD")}
+                        min={moment().format("YYYY-MM-DD")}
                         defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
                         type="date" id="date" {...register("Date")}/>
                       

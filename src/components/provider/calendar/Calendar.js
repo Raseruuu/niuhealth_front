@@ -51,6 +51,9 @@ function Calendar({ allowCall,dateList }) {
     const startStr = `${currentD}T${timeStr}:00:00`
     const dateX = moment(startStr).format('YYYY-MM-DD h:mm a')
     const appointmentIsOver= (moment().isAfter(moment(startStr)))
+    
+    const appointmentIsLater= (moment(startStr).add(1,'hours').isAfter(moment()))
+
     Swal.fire({
       titleText: 'Appointment Details:',
       
@@ -61,7 +64,7 @@ function Calendar({ allowCall,dateList }) {
     Email: ${selected.email}<br/>
     Phone: ${selected.contact_info}<br/>
     </div>`,
-      confirmButtonText: allowCall ? (appointmentIsOver?"OK":'Start Zoom meeting') : 'Ok',
+      confirmButtonText: allowCall ? (appointmentIsOver?"OK":appointmentIsLater?"OK":'Start Zoom meeting') : 'Ok',
       showCancelButton: allowCall,
     }).then(async ({ isConfirmed }) => {
       

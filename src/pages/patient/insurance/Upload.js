@@ -64,7 +64,7 @@ function Upload() {
     var formdata={...data}
     formdata['StartDate']=moment(data.StartDate).format("YYYY-MM-DD")
     formdata['EndDate']=moment(data.EndDate).format("YYYY-MM-DD")
-    Swal.fire(`Start: ${formdata['StartDate']} <br> End: ${formdata['EndDate']} <br>`)
+    // Swal.fire(`Start: ${formdata['StartDate']} <br> End: ${formdata['EndDate']} <br>`)
     try {
       await axiosPrivate
         .post(
