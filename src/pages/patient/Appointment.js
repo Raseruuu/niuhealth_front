@@ -13,7 +13,7 @@ import Swal from 'sweetalert2'
 import 'animate.css';
 import RingLoading from "../../components/lottie/RingLoading"
 function dateTimeFormat(date) {
-  return moment(date).format('MMM DD, YYYY, hh:mm A UTC Z')
+  return moment(date).format('MMM DD, YYYY, hh:mm:ss A UTC Z')
 }
 const timenow=moment()
 
@@ -24,7 +24,7 @@ function formatLongtxt(string=""){
   return string
 }
       
-const CancelButton = ({visit_id}) => {
+const CancelButton = ({visit_id, refreshList, setRefreshList}) => {
   
   const { auth } = useAuth()
 const axiosPrivate = useAxiosPrivate()
@@ -63,7 +63,7 @@ return(
             ) .then((res) => {
               console.log()
               if (res.data?.Status && isConfirmed) {
-                Swal.fire('Appointment successfully cancelled.')
+                Swal.fire('Appointment successfully cancelled.').then(()=>{setRefreshList(!refreshList)})
 
               // } else if (res.data?.Status && !cancel) {
               //   Swal.fire('Appointment  cancelled.')
@@ -198,7 +198,18 @@ function HMFormat(minutes) {
   return days+" days, "+ hours+" hrs and "+dig+min+" mins"}
   // return hours+":"+dig+min+":"+sec
 }
-const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_name, provider_description, appointment ,joinAppointment}) => {
+const AppointmentAction = ({ 
+  status ,
+  visit_id, 
+  appointmentTime ,
+  image,provider_name, 
+  provider_description, 
+  appointment ,
+  joinAppointment,
+  refreshList,
+  setRefreshList
+
+}) => {
 
   const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
   const withinAppointmentPeriod=(timenow>appointmentPeriod[0]&&timenow<appointmentPeriod[1])
@@ -228,7 +239,7 @@ const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_n
       <div className="col-md-12 ">
         <h6 className="m-3">Appointment ETA: {appointmentETA}
         </h6>
-        <CancelButton visit_id={visit_id}/>
+        <CancelButton visit_id={visit_id} refreshList={refreshList} setRefreshList={setRefreshList}/>
       </div>
     )}
     
@@ -236,7 +247,7 @@ const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_n
     return (
       <div className="col-md-12 ">
         <h6 className="m-3">Awaiting doctor {provider_name}'s approval.</h6>
-        <CancelButton visit_id={visit_id}/></div>
+        <CancelButton visit_id={visit_id} refreshList={refreshList} setRefreshList={setRefreshList}/></div>
     )}
   else if (status==="1"){
     return (
@@ -263,14 +274,24 @@ const AppointmentAction = ({ status ,visit_id, appointmentTime ,image,provider_n
 
 }
 function TimeCard(){
+  async function timeChange(){
+    const time=moment()
+    setCurrentTime(dateTimeFormat(time))
+  }
+    const [currentTime,setCurrentTime]=useState()
+    useInterval(timeChange, 100)
+    useEffect(()=>{
+
+    },[currentTime])
     return(
       <CardItem>
         <div width={"1000px"}>
           <h3>Time Now:</h3> 
-          <i className="far fa-fw fa-clock"></i>{dateTimeFormat(timenow)}
+          <i className="far fa-fw fa-clock"></i>{currentTime}
         </div>
       </CardItem>
     )
+
 }
 function AppointmentItem({
     provider_description,
@@ -282,7 +303,9 @@ function AppointmentItem({
     service_id,
     trans_start,
     trans_date_time,
-    visit_id,status,joinAppointment}){
+    visit_id,status,joinAppointment,
+    refreshList, setRefreshList 
+  }){
   
   const dateTime=(trans_date_time+", "+trans_start+":00")
 
@@ -346,7 +369,16 @@ function AppointmentItem({
         </div>
         <div className="col-md-12 text-right m-2">
           
-          <AppointmentAction status={status} visit_id={visit_id} appointmentTime={dateTime} image={image} provider_name={provider_name} provider_description={provider_description} appointment={visit_id} joinAppointment={joinAppointment} />
+          <AppointmentAction 
+            status={status} visit_id={visit_id} 
+            appointmentTime={dateTime} image={image} 
+            provider_name={provider_name} 
+            provider_description={provider_description} 
+            appointment={visit_id} 
+            joinAppointment={joinAppointment} 
+            refreshList={refreshList} 
+            setRefreshList={setRefreshList}
+            />
           
         </div>
       </div>
@@ -390,6 +422,9 @@ function Appointment() {
   let isMounted = true
   const controller = new AbortController()
   const [errMsg, setErrMsg] = useState(null)
+  
+  
+  const [refreshList, setRefreshList] = useState(false)
   async function joinAppointment (appointment) {
     
      
@@ -464,7 +499,7 @@ function Appointment() {
   }
   useEffect(()=>{
     getList()  
-  }, [])
+  }, [refreshList])
       
   return (
     <div className="page-wrapper">
@@ -483,7 +518,7 @@ function Appointment() {
           (<div className="row">
             <div className="col-lg-12">
               {appointmentsList.map((appointment,index)=>
-              <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index} />
+              <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index}  refreshList={refreshList} setRefreshList={setRefreshList} />
               )}
             </div>
           </div>):<CardItem><h4><div className='d-flex justify-content-center'><RingLoading size={200}/></div></h4></CardItem>}

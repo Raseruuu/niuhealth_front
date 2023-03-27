@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { Alert } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import Footer from '../../../components/Footer'
 import { UploadOneImage } from '../../../components/form/UploadImage'
 import useAuth from '../../../hooks/useAuth'
@@ -60,11 +61,15 @@ function Upload() {
       
       additional_formdata["Image"+String(parseInt(index)+1)]=imageList[index].file
     }
+    var formdata={...data}
+    formdata['StartDate']=moment(data.StartDate).format("YYYY-MM-DD")
+    formdata['EndDate']=moment(data.EndDate).format("YYYY-MM-DD")
+    Swal.fire(`Start: ${formdata['StartDate']} <br> End: ${formdata['EndDate']} <br>`)
     try {
       await axiosPrivate
         .post(
           'uploadInsuranceBucket',
-          { ...data,...additional_formdata,
+          { ...formdata,...additional_formdata,
             // Image: data?.Image[0],
             Email: auth?.email,
             // Title: data.Title,

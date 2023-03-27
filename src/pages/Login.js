@@ -20,7 +20,7 @@ function Login( ) {
   async function logoutCurrentUser(){
     await axiosPrivate
       .get(
-        "http://ebsdrcocophp01prod-env.eba-y6pjrhe2.us-west-1.elasticbeanstalk.com/niuhealth-api/api/getusers",
+        "http://ebsdrcocophp01prod-env.eba-y6pjrhe2.us-west-1.elasticbeanstalk.com/niuhealth-api/api/",
         {headers:{
           
           'Access-Control-Allow-Origin': '*',
@@ -60,13 +60,18 @@ function Login( ) {
         sessionStorage.setItem('isLoggedIn', true)
         setAuth({...auth,
           isLoggedIn:true,
+          
+          email:res.data.Email,
+          email:res.data.Name,
+          email:res.data.Email,
+
           has_insurance:res.data.has_insurance,
           userType:res.data.UserType,
           transactionType:res.data.TransactionType,
           expires_in:res.data.Tokens.expires_in,
           token_type:res.data.Tokens.token_type,
           refresh_token: res.data.Tokens.refresh_token,
-          id_token: res.data.Tokens.id_token
+          // id_token: res.data.Tokens.id_token
 
         })
         Swal.fire({ icon: 'success',html:`${Message}`}).then(()=>{
