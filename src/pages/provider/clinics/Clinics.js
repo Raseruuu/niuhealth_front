@@ -90,7 +90,7 @@ function Clinics() {
                 <p className='text-muted mb-0'>
                   {item.specialty}
                 </p>
-                <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p>
+                {/* <p className='mb-0'>{item.working_hours || `Mon 8am - 5pm`}</p> */}
                 
               </div>
               

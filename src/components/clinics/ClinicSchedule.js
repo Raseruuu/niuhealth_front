@@ -349,17 +349,17 @@ export default function ClinicSchedule() {
         <TableTitle title={"Clinic Profile"}>
           
               <div className='float-right'>
-                {/* <ol className='breadcrumb'>
+                <ol className='breadcrumb'>
                   <li className='breadcrumb-item'>
-                    <Link to='/admin'>NU Health</Link>
+                    <Link to='/admin'>NIU Health</Link>
                   </li>
                   <li className='breadcrumb-item'>
                     <Link to='/admin/clinics'>Clinics</Link>
                   </li>
                   <li className='breadcrumb-item active'>
-                    New Clinic Schedule
+                    {(action==="create")?"New Clinic":(action==="edit")?"Edit Clinic":"Clinic"}
                   </li>
-                </ol> */}
+                </ol>
               </div>
         </TableTitle>
 

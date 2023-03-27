@@ -69,7 +69,7 @@ function showReview({patientPicture,patientName,patientEmail,rating,service_name
   })
 }
 
-function RatingsItem({patientPicture,patientName,service_name,service_description,patientEmail,rating_id,rating,review="It was certainly one of the consultations of all time."}){
+function RatingsItem({setRefreshList,refreshList,patientPicture,patientName,service_name,service_description,patientEmail,rating_id,rating,review="It was certainly one of the consultations of all time."}){
   const { auth } = useAuth()
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
@@ -82,7 +82,8 @@ function RatingsItem({patientPicture,patientName,service_name,service_descriptio
         console.log('res',res.data)
         const {Status,Message}=res.data
         if (Status){
-          Swal.fire({icon:'info',html:`This Review has been deleted.`})
+          Swal.fire({icon:'info',html:`This Review has been deleted.`}).then(()=>{setRefreshList(!refreshList)
+          })
           
           return
         }
@@ -374,7 +375,7 @@ function Ratings({}) {
   const [generalRatingListOriginal, setGeneralRatingListOriginal] = useState([])
   const [patientGeneralRatingList,setPatientGeneralRatingList]=useState([])
   const [errMsg, setErrMsg] = useState(null)
-  
+  const [refreshList,setRefreshList]=useState(false)
   const [filters,setFilters]=useState([])
   useEffect(() => {
     let isMounted = true
@@ -419,7 +420,7 @@ function Ratings({}) {
       isMounted = false
       controller.abort()
     }
-  }, [])
+  }, [refreshList])
 
   return (
     <div className='container-fluid'>
@@ -493,7 +494,7 @@ function Ratings({}) {
                 {/* <CardItem length={12}> */}
                       <div className='row'>
                       {patientGeneralRatingList.map((item,index)=>
-                          (<RatingsItem key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating_id={item.rating_id} rating={item.rating} review={item.review}/>)
+                          (<RatingsItem setRefreshList={setRefreshList} refreshList={refreshList} key={index} patientPicture={item.picture} patientName={item.full_name} service_name={item.service_name} service_description={item.service_description} patientEmail={item.email} rating_id={item.rating_id} rating={item.rating} review={item.review}/>)
                         
                         )}
                       </div> 

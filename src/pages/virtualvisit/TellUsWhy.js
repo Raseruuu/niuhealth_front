@@ -214,7 +214,7 @@ export default function TellUsWhy() {
         {/* <!-- container --> */}
 
         {/* <footer className="footer text-center text-sm-left">
-            &copy; 2022 NU Health 
+            &copy; 2022 NIU Health 
         </footer> */}
         <Footer />
         {/* <!--end footer--> */}

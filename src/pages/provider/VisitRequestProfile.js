@@ -68,7 +68,7 @@ function VisitRequestProfile() {
                             <div className="page-title-box">
                                 <div className="float-right">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><a href="../dashboard/provider-index.html">Nu Health</a></li>
+                                        <li className="breadcrumb-item"><a href="../dashboard/provider-index.html">Niu Health</a></li>
                                         <li className="breadcrumb-item"><a href="../dashboard/visit_requests-index.html">Visit Requests</a></li>
                                         <li className="breadcrumb-item active">Request Approval</li>
                                     </ol>
@@ -162,7 +162,7 @@ function VisitRequestProfile() {
                 </div>
 
                 <footer className="footer text-center text-sm-left">
-                    &copy; 2022 NU Health 
+                    &copy; 2022 NIU Health 
                 </footer>
             </div>
             </div>

@@ -57,7 +57,7 @@ export default function AdminSettings() {
 															
 															<div className="form-group row">
                                                                 <div className="col-md-12">
-																	If you want to permanenetly deactivate your NU Health account, let us know. Your account will be deleted after 30 days. Once the deactivating process begins, you won't be able to reactivate or retrieve any of the content or information you have added.
+																	If you want to permanenetly deactivate your NIU Health account, let us know. Your account will be deleted after 30 days. Once the deactivating process begins, you won't be able to reactivate or retrieve any of the content or information you have added.
                
                                                                 </div>
                                                             </div>
@@ -82,7 +82,7 @@ export default function AdminSettings() {
                 {/* <!-- container --> */}
 
                 <footer className="footer text-center text-sm-left">
-                    &copy; 2022 NU Health 
+                    &copy; 2022 NIU Health 
                 </footer>
                 {/* <!--end footer--> */}
             </div>

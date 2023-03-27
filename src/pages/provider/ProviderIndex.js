@@ -27,7 +27,7 @@ function hourformat(hour){
   else if (hour===0){
     return (12)+":00 AM"
   }
-  else{
+  else{ 
     return ((hour<10)?"0":"")+hour+":00 AM"
   }
 }
@@ -155,6 +155,7 @@ function ProviderIndex() {
         .then((res) => {
           const { Data = [] } = res.data
           setPatientList(Data.Patients)
+          
         })
         .catch((err) => {
           console.error(err)
@@ -184,8 +185,8 @@ function ProviderIndex() {
               <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
               <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
               
-              <h4>Start an In-Person Visit with a Patient here.</h4>
-              <h6 className='text-muted'> Make sure to input appropriate info.</h6>
+              <h4> Visit with a Patient</h4>
+              <h6 className='text-muted'>Schedule a Virtual/In-Person Visit with a patient today.</h6>
               <div className='align-item-center float-right'>
                 <button
                   className='btn btn-outline-success btn-round ' 
@@ -197,7 +198,7 @@ function ProviderIndex() {
                   // data-target="#myModal"
                   
                   >
-                  New Visit
+                  Go To Patients Menu
                 </button>
               </div>
             </div>
