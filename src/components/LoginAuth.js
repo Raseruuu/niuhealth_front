@@ -8,6 +8,14 @@ export async function loader({ request }) {
   const access_token = sessionStorage.getItem('access_token')
   const token_type = sessionStorage.getItem('token_type')
   const isLoggedIn = sessionStorage.getItem('isLoggedIn ')
+  
+  // const { auth, setAuth } = useAuth()
+  // const access_token = auth.access_token
+  // const token_type = auth.token_type
+  // const isLoggedIn = auth.isLoggedIn
+
+  
+
   // const navigate = useNavigate()
   if (isLoggedIn==='false' || !access_token || access_token === 'undefined') {
   //   // window.location.replace(AWS_COGNITO_HOSTUI_DOMAIN)
@@ -71,7 +79,7 @@ export async function loader({ request }) {
 }
 
 function LoginAuth() {
-  const { setAuth } = useAuth()
+  const { auth, setAuth } = useAuth()
   const id_token = sessionStorage.getItem('id_token')
   const refresh_token = sessionStorage.getItem('refresh_token')
   const transactionType = sessionStorage.getItem('transactionType')
@@ -115,6 +123,7 @@ function LoginAuth() {
       transactionType,
       userType,
     }))
+    console.log(auth)
   }, [])
 
   if (accessTokenValid && userType === USERTYPE.patient) {

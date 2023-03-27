@@ -128,7 +128,7 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
     //   getProfile()
     // }
     // if (auth.userType==="Patient"){
-      if (!auth.contact_info){
+      if (auth.profile){
         getProfile()
       }
     // }

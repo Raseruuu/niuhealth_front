@@ -110,9 +110,10 @@ function Insurance() {
                       <>
                         <CardItem>{(isLoading)?<div className='d-flex justify-content-center'><RingLoading size={200}/></div> :(`You have no submitted Insurance Documents.`)}</CardItem>
                       </>:<></>}
-                    {list?.map((item) => (
+                    {list?.map((item,index) => (
                       <Link
                       // className="btn-success waves"
+                      key={index}
                       style={{background:'none', marginLeft:'2px'}}
                       to={`/patient/insurance/folders/${item.BucketId}`}
                       // onClick={()=>Swal.fire(

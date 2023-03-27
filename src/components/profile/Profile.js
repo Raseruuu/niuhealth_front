@@ -124,8 +124,9 @@ function ProfileEdit() {
       formData.append('Province', profile.province||"")
       formData.append('CountryID', profile.country_id||"")
       formData.append('City', profile.city||"")
-      formData.append('DateOfBirth', profile.date_of_birth||"")
+      formData.append('DateOfBirth', moment(profile.date_of_birth).format("YYYY-MM-DD")||"")
       formData.append('LocalTimeZone', profile.local_time_zone||"")
+
     }
     if (auth.userType==="Provider"){
       formData.append('Email', auth.email)
@@ -169,7 +170,8 @@ function ProfileEdit() {
         const { Status, Data: data = [], Message } = res.data
 
         if (Status) {
-          setAuth((prev) => ({ ...prev, profile }))
+          setAuth((prev) => ({ ...prev, ...profile }))
+          console.log(auth)
           setOldProfile(profile)
           Swal.fire({icon:'success',text:'Successfully Updated Your Profile.'})
           setDisableForm(!disableForm)
@@ -415,11 +417,13 @@ function ProfileEdit() {
                           type="file"
                           id="input-file-now-custom-1"
                           accept="image/*"
-                          capture="user"
+                          // capture="user"
+                          // capture="filesystem"
                           name="Image"
                           ref={imgRef}
                           onChange={handleImageInputChange}
                         />
+                        
                             {/* {auth.userType} */}
                         <img
                           alt=""

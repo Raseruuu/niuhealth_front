@@ -59,9 +59,10 @@ return (
                     type="file"
                     id="input-file-now-custom-1"
                     accept="image/*"
-                    capture="user"
+                    // capture="user"
                     name="Image"
                     ref={imgRef}
+                    capture="filesystem"
                     onChange={handleImageInputChange}
                 />
                 {(image.path!=='undefined')?(
@@ -184,8 +185,9 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                     type="file"
                     id="input-file-now-custom-1"
                     accept="image/*"
-                    capture="user"
+                    // capture="user"
                     name="Image"
+                    capture="filesystem"
                     ref={imgRef}
                     onChange={handleImageInputChange}
                 />

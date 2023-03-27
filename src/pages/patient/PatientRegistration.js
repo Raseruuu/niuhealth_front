@@ -24,10 +24,11 @@ function PatientRegistration() {
     
   async function handleRegisterForm(data){
     const controller = new AbortController()
-   
+    var formData={...data}
+    formData["DateOfBirth"]=(moment(profile.date_of_birth).format("YYYY-MM-DD")||"")
     await axiosPrivate
     .post("updatePatientDetails", 
-      {...data,
+      {...formData,
       Email:email,
       FirstName:profile?.first_name,
       MiddleName:profile?.middle_name,
