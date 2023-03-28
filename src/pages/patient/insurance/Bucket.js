@@ -14,16 +14,19 @@ import { StatusTextInsurance2 } from '../../../components/status/Status'
 
 export const StyleWrapper = styled.div`
   .styles-module_image__2hdkJ{
-    height : 800px;
+    height : auto;
+    max-height: 780px;
     margin-bottom : 120px;
     
     }
   .styles-module_wrapper__1I_qj{
     margin-top : 70px;
     background-color :rgba(0 0 0 / 50%);
+
   }
   img{
-    z-index : 50;
+    z-index : 120;
+    object-fit:contain;
     opacity: 1.0 !important;
   }
 `
@@ -218,11 +221,11 @@ function Bucket() {
                             
                             <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
                             
-                            {moment(item.start_date).format("MMMM DD, YYYY ")}
+                            {moment(item.start_date).format("MMMM DD, YYYY")}
                           </div>
                             <div className="col">
                               <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
-                              {moment(item.end_date).format("MMMM DD, YYYY ")}
+                              {moment(item.end_date).format("MMMM DD, YYYY")}
                         </div>
                     </div>
                   </div>
@@ -233,11 +236,11 @@ function Bucket() {
                             
                             <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
                             
-                            {moment(item.validated_start_date).format("MMMM DD, YYYY ")}
+                            {moment(item.validated_start_date).format("MMMM DD, YYYY")}
                           </div>
                             <div className="col">
                               <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
-                              {moment(item.validated_end_date).format("MMMM DD, YYYY ")}
+                              {moment(item.validated_end_date).format("MMMM DD, YYYY")}
                         </div>
                     </div>
                   </div>:<></>}

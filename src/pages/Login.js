@@ -62,11 +62,11 @@ function Login( ) {
           isLoggedIn:true,
           
           email:res.data.Email,
-          email:res.data.Name,
-          email:res.data.Email,
-
+          Name:res.data.Name,
+          // refresh_token:res.data.Tokens.refresh_token,
           has_insurance:res.data.has_insurance,
           userType:res.data.UserType,
+          access_token:res.data.Tokens.access_token,
           transactionType:res.data.TransactionType,
           expires_in:res.data.Tokens.expires_in,
           token_type:res.data.Tokens.token_type,

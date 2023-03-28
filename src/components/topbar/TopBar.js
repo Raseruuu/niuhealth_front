@@ -128,7 +128,7 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
     //   getProfile()
     // }
     // if (auth.userType==="Patient"){
-      if (auth.profile){
+      if (profile){
         getProfile()
       }
     // }
@@ -175,7 +175,8 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
               alt='profile-user'
               className='rounded-circle'
               style={{display:(removePfp?'none':'unset'),objectFit:"cover", width:50, height:50}}
-            /></>:null}
+            />
+            </>:null}
            
           </Link>
           <div className='dropdown-menu dropdown-menu-right'>

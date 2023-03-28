@@ -448,8 +448,8 @@ function Appointment() {
           const { Data } = res.data
 
           console.log("Data",Data,res.data?.Status)
-          setMeetingID(Data.MeetingID)
-          setPassword(Data.Passcode)
+          setMeetingID(Data?.MeetingID)
+          setPassword(Data?.Passcode)
           
           if (res.data?.Status === true) {
             setDelay(null)

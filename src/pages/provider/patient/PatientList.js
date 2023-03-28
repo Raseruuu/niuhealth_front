@@ -422,7 +422,7 @@ function PatientList() {
         setIsLoading(false)
         console.log(res)
         const { Data = [] } = res.data
-        if (searchText.length>0){
+        if (searchText?.length>0){
           
           setPatientList(Data)
         }
@@ -468,7 +468,7 @@ function PatientList() {
   async function handleSubmitSearch(event) {
     event.preventDefault()
     setPageNum(1)
-    if (searchText.length < 3) {
+    if (searchText?.length < 3) {
       return
     }
 
@@ -540,7 +540,7 @@ function PatientList() {
           ? '0 record found.'
           : null} */}
           {/* </CardLongItem> */}
-      {(patientList.length>0)?<>
+      {(patientList?.length>0)?<>
         <TableCard
         headers={[
           'Patient',
@@ -575,7 +575,7 @@ function PatientList() {
               <Pagination
                 activePage={pageNum}
                 itemsCountPerPage={pageLimit}
-                totalItemsCount={patientList.length||[]}
+                totalItemsCount={patientList?.length||[]}
                 pageRangeDisplayed={5}
                 // onPageChange={}
                 itemclassName="page-item "

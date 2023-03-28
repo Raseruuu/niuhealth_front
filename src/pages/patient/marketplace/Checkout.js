@@ -26,6 +26,7 @@ export default function Checkout() {
   const [totalAmount, setTotalAmount] = useState(
     selectedService?.selectedProvider?.cost_price
   )
+  console.log("SelectedSer",selectedService)
   const [clinic] = useState(selectedService?.clinic_obj)
   console.log("CLINIC",selectedService?.clinic_obj)
   const handleClose = () => setShow(false)
@@ -44,7 +45,7 @@ export default function Checkout() {
         ServiceID: selectedService.selectedProvider.service_id,
         PaymentType: 3,
         ClinicID:clinic.clinic_id,
-        ProviderID: selectedService.selectedProvider.provider_id,
+        ProviderID: selectedService.provider.provider_id,
         Date: selectedService.timeSlot.dateX,
         Time: selectedService.timeSlot.timeX,
       }

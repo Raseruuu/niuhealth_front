@@ -103,10 +103,13 @@ export default function WaitingRoom() {
       })
       .catch((err) => console.error(err))
   }
-
+  function showSwal(){
+    Swal.fire("Ayoo")
+  }
   // we need to put getStatus and getQueueCount on useInterval,
   useInterval(getStatus, delay)
   useInterval(getQueueCount, delay)
+  // useInterval(showSwal, delay)
   useEffect(() => {
     const handleContextmenu = e => {
         e.preventDefault()
@@ -161,7 +164,9 @@ export default function WaitingRoom() {
 
                     <video
                       width="100%"
-                      height="442" 
+                      height="auto" 
+                      playsInline
+                      className='pt-4'
                       // controls={true}
                       name={"video1"}
                       ref={myVideo}
@@ -190,13 +195,13 @@ export default function WaitingRoom() {
               </div>
 
               <div className="col-lg-6">
-                <div className="card">
-                  <div className="card-body">
-                    <h2 style={{ paddingTop: '30px' }}>
+                {/* <div className="card">
+                  <div className="card-body"> */}
+                    <h3 style={{ paddingTop: '20px' }}>
                       Thanks for your patience.
                       <br />
                       Your provider will soon be with you.
-                    </h2>
+                    </h3>
                     <div className="steps_title_sub_text">
                       Keep this window open and active to hold your place in
                       line. Video content is how we keep your healthcare costs
@@ -213,36 +218,40 @@ export default function WaitingRoom() {
                     <div className="steps_info_text">
                     There are <strong>{queueCount}</strong> people in the queue
                     </div>
-                    <div
-                      className="wizard_btn"
-                      style={{ margin: '50px 0', paddingBottom: '50px' }}
-                    >
-                      <button
-                        type="button"
-                        className="btn btn-success btn-round waves-effect waves-light figmaBigButton float-left"
-                        onClick={() =>
-                          navigate('../room', {
-                             state: 
-                             {MeetingID:meetingID,
-                              Password:password}
-                            })
-                        }
-                        style={{
-                          cursor: isReady ? 'pointer' : 'not-allowed',
-                        }}
-                        disabled={!isReady}
+                    <div className='d-flex justify-content-center m-2 p-0 w-100'>
+                      <div
+                        className="wizard_btn"
+                        // style={{ margin: '20px 0'}}
                       >
-                        {isReady ? ' Join Virtual Visit Now' : 'Please wait...'}
-                      </button>
-
-                      <button
-                        onClick={() => navigate('/patient')}
-                        type="button"
-                        className="btn btn-outline-danger btn-round waves-effect waves-light figmaBigButton float-right"
-                      >
-                        Cancel Visit
-                      </button>
-                    </div>
+                        <div className='row'>
+                        <button
+                          type="button"
+                          className="btn btn-success btn-round waves-effect waves-light figmaBigButton m-1"
+                          onClick={() =>
+                            navigate('../room', {
+                              state: 
+                              {MeetingID:meetingID,
+                                Password:password}
+                              })
+                          }
+                          style={{
+                            cursor: isReady ? 'pointer' : 'not-allowed',
+                          }}
+                          disabled={!isReady}
+                        >
+                          {isReady ? ' Join Virtual Visit Now' : 'Please wait...'}
+                        </button>
+                      
+                        <button
+                          onClick={() => navigate('/patient')}
+                          type="button"
+                          className="btn btn-outline-danger btn-round waves-effect waves-light figmaBigButton m-1"
+                        >
+                          Cancel Visit
+                        </button>
+                        </div>
+                      {/* </div> */}
+                    {/* </div> */}
                   </div>
                 </div>
               </div>

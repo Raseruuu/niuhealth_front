@@ -4,7 +4,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import useLogout from '../../../hooks/useLogout'
 
-function SideNav({ openSideNav }) {
+function SideNav({ openSideNav,openSideIcons,removePfp }) {
   const logout = useLogout()
   const navigate = useNavigate()
   const [openSideNav_delayed,setOpenSideNav_delayed]=useState(openSideNav)
@@ -49,7 +49,16 @@ function SideNav({ openSideNav }) {
     <div
       className='left-sidenav'
       // style={{ display: openSideNav ? 'block' : 'none', marginTop: '70px' }}
-      style={{ display: 'block' , marginTop: '70px' ,padding:'0px', minWidth:'80px', pxmarginLeft:'-26zpx',width:(openSideNav?'260px':'78px'),position:'unset'}}
+      style={{
+        display: (openSideIcons?'block':'none') , 
+        marginTop: '70px' ,
+        padding:'0px', 
+        minWidth:'80px', 
+        pxmarginLeft:'-26zpx',
+        width:(openSideNav?'260px':'78px'),
+        zIndex:10,
+        position:(!removePfp?'unset':'absolute')
+      }}
 
     >
       {(openSideNav)?

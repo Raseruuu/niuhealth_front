@@ -14,7 +14,6 @@ function PatientDashboard() {
   const narrowmatch = useMediaQuery('only screen and (max-width: 460px)')
   const narrowscreen = useMediaQuery('only screen and (max-width: 320px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
-  
   const [openSideIcons, setOpenSideIcons] = useState(!narrowmatch)
   const [removePfp,setRemovePfp]= useState(!narrowscreen)
   // Comment in for Actual Route Protection

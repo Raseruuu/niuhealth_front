@@ -13,9 +13,15 @@ function ProviderDashboard() {
 
   const navigate = useNavigate()
   const { auth } = useAuth()
-  const matches = useMediaQuery('only screen and (max-width: 575.98px)')
+  
+  const matches = useMediaQuery('only screen and (max-width: 800px)')
+  const narrowmatch = useMediaQuery('only screen and (max-width: 460px)')
+  const narrowscreen = useMediaQuery('only screen and (max-width: 320px)')
+  // const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
-  const [openSideNav_delayed, setOpenSideNav_delayed] = useState(!matches)
+  const [openSideIcons, setOpenSideIcons] = useState(!narrowmatch)
+  const [removePfp,setRemovePfp]= useState(!narrowscreen)
+  
   // const [protect_done,setProtectDone]=useState(false)
   // Comment in for Actual Route Protection
   
@@ -26,22 +32,42 @@ function ProviderDashboard() {
       }
   }, [])
   useEffect(() => {
+    
     if (matches) {
       setOpenSideNav(false)
+      setOpenSideIcons(!narrowmatch)
     }
-  }, [matches])
+    if (narrowmatch) {
+      
+      // console.log("sideIcons",openSideIcons)
+      setOpenSideIcons(false)
+    }
+    
+    if (!narrowmatch) {
+      setOpenSideIcons(true)
+    }
+    if (narrowscreen) {
+      setRemovePfp(narrowscreen)
+    }
+    if (!narrowscreen) {
+      setRemovePfp(narrowscreen)
+    }
+
+
+  }, [matches,narrowmatch,narrowscreen])
 
   return (
     <div style={{ display: 'flex', width: '100vw' }}>
       <TopBar
-        menuClick={async () => { 
-          
-          setOpenSideNav((prev) => !prev)
-       
-        }}
+        menuClick={() => {
+          setOpenSideNav((prev) => !prev);
+          if (narrowmatch||narrowscreen){
+            setOpenSideIcons(openSideNav)
+          }}}
+        removePfp={removePfp}
         homeAddress={'/provider'}
       />
-      <SideNav openSideNav={openSideNav} openSideNav_delayed={openSideNav_delayed}  />
+      <SideNav openSideNav={openSideNav}  openSideIcons={openSideIcons}  removePfp={removePfp}/>
       <div
         style={{
           height: '100vh',

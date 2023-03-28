@@ -179,8 +179,10 @@ function ProviderIndex() {
           <WelcomeCard />
         </div>
         <div className="col-lg-4">
-          <CardItem style={{height:300, display:'flex',alignItems: 'center'}}>
-            <div style={{top: '50%'}}>
+        <div className="card" style={{height:'90%',maxHeight:'320px',minHeight:'300px'}}> 
+        <div className="card-body d-flex align-items-center justify-content-center">
+            {/* <div className="d-flex align-item-center" style={{height:'auto'}} > */}
+              <div className='col'>
               <i className='fas fa-user-nurse fa-fw fa-4x' style={{color: '#303e67'}}></i>
               <i className='fas fa-comment fa-fw fa-4x' style={{color: '#303e67'}}></i>
               <i className='fas fa-user fa-fw fa-4x' style={{color: '#303e67'}}></i>
@@ -200,9 +202,11 @@ function ProviderIndex() {
                   >
                   Go To Patients Menu
                 </button>
+                </div>
+                </div>
+              {/* </div> */}
               </div>
             </div>
-          </CardItem>
         </div>
       </div>
       <div className="card">

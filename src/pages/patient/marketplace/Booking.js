@@ -22,6 +22,7 @@ import { useCallback } from 'react'
 import styled from "@emotion/styled"
 import Swal from 'sweetalert2'
 import RingLoading from '../../../components/lottie/RingLoading'
+import { useMediaQuery } from '@react-hook/media-query'
 
 
 // add styles as css
@@ -32,20 +33,29 @@ export const StyleWrapper = styled.div`
   } 
    .fc-event {cursor: pointer;waves-effect}
   .styles-module_image__2hdkJ{
-    height : 800px;
+    height : auto;
+    max-height: 780px;
     margin-bottom : 120px;
     
+    
     }
+  .styles-module_navigation__1pqAE{
+    z-index : 1;
+  }
   .styles-module_wrapper__1I_qj{
-    margin-top : 70px;
+    margin-top : 2070px;
     background-color :rgba(0 0 0 / 50%);
   }
   img{
-    z-index : 50;
+    
+    object-fit:contain;
     opacity: 1.0 !important;
+    
   }
 `
 export default function Booking() {
+  
+  const matches = useMediaQuery('only screen and (max-width: 1510px)')
   const { state: selectedProvider } = useLocation()
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
@@ -59,6 +69,7 @@ export default function Booking() {
     setCurrentImage(0);
     setIsViewerOpen(false);
   };
+  const [moveIcons,setMoveIcons]= useState(matches)
   const [currentImage, setCurrentImage] = useState(0);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const effectRun = useRef(false);
@@ -125,6 +136,7 @@ export default function Booking() {
     console.log(selectedProvider)
     const state = {
       selectedProvider,
+      provider:{provider_id:serviceDetails.provider_id},
       timeSlot: {
         dateX,
         timeX,
@@ -228,6 +240,15 @@ export default function Booking() {
   }
 
   useEffect(() => {
+    if (matches) {
+      setMoveIcons(true)
+    }
+    if (!matches) {
+      setMoveIcons(false)
+    }
+  },[matches])
+  useEffect(() => {
+    
     // TODO: CHECK IF providerSched is not SET e.g. not available on sat and sun
     const startTimeArr = []
     const endTimeArr = []
@@ -276,8 +297,8 @@ export default function Booking() {
     async function getService() {
       await axiosPrivate
         .post(
-          'patientGetService',
-          { Email: (auth.userType==="Patient"?auth.email:"patient1@gmail.com"),
+          (auth.userType==="Patient")?'patientGetService':"providerGetService",
+          { Email: (auth.email),
             ServiceID:id },
           {
             signal: controller.signal,
@@ -291,29 +312,38 @@ export default function Booking() {
             isMounted && setServiceDetails(data.service_details)
             console.log("serviceDetails", data.service_details)
             setServiceClinics(data.clinics)
-            getDoctorSchedule(data.service_details.provider_id)
-            getSched(data.service_details.email)
-            setService(data)
+            if (auth.userType==="Patient"){
+              getDoctorSchedule(data.service_details.provider_id)
             
-            var tempImageList=[]
-            if (data.service_details.image1){
-              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image1)
-              // `${AWS_BUCKET_SERVICES}services/${serviceDetails?.service_number}/${serviceImages[0]}`
+              getSched(data.service_details.email)
+              
+              setService(data)
+              var tempImageList=[]
+              if (data.service_details.image1){
+                tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image1)
+                // `${AWS_BUCKET_SERVICES}services/${serviceDetails?.service_number}/${serviceImages[0]}`
+              }
+              if (data.service_details.image2){
+                tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image2)
+              }
+              if (data.service_details.image3){
+                tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image3)
+              }
+              if (data.service_details.image4){
+                tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image4)
+              }
+              if (data.service_details.image5){
+                tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image5)
+              }
+              setServiceImages(tempImageList)
+              console.log(tempImageList)
             }
-            if (data.service_details.image2){
-              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image2)
+            else{
+              setIsLoading(false)
+              
             }
-            if (data.service_details.image3){
-              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image3)
-            }
-            if (data.service_details.image4){
-              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image4)
-            }
-            if (data.service_details.image5){
-              tempImageList.push(AWS_BUCKET_SERVICES+"services/"+data.service_details.service_number+"/"+data.service_details.image5)
-            }
-            setServiceImages(tempImageList)
-            console.log(tempImageList)
+            
+            
             
           } else {
             throw new Error(Message)
@@ -430,25 +460,26 @@ export default function Booking() {
                               src={`${serviceImages[-0]}`}
                               alt=""
                               // width={30}
-                              style={{objectFit:'cover',width:'100%',maxWidth:'560px', maxHeight:'380px', height:'auto'}}
+                              style={{objectFit:'cover',width:'100%',minWidth:'148px', maxWidth:'560px', maxHeight:'380px', height:'auto'}}
                               // className="rounded-circle"
                             />
                             </Link>
                         </div> 
-                        <div className='d-flex justify-content-center'>
+                        {/* <div className='d-flex justify-content-center'> */}
                         
-                          <div className='row-lg-12'>
+                          <div className={`row${moveIcons?"":"-lg"}`}>
                           {serviceImages.map((serviceImage,index)=>{
                               // console.log("ServeIMG",serviceImage);
                               if (index!==0){
-                              return(<div className='row-lg-4'>
+                              return(
+                              <div className='row-sm-3 m-2 ml-3'>
                               <Link onClick={() => {console.log(serviceImages);openImageViewer(index)}}>
                               <img
                                 src={`${serviceImage}`}
                                 alt=""
                                 // width={30}
-                                className='img-thumbnail'
-                                style={{objectFit:'cover',width:'100%',maxWidth:'140px', maxHeight:'200px', height:'auto'}}
+                                // className='img-thumbnail'
+                                style={{objectFit:'contain',width:'100%',minWidth:'140px',maxWidth:'140px', maxHeight:'200px', height:'auto'}}
 
                                 // className="rounded-circle"
                               />
@@ -458,7 +489,7 @@ export default function Booking() {
                             })
                           }
                           </div>
-                        </div>
+                        {/* </div> */}
                         </div>
                         <div className="met-profile-main">
                           {/* <div className="met-profile-main-pic"> */}
@@ -510,9 +541,11 @@ export default function Booking() {
                 </div>
               </div>
             </div>
+            {(auth.userType==="Patient")?
             <div className='col-lg-4'>
               <div className='card'>
                 <div className='card-body'>
+                  
                 <div className="row-lg-4 ml-auto" style={{marginLeft:'10px'}}>
                        <div className='row'>
                           <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id)}>    
@@ -565,7 +598,7 @@ export default function Booking() {
                   </div>
                 </div>
 
-            </div>
+            </div>:null}
           </div>
 
           <div className="row">
@@ -694,7 +727,7 @@ export default function Booking() {
         <Footer />
       </div>
       {isViewerOpen && (
-        <div style={{marginTop:'100px', zIndex:40}}>
+        <div style={{marginTop:'100px', zIndex:1020}}>
           <StyleWrapper>
             <ImageViewer
               src={ serviceImages }

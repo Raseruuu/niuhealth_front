@@ -206,6 +206,8 @@ const router =createBrowserRouter(
             { index: true, element: <ProviderIndex /> },
             { path: 'profile', element: <Profile /> },
             { path: 'service/view', element: <Booking /> },
+            
+            { path: 'service/view/:id', element: <Booking /> },
             {
               path: 'patient',
               element: <Outlet />,

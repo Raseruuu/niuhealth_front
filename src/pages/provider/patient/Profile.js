@@ -17,16 +17,22 @@ import { StatusTextInsurance2, StatusTextInsurance3 } from "../../../components/
 
 export const StyleWrapper = styled.div`
   .styles-module_image__2hdkJ{
-    height : 800px;
+    height : auto;
+    max-height: 780px;
     margin-bottom : 120px;
     
     }
+  .styles-module_navigation__1pqAE{
+    z-index : 50;
+    
+  }
   .styles-module_wrapper__1I_qj{
     margin-top : 70px;
     background-color :rgba(0 0 0 / 50%);
   }
   img{
-    z-index : 50;
+    z-index : 120;
+    object-fit:contain;
     opacity: 1.0 !important;
   }
 `
@@ -649,12 +655,12 @@ function PatientProfile() {
                       {appointmentslist.map((item,index)=>(
                         <tr key={index}>
                         <td>
-                          <Link
+                          {/* <Link
                             to={"/provider/profiles/"+item.provider_id}
                             // state={{
                             //   selectedUser: item,
                             // }}
-                          >
+                          > */}
                             <div className="row">
                               <div className="col">
                                 <img
@@ -666,7 +672,7 @@ function PatientProfile() {
                                 {item.provider_name} 
                               </div>
                             </div>
-                          </Link>
+                          {/* </Link> */}
                         </td>
 
                         <td>
@@ -817,12 +823,12 @@ function PatientProfile() {
                             
                             <label htmlFor="date" className="col-form-label"><b> Date Start</b></label><br/>
                             
-                            {moment(insuranceList[ins_index].start_date).format("MMMM DD, YYYY ")}
+                            {moment(insuranceList[ins_index].start_date).format("MMMM DD, YYYY")}
                           </div>
                             <div className="col">
                             <label htmlFor="date" className="col-form-label"><b> Date End</b></label><br/>
                             
-                            {moment(insuranceList[ins_index].end_date).format("MMMM DD, YYYY ")}
+                            {moment(insuranceList[ins_index].end_date).format("MMMM DD, YYYY")}
                           </div>
                         </div>
                       </div>
@@ -893,7 +899,7 @@ function PatientProfile() {
                             <label htmlFor="date" className="col-form-label">Validated Date End</label>
                               <input required 
                                 className="form-control" 
-                                min={moment().add(1,"days").format("YYYY-MM-DD")}
+                                min={moment().add(1,"days").format("YYYY-MM-DD ")}
                                 // defaultValue={moment().add(1,"days").format("YYYY-MM-DD")}
                                 type="date" id="date" value={validDateEnd} onChange={(e)=>{setValidDateEnd(e.target.value)}}/>
                           </div>

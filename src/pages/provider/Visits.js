@@ -62,7 +62,7 @@ function hourformat(hour){
 }
 function Visits() {
   const navigate = useNavigate()
-  
+  const timenow=moment()
   const [isLoading, setIsLoading] = useState(true)
   const [appointmentList, setAppointmentList] = useState([])
   const { auth } = useAuth()
@@ -199,7 +199,7 @@ function Visits() {
           }
         )
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
@@ -207,7 +207,7 @@ function Visits() {
             setClinicList(data)
             var clinics=[]
             setClinicIDList(data.map((item)=>{
-              console.log("clinsss",clinics)
+              // console.log("clinsss",clinics)
               if (clinics.includes(item.clinic_id)){
                 pass
               }
@@ -430,7 +430,7 @@ function Visits() {
                                                       newstatusfilter[index]=true
                                                     }
                                                     setStatusFilter(newstatusfilter)
-                                                    console.log('filter',newstatusfilter)
+                                                    // console.log('filter',newstatusfilter)
 
                                                     
                                                 }}
@@ -511,7 +511,7 @@ function Visits() {
                                                 newstatusfilter[index]=true
                                               }
                                               setTransFilter(newstatusfilter)
-                                              console.log('filter',newstatusfilter)
+                                              // console.log('filter',newstatusfilter)
 
                                               
                                           }}
@@ -527,7 +527,7 @@ function Visits() {
                                 <div className='m-1'> 
                                     <button className='m-1 btn btn-round btn-success' onClick={()=>{
                                       const filter =transFilter.map((filt,index)=>{if (filt===true){return index+1}else{return(false)}})
-                                      console.log('filterrrr',filter)
+                                      // console.log('filterrrr',filter)
                                       setAppointmentList(listOriginal
                                         .filter((item)=>{
                                           return(filter.includes(parseInt(item.trans_type))
@@ -594,8 +594,16 @@ function Visits() {
           {/* <div className='col-lg-12'> */}
           {(appointmentList.length!==0)?
               <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status","Action"]}>
-              {appointmentList.map((item,index)=>(
-                <tr key={index}>
+              {appointmentList.map((item,index)=>{
+                const appointmentTime=`${hourformat(item.trans_start)} ${moment(item.trans_date_time).format('MMMM-DD-YYYY')}`
+
+                const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
+                
+                const withinAppointmentPeriod=timenow.isAfter(appointmentPeriod[0])&&appointmentPeriod[1].isAfter(timenow)
+                // const withinAppointmentPeriod=false
+                console.log("AppPer",withinAppointmentPeriod)
+                return(
+                <tr key={index} className={withinAppointmentPeriod?'bg-light':''}>
                 <td>
                   <Link
                     to={"/provider/patient/profile/"+item.patient_id}
@@ -627,7 +635,8 @@ function Visits() {
                 {formatLongtxt(item.clinic_name)}
                 </td>
                 <td>
-                {(hourformat(item.trans_start)+"  "+moment(item.trans_date_time).format('MM/DD/YY'))}
+                {(hourformat(item.trans_start))}<br/>
+                {(moment(item.trans_date_time).format('MMM DD YYYY'))}
                 </td>
                 <td>
                 {item.trans_type==="1"?"Virtual Visit":(item.trans_type==="2")?"In-Person Visit":""}
@@ -635,9 +644,63 @@ function Visits() {
                 <td>
                 <StatusTextVisit status={item.status}/>
                 </td>
+                <td>
+                  {(withinAppointmentPeriod)?
+                  <button 
+                    className='btn btn-success' 
+                    onClick={()=>{
+                      
+                      async function joinAppointment () {
+    
+     
+                        await axiosPrivate
+                          .post(
+                            'providerStartAppointment',
+                            { Email: auth.email,
+                              MeetingID: item.appointment_id,
+                            },
+                            // {
+                            //   signal: controller.signal,
+                            // }
+                          )
+                          .then((res) => {
+                            if (res.data?.Status ) {
+                              Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'})
+                              console.log(res.data.Data)
+                              if (allowCall && isConfirmed) {
+                                navigate('/virtualvisit/room', {
+                                    state: {
+                                      MeetingID: res.data.Data.MeetingID,
+                                      Password: res.data.Data.Passcode },
+                                  })
+                              }
+                            } else {
+                              Swal.fire(res.data?.Message)
+                            }
+                          })
+                          .catch((err) => console.error(err))
+                      }
+                      Swal.fire({
+                        html:"Start this Virtual Visit?",
+                        showCancelButton:true})
+                        .then((res)=>
+                        {
+                          if (res.isConfirmed){
+                            
+                            joinAppointment()
+                          }
+                      })
+                    }}
+                  >Start Visit</button>
+                  :
+                  <button className='btn btn-outline-purple'>View Visit</button>
+                  
+                  }
+                
+                </td>
                 </tr>
 
-              ))}
+              )})}
                       
               </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoading)?"Loading...":"No Appointments."}</CardItem></>}
             {/* </div> */}

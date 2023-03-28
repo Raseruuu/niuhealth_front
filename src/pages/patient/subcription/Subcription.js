@@ -47,8 +47,13 @@ function Subscription() {
   const [isLoadingPayments,setIsLoadingPayments]=useState(true)
   
   const [paymentHistory,setPaymentHistory] = useState([])
-  const [subs, setSubs] = useState({ subsStart: '-', subsEnd: '-' })
+  const [subs, setSubs] = useState({ subsStart: 'January 1 2023, 12:00 AM', subsEnd: '-' })
   const [isSuccess,setIsSuccess]=useState(false)
+  function date_format(date){
+    let formatdate = Date.parse(date);
+    const d = new Date(formatdate);
+    return d.toDateString()
+  }
   async function handleCancelSub(){
     await axiosPrivate
       .post(
@@ -110,7 +115,7 @@ function Subscription() {
         .then((res) => {
           console.log(res)
           const { Status, Data: data = [], Message } = res.data
-          setIsSuccess(true)
+         
           if (Status && Message === 'Patient not subscribed') {
             
             setIsLoading(false)
@@ -121,6 +126,7 @@ function Subscription() {
           if (Status && isMounted) {
             
             setIsLoading(false)
+            setIsSuccess(true)
             setSubs({
               subsStart: data.subscription_start,
               subsEnd: data.subscription_end,
@@ -154,7 +160,7 @@ function Subscription() {
               </div>
             </div>
           </div>
-          {(subs.subsStart!='-'||isLoading)?
+          {(subs.subsStart!=='-'||isLoading)?
             <div className='row'>
               <div className='col-lg-12'>
                 <div className='card'>
@@ -165,11 +171,18 @@ function Subscription() {
                         <tbody>
                           <tr>
                             <td className='payment-title'>Start date</td>
-                            <td>{isSuccess?moment(subs.subsStart).format('MM/DD/YYYY'):''}</td>
+                            {/* {moment(subs.subsStart).format()} */}
+                            
+                            <td>
+                              {isSuccess?date_format(subs.subsStart) :''}
+                            </td>
                           </tr>
                           <tr>
                             <td className='payment-title'>End Date</td>
-                            <td>{isSuccess?moment(subs.subsEnd).format('MM/DD/YYYY'):''}</td>
+                            <td>
+
+                              {isSuccess?date_format(subs.subsEnd):''}
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -295,7 +308,7 @@ function Subscription() {
                                   showConfirmButton:true,
                                   showCancelButton:true
                                 })
-                                .then((response)=>{if (response){
+                                .then((response)=>{if (response.isConfirmed){
                                   // navigate(receipt_link,{replace:true})
                                   openInNewTab(receipt_link)
                                 }})

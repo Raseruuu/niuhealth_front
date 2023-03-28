@@ -434,7 +434,7 @@ function ProviderProfile() {
                         <b>About Me</b> : 
                       </li> */}
                     </ul>
-                    <div className='button-list btn-social-icon'>
+                    {/* <div className='button-list btn-social-icon'>
                       <button type='button' className='btn btn-blue btn-circle'>
                         <i className='fab fa-facebook-f'></i>
                       </button>
@@ -452,7 +452,7 @@ function ProviderProfile() {
                       >
                         <i className='fab fa-dribbble'></i>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
