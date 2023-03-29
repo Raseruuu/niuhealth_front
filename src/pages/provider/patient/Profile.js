@@ -36,14 +36,31 @@ export const StyleWrapper = styled.div`
     opacity: 1.0 !important;
   }
 `
+function hourformat(hourstr){
+  const hour=parseInt(hourstr)
 
+  if (hour>12){
+    return ((hour-12<10)?"0":"")+(hour-12)+":00 PM"
+  }
+  else if (hour===12){
+    return (12)+":00 PM"
+  }
+  else if (hour===0){
+    return (12)+":00 AM"
+  }
+  else{
+    return ((hour<10)?"0":"")+hour+":00 AM"
+  }
+}
 const StatusText = ({ status }) => {
   const statusColor = {
-    0: 'badge-soft-purple',
+    0: 'badge-soft-warning',
     1: "badge-soft-success",
     2: 'badge-soft-danger',
     3: 'badge-soft-danger',
     4: "badge-soft-success",
+    5: "badge-soft-purple",
+    6: "badge-soft-primary",
   }
   const statusText = {
     0: 'For Approval',
@@ -51,6 +68,8 @@ const StatusText = ({ status }) => {
     2: 'Cancelled By You',
     3: 'Cancelled By Doctor',
     4: "Approved",
+    5: "Started",
+    6: "Created By Doctor",
   }
   return (
     <span className={`virtualvisitbadge badge badge-md ${statusColor[status]}`}>
@@ -84,7 +103,7 @@ function PatientProfile() {
   
   const [validDateStart,setValidDateStart] = useState(moment().format("YYYY-MM-DD"))
   const [appointmentslist,setAppointmentsList] = useState([])
-  setAppointmentsList
+  // setAppointmentsList
   const [isLoading, setIsLoading] = useState(true)
   const [ins_view,setIns_view] = useState(false)
   
@@ -679,7 +698,8 @@ function PatientProfile() {
                         {item.service_description}
                         </td>
                         <td>
-                        {moment(item.trans_date_time).format('hh:mm a MM/DD/YY')}
+   
+                        {`${hourformat(item.trans_start)}, ${moment(item.trans_date_time).format('MMMM DD, YYYY')}`}
                         </td>
                        
                         <td>
@@ -727,7 +747,7 @@ function PatientProfile() {
                           </NavLink>
                         </td>
                         <td>
-                        {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
+                        {moment(item.payment_date_time).format('hh:mm a, MMMM DD, YYYY')}
                         </td>
                         {/* <td>
                         <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>

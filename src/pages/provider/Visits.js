@@ -15,6 +15,7 @@ import moment from 'moment'
 import styled from "@emotion/styled"
 import Multiselect from 'multiselect-react-dropdown'
 import { StatusTextVisit } from '../../components/status/Status'
+import Swal from 'sweetalert2'
 
 
 
@@ -46,7 +47,8 @@ const StatusText = ({ status }) => {
   )
 }
 
-function hourformat(hour){
+function hourformat(hourstr){
+ const hour=parseInt(hourstr)
   if (hour>12){
     return ((hour-12<10)?"0":"")+(hour-12)+":00 PM"
   }
@@ -595,9 +597,15 @@ function Visits() {
           {(appointmentList.length!==0)?
               <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status","Action"]}>
               {appointmentList.map((item,index)=>{
-                const appointmentTime=`${hourformat(item.trans_start)} ${moment(item.trans_date_time).format('MMMM-DD-YYYY')}`
-
+                const appointmentTime=`${item.trans_date_time.replace(/-/g, "/").slice(0,10)} ${(item.trans_start+":00:00")} `
+                console.log(appointmentTime)
                 const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
+                const formatPeriod=[
+                  appointmentPeriod[0].format("MMM DD YY"),
+                  appointmentPeriod[0].format("hh:mm"),
+                  appointmentPeriod[1].format("hh:mm a"),
+                ]
+                const appointmentIsOver= (moment().isAfter(appointmentPeriod[1]))
                 
                 const withinAppointmentPeriod=timenow.isAfter(appointmentPeriod[0])&&appointmentPeriod[1].isAfter(timenow)
                 // const withinAppointmentPeriod=false
@@ -635,8 +643,8 @@ function Visits() {
                 {formatLongtxt(item.clinic_name)}
                 </td>
                 <td>
-                {(hourformat(item.trans_start))}<br/>
-                {(moment(item.trans_date_time).format('MMM DD YYYY'))}
+                {formatPeriod[0]}<br/>{formatPeriod[1]}-{formatPeriod[2]}
+                
                 </td>
                 <td>
                 {item.trans_type==="1"?"Virtual Visit":(item.trans_type==="2")?"In-Person Visit":""}
@@ -645,15 +653,32 @@ function Visits() {
                 <StatusTextVisit status={item.status}/>
                 </td>
                 <td>
-                  {(withinAppointmentPeriod)?
                   <button 
-                    className='btn btn-success' 
+                    className={withinAppointmentPeriod?'btn btn-success':'btn btn-outline-purple' }
                     onClick={()=>{
                       
-                      async function joinAppointment () {
-    
-     
-                        await axiosPrivate
+                      Swal.fire({
+                        titleText: `Appointment Details:`,
+                        html:`<div class='text-left'>
+                        <b class="text-center"> ${ appointmentIsOver?"<div class='text-purple'>The Appointment period is over.</div>":withinAppointmentPeriod?"<div class='text-success'>Appointment is Now!</div>":""}</b> 
+                        Date: <strong>${formatPeriod[0]}, ${formatPeriod[1]} - ${formatPeriod[2]}</strong><br/><br/>
+                      Name: ${item.full_name}<br/>
+                      Email: ${item.email}<br/>
+                      Phone: ${item.contact_info}<br/>
+                      </div>`,
+                      confirmButtonText:  
+                        (withinAppointmentPeriod?"Start Zoom Meeting":'OK'),
+                      showCancelButton: true,
+                      // showCancelButton:true
+                      
+                      
+                      })
+                        .then(
+                          async (response)=>
+                        {
+                          console.log(response)
+                          if (response?.isConfirmed&&withinAppointmentPeriod){
+                            await axiosPrivate
                           .post(
                             'providerStartAppointment',
                             { Email: auth.email,
@@ -665,37 +690,27 @@ function Visits() {
                           )
                           .then((res) => {
                             if (res.data?.Status ) {
-                              Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'})
-                              console.log(res.data.Data)
-                              if (allowCall && isConfirmed) {
-                                navigate('/virtualvisit/room', {
-                                    state: {
-                                      MeetingID: res.data.Data.MeetingID,
-                                      Password: res.data.Data.Passcode },
-                                  })
-                              }
+                              Swal.fire({title:'Virtual Visit',html:'Zoom Meeting will start.'}).then(({isConfirmed})=>{
+                                if (isConfirmed) {
+                                  navigate('/virtualvisit/room', {
+                                      state: {
+                                        MeetingID: res.data.Data.MeetingID,
+                                        Password: res.data.Data.Passcode },
+                                    })
+                                }
+                              })
+                              
                             } else {
                               Swal.fire(res.data?.Message)
                             }
                           })
                           .catch((err) => console.error(err))
-                      }
-                      Swal.fire({
-                        html:"Start this Virtual Visit?",
-                        showCancelButton:true})
-                        .then((res)=>
-                        {
-                          if (res.isConfirmed){
-                            
-                            joinAppointment()
                           }
                       })
                     }}
-                  >Start Visit</button>
-                  :
-                  <button className='btn btn-outline-purple'>View Visit</button>
+                  >{(withinAppointmentPeriod)?"Start Visit":"View Visit"}</button>
                   
-                  }
+                  
                 
                 </td>
                 </tr>

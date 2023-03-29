@@ -62,8 +62,8 @@ function Upload() {
       additional_formdata["Image"+String(parseInt(index)+1)]=imageList[index].file
     }
     var formdata={...data}
-    formdata['StartDate']=moment(data.StartDate).format("YYYY-MM-DD")
-    formdata['EndDate']=moment(data.EndDate).format("YYYY-MM-DD")
+    formdata['StartDate']=moment(data.StartDate.replace(/-/g, "/")).format("YYYY-MM-DD")
+    formdata['EndDate']=moment(data.EndDate.replace(/-/g, "/")).format("YYYY-MM-DD")
     // Swal.fire(`Start: ${formdata['StartDate']} <br> End: ${formdata['EndDate']} <br>`)
     try {
       await axiosPrivate

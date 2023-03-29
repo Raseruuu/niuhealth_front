@@ -154,13 +154,13 @@ const StatusIcon = ({ icontype }) => {
 
 const StatusText = ({ status }) => {
   const statusColor = {
-    0: 'badge-soft-purple',
+    0: 'badge-soft-info',
     1: "badge-soft-success",
     2: 'badge-soft-danger',
     3: 'badge-soft-danger',
-    4: "badge-soft-success",
-    5: "badge-soft-success",
-    6: "badge-soft-success",
+    4: "badge-soft-warning",
+    5: "badge-soft-purple",
+    6: "badge-soft-primary",
   }
   const statusText = {
     0: 'For Approval',
@@ -313,10 +313,11 @@ function AppointmentItem({
     refreshList, setRefreshList 
   }){
   
-  const dateTime=(trans_date_time+", "+trans_start+":00")
+  const dateTime=(trans_date_time+" "+trans_start+":00")
 
   const date=moment(trans_date_time).format('MMM DD, YYYY')
-  const time=moment(trans_date_time+", "+trans_start+":00").format('hh:mm A')+" - "+moment(dateTime).add(1, 'hours').format('hh:mm A')
+  const time=moment(trans_date_time+" "+trans_start+":00").format('hh:mm A')+" - "+moment(dateTime).add(1, 'hours').format('hh:mm A')
+  
   // const time=moment(dateTime).get('hour')+":"+moment(dateTime).get('minute')
   return(
     <div className="card" id={service_id} >

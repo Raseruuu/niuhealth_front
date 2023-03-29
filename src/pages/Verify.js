@@ -17,11 +17,9 @@ export default function Verify (){
     const {email}  = useParams();
 
     const { state: password } = useLocation()
-    console.log("VPASS",password.Password)
     async function handleLogin(data){
         const controller = new AbortController()
 
-        console.log("data",data)
         await axiosPrivate
         .post("cognitoSignIn", {...data},
         {
@@ -30,7 +28,6 @@ export default function Verify (){
             
         )
         .then((res) => {
-            console.log(res); 
             const { StatusCode, Data: data = {}, Message } = res.data;
             
             if (StatusCode===200) {
@@ -56,7 +53,6 @@ export default function Verify (){
         })}
       
     async function cognitoConfirmSignUp(data){
-        console.log("VER",email)
         await axiosPrivate
         .post("cognitoConfirmSignUp", {
             // Email:auth.email,
@@ -67,10 +63,8 @@ export default function Verify (){
           
         )
         .then((res) => {
-          console.log(res);
           const { Status, Data: data = [], Message } = res.data;
           if (Status) {
-            console.log(res)
             Swal.fire({icon:'success',text:Message})
                 .then(()=>{
                     handleLogin({Email:email,Password:password.Password})

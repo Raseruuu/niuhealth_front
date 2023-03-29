@@ -9,14 +9,29 @@ import moment from 'moment'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 
-function Calendar({ allowCall,dateList }) {
+function Calendar({ allowCall=true,dateList }) {
   const { auth } = useAuth()
   const navigate = useNavigate()
   const [slots, setSlots] = useState([])
   const axiosPrivate = useAxiosPrivate()
   const [errMsg, setErrMsg] = useState(null)
   const [appointmentList, setAppointmentList] = useState(dateList)
+  function hourformat(hourstr){
+    const hour=parseInt(hourstr)
 
+    if (hour>12){
+      return ((hour-12<10)?"0":"")+(hour-12)+":00 PM"
+    }
+    else if (hour===12){
+      return (12)+":00 PM"
+    }
+    else if (hour===0){
+      return (12)+":00 AM"
+    }
+    else{
+      return ((hour<10)?"0":"")+hour+":00 AM"
+    }
+  }
   const handleDateSelect = (selectInfo) => {
     console.log(selectInfo)
     
@@ -48,27 +63,34 @@ function Calendar({ allowCall,dateList }) {
       timeStr = '0' + timeStr
     }
 
-    const startStr = `${selected.trans_start} ${selected.trans_date_time}`
-    const dateX = moment(startStr).format('YYYY-MM-DD h:mm a')
-    const appointmentIsOver= (moment().isAfter(moment(startStr)))
+    const startStr = `${selected.trans_date_time}, ${hourformat(selected.trans_start)} `
+    const dateX = moment(startStr).format('MMM DD YYYY,  h:mm a')
+    console.log("adasdas",selected.trans_start)
+   
+    // const appointmentIsLater= (moment(startStr).add(1,'hours').isAfter(moment()))
+    // const withinAppointmentPeriod=(!appointmentIsOver)&&(!appointmentIsLater)
+    const appointmentTime=`${hourformat(selected.trans_start)} ${moment(selected.trans_date_time).format('MMMM DD YYYY')}`
+   
+    const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
+    const appointmentIsOver= (moment().isAfter(appointmentPeriod[1]))
     
-    const appointmentIsLater= (moment(startStr).add(1,'hours').isAfter(moment()))
-    const withinAppointmentPeriod=(!appointmentIsOver)&&(!appointmentIsLater)
+    const withinAppointmentPeriod=moment().isAfter(appointmentPeriod[0])&&appointmentPeriod[1].isAfter(moment())
     Swal.fire({
-      titleText: 'Appointment Details:',
+      titleText: `Appointment Details:`,
       
       html: `<div class='text-left'>
-      Date: <strong>${dateX}</strong><br/>
-      ${ appointmentIsOver?"The Appointment period is over.":""}<br/>
+      <b class="text-center"> ${ appointmentIsOver?"<div class='text-purple'>The Appointment period is over.</div>":withinAppointmentPeriod?"<div class='text-success'>Appointment is Now!</div>":""}</b> 
+      Date: <strong>${appointmentTime}</strong><br/><br/>
     Name: ${selected.full_name}<br/>
     Email: ${selected.email}<br/>
     Phone: ${selected.contact_info}<br/>
     </div>`,
-      confirmButtonText: allowCall ? (appointmentIsOver?"OK":withinAppointmentPeriod?"Start Zoom Meeting":'OK') : 'Ok',
+      confirmButtonText: allowCall ? 
+        (withinAppointmentPeriod?"Start Zoom Meeting":'OK'):"OK",
       showCancelButton: allowCall,
-    }).then(async ({ isConfirmed }) => {
-      
-      if (isConfirmed&&withinAppointmentPeriod) {
+    }).then(
+      async ({isConfirmed} ) => {
+      if (isConfirmed &&withinAppointmentPeriod) {
         await axiosPrivate
           .post('providerStartAppointment',
             {

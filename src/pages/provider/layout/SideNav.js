@@ -50,14 +50,15 @@ function SideNav({ openSideNav,openSideIcons,removePfp }) {
       className='left-sidenav'
       // style={{ display: openSideNav ? 'block' : 'none', marginTop: '70px' }}
       style={{
+        height:'auto',
         display: (openSideIcons?'block':'none') , 
         marginTop: '70px' ,
         padding:'0px', 
         minWidth:'80px', 
         pxmarginLeft:'-26zpx',
-        width:(openSideNav?'260px':'78px'),
+        width:(openSideNav?'320px':'78px'),
         zIndex:10,
-        position:(!removePfp?'unset':'absolute')
+        position:(removePfp?'fixed':'static')
       }}
 
     >

@@ -174,19 +174,19 @@ function Subscription() {
                             {/* {moment(subs.subsStart).format()} */}
                             
                             <td>
-                              {isSuccess?date_format(subs.subsStart) :''}
+                              {isSuccess?date_format(subs.subsStart.replace(/-/g, "/").slice(0,19)) :''}
                             </td>
                           </tr>
                           <tr>
                             <td className='payment-title'>End Date</td>
                             <td>
 
-                              {isSuccess?date_format(subs.subsEnd):''}
+                              {isSuccess?date_format(subs.subsEnd.replace(/-/g, "/").slice(0,19)):''}
                             </td>
                           </tr>
                         </tbody>
                       </table>
-                      <div className='d-flex flex-column flex-md-row float-right'>
+                      <div className='d-flex flex-column flex-md-row float-right m-4'>
                         <button
                           type='button'
                           className='btn btn-round btn-outline-info waves-effect waves-light'
@@ -318,13 +318,14 @@ function Subscription() {
                           </NavLink>
                         </td>
                         <td>
-                        {moment(item.payment_date_time).format('hh:mm a MM/DD/YY')}
+                        {/* {item.payment_date_time.replace(/-/g, "/").slice(0,19)} */}
+                        {moment(item.payment_date_time.replace(/-/g, "/").slice(0,19)).format('hh:mm a MMM DD, YYYY')}
                         </td>
                         {/* <td>
                         <a href={item.receipt}>View<i className="fa fa-receipt"></i></a>
                         </td> */}
                         <td>
-                        {item.amount}
+                        $ {item.amount}
                         </td>
                         </tr>
 

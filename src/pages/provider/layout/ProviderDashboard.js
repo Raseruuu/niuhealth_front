@@ -16,7 +16,7 @@ function ProviderDashboard() {
   
   const matches = useMediaQuery('only screen and (max-width: 800px)')
   const narrowmatch = useMediaQuery('only screen and (max-width: 460px)')
-  const narrowscreen = useMediaQuery('only screen and (max-width: 320px)')
+  const narrowscreen = useMediaQuery('only screen and (max-width: 420px)')
   // const matches = useMediaQuery('only screen and (max-width: 575.98px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
   const [openSideIcons, setOpenSideIcons] = useState(!narrowmatch)

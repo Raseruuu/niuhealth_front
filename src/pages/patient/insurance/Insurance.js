@@ -142,7 +142,7 @@ function Insurance() {
                           {item.status==="0"?"For Approval":(item.status==="1")?"Approved":"Rejected"}<br/>
                           </div> */}
                           <small className='text-muted'>
-                          {"Uploaded "+moment(item.DateUploaded).format('hh:mm a MM/DD/YY')}
+                          {"Uploaded "+moment(item.DateUploaded.replace(/-/g, "/").slice(0,19)).format('hh:mm a MM/DD/YY')}
                             {/* 06 March 2022 / 5MB */}
                           </small>
                         </div>

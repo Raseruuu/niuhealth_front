@@ -10,12 +10,10 @@ export function UploadOneImage({image,setImage, disabled}){
   function triggerFileInput() {
    
     if (imgRef.current) {
-      console.log("imageref",imgRef.current,)
         imgRef.current.click()
     }}
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
-    console.log("FILE HERE: ",file)
     setImage({...image, file:file})
     
     setPreviewImage({...image, file:file})
@@ -34,7 +32,6 @@ export function UploadOneImage({image,setImage, disabled}){
             const { result } = e.target;
             if (result && !isCancel) {
             const tempimage={path:result,file:image.file}
-            console.log(tempimage)
             setImage(tempimage)
             // setImages([...images, tempimage])
             
@@ -62,7 +59,7 @@ return (
                     // capture="user"
                     name="Image"
                     ref={imgRef}
-                    capture="filesystem"
+                    // capture="filesystem"
                     onChange={handleImageInputChange}
                 />
                 {(image.path!=='undefined')?(
@@ -111,15 +108,8 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
     const picRef = useRef()
     const handleImageInputChange = (e) => {
         const [file] = e.target.files;
-        console.log("FILE HERE: ",file);
-        // console.log(imgRef.current.value+"")
-        // let imageid='image'+id+'_file'
-        console.log('editing now: ', id)
         setImage({...image, file:file})
-        // setFormData({...formData,imagefile:file})
-
         setFormData({...formData,images:[...images,image]})
-        console.log('uguu',images)
       };
     const removeClinicImage = (index) => {
       // setImages([
@@ -160,9 +150,7 @@ export default function UploadImage({id,images,setImages, previewImage,formData,
                 const { result } = e.target;
                 if (result && !isCancel) {
                 const tempimage={path:result,file:image.file}
-                // console.log(tempimage)
                 updateImages(id,tempimage)
-                console.log("images",images)
                 // setImages([...images, tempimage])
                 setImagePreview(true)
                 }

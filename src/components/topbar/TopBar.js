@@ -153,6 +153,9 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
       </div>
 
       <ul className='list-unstyled dev-top-bar-right mb-0'>
+        {/* <li>
+        <NotifLink />
+        </li> */}
         <li className='dropdown'>
           <Link
             className='nav-link dropdown-toggle waves-effect waves-light nav-user'

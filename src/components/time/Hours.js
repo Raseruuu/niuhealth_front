@@ -36,7 +36,6 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
             value={hours['Hours'+weekday+'Start']}
             onChange={(e)=>{
             setHours({...hours,['Hours'+weekday+'Start']:e.target.value});
-            console.log("hours = oldhours",hours===oldHours)
           }
           }
             className="col-sm form-control float-right" style={{ minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:"30px"}}>   
@@ -56,7 +55,6 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
             value={hours['Hours'+weekday+'End']}
             onChange={(e)=>{
               setHours({...hours,['Hours'+weekday+'End']:e.target.value});
-              console.log(hours)
             }
             }
             className="col-sm form-control float-right" style={{minWidth: '116px',marginLeft:"10px",marginRight:"10px",width:40}}>

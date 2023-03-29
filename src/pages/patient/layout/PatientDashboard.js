@@ -12,7 +12,7 @@ function PatientDashboard() {
   const { auth } = useAuth()
   const matches = useMediaQuery('only screen and (max-width: 800px)')
   const narrowmatch = useMediaQuery('only screen and (max-width: 460px)')
-  const narrowscreen = useMediaQuery('only screen and (max-width: 320px)')
+  const narrowscreen = useMediaQuery('only screen and (max-width: 380px)')
   const [openSideNav, setOpenSideNav] = useState(!matches)
   const [openSideIcons, setOpenSideIcons] = useState(!narrowmatch)
   const [removePfp,setRemovePfp]= useState(!narrowscreen)
