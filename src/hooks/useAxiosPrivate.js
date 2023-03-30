@@ -13,7 +13,7 @@ const useAxiosPrivate = () => {
         if (!config.headers['Authorization']) {
           config.headers[
             'Authorization'
-          ] = `${auth?.access_token}`
+          ] = `${auth?.refresh_token}`
         }
 
         return config
@@ -27,7 +27,8 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true
-          const newAccessToken = await refresh()
+          // const newAccessToken = await refresh()
+          console.log(auth)
           const refreshToken=auth.refresh_token
           prevRequest.headers['Authorization'] = `${refreshToken}`
           return axiosPrivate(prevRequest)

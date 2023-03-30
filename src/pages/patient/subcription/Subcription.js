@@ -167,54 +167,59 @@ function Subscription() {
                   <div className='card-body'>
                     <div className='total-payment'>
                       <h5 className='m-2'>Subscription</h5>
+                      
+                      {isLoading?<></>:<>
                       <table className='table mb-0'>
-                        <tbody>
-                          <tr>
-                            <td className='payment-title'>Start date</td>
-                            {/* {moment(subs.subsStart).format()} */}
-                            
-                            <td>
-                              {isSuccess?date_format(subs.subsStart.replace(/-/g, "/").slice(0,19)) :''}
-                            </td>
-                          </tr>
-                          <tr>
-                            <td className='payment-title'>End Date</td>
-                            <td>
+                      <tbody>
+                        <tr>
+                          <td className='payment-title'>Start date</td>
+                          {/* {moment(subs.subsStart).format()} */}
+                          
+                          <td>
+                            {isSuccess?date_format(subs.subsStart.replace(/-/g, "/").slice(0,19)) :''}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className='payment-title'>End Date</td>
+                          <td>
 
-                              {isSuccess?date_format(subs.subsEnd.replace(/-/g, "/").slice(0,19)):''}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                            {isSuccess?date_format(subs.subsEnd.replace(/-/g, "/").slice(0,19)):''}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                       <div className='d-flex flex-column flex-md-row float-right m-4'>
-                        <button
-                          type='button'
-                          className='btn btn-round btn-outline-info waves-effect waves-light'
-                          onClick={() => navigate('renew')}
-                        >
-                          Renew Your Subscription
-                        </button>{' '}
-                        <button
-                          type='button'
-                          className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
-                          onClick={() =>
-                            Swal.fire({
-                              icon:'question',
-                              html:`Are you sure you want to cancel your subscription?`,
-                              showConfirmButton:true,
-                              showCancelButton:true
-                            }
-                            ).then((result)=>{
-                              if (result.isConfirmed){
-                                handleCancelSub();
-                              }
-                            })
-                            
+                      <button
+                        type='button'
+                        className='btn btn-round btn-outline-info waves-effect waves-light'
+                        onClick={() => navigate('renew')}
+                      >
+                        Renew Your Subscription
+                      </button>{' '}
+                      <button
+                        type='button'
+                        className='btn btn-round btn-outline-danger waves-effect waves-light mt-1 mt-md-0 ml-0 ml-md-1'
+                        onClick={() =>
+                          Swal.fire({
+                            icon:'question',
+                            html:`Are you sure you want to cancel your subscription?`,
+                            showConfirmButton:true,
+                            showCancelButton:true
                           }
-                        >
-                          Cancel Subscription
-                        </button>
-                      </div>
+                          ).then((result)=>{
+                            if (result.isConfirmed){
+                              handleCancelSub();
+                            }
+                          })
+                          
+                        }
+                      >
+                        Cancel Subscription
+                      </button>
+                    </div>
+                    </>
+                    }
+                      
                     </div>
                   </div>
                 </div>
@@ -291,9 +296,9 @@ function Subscription() {
             </div>
           </div> */}
           <div className='row-lg-12'>
-                    {(paymentHistory.length!==0)?
+                    {(paymentHistory?.length!==0)?
                       <TableCard headers={["Description","Payment Time", "Amount"]}>
-                      {paymentHistory.map((item,index)=>(
+                      {paymentHistory?.map((item,index)=>(
                         <tr key={index}>
                         <td>
                           <NavLink onClick={
@@ -331,7 +336,13 @@ function Subscription() {
 
                       ))}
                       
-                      </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoadingPayments)?<div className='d-flex justify-content-center'><RingLoading size={200}/></div>:"No Payment History results."}</CardItem></>}
+                      </TableCard>:<><CardItem className={'col-lg-12'}>
+                        {(isLoadingPayments)?
+                          <div className='d-flex justify-content-center'>
+                            <RingLoading size={200}/></div>
+                            :"No Payment History results."}
+                            
+                            </CardItem></>}
                   
                 </div>
         </div>

@@ -6,7 +6,7 @@ import useAuth from '../../hooks/useAuth'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import moment from "moment"
 import TableCard from "../../components/table/Tables"
-import CardItem from "../../components/cards/Card"
+import CardItem, { CardLongItem } from "../../components/cards/Card"
 import useInterval from '../../hooks/useInterval'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
@@ -407,7 +407,7 @@ function Appointment() {
   }
   const [appointmentsList,setAppointmentsList] = useState([])
   const [delay, setDelay] = useState('10000')
-  
+  const [isLoading,setIsLoading]=useState(false)
   const [sample_appointmentsList,setSample_AppointmentsList] = useState([
     {provider_description:"Hi! I`m Jane Doe",
       provider_name:"Jane Doe",
@@ -455,6 +455,8 @@ function Appointment() {
           if (res.data?.Status === true) {
             setDelay(null)
             setIsReady(true)
+            setIsLoading(false)
+
            
             navigate('/virtualvisit/room', {
               state: 
@@ -463,6 +465,7 @@ function Appointment() {
             })
           } else {
             setIsReady(false)
+            setIsLoading(false)
           }
         })
         .catch((err) => console.error(err))
@@ -528,7 +531,7 @@ function Appointment() {
               <AppointmentItem {...appointment} joinAppointment={joinAppointment} key={index}  refreshList={refreshList} setRefreshList={setRefreshList} />
               )}
             </div>
-          </div>):<CardItem><h4><div className='d-flex justify-content-center'><RingLoading size={200}/></div></h4></CardItem>}
+          </div>):(isLoading)?<CardItem><h4><div className='d-flex justify-content-center'><RingLoading size={200}/></div></h4></CardItem>:<CardLongItem>No Appointments.</CardLongItem>}
         </div>
 
         <Footer />

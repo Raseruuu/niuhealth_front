@@ -6,6 +6,7 @@ import { Link,useLocation,useNavigate, useParams } from "react-router-dom";
 // import useAuth from "../hooks/useAuth";
 import { useState } from 'react';
 import Swal from 'sweetalert2';
+import useAuth from '../hooks/useAuth';
 export default function Verify (){
     
     const axiosPrivate = useAxiosPrivate();
@@ -15,7 +16,7 @@ export default function Verify (){
     const [verificationCode,setVerificationCode]=useState([])
     // const { auth } = useAuth();
     const {email}  = useParams();
-
+    const { auth,setAuth } = useAuth()
     const { state: password } = useLocation()
     async function handleLogin(data){
         const controller = new AbortController()
@@ -42,7 +43,23 @@ export default function Verify (){
             sessionStorage.setItem('userType',  res.data.UserType)
             sessionStorage.setItem('has_insurance', res.data.has_insurance)
             sessionStorage.setItem('isLoggedIn', true)
-            
+            setAuth({...auth,
+                isLoggedIn:true,
+                
+                email:res.data.Email,
+                Name:res.data.Name,
+                // refresh_token:res.data.Tokens.refresh_token,
+                has_insurance:res.data.has_insurance,
+                userType:res.data.UserType,
+                access_token:res.data.Tokens.access_token,
+                transactionType:res.data.TransactionType,
+                expires_in:res.data.Tokens.expires_in,
+                token_type:res.data.Tokens.token_type,
+                refresh_token: res.data.Tokens.refresh_token,
+                // id_token: res.data.Tokens.id_token
+      
+              })
+              navigate('/register_2/'+email)
             } else {
             Swal.fire({ icon: 'error',html:`${Message}`})
             throw new Error(Message);
@@ -69,7 +86,7 @@ export default function Verify (){
                 .then(()=>{
                     handleLogin({Email:email,Password:password.Password})
                 })
-            navigate('/register_2/'+email)
+            
           } else {
             setError(res.Message)
             Swal.fire({icon:'error',text:Message})

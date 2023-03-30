@@ -138,7 +138,6 @@ function ProfileEdit() {
       for (let key in hours) {
         if (hours.hasOwnProperty(key)) {
           formData.append(key,hours[key])
-          console.log(key,hours[key])
         }
       }
       
@@ -159,11 +158,11 @@ function ProfileEdit() {
       .post(profile_endpoint2, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: function (ProgressEvent) {
-          console.log(
-            "uploadprogress: " +
-              (ProgressEvent.loaded / ProgressEvent.total) * 100 +
-              "%"
-          );
+          // console.log(
+          //   "uploadprogress: " +
+          //     (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+          //     "%"
+          // );
         },
       })
       .then((res) => {
@@ -171,7 +170,6 @@ function ProfileEdit() {
 
         if (Status) {
           setAuth((prev) => ({ ...prev, ...profile }))
-          console.log(auth)
           setOldProfile(profile)
           Swal.fire({icon:'success',text:'Successfully Updated Your Profile.'})
           setDisableForm(!disableForm)
@@ -231,7 +229,6 @@ function ProfileEdit() {
 }
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
-    console.log("FILE HERE: ",file);
     setProfile({
       ...profile,
       picturefile:file
@@ -305,8 +302,6 @@ function ProfileEdit() {
          
           if (Status) {
             setProfile(details)
-            // console.log('deets',details,moment(details.date_of_birth).format('yyyy-MM-dd'))
-            
             // setProfile({...profile, date_of_birth:(moment(details.date_of_birth).format('yyyy-MM-dd'))})
             setHours({
               HoursSunStart:  details.hours_sun_start,
@@ -362,7 +357,6 @@ function ProfileEdit() {
           }
         )
         .then((res) => {
-          // console.log(res)
           const { Status, Data: data = [], Message } = res.data
 
           if (Status) {
@@ -443,7 +437,7 @@ function ProfileEdit() {
                         {disableForm ? null : (
                           <button
                             type="button"
-                            className="btn btn-success btn-round waves-effect waves-light mt-2"
+                            className="btn btn-success btn-round waves-effect waves-light mt-2 m-2"
                             onClick={triggerFileInput}
                             
                           >
@@ -529,6 +523,7 @@ function ProfileEdit() {
                             disabled={disableForm}
                             className="form-control"
                             type="text"
+                            required
                             name="last_name"
                             value={profile.last_name}
                             onChange={handleInputChange.bind(this)}
@@ -588,6 +583,7 @@ function ProfileEdit() {
                             className="form-control"
                             type="tel"
                             rows="4"
+                            
                             name="provider_description"
                             value={profile.provider_description}
                             onChange={handleInputChange.bind(this)}
@@ -626,6 +622,7 @@ function ProfileEdit() {
                             className="form-control"
                             type="tel"
                             name="contact_info"
+                            required
                             value={profile.contact_info}
                             onChange={handleInputChange.bind(this)}
                           />
@@ -646,6 +643,7 @@ function ProfileEdit() {
                               disabled={disableForm}
                               className="form-control"
                               type="text"
+                              required
                               name="address_line_1"
                               value={profile.address_line_1}
                               onChange={handleInputChange.bind(this)}
@@ -724,6 +722,7 @@ function ProfileEdit() {
                           <select
                             className="form-control"
                             disabled={disableForm}
+                            required
                             name="country_id"
                             value={profile.country_id}
                             onChange={handleInputChange.bind(this)}
@@ -743,6 +742,7 @@ function ProfileEdit() {
                             <input
                               disabled={disableForm}
                               className="form-control"
+                              required
                               type="text"
                               name="city"
                               value={profile.city}
@@ -776,6 +776,7 @@ function ProfileEdit() {
                         </label>
                         <div className="col-sm-8">
                           <TimeZoneSelect
+                            required={true}
                             value={profile.local_time_zone}
                             setTimeZone={(selected) =>
                               setProfile((prev) => ({
@@ -800,6 +801,7 @@ function ProfileEdit() {
                             disabled={disableForm}
                             className="form-control"
                             type="date"
+                            required={true}
                             placeholder={'mm-dd-yyyy'}
                             name="date_of_birth"
                             // defaultValue={dateFormat(profile.date_of_birth)}
