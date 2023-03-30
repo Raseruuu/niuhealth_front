@@ -29,11 +29,11 @@ function PatientRegistration() {
     await axiosPrivate
     .post("updatePatientDetails", 
       {...formData,
-      Email:email,
-      FirstName:profile?.first_name,
-      MiddleName:profile?.middle_name,
-      LastName:profile?.last_name,
-      LocalTimeZone:profile?.local_time_zone
+        Email:email,
+        FirstName:profile?.first_name,
+        MiddleName:profile?.middle_name,
+        LastName:profile?.last_name,
+        LocalTimeZone:profile?.local_time_zone
       }
       ,
         {signal: controller.signal}
@@ -165,7 +165,7 @@ function PatientRegistration() {
           <div className="col-md-12">
             <label htmlFor="example-text-input" className="col-form-label text-right" >Address Line 1</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" id="Address1" {...register("Address1")} />
+                    <input className="form-control" required type="text" id="Address1" {...register("Address1")} />
             </div>
         </div>
         <div className="form-group row">
@@ -179,7 +179,7 @@ function PatientRegistration() {
           <div className="col-md-12">
             <label htmlFor="example-text-input" className="col-form-label text-right" >Zip Code</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" id="ZIPCode" {...register("ZIPCode")} />
+                    <input className="form-control" required type="text" id="ZIPCode" {...register("ZIPCode")} />
             </div>
         </div>
         <div className="form-group row">
@@ -208,7 +208,7 @@ function PatientRegistration() {
           <div className="col-md-12 ">
             <label htmlFor="example-text-input" className="col-form-label text-right">City</label></div>
                 <div className="col-md-12">
-                    <input className="form-control" type="text" id="example-text-input" {...register("City")} />
+                    <input className="form-control" required type="text" id="example-text-input" {...register("City")} />
             </div>
         </div>
         {/* <div className="col-md-6">

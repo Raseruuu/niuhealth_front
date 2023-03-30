@@ -20,6 +20,18 @@ function PatientSideNav({ openSideNav,openSideIcons,removePfp }) {
   const {auth} = useAuth();
   const [isLoading,setIsLoading]=useState(true)
   const axiosPrivate = useAxiosPrivate()
+  async function logoutCurrentUser(){
+    await axiosPrivate
+      .post(
+        "signOut" ,{Email:auth.email})
+      .then((res) => {
+        console.log(res);
+
+        // const { StatusCode, Data: data = [], Message } = res.data;
+      })
+      
+
+    }
   function handleLogout(e) {
     e.preventDefault()
     Swal.fire(
@@ -34,6 +46,7 @@ function PatientSideNav({ openSideNav,openSideIcons,removePfp }) {
         if(result.isConfirmed)
           { 
             logout()
+            logoutCurrentUser()
             navigate('/login',{replace:true})
           }
         else{
@@ -75,7 +88,7 @@ function PatientSideNav({ openSideNav,openSideIcons,removePfp }) {
           
           setIsLoading(false)
           console.log('res',res)
-          setSubscribed(parseInt(res.data.Data[0].subscription_plan)>0)
+          setSubscribed(parseInt(res?.data.Data[0].subscription_plan)>0)
           sessionStorage.setItem('has_insurance',res.data.Data[0].has_insurance)
         })
         .catch((error) => {

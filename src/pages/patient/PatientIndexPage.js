@@ -19,6 +19,18 @@ function PatientIndexPage() {
   const [isLoading,setIsLoading]=useState(true)
   const [patient,setPatient]=useState({})
   const has_insurance=sessionStorage.getItem('has_insurance')
+  async function logoutCurrentUser(){
+    await axiosPrivate
+      .post(
+        "signOut" ,auth.email)
+      .then((res) => {
+        console.log(res);
+
+        // const { StatusCode, Data: data = [], Message } = res.data;
+      })
+      
+
+    }
   useEffect(()=>{
     
     const controller = new AbortController()

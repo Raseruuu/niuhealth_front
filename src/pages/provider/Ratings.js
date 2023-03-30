@@ -305,7 +305,7 @@ function RatingsFilter({
         <div className='col-lg-12'>
           <div className='p-3'>
             <h6 className='mt-0 mb-4'>Filter</h6>
-            {[5,4,3,2,1,0].map((val,index) => (
+            {[5,4,3,2,1].map((val,index) => (
                 <div key={val} className="checkbox checkbox-success">
                   <input 
                     id={`checkboxa${val}`}
@@ -426,8 +426,11 @@ function Ratings({}) {
     <div className='container-fluid'>
       <TitleBox text="Ratings"/>
       <div className='row'>
-        <div>
-          <div className='card'>
+        <div className=''>
+          <h4 className='header-title mt-0 mb-4'>
+            Overview
+          </h4>
+          <div className='card m-2 ml-4'>
             <div className='card-body'>
               <RatingsBoxOverall score={list?.Average} totalReviews={totalRatings.length} size={24} />
               <RatingsChart ratinglist={totalRatings}/>
@@ -435,7 +438,7 @@ function Ratings({}) {
                 {/* <span className='text-right ml-auto d-inline-block'>
                   <i className='far fa-smile font-24 text-warning'></i>
                 </span> */}
-                <i className={`mdi mdi-star text-warning font-24`}></i>
+                {/* <i className={`mdi mdi-star text-warning font-24`}></i> */}
                 {/* <h3 className='d-inline-block mr-2 mb-1 mb-lg-0'>{list.TotalRatings}</h3>
                 <h4 className='header-title d-inline-block mr-2 mb-1 mb-lg-0'>
                   Total Stars
@@ -444,6 +447,7 @@ function Ratings({}) {
               </div>
             </div>
           </div>
+          <div className='m-2 ml-4'>
           <RatingsFilter 
             starFilter={starFilter} 
             setList={setList} 
@@ -456,6 +460,7 @@ function Ratings({}) {
             setStarFilter={setStarFilter} 
             filters={filters} 
             setFilters={setFilters}/>
+            </div>
         </div>
         <div className='col'>
           <div className='row'>

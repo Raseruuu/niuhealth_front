@@ -48,7 +48,7 @@ export default function ClinicSchedule() {
   const [clinicProfile,setClinicProfile]=useState({})
   const [oldProfile,setOldProfile]=useState({})
   const { state } = useLocation();
-  const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png',file:{}}])
+  const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png'}])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
 
@@ -132,7 +132,6 @@ export default function ClinicSchedule() {
   const onSubmit = async (data) => {
     
     const formData = new FormData();
-    console.log(data)
     if (action==='create'){
       formData.append("Email", auth.email);
       formData.append("ClinicName",data.ClinicName)
@@ -159,13 +158,13 @@ export default function ClinicSchedule() {
     for (let key in hours) {
       if (hours.hasOwnProperty(key)) {
         formData.append(key,hours[key])
-        console.log(key,hours[key])
       }
     }
     formData.append("LocalCurrency", localCurrency);
     formData.append("LocalTimeZone", localTimezone);
     for (var index in clinicImages){
       if (clinicImages[index].file){
+        // console.log(clinicImages[index].file!=={})
         formData.append('Image'+(parseInt(index)+1), clinicImages[index].file)
       }
     }
@@ -183,11 +182,11 @@ export default function ClinicSchedule() {
           formData,{
             headers: { "Content-Type": "multipart/form-data" },
             onUploadProgress: function (ProgressEvent) {
-              console.log(
-                "uploadprogress: " +
-                  (ProgressEvent.loaded / ProgressEvent.total) * 100 +
-                  "%"
-              );
+              // console.log(
+              //   "uploadprogress: " +
+              //     (ProgressEvent.loaded / ProgressEvent.total) * 100 +
+              //     "%"
+              // );
             },
           }
         )
@@ -202,7 +201,8 @@ export default function ClinicSchedule() {
             if (action==="create")
             { 
               Swal.fire("Success! You created a new Clinic.")
-              // navigate('/provider/clinics')
+              navigate('/provider/clinics/profile/'+clinicID)
+
             }
             else if (action==="edit")
               {
@@ -235,13 +235,10 @@ export default function ClinicSchedule() {
           }
         )
         .then((res) => {
-          console.log(res)
           const { Status, Data: data, Message } = res.data
           const details = data
 
           if (Status) {
-            console.log('details',res.data.Data)
-            
             setOldProfile(res.data.Data)
             setClinicProfile(res.data.Data)
             setLocalCurrency(res.data.Data.local_currency)
@@ -289,6 +286,7 @@ export default function ClinicSchedule() {
     else if (action==='create'){
 
       setClinicProfile({...clinicProfile, image1:{path:"clinics/Default.png"}})
+
     }
   }, [])
   // useEffect(() => {
@@ -302,7 +300,6 @@ export default function ClinicSchedule() {
   }
   const handleImageInputChange = (e) => {
     const [file] = e.target.files;
-    console.log("FILE HERE: ",file);
     setClinicProfile({
       ...clinicProfile,
       picturefile:file
@@ -320,7 +317,6 @@ export default function ClinicSchedule() {
         const { result } = e.target;
         if (result && !isCancel) {
           // setFileDataURL(result)
-          // console.log('result',result)
           setClinicProfile({
             ...clinicProfile,
             picture:result 
@@ -351,10 +347,10 @@ export default function ClinicSchedule() {
               <div className='float-right'>
                 <ol className='breadcrumb'>
                   <li className='breadcrumb-item'>
-                    <Link to='/admin'>NIU Health</Link>
+                    <Link to='/provider'>NIU Health</Link>
                   </li>
                   <li className='breadcrumb-item'>
-                    <Link to='/admin/clinics'>Clinics</Link>
+                    <Link to='/provider/clinics'>Clinics</Link>
                   </li>
                   <li className='breadcrumb-item active'>
                     {(action==="create")?"New Clinic":(action==="edit")?"Edit Clinic":"Clinic"}
@@ -388,7 +384,7 @@ export default function ClinicSchedule() {
                         {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1]?.path!="clinics/Default.png")))?(
                         <button
                           className="btn btn-gradient-success waves-effect waves-light"
-                          minWidth="200px" height="150px"
+                          height="150px"
                           onClick={(e)=>{
                             e.preventDefault();
                             if (clinicImages.length<=4)
@@ -854,14 +850,14 @@ export default function ClinicSchedule() {
                     >
                       Save
                     </button>{' '}
-                    <button
+                    {/* <button
                       type='button'
                       className='btn btn-gradient-danger waves-effect waves-light'
                       onClick={() => Swal.fire({html:"This clinic cannot be deleted due to an active booking."})}
                       style={{marginRight:'10px'}}
                     >
                       Delete
-                    </button>
+                    </button> */}
                     <button
                       type='button'
                       className='btn btn-gradient-info waves-effect waves-light'
@@ -877,7 +873,7 @@ export default function ClinicSchedule() {
                           className='btn btn-gradient-success waves-effect waves-light'
                           disabled={isSubmitting}
                         >
-                          Save
+                          {isSubmitting?"Saving...":"Save"}
                         </button>{' '}
                         <button
                           type='button'

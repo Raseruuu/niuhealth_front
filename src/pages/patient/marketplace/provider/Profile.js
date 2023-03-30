@@ -34,7 +34,12 @@ function ProviderProfile() {
     start: 8,
     end: 17,
   })
-  
+  function formatLongtxt(string="",limit=50){
+
+    if (string?.length>limit){
+      return string.substring(0,limit)+"..."}
+    return string
+  }
   const [providerSched, setProviderSched] = useState({
     hours_mon_start: '8',
     hours_mon_end: '17',
@@ -176,7 +181,7 @@ function ProviderProfile() {
           // Condition compares looped time with current time, prevents booking on already past time
           schedArray.push({
               id: 'id_' + index + j,
-              title: 'Available',
+              title: 'OPEN',
               start: startStr,
               backgroundColor: '#007e26',
               borderColor: '#1eca7b',
@@ -479,7 +484,7 @@ function ProviderProfile() {
                     Services
                   </a>
                 </li>
-                <li className='nav-item'>
+                {/* <li className='nav-item'>
                   <a
                     className='nav-link'
                     id='clinics_tab'
@@ -488,7 +493,7 @@ function ProviderProfile() {
                   >
                     Clinics
                   </a>
-                </li>
+                </li> */}
                 {/* <li className='nav-item'>
                   <a
                     className='nav-link'
@@ -690,33 +695,43 @@ function ProviderProfile() {
                         <img
                           src={(AWS_BUCKET_SERVICES+item.image)}
                           alt=""
-                          style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                          style={{
+                            maxWidth:'200px',maxHeight: '200px',minHeight:'200px',
+                            width:'100%', height:'100%',objectFit: 'cover'}}
                           className="img-fluid"
                         />
                       </Link>
-                      <div className="card-body product-info">
+                      <div className="card-body product-info pr-4 pl-4">
                         <Link
                           to={(auth.userType==="Patient"?"/patient/marketplace/booking/"+item.service_id:"/provider/service/view")}
                           className="product-title"
                           state={{ ...item }}
                         >
-                          <div className='text-title' style={{marginBottom:0}}><h4>{item.service_name}</h4>
+                          <div className='text-title m-0'
+                              style={{height:48,marginBottom:8}}><h4>
+                          {formatLongtxt(item.service_name,36)}</h4>
                           </div>
                         </Link>
                         <br/>
-                        <div className='row-lg-3'>
-                        <b>Description : </b><br/>{item.service_description}<br/>
-                        <b>Category :</b><br/> {item.category}<br/>
+                        <div className='row-md-3'>
+                        <div style={{height:86}}>
+                          <b>Description : </b><br/>
+                          {formatLongtxt(item.service_description,60)}
+                          <br/>
                         </div>
-                        <br/> 
-                        <h4 className='met-user-name'>{item.provider_name}</h4><br/> 
+                        <div style={{height:48}}>
+                          <b>Category :</b><br/> {item.category}<br/>
+                        </div>
+                        </div>
+                        
+                          
 
                         {/* <div className='text-muted' style={{marginTop:-20}}>Provider</div> */}
                         
-                        <div className="d-flex justify-content-between my-2 row">
+                        <div className="d-flex justify-content-between my-1 row">
                           <p className="product-price m-2">${item.cost_price}</p>
                           <div className="row product-review align-self-center">
-                            <div className='col-md-10 m-3'>
+                            <div className='col'>
                             {(item.average_ratings===0)?<>Unrated</>:
                             <Rating
                               fillColor="#ffb822"
@@ -733,10 +748,12 @@ function ProviderProfile() {
                           </div>
                         </div>
                         {auth.userType==="Patient"?
-                        <div className="d-flex justify-content-between my-2 row">
+                        <div className="d-flex align-items-end justify-content-between my-2 row">
                           <button 
                             onClick={()=>{navigate("/patient/marketplace/booking/"+(item?.service_id),{state:{ ...item}})}}
-                            className='btn btn-success'>Book Appointment</button>
+                            className='btn btn-success'>
+                              Book Appointment
+                          </button>
                           {/* <button 
                             onClick={()=>{navigate("/patient/marketplace/provider/"+(id))}}
                             className='btn btn-outline-success'>View Profile</button> */}

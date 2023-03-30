@@ -248,13 +248,15 @@ function Bucket() {
 
 
                      {images.map((image,index)=>{
-                      return(
+                      return(<div key={index}>
                       <CardItem className={"m-2 col lg-4"} >
                       <div className='m-2 col lg-4'  onClick= {() => openImageViewer(index)}>
                           File {index+1}<br/><br/>
                           <img  style={{width:'250px',objectFit:'cover'}} src={image}></img>
                           </div>
-                      </CardItem>)
+                      </CardItem>
+                      </div>
+                      )
                       })
                     }
 

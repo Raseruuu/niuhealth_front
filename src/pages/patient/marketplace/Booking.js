@@ -40,10 +40,10 @@ export const StyleWrapper = styled.div`
     
     }
   .styles-module_navigation__1pqAE{
-    z-index : 1;
+    z-index : 1080;
   }
   .styles-module_wrapper__1I_qj{
-    margin-top : 2070px;
+    // margin-top : 2070px;
     background-color :rgba(0 0 0 / 50%);
   }
   img{
@@ -457,7 +457,7 @@ export default function Booking() {
                         <div className='d-flex justify-content-center'>
                         <Link onClick={() => openImageViewer(0)}>
                             <img
-                              src={`${serviceImages[-0]}`}
+                              src={`${serviceImages[0]}`}
                               alt=""
                               // width={30}
                               style={{objectFit:'cover',width:'100%',minWidth:'148px', maxWidth:'560px', maxHeight:'380px', height:'auto'}}
@@ -473,13 +473,23 @@ export default function Booking() {
                               if (index!==0){
                               return(
                               <div className='row-sm-3 m-2 ml-3'>
-                              <Link onClick={() => {console.log(serviceImages);openImageViewer(index)}}>
+                              <Link 
+                                onClick=
+                                {() => {console.log(isViewerOpen);
+                                  
+                                  openImageViewer(index)}}>
                               <img
                                 src={`${serviceImage}`}
                                 alt=""
                                 // width={30}
                                 // className='img-thumbnail'
-                                style={{objectFit:'contain',width:'100%',minWidth:'140px',maxWidth:'140px', maxHeight:'200px', height:'auto'}}
+                                style={{
+                                  objectFit:'contain',
+                                  width:'100%',
+                                  minWidth:'140px',
+                                  maxWidth:'140px', 
+                                  maxHeight:'200px', 
+                                  height:'140px'}}
 
                                 // className="rounded-circle"
                               />
@@ -523,7 +533,7 @@ export default function Booking() {
                                 SVGstorkeWidth={1}
                                 size={14}
                                 allowFraction={true}
-                                initialValue={serviceDetails?.average}
+                                initialValue={service?.average}
                                 readonly={true}
                               /><br/>
                               {service?.average} ({service?.total_reviews} Total Reviews)
@@ -715,7 +725,7 @@ export default function Booking() {
                       }}
                     />
                     </StyleWrapper>
-                  <div className="clearfix"></div>
+                  {/* <div className="clearfix"></div> */}
                 </div>
               </div>
             </div>
@@ -726,7 +736,7 @@ export default function Booking() {
 
         <Footer />
       </div>
-      {isViewerOpen && (
+      {isViewerOpen?(
         <div style={{marginTop:'100px', zIndex:1020}}>
           <StyleWrapper>
             <ImageViewer
@@ -738,7 +748,7 @@ export default function Booking() {
             />
           </StyleWrapper>
         </div>
-      )}
+      ):null}
     </div>
   )
 }

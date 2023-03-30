@@ -84,7 +84,16 @@ export default function Marketplace() {
           setList(serviceList)
           setListOriginal(serviceList)
           const serviceCategories=serviceList.map((item,index)=>{return item.category})
-          setCategoryOptions(serviceCategories)
+          var tempCategories=[]
+          serviceCategories.map(
+            (item,index)=>{
+              if (!tempCategories.includes(item)){
+                tempCategories.push(item)
+              }
+            
+          })
+          console.log(tempCategories)
+          setCategoryOptions(tempCategories)
         })
         .catch((err) => {
           setIsLoading(false)
@@ -411,7 +420,7 @@ export default function Marketplace() {
                   {
                   list.map((item, index) => (
                     <div key={index} className="col-xl-3" style={{minWidth:'200px'}}>
-                      <div className="card e-co-product" style={{minHeight:'700px'}} >
+                      <div className="card e-co-product" style={{minHeight:'740px'}} >
                       {/* {AWS_BUCKET_SERVICES+ item.images} */}
                         <Link to={"booking/"+item.service_id} state={{ ...item }}>
                           <img
@@ -420,55 +429,70 @@ export default function Marketplace() {
                             // style={{width:'200px', height:'200px',objectFit: 'cover'}}
                             style={{ 
                               // width: 'unset', 
-                               maxWidth:'200px',minHeight:'200px',
+                               maxWidth:'200px',maxHeight: '200px',minHeight:'200px',
                                width:'100%', height:'100%',objectFit: 'cover'}}
                             className="img-fluid"
                           />
                         </Link>
-                        <div className="card-body product-info">
+                        <div className="card-body product-info pr-4 pl-4">
                           <Link
                             to={"booking/"+item.service_id}
-                            className="product-title"
+                            className="product-title "
                             state={{ ...item }}
                           >
-                            <div className='text-title' style={{marginBottom:0}}><h4>{item.service_name}</h4>
+                            <div
+                              className='text-title m-0' 
+                              style={{height:48,marginBottom:8}}>
+                                <h4 style={{overflowWrap:'normal'}}> 
+                                {formatLongtxt(item.service_name,36)}</h4>
                             </div>
                           </Link>
                           <br/>
-                          <div className='row-lg-3'>
-                          <b>Description : </b><br/>{formatLongtxt(item.service_description,160)}<br/>
-                          <b>Category :</b><br/> {item.category}<br/>
+                          <div className='row-md-3'>
+                            <div style={{height:86}}>
+                              <b>Description : </b><br/>
+                                {formatLongtxt(item.service_description,60)}
+                              <br/>
+                            </div>
+                            <div style={{height:48}}>
+                              <b>Category :</b><br/> {item.category}<br/>
+                            </div>
                           </div>
                           <br/> 
-                          <h4 className='met-user-name'>{item.provider_name}</h4><br/> 
-                          <div className='text-muted' style={{marginTop:-20}}>Provider</div>
+                          <h4 className='met-user-name mt-1 mb-0'>{item.provider_name}</h4><br/> 
+                          <div className='text-muted ' style={{marginTop:-20}}>Provider</div>
                           
-                          <div className="d-flex justify-content-between my-2 row">
-                            <p className="product-price m-2">${item.cost_price}</p>
+                          <div className="d-flex justify-content-between my-1 row">
+                            <p className="product-price m-1">${item.cost_price}</p>
+                           
                             <div className="row product-review align-self-center">
-                              <div className='col-md-10 m-3'>
-                              {(item.average_ratings===0)?<>Unrated</>:
-                              <Rating
-                                fillColor="#ffb822"
-                                emptyColor="white"
-                                SVGstrokeColor="#f1a545"
-                                SVGstorkeWidth={1}
-                                size={17}
-                                allowFraction={true}
-                                initialValue={item.average_ratings}
-                                readonly={true} 
-                              />}
-                               {/* ({item.average_ratings}) */}
+                              <div className='col'>
+                              {(item.average_ratings===0)?
+                                <div className='col-lg'> Unrated</div>:
+                                <Rating
+                                  fillColor="#ffb822"
+                                  emptyColor="white"
+                                  SVGstrokeColor="#f1a545"
+                                  SVGstorkeWidth={1}
+                                  size={17}
+                                  allowFraction={true}
+                                  initialValue={item.average_ratings}
+                                  readonly={true} 
+                                />}
                               </div>
                             </div>
                           </div>
                           <div className="d-flex align-items-end justify-content-between my-2 row">
                             <button 
                               onClick={()=>{navigate("/patient/marketplace/booking/"+item.service_id,{state:{ ...item}})}}
-                              className='btn btn-success'>Book Appointment</button>
+                              className='btn btn-success m-1'>
+                                Book Appointment
+                            </button>
                             <button 
                               onClick={()=>{navigate("/patient/marketplace/provider/"+(item?.provider_id))}}
-                              className='btn btn-outline-success'>View Profile</button>
+                              className='btn btn-outline-success m-1'>
+                                View Profile
+                            </button>
                           </div>
                         </div>
                       </div>

@@ -18,7 +18,7 @@ const useAxiosPrivate = () => {
 
         return config
       },
-      (error) => Promise.reject(error)
+      (error) => {Promise.reject(error)}
     )
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
@@ -28,7 +28,6 @@ const useAxiosPrivate = () => {
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true
           const newAccessToken = await refresh()
-          console.log("Refresh",auth.refresh_token)
           const refreshToken=auth.refresh_token
           prevRequest.headers['Authorization'] = `${refreshToken}`
           return axiosPrivate(prevRequest)

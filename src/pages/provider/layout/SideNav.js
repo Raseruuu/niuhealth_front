@@ -2,12 +2,26 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import useAuth from '../../../hooks/useAuth'
 import useLogout from '../../../hooks/useLogout'
 
 function SideNav({ openSideNav,openSideIcons,removePfp }) {
   const logout = useLogout()
+  const { auth, setAuth } = useAuth()
   const navigate = useNavigate()
   const [openSideNav_delayed,setOpenSideNav_delayed]=useState(openSideNav)
+  async function logoutCurrentUser(){
+    await axiosPrivate
+      .post(
+        "signOut" ,{Email:auth.email})
+      .then((res) => {
+        console.log(res);
+
+        // const { StatusCode, Data: data = [], Message } = res.data;
+      })
+      
+
+    }
   function handleLogout(e) {
     e.preventDefault()
     Swal.fire(
@@ -22,6 +36,7 @@ function SideNav({ openSideNav,openSideIcons,removePfp }) {
         if(result.isConfirmed)
           { 
             logout()
+            logoutCurrentUser()
             navigate('/login',{replace:true})
           }
         else{

@@ -72,6 +72,16 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
   const ntfBadgeNum = notifs.length
   // console.log(ntfBadgeNum)
   // console.log(notifs[0].type)
+  async function logoutCurrentUser(){
+    await axiosPrivate
+      .post(
+        "signOut" ,{Email:auth.email})
+      .then((res) => {
+        console.log(res);
+      })
+      
+
+    }
   function handleLogout(e) {
     e.preventDefault()
     Swal.fire(
@@ -86,6 +96,7 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
         if(result.isConfirmed)
           { 
             logout()
+            logoutCurrentUser()
             navigate('/login',{replace:true})
           }
         else{
@@ -157,7 +168,7 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
         <NotifLink />
         </li> */}
         <li className='dropdown'>
-          <Link
+          {(removePfp)?<></>:<Link
             className='nav-link dropdown-toggle waves-effect waves-light nav-user'
             data-toggle='dropdown'
             to='#'
@@ -177,11 +188,11 @@ export function TopBar({ menuClick, homeAddress,removePfp }) {
               src={(auth.userType==='Patient')?`${AWS_BUCKET_SERVICES}profiles/pictures/${profile?.picture}`:(auth.userType==='Provider')?`${AWS_BUCKET_SERVICES}providers/${profile.picture}`:`${AWS_BUCKET}/assets/images/users/user-1.png`}
               alt='profile-user'
               className='rounded-circle'
-              style={{display:(removePfp?'none':'unset'),objectFit:"cover", width:50, height:50}}
+              style={{objectFit:"cover", width:50, height:50}}
             />
             </>:null}
            
-          </Link>
+          </Link>}
           <div className='dropdown-menu dropdown-menu-right'>
             <Link className='dropdown-item' to='profile'>
               <i className='ti-user text-muted mr-2'></i> Profile

@@ -324,7 +324,7 @@ function Upload() {
                     ) : null}
                     {isSuccess ? (
                       <div className='alert alert-success' role='alert'>
-                        File successfully uploaded.
+                        Files successfully uploaded.
                       </div>
                     ) : null}
                     {!isSuccess ? (<>

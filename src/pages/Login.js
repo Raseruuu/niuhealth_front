@@ -17,22 +17,7 @@ function Login( ) {
   
   const effectRun = useRef(false);
   const navigate = useNavigate()
-  async function logoutCurrentUser(){
-    await axiosPrivate
-      .get(
-        "http://ebsdrcocophp01prod-env.eba-y6pjrhe2.us-west-1.elasticbeanstalk.com/niuhealth-api/api/",
-        {headers:{
-          
-          'Access-Control-Allow-Origin': '*',
-          "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"}} )
-      .then((res) => {
-        console.log(res);
-        // const { StatusCode, Data: data = [], Message } = res.data;
-      })
-      
-
-    }
+ 
   async function handleLogin(data){
     const controller = new AbortController()
 
