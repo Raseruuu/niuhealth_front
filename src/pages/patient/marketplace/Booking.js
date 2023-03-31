@@ -526,7 +526,7 @@ export default function Booking() {
                                 <i className="mdi mdi-star text-warning"></i>
                               </label> */}
                               <b>Average Rating:</b><br/>
-                              {(service?.total_reviews)?<Rating
+                              {(service?.total_reviews===0)?<Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
                                 SVGstrokeColor="#f1a545"
@@ -537,7 +537,7 @@ export default function Booking() {
                                 readonly={true}
                               />:<h5 className='text-purple m-0'>Unrated</h5>}
                               <br/>
-                              {service?.average} ({(service?.total_reviews)?service?.total_reviews:0} Total Reviews)
+                              {service?.average} 
                             </p>
                             <h5>
                               <b>Price:</b>{' '}

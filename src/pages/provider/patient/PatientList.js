@@ -11,6 +11,7 @@ import Pagination from "react-js-pagination";
 import { CardLongItem } from '../../../components/cards/Card'
 import { useForm } from 'react-hook-form'
 import Swal from 'sweetalert2'
+import RingLoading from '../../../components/lottie/RingLoading'
 // Provider list of patients
 
 function PatientList() {
@@ -30,6 +31,7 @@ function PatientList() {
   const [clinicIDList, setClinicIDList] = useState([])
   const [serviceList, setServiceList] = useState([])
   const [service, setService] = useState("")
+  const [pagesMax,setPagesMax] = useState(1)
   // itemsCountPerPage
   /*
   For Status:
@@ -127,7 +129,6 @@ function PatientList() {
         }
       )
       .then((res) => {
-        console.log(res)
         const { Status, Data: data = [], Message } = res.data
 
         if (Status) {
@@ -155,7 +156,12 @@ function PatientList() {
     await axiosPrivate
       .post(
         searchText ? 'searchPatient' : 'getPatients',
-        { Email: auth.email, Search: searchText},
+        { 
+          Email: auth.email,
+          Search: searchText,
+          PageNumber:pageNum,
+          RowPerPage:10
+        },
         {
           signal: controller.signal,
         }
@@ -164,12 +170,14 @@ function PatientList() {
         setIsLoading(false)
         console.log(res)
         const { Data = [] } = res.data
+
         if (searchText?.length>0){
-          
           setPatientList(Data)
         }
         else{
           setPatientList(Data.Patients)
+          console.log(Data)
+          setPagesMax(Data.MaxPage)
         }
       })
       .catch((err) => {
@@ -222,12 +230,14 @@ function PatientList() {
       getList()
     }
   }, [searchText])
-
   useEffect(() => {
     getServicesList()
-    getList()
     getClinicList()
   }, [])
+  useEffect(() => {
+    setIsLoading(true)
+    getList()
+  }, [pageNum])
 
   return (
     <ContainerFluid>
@@ -296,7 +306,7 @@ function PatientList() {
         
         <PatientListData 
           limit={pageLimit} 
-          pagenum={pageNum} 
+          pagenum={(searchText.length>0)?pageNum:1} 
           list={patientList} 
           showModal={
             (patient)=>{
@@ -310,23 +320,27 @@ function PatientList() {
         
       </TableCard>
       <CardLongItem>
-      {(patientList.length>pageLimit)?
+      {(patientList.length>0)?
       
             <div className='justify-content-center d-flex' style={{alignItems:'center',flexDirection:'column'}}>
               
               <Pagination
                 activePage={pageNum}
                 itemsCountPerPage={pageLimit}
-                totalItemsCount={patientList?.length||[]}
-                pageRangeDisplayed={5}
+                totalItemsCount={(searchText.length>0)?patientList.length:patientList?.length*pagesMax+1}
+                pageRangeDisplayed={10}
                 // onPageChange={}
                 itemclassName="page-item "
                 linkClass="page-link float-center"
                 onChange={(e)=>{
-                  console.log(e);
+                  // console.log(e);
+                  if (searchText.length<3){
+                    setIsLoading(true)
+                    setPatientList([])
+                  }
                   setPageNum(e)}}
                         />
-              <div className='row-lg-12 h-2'>Page {pageNum}</div> 
+              <div className='row-lg-12 h-2 m-1'>Page {pageNum}</div> 
                   </div>:<></>}
         {/* {isLoading ? 'Loading please wait...' : null} */}
         {/* {errMsg ? <span style={{ color: 'red' }}>{errMsg}</span> : null}
@@ -334,7 +348,15 @@ function PatientList() {
           ? '0 record found.'
           : null} */}
           </CardLongItem>
-        </>:<CardLongItem><h5>{(isLoading)?"Loading, please wait...":"No Results."}</h5></CardLongItem>
+        </>:<CardLongItem><h5>
+      {(isLoading)?
+        <CardLongItem><h4>    
+          <div className='d-flex justify-content-center'>
+            <RingLoading size={200}/>
+          </div>
+        </h4>
+      </CardLongItem>:
+     "No Results."}</h5></CardLongItem>
         }
          {/* {showModal===false?null: */}
           <div id="myModal" className={"modal fade show"} role="form">
@@ -390,7 +412,6 @@ function PatientList() {
                       <label  className="col-form-label">Service</label>
                       <select required className="form-control" 
                         onChange={(e)=>{
-                        console.log("chosenservice",e.target.value)
                         const [chosenService]=serviceList.filter((item)=>{return (e.target.value===item.service_id)})
                         setService(chosenService)}}
                         // {...register("ServiceID")}
@@ -410,7 +431,6 @@ function PatientList() {
                                   {clinicList.filter((item,index)=>{
                                     
                                     const serviceClinics=service?.clinic_ids?.split(',')
-                                    console.log(item)
                                     return (serviceClinics?.includes(item.clinic_id))
                                   }
                                 )?.map((item)=>{

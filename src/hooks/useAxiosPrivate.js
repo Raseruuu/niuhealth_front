@@ -47,7 +47,13 @@ const useAxiosPrivate = () => {
           Swal.fire({
             icon:'warning',
             html:'Your session has expired.',
-            confirmButtonText:'Logout'
+            confirmButtonText:'Logout',
+            // showClass: {
+            //   popup: 'swal2-show'
+            // },
+            // hideClass: {
+            //   popup: ''
+            // },
           }).then((response)=>{
            
               
