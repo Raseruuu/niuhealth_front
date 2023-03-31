@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import {StatusTextInsurance} from "../../components/status/Status"
 import { AWS_BUCKET_PROFILES } from "../../constants";
 import CardItem from '../../components/cards/Card'
+import RingLoading from '../../components/lottie/RingLoading'
 function VisitRequest() {
   const actionX = useMemo(() => ({ approve: 'approve', cancel: 'cancel' }), [])
 
@@ -146,7 +147,11 @@ function VisitRequest() {
   return (
     <div className='container-fluid'>
       <TableTitle title = "Visit Requests"/>
-      {(list.length===0)?<CardItem>{(isLoading)?"Loading...":"No Results."}</CardItem>:
+      {(list.length===0)?<CardItem><div style={{height:100}} className='d-flex align-items-center justify-content-center'>{(isLoading)?<h4>
+        
+          <RingLoading size={200}/>
+          
+        </h4>:<div >No Visit Requests.</div>}</div></CardItem>:
       <TableCard headers = {["ID", "Patient", "Request Date", "Action"]}>
         {list.map((item, index) => (
           <tr key={item?.appointment_id || index}>

@@ -6,7 +6,7 @@ import Swal from 'sweetalert2'
 
 import { Link, useNavigate } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
-import CardItem from '../../components/cards/Card'
+import CardItem, { CardLongItem } from '../../components/cards/Card'
 
 
 function TitleBox({text}){
@@ -468,8 +468,11 @@ function Ratings({}) {
                   <h4 className='header-title mt-0 mb-4'>
                     Appointment Reviews
                   </h4>
-                  {((patientRatingList?.length===0) && patientGeneralRatingList.length==0)?
-                  (<CardItem length={12}><h4>There are no reviews to display.</h4></CardItem>):
+                  {((patientRatingList?.length===0))?
+                  (<div className='col-lg-12' style={{minWidth:"450px"}}>
+                  <div className='card'>
+                  <div className='card-body'>
+                    <h4>There are no reviews to display.</h4></div></div></div>):
                   ([patientRatingList].length>0)?
                   
                     (<div className='col-lg-12' style={{minWidth:"450px"}}>
@@ -491,7 +494,9 @@ function Ratings({}) {
                   General Visit Reviews
                 </h4>
                 { (patientGeneralRatingList?.length===0)?
-                (<CardItem length={12} style={{minWidth:"450px"}}><h4>There are no reviews to display.</h4></CardItem>):
+                (<div className='col-lg-12' style={{minWidth:"450px"}}>
+                <div className='card'>
+                <div className='card-body'><h4>There are no reviews to display.</h4></div></div></div>):
                 (patientGeneralRatingList.length>0)?
                 <div className='col-lg-12' style={{minWidth:"450px"}}>
                   <div className='card'>

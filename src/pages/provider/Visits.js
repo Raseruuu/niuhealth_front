@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CardItem from '../../components/cards/Card'
+import CardItem, { CardLongItem } from '../../components/cards/Card'
 import Calendar from '../../components/provider/calendar/Calendar'
 import TableCard from '../../components/table/Tables'
 import useAuth from '../../hooks/useAuth'
@@ -16,6 +16,7 @@ import styled from "@emotion/styled"
 import Multiselect from 'multiselect-react-dropdown'
 import { StatusTextVisit } from '../../components/status/Status'
 import Swal from 'sweetalert2'
+import RingLoading from '../../components/lottie/RingLoading'
 
 
 
@@ -208,18 +209,23 @@ function Visits() {
             // console.log("Clinics",data)
             setClinicList(data)
             var clinics=[]
-            setClinicIDList(data.map((item)=>{
+            var clinicObjects=[]
+            data.map((item)=>{
               // console.log("clinsss",clinics)
               if (clinics.includes(item.clinic_id)){
                 pass
               }
               else{
+                clinicObjects=(
+                  [...clinicObjects,{name:item.clinic_name,id:item.clinic_id}])
                 clinics.push(item.clinic_id)
                 
                 return {name:item.clinic_name,id:item.clinic_id}
               }
             
-            }))
+            })
+            console.log("ClinicOBj",clinicObjects)
+            setClinicIDList(clinicObjects)
             
           } else {
             throw new Error(Message)
@@ -338,7 +344,7 @@ function Visits() {
                                         onSelect={
                                           (selectedList,selectedItem)=>{
                                               
-                                              setFilterList(selectedList)
+                                              setFilterList([...filterList,selectedItem])
                                               const clinic_filter=selectedList.map((clinic)=>{return clinic.id})
                                               if (selectedList.length>0)
                                                 {setAppointmentList(listOriginal
@@ -598,7 +604,7 @@ function Visits() {
               <TableCard headers={["Patient","Service Name","Category","Clinic","Appointment Time","Visit Type", "Status","Action"]}>
               {appointmentList.map((item,index)=>{
                 const appointmentTime=`${item.trans_date_time.replace(/-/g, "/").slice(0,10)} ${(item.trans_start+":00:00")} `
-                console.log(appointmentTime)
+                // console.log(appointmentTime)
                 const appointmentPeriod=[moment(appointmentTime),moment(appointmentTime).add(1, 'hours')]
                 const formatPeriod=[
                   appointmentPeriod[0].format("MMM DD YY"),
@@ -609,7 +615,7 @@ function Visits() {
                 
                 const withinAppointmentPeriod=timenow.isAfter(appointmentPeriod[0])&&appointmentPeriod[1].isAfter(timenow)
                 // const withinAppointmentPeriod=false
-                console.log("AppPer",withinAppointmentPeriod)
+                // console.log("AppPer",withinAppointmentPeriod)
                 return(
                 <tr key={index} className={withinAppointmentPeriod?'bg-light':''}>
                 <td>
@@ -676,7 +682,7 @@ function Visits() {
                         .then(
                           async (response)=>
                         {
-                          console.log(response)
+                          // console.log(response)
                           if (response?.isConfirmed&&withinAppointmentPeriod){
                             await axiosPrivate
                           .post(
@@ -717,7 +723,14 @@ function Visits() {
 
               )})}
                       
-              </TableCard>:<><CardItem className={'col-lg-12'}>{(isLoading)?"Loading...":"No Appointments."}</CardItem></>}
+              </TableCard>:<><CardLongItem className={'col-lg-12'}>{(isLoading)?
+              <h4>
+        <div className='d-flex justify-content-center'>
+          <RingLoading size={200}/>
+          </div>
+        </h4>
+      
+      :"No Appointments."}</CardLongItem></>}
             {/* </div> */}
           </div>
         </div>

@@ -463,7 +463,7 @@ export default function Marketplace() {
                           <div className='text-muted ' style={{marginTop:-20}}>Provider</div>
                           
                           <div className="d-flex justify-content-between my-1 row">
-                            <p className="product-price m-1">${item.cost_price}</p>
+                            <p className="product-price mb-0">${item.cost_price}</p>
                            
                             <div className="row product-review align-self-center">
                               <div className='col'>

@@ -37,6 +37,12 @@ function Services({ limit }) {
   const [activeFilter,setActiveFilter]=useState('')
   const [searchString,setSearchString]=useState("")
   const [isLoading, setIsLoading] = useState(true)
+  function formatLongtxt(string="",limit=50){
+
+    if (string?.length>limit){
+      return string.substring(0,limit)+"..."}
+    return string
+  }
   async function getList() {
     const controller = new AbortController()
     await axiosPrivate
@@ -400,7 +406,10 @@ function Services({ limit }) {
                 
                   <Link to={'manage/update/'+item.service_id} state={{ selectedService: item }}>
                     <img
-                      style={{width:'200px', height:'200px',objectFit: 'cover'}}
+                      style={{ 
+                        // width: 'unset', 
+                         maxWidth:'200px',maxHeight: '200px',minHeight:'200px',
+                         width:'100%', height:'100%',objectFit: 'cover'}}
                       src={AWS_BUCKET_SERVICES+item?.default_image }
                       alt=''
                       className='img-fluid'
@@ -408,26 +417,31 @@ function Services({ limit }) {
                   </Link>
                   <div className='card-body product-info'>
                   <Link to={'manage/update/'+item.service_id} state={{ selectedService: item }} className='product-title'>
-                    {/* <div className='col'> */}
-                      
-                     {item.service_name}<br/>
-                    
-                        
-                      
-                    {/* </div> */}
+                  <div
+                              className='text-title m-0' 
+                              style={{height:48,marginBottom:8}}>
+                    <h4 style={{overflowWrap:'normal'}}> 
+                     {formatLongtxt(item.service_name,36)}</h4><br/>
+                     </div>
                     </Link>
                     <br/>
                     <div className='row-lg-3'>
-                    <b>Description: </b><br/>{item.service_description}<br/>
-                    <b>Category :</b><br/> {item.category}<br/>
+                    <div style={{height:86}}>
+                      <b>Description: </b><br/>
+                      {formatLongtxt(item.service_description,60)}<br/>
+                      
                     </div>
+                    <div style={{height:48}}>
+                      <b>Category :</b><br/> {formatLongtxt(item.category,60)}
+                      
                     <br/> 
-                    <p>{item.description}</p>
+                      </div>
+                    
                       <div className='d-flex justify-content-between my-2 row'>
                       <p className='product-price m-2'>${item.cost_price}</p>
-                      <div className='mb-0 product-review align-self-center'>
+                      <div className='mb-0 row product-review align-self-center'>
                       <div className='col-md-10 m-3'>
-                      {(item.average_ratings===0)?<>Unrated</>:
+                      {(item.average_ratings===0)?<div className='col-lg'> Unrated</div>:
                               <Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
@@ -440,6 +454,7 @@ function Services({ limit }) {
                               />}
                         </div>
                       </div>
+                    </div>
                     </div>
                     <Link to={'manage/update/'+item.service_id} state={{ selectedService: item }}>
                       <button

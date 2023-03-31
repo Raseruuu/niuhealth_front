@@ -29,6 +29,7 @@ function Login( ) {
       
     )
     .then((res) => {
+      console.log(res)
       const { StatusCode, Data: data = {}, Message } = res.data;
       
       if (StatusCode===200) {

@@ -13,6 +13,8 @@ import ScheduleSelect from  '../time/Hours'
 import ProfileEdit from '../../pages/patient/Profile'
 import UploadImage from '../form/UploadImage'
 import Swal from 'sweetalert2'
+import RingLoading from '../lottie/RingLoading'
+import CardItem, { CardLongItem } from '../cards/Card'
 function CurrencySelect({ setLocalCurrency, value,disabled }){
   return(
     <div className="row">
@@ -51,7 +53,7 @@ export default function ClinicSchedule() {
   const [clinicImages,setClinicImages]=useState([{path:'clinics/Default.png'}])
   const [imagepreview, setImagePreview] = useState(false)
   const imgRef = useRef()
-
+  const [isLoading,setIsLoading]=useState(true)
   const {
     register,
     handleSubmit,
@@ -61,20 +63,20 @@ export default function ClinicSchedule() {
   const navigate = useNavigate()
   // default hours:
   const [hours,setHours]=useState({
-    'HoursMonStart':8,
-    'HoursMonEnd':20,
-    'HoursTueStart':8,
-    'HoursTueEnd':20,
-    'HoursWedStart':8,
-    'HoursWedEnd':20,
-    'HoursThuStart':8,
-    'HoursThuEnd':20,
-    'HoursFriStart':8,
-    'HoursFriEnd':20,
-    'HoursSatStart':8,
-    'HoursSatEnd':20,
-    'HoursSunStart':8,
-    'HoursSunEnd':20
+    'HoursMonStart':6,
+    'HoursMonEnd':18,
+    'HoursTueStart':6,
+    'HoursTueEnd':18,
+    'HoursWedStart':6,
+    'HoursWedEnd':18,
+    'HoursThuStart':6,
+    'HoursThuEnd':18,
+    'HoursFriStart':6,
+    'HoursFriEnd':18,
+    'HoursSatStart':6,
+    'HoursSatEnd':18,
+    'HoursSunStart':6,
+    'HoursSunEnd':18
     })
   
     function handleInputChange(e) {
@@ -156,7 +158,8 @@ export default function ClinicSchedule() {
     }
     
     for (let key in hours) {
-      if (hours.hasOwnProperty(key)) {
+      if (hours.hasOwnProperty(key)){
+
         formData.append(key,hours[key])
       }
     }
@@ -253,30 +256,35 @@ export default function ClinicSchedule() {
             console.log(tempImgList)
             setClinicImages(tempImgList)
             setHours({
-              'HoursMonStart':data.hours_mon_start,
-              'HoursMonEnd':data.hours_mon_end,
-              'HoursTueStart':data.hours_tue_start,
-              'HoursTueEnd':data.hours_tue_end,
-              'HoursWedStart':data.hours_wed_start,
-              'HoursWedEnd':data.hours_wed_end,
-              'HoursThuStart':data.hours_thu_start,
-              'HoursThuEnd':data.hours_thu_end,
-              'HoursFriStart':data.hours_fri_start,
-              'HoursFriEnd':data.hours_fri_start,
-              'HoursSatStart':data.hours_sat_start,
-              'HoursSatEnd':data.hours_sat_end,
-              'HoursSunStart':data.hours_sun_start,
-              'HoursSunEnd':data.hours_sun_end
+              'HoursMonStart':parseInt(data.hours_mon_start)||data.hours_mon_start,
+              'HoursMonEnd':parseInt(data.hours_mon_end)||data.hours_mon_end,
+              'HoursTueStart':parseInt(data.hours_tue_start)||data.hours_tue_start,
+              'HoursTueEnd':parseInt(data.hours_tue_end)||data.hours_tue_end,
+              'HoursWedStart':parseInt(data.hours_wed_start)||data.hours_wed_start,
+              'HoursWedEnd':parseInt(data.hours_wed_end)||data.hours_wed_end,
+              'HoursThuStart':parseInt(data.hours_thu_start)||data.hours_thu_start,
+              'HoursThuEnd':parseInt(data.hours_thu_end)||data.hours_thu_end,
+              'HoursFriStart':parseInt(data.hours_fri_start)||data.hours_fri_start,
+              'HoursFriEnd':parseInt(data.hours_fri_start)||data.hours_fri_start,
+              'HoursSatStart':parseInt(data.hours_sat_start)||data.hours_sat_start,
+              'HoursSatEnd':parseInt(data.hours_sat_end)||data.hours_sat_end,
+              'HoursSunStart':parseInt(data.hours_sun_start)||data.hours_sun_start,
+              'HoursSunEnd':parseInt(data.hours_sun_end)||data.hours_sun_end
               })
             
             setImagePreview(true)
             // setAuth((prev) => ({ ...prev, ...details }))
             // setTimeZone(details?.local_time_zone)
+            setIsLoading(false)
           } else {
+            
+            setIsLoading(false)
             throw new Error(Message)
           }
         })
         .catch((err) => {
+          
+          setIsLoading(false)
           console.error(err)
         })
     }
@@ -330,6 +338,9 @@ export default function ClinicSchedule() {
       fileReader.readAsDataURL(clinicProfile.picturefile);
     }
     return () => {
+      if (action==='create'){
+        setIsLoading(false)
+      }
       isCancel = true;
       if (fileReader && fileReader.readyState === 1) {
         fileReader.abort();
@@ -359,8 +370,16 @@ export default function ClinicSchedule() {
               </div>
         </TableTitle>
 
-        <div className='row '>
-          <div className='col-lg-12'>
+        <div className='row mt-1'>
+          {isLoading?
+            <CardLongItem><h4>
+              <div className='d-flex justify-content-center'>
+                <RingLoading size={200}/>
+                </div>
+              </h4>
+            </CardLongItem>
+          :<>
+            <div className='col-lg-12'>
             <div className='card'>
               <div className='card-body'>
                 <div className='row'>
@@ -379,7 +398,7 @@ export default function ClinicSchedule() {
                             imagepreview={imagepreview} 
                             setImagePreview={setImagePreview}
                             action={action}/>
-                       
+                      
                         ))}
                         {(clinicImages.length<5&&(action==='edit'||action==='create'&&(clinicImages[clinicImages.length-1]?.path!="clinics/Default.png")))?(
                         <button
@@ -774,7 +793,7 @@ export default function ClinicSchedule() {
                         </label>
                       </div>
                       <div className='col-lg-12'  >
-                        <div className='form-group row' >
+                        <div className='form-group row m-2 mb-4' >
                           {/* <div className='row'> */}
                             <div className='col-md-3' >
                               <h5>Sunday</h5>
@@ -820,7 +839,7 @@ export default function ClinicSchedule() {
                 
 
                 <div className='row'>
-                 { (action==='profile')?(
+                { (action==='profile')?(
                   <div className='col-lg-12'>
                     <button
                       type='button'
@@ -889,7 +908,10 @@ export default function ClinicSchedule() {
                 
               </div>
             </div>
-          </div>
+            </div>
+          </>
+        }
+          
         </div>
       </div>
     </form>

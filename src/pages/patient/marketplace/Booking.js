@@ -136,7 +136,7 @@ export default function Booking() {
     console.log(selectedProvider)
     const state = {
       selectedProvider,
-      provider:{provider_id:serviceDetails.provider_id},
+      provider:{provider_id:serviceDetails?.provider_id},
       timeSlot: {
         dateX,
         timeX,
@@ -155,10 +155,10 @@ export default function Booking() {
               )}</b>
             <br><br>
             <img 
-              class="" 
+              class="thumbnail" 
               style="height: 150px;width: 200px; object-fit:cover" 
               src="${
-                (serviceClinics[selected_clinic_index].default_image!=="Default.png")?
+                (serviceClinics[selected_clinic_index]?.default_image!=="Default.png")?
                 AWS_BUCKET_SERVICES+"clinics/"+serviceClinics[selected_clinic_index].clinic_id+"/"+serviceClinics[selected_clinic_index].default_image:
                 AWS_BUCKET_SERVICES+"clinics/Default.png"
               }">
@@ -472,7 +472,7 @@ export default function Booking() {
                               // console.log("ServeIMG",serviceImage);
                               if (index!==0){
                               return(
-                              <div className='row-sm-3 m-2 ml-3'>
+                              <div className='row-sm-3 m-1 ml-3'>
                               <Link 
                                 onClick=
                                 {() => {console.log(isViewerOpen);
@@ -486,10 +486,10 @@ export default function Booking() {
                                 style={{
                                   objectFit:'contain',
                                   width:'100%',
-                                  minWidth:'140px',
-                                  maxWidth:'140px', 
-                                  maxHeight:'200px', 
-                                  height:'140px'}}
+                                  minWidth:'100px',
+                                  maxWidth:'100px', 
+                                  maxHeight:'100px', 
+                                  height:'100px'}}
 
                                 // className="rounded-circle"
                               />
@@ -526,7 +526,7 @@ export default function Booking() {
                                 <i className="mdi mdi-star text-warning"></i>
                               </label> */}
                               <b>Average Rating:</b><br/>
-                              <Rating
+                              {(service?.total_reviews)?<Rating
                                 fillColor="#ffb822"
                                 emptyColor="white"
                                 SVGstrokeColor="#f1a545"
@@ -535,8 +535,9 @@ export default function Booking() {
                                 allowFraction={true}
                                 initialValue={service?.average}
                                 readonly={true}
-                              /><br/>
-                              {service?.average} ({service?.total_reviews} Total Reviews)
+                              />:<h5 className='text-purple m-0'>Unrated</h5>}
+                              <br/>
+                              {service?.average} ({(service?.total_reviews)?service?.total_reviews:0} Total Reviews)
                             </p>
                             <h5>
                               <b>Price:</b>{' '}
@@ -558,7 +559,7 @@ export default function Booking() {
                   
                 <div className="row-lg-4 ml-auto" style={{marginLeft:'10px'}}>
                        <div className='row'>
-                          <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id)}>    
+                          <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}>    
                           {(serviceDetails)?(
                             <img
                               src={`${AWS_BUCKET_SERVICES}providers/${serviceDetails?.provider_photo}`}
@@ -575,7 +576,7 @@ export default function Booking() {
                           }
                             </Link>
                           <div className='col'>
-                              <Link to={"/patient/marketplace/provider/"+(serviceDetails.provider_id)}>    
+                              <Link to={"/patient/marketplace/provider/"+(serviceDetails?.provider_id)}>    
                                 <h3 className="met-user-name">
                                   {serviceDetails?.provider_name}
                                 </h3>
@@ -601,7 +602,15 @@ export default function Booking() {
                                     <b>Specialization </b> : {' '}
                                     {serviceDetails?.provider_practice}
                                   </li>
+                                  <li className='text-right m-2'>
+                                  <button 
+                                    onClick={()=>{navigate("/patient/marketplace/provider/"+(serviceDetails?.provider_id))}}
+                                    className='btn btn-outline-success m-1 '>
+                                      View Profile
+                                  </button>
+                                  </li>
                               </ul>
+
                             </div>
                           </div>
                       </div>
@@ -630,8 +639,7 @@ export default function Booking() {
                             className='card-img-top'
                             style={{ 
                               // width: 'unset', 
-                               maxWidth:'180px',maxHeight:'130px',
-                               width:'100%', height:'auto',objectFit: 'cover'}}
+                              width:'200px', minWidth:'200px',minHeight:'150px',height:'150px',objectFit: 'cover'}}
                             // src={`${AWS_BUCKET_SERVICES}/assets/images/users/user-10.jpg`}
                             // src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+serviceDetails.clinic_ids.split(',')[index]+"/"+item.default_image}
                             src={item.default_image==="Default.png"?(AWS_BUCKET_SERVICES+"clinics/Default.png"):AWS_BUCKET_SERVICES+"clinics/"+item.clinic_id+"/"+item.default_image}

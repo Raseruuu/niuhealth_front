@@ -14,10 +14,10 @@ function hourformat(hour){
     }
   }
 
-export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours}){
+export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours,hasEmptyOption}){
   // hours = 0
-  let morning_options=[8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5,6,7]
-  let night_options=[20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,]
+  let morning_options=[6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,0,1,2,3,4,5]
+  let night_options=[18,19,20,21,22,23,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17]
   
   return(
     <div className="column" style={{maxWidth:'250px', paddingLeft:"20px"}}>
@@ -43,7 +43,7 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
               <option key={index} value={option}>{hourformat(option)}</option>
               ))}
               
-            <option value={null}>--:--</option>
+            <option value={'--:--'}>--:--</option>
           </select>
         </div>
       </div>
@@ -61,7 +61,8 @@ export default function ScheduleSelect({hours,setHours,weekday,disabled,oldHours
             {night_options.map((option2,index)=>(
               <option key={index} value={option2}>{hourformat(option2)}</option>
               ))}
-            <option value={null}>--:--</option>
+           
+            <option value={'--:--'}>--:--</option>
           </select>
         </div>
       </div>

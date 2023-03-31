@@ -114,26 +114,26 @@ function ProfileEdit() {
     const formData = new FormData()
     if (auth.userType==="Patient"){
       formData.append('Email', auth.email)
-      formData.append('FirstName', profile.first_name||"")
-      formData.append('MiddleName', profile.middle_name||"")
-      formData.append('LastName', profile.last_name||"")
-      formData.append('ContactInfo', profile.contact_info||"")
-      formData.append('Address1', profile.address_line_1||"")
-      formData.append('Address2', profile.address_line_2||"")
-      formData.append('ZIPCode', profile.zip_code||"")
-      formData.append('Province', profile.province||"")
-      formData.append('CountryID', profile.country_id||"")
-      formData.append('City', profile.city||"")
-      formData.append('DateOfBirth', moment(profile.date_of_birth).format("YYYY-MM-DD")||"")
-      formData.append('LocalTimeZone', profile.local_time_zone||"")
+      formData.append('FirstName', profile?.first_name||"")
+      formData.append('MiddleName', profile?.middle_name||"")
+      formData.append('LastName', profile?.last_name||"")
+      formData.append('ContactInfo', profile?.contact_info||"")
+      formData.append('Address1', profile?.address_line_1||"")
+      formData.append('Address2', profile?.address_line_2||"")
+      formData.append('ZIPCode', profile?.zip_code||"")
+      formData.append('Province', profile?.province||"")
+      formData.append('CountryID', profile?.country_id||"")
+      formData.append('City', profile?.city||"")
+      formData.append('DateOfBirth', moment(profile?.date_of_birth).format("YYYY-MM-DD")||"")
+      formData.append('LocalTimeZone', profile?.local_time_zone||"")
 
     }
     if (auth.userType==="Provider"){
       formData.append('Email', auth.email)
-      formData.append('Name', profile.provider_name)
-      formData.append('ProviderDescription', profile.provider_description)
-      formData.append('Practice', profile.practice)
-      formData.append('ContactInfo', profile.contact_info)
+      formData.append('Name', profile?.provider_name)
+      formData.append('ProviderDescription', profile?.provider_description)
+      formData.append('Practice', profile?.practice)
+      formData.append('ContactInfo', profile?.contact_info)
       
       for (let key in hours) {
         if (hours.hasOwnProperty(key)) {
@@ -141,15 +141,15 @@ function ProfileEdit() {
         }
       }
       
-      // formData.append('ContactInfo', profile.contact_info)
-      // formData.append('Address', profile.address)
-      // formData.append('CountryID', profile.country_id)
-      // formData.append('CityID', profile.country_city_id)
-      // formData.append('DateOfBirth', profile.date_of_birth)
-      // formData.append('LocalTimeZone', profile.local_time_zone)
+      // formData.append('ContactInfo', profile?.contact_info)
+      // formData.append('Address', profile?.address)
+      // formData.append('CountryID', profile?.country_id)
+      // formData.append('CityID', profile?.country_city_id)
+      // formData.append('DateOfBirth', profile?.date_of_birth)
+      // formData.append('LocalTimeZone', profile?.local_time_zone)
     }
-    if (typeof profile.picturefile === 'object'){
-      formData.append('Image', profile.picturefile ,"profile_pic")
+    if (typeof profile?.picturefile === 'object'){
+      formData.append('Image', profile?.picturefile ,"profile_pic")
     }
     
     let profile_endpoint2=((auth.userType==='Provider')?"providerUpdateDetails":(auth.userType==='Patient')?"updatePatientDetails":"none")
@@ -238,7 +238,7 @@ function ProfileEdit() {
     let isMounted = true
     const controller = new AbortController()
     let fileReader, isCancel = false;
-    if (profile.picturefile) {
+    if (profile?.picturefile) {
       fileReader = new FileReader();
       fileReader.onload = (e) => {
         const { result } = e.target;
@@ -253,7 +253,7 @@ function ProfileEdit() {
           setImagePreview(true)
         }
       }
-      fileReader.readAsDataURL(profile.picturefile);
+      fileReader.readAsDataURL(profile?.picturefile);
     }
     return () => {
       isCancel = true;
@@ -267,7 +267,7 @@ function ProfileEdit() {
   // async function getCities() {
   //   const result = await axiosPrivate
   //     .post('getCities', {
-  //       CountryID: profile.country_id,
+  //       CountryID: profile?.country_id,
   //       Email: auth.email,
   //     })
   //     .then((res) => {
@@ -371,7 +371,7 @@ function ProfileEdit() {
         })
     }
    
-    setAuth((prev) => ({ ...prev, profile,name:profile.first_name })) 
+    setAuth((prev) => ({ ...prev, profile,name:profile?.first_name })) 
     // if (effectRun.current){
     getProfileDetails()
   
@@ -389,7 +389,7 @@ function ProfileEdit() {
     
   //   if (!profile?.country_id || profile?.country_id === 'undefined'|| profile?.country_id === '') return
   //   // getCities()
-  // }, [profile.country_id])
+  // }, [profile?.country_id])
 
   return (
     <form >
@@ -425,11 +425,11 @@ function ProfileEdit() {
                           onClick={() => {
                             Swal.fire({
                               title: 'Profile Picture',
-                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile.picture: (profile.picture)}"></img>`,
-                              // { AWS_BUCKET_SERVICES } + profile.picture,
+                              html: `<img height="300px" src="${!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile?.picture: (profile?.picture)}"></img>`,
+                              // { AWS_BUCKET_SERVICES } + profile?.picture,
                             })
                           }}
-                          src={!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile.picture: (profile.picture)}
+                          src={!imagepreview?AWS_BUCKET_SERVICES +(auth.userType==='Provider'?"providers/":"profiles/pictures/")+profile?.picture: (profile?.picture)}
                           className="m-4 rounded-circle profile-pic"
                           // style={{ margin: 'unset' }}
                         />
@@ -463,7 +463,7 @@ function ProfileEdit() {
                               className="form-control"
                               type="text"
                               name="provider_name"
-                              value={profile.provider_name}
+                              value={profile?.provider_name}
                               
                               onChange={handleInputChange.bind(this)}
                               required
@@ -486,7 +486,7 @@ function ProfileEdit() {
                               className="form-control"
                               type="text"
                               name="first_name"
-                              value={profile.first_name}
+                              value={profile?.first_name}
                               onChange={handleInputChange.bind(this)}
                               required
                             />
@@ -506,7 +506,7 @@ function ProfileEdit() {
                             className="form-control"
                             type="text"
                             name="middle_name"
-                            value={profile.middle_name}
+                            value={profile?.middle_name}
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
@@ -525,7 +525,7 @@ function ProfileEdit() {
                             type="text"
                             required
                             name="last_name"
-                            value={profile.last_name}
+                            value={profile?.last_name}
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
@@ -563,7 +563,7 @@ function ProfileEdit() {
                             className="form-control"
                             type="tel"
                             name="facebook"
-                            value={profile.facebook}
+                            value={profile?.facebook}
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
@@ -584,8 +584,9 @@ function ProfileEdit() {
                             type="tel"
                             rows="4"
                             
+                            maxLength={350}
                             name="provider_description"
-                            value={profile.provider_description}
+                            value={profile?.provider_description}
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
@@ -603,7 +604,7 @@ function ProfileEdit() {
                           className="form-control"
                           type="tel"
                           name="practice"
-                          value={profile.practice}
+                          value={profile?.practice}
                           onChange={handleInputChange.bind(this)}
                         />
                       </div>
@@ -623,7 +624,7 @@ function ProfileEdit() {
                             type="tel"
                             name="contact_info"
                             required
-                            value={profile.contact_info}
+                            value={profile?.contact_info}
                             onChange={handleInputChange.bind(this)}
                           />
                         </div>
@@ -645,7 +646,7 @@ function ProfileEdit() {
                               type="text"
                               required
                               name="address_line_1"
-                              value={profile.address_line_1}
+                              value={profile?.address_line_1}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -663,7 +664,7 @@ function ProfileEdit() {
                               className="form-control"
                               type="text"
                               name="address_line_2"
-                              value={profile.address_line_2}
+                              value={profile?.address_line_2}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -682,7 +683,7 @@ function ProfileEdit() {
                               type="text"
                               pattern={"[0-9]{5}"}
                               name="zip_code"
-                              value={profile.zip_code}
+                              value={profile?.zip_code}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -700,7 +701,7 @@ function ProfileEdit() {
                               className="form-control"
                               type="text"
                               name="province"
-                              value={profile.province}
+                              value={profile?.province}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -724,7 +725,7 @@ function ProfileEdit() {
                             disabled={disableForm}
                             required
                             name="country_id"
-                            value={profile.country_id}
+                            value={profile?.country_id}
                             onChange={handleInputChange.bind(this)}
                           >
                             <option value={''}>Select</option>
@@ -745,7 +746,7 @@ function ProfileEdit() {
                               required
                               type="text"
                               name="city"
-                              value={profile.city}
+                              value={profile?.city}
                               onChange={handleInputChange.bind(this)}
                             />
                           </div>
@@ -754,7 +755,7 @@ function ProfileEdit() {
                             className="form-control"
                             disabled={disableForm}
                             name="country_city_id"
-                            value={profile.country_city_id}
+                            value={profile?.country_city_id}
                             onChange={handleInputChange.bind(this)}
                           >
                             <option>Select</option>
@@ -777,7 +778,7 @@ function ProfileEdit() {
                         <div className="col-sm-8">
                           <TimeZoneSelect
                             required={true}
-                            value={profile.local_time_zone}
+                            value={profile?.local_time_zone}
                             setTimeZone={(selected) =>
                               setProfile((prev) => ({
                                 ...prev,
@@ -804,7 +805,7 @@ function ProfileEdit() {
                             required={true}
                             placeholder={'mm-dd-yyyy'}
                             name="date_of_birth"
-                            // defaultValue={dateFormat(profile.date_of_birth)}
+                            // defaultValue={dateFormat(profile?.date_of_birth)}
                             value={dateFormat(profile?.date_of_birth)}
                             onChangeCapture={handleInputChange.bind(this)}
                           />

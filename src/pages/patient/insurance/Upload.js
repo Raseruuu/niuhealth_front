@@ -245,7 +245,7 @@ function Upload() {
                     {imageList.map((image,index)=>{
                       console.log("imageList",imageList)
                       return(
-                      <div className='col-lg-12 mr-1 p-4 w-100'  style={{height:240}}>
+                      <div key={index} className='col-lg-12 mr-1 p-4 w-100'  style={{height:240}}>
                         
                         
                           <UploadOneImage
