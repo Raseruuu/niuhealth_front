@@ -22,7 +22,7 @@ function Login( ) {
     const controller = new AbortController()
 
     await axiosPrivate
-    .post("cognitoSignIn", {...data},
+    .post("localLogin", {...data},
     {
       signal: controller.signal,
     }

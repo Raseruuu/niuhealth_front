@@ -28,7 +28,7 @@ function Room() {
     // 'http://niuhealthfront4-env.eba-h3pm89ah.us-west-2.elasticbeanstalk.com'
     // REACT_APP_API_URL
   // var sdkKey = ZOOM_SDK
-  var sdkKey = 'etZwCMjsSMuHwjuLtQ_LA'
+  var sdkKey = 'mr6VPQYFTzGLL3kvwPXhSw'
   var zakToken = ''
   var meetingNumber = state?.MeetingID
   // var meetingNumber = '4737080721'
